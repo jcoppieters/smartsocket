@@ -1,0 +1,14 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Run SmartSocket Proxy",
+      "program": "${workspaceFolder}/index.js",
+      "outFiles": [
+        "${workspaceFolder}/**/*.js"
+      ]
+    }
+  ]
+}

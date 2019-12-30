@@ -1,0 +1,28 @@
+{
+  "name": "smart-socket",
+  "version": "1.0.0",
+  "description": "Proxy Websockets to TCP sockets",
+  "main": "index.js",
+  "scripts": {},
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "keywords": [
+    "websockets",
+    "TCP",
+    "sockets",
+    "proxy"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jcoppieters/smartsocket.git"
+  },
+  "author": "Johan Coppieters",
+  "license": "ISC",
+  "dependencies": {
+    "@types/ws": "^6.0.4"
+  },
+  "devDependencies": {
+    "@types/node": "^11.15.3"
+  }
+}
