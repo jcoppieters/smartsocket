@@ -66,7 +66,7 @@ Client Example:
       });
     }
 
-
+    // send data to the tcp sockter over the websocket proxy
     try {
       socket.send(data);
     } catch(err) {

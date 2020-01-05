@@ -20,7 +20,9 @@
   "author": "Johan Coppieters",
   "license": "ISC",
   "dependencies": {
-    "@types/ws": "^6.0.4"
+    "@types/mime-types": "^2.1.0",
+    "@types/ws": "^6.0.4",
+    "mime-types": "^2.1.25"
   },
   "devDependencies": {
     "@types/node": "^11.15.3"

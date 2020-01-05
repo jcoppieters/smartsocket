@@ -14,5 +14,6 @@
     "**/*", ".vscode/platform.ts"
   ],
   "exclude": [
+    "www/**/*"
   ]
 }
