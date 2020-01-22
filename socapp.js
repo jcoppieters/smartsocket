@@ -1,9 +1,10 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -37,7 +38,7 @@ function handleClient(client, req) {
     });
     target.on('data', function (data) {
         const msg = data.toString();
-        log("received from target: " + msg.substr(0, msg.length - 1));
+        // log("received from target: " + msg.substr(0, msg.length-1));
         try {
             client.send(msg);
         }
@@ -60,7 +61,7 @@ function handleClient(client, req) {
     ///////////////////////////////////
     // websocket connection handling
     client.on('message', function (msg) {
-        log('got message from websocket: ' + msg.substr(0, msg.length - 1));
+        // log('got message from websocket: ' + msg.substr(0, msg.length-1));
         // Let's hope the socket is buffering even before the connection is fully open
         // if (! connected) log('Not yet connected!!') else
         target.write(msg);
