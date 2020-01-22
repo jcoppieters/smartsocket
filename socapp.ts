@@ -34,7 +34,7 @@ function handleClient(client, req) {
   });
   target.on('data', function(data) {
     const msg = data.toString();
-    log("received from target: " + msg.substr(0, msg.length-1));
+    // log("received from target: " + msg.substr(0, msg.length-1));
     try {
       client.send(msg);
     } catch(e) {
@@ -57,7 +57,7 @@ function handleClient(client, req) {
   ///////////////////////////////////
   // websocket connection handling
   client.on('message', function(msg) {
-    log('got message from websocket: ' + msg.substr(0, msg.length-1));
+    // log('got message from websocket: ' + msg.substr(0, msg.length-1));
     // Let's hope the socket is buffering even before the connection is fully open
     // if (! connected) log('Not yet connected!!') else
     target.write(msg);
