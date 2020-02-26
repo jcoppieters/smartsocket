@@ -3563,7 +3563,7 @@ var Sanitizers = {
             config = {};
         config.name = config.name || "Smartbox";
         config.address = config.address || "";
-        config.port = config.port || 5001;
+        config.port = config.port || 0;
         if (typeof config.port === "string")
             config.port = parseInt(config.port);
         config.password = config.password || "";
