@@ -1,6 +1,6 @@
-SmartSocket Server v1.0
+# SmartSocket Server v1.0
 
-v1, dec 2019, Johan Coppieters
+## v1, dec 2019, Johan Coppieters
 
 Use:
 - start the server on a specific port (and IP address)
@@ -8,7 +8,62 @@ Use:
 - add to the ws url /[url]:[port] of the target TCP Socket
 - send/receive from the websocket as if it were a raw socket
 
-Client Example:
+
+## v2, feb 2020, Johan Coppieters
+- includes the smartapp.
+
+## Installation instructions on Raspberry
+Depends on version of Raspberry:
+uname -a  => ARM7 of ARM8
+
+
+### 1a - nodejs  - ARM7
+wget https://nodejs.org/dist/v12.16.1/node-v12.16.1-linux-armv7l.tar.xz
+cd /opt
+sudo tar -xJvf ~/node-v12.16.1-linux-armv7l.tar.xz
+rm -f ~/node-v12.16.1-linux-armv7l.tar.xz
+sudo ln -s /opt/node-v12.16.1-linux-armv7l /opt/node
+sudo ln -s /opt/node/bin/node /usr/bin/node
+sudo ln -s /opt/node/bin/npm /usr/bin/npm
+cd ~
+
+### 1b - nodejs  - ARM8
+wget https://nodejs.org/dist/v12.16.1/node-v12.16.1-linux-arm64.tar.xz
+cd /opt
+sudo tar -xJvf ~/node-v12.16.1-linux-arm64.tar.xz
+rm -f ~/node-v12.16.1-linux-arm64.tar.xz
+sudo ln -s /opt/node-v12.16.1-linux-arm64 /opt/node
+sudo ln -s /opt/node/bin/node /usr/bin/node
+sudo ln -s /opt/node/bin/npm /usr/bin/npm
+cd ~
+
+### 2 - git
+sudo apt-get update
+sudo apt-get --yes --force-yes install libcurl4-openssl-dev
+sudo apt-get  --yes --force-yes install git
+
+### 3 - smartsocket proxy server
+git clone https://github.com/jcoppieters/smartsocket.git
+cd smartcocket
+npm install
+npm install ejs
+
+### 4 - startup - pm2
+cd ~
+sudo npm install -g pm2
+sudo ln -s /opt/node/bin/pm2 /usr/bin/pm2
+
+### 5 - use pm2 to start homebridge
+cd ~/smartsocket
+pm2 start index.js --name smartsocket
+pm2 save
+pm2 startup | grep "sudo" | bash
+
+### Follow the log file:
+tail -f ~/.pm2/logs/smartsocket-out.log
+
+
+## Client Example:
 
     private socket: WebSocket;
 
