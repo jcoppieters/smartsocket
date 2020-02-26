@@ -14,53 +14,54 @@ Use:
 
 ## Installation instructions on Raspberry
 Depends on version of Raspberry:
-uname -a  => ARM7 of ARM8
+
+    uname -a  => ARM7 of ARM8
 
 
 ### 1a - nodejs  - ARM7
-wget https://nodejs.org/dist/v12.16.1/node-v12.16.1-linux-armv7l.tar.xz
-cd /opt
-sudo tar -xJvf ~/node-v12.16.1-linux-armv7l.tar.xz
-rm -f ~/node-v12.16.1-linux-armv7l.tar.xz
-sudo ln -s /opt/node-v12.16.1-linux-armv7l /opt/node
-sudo ln -s /opt/node/bin/node /usr/bin/node
-sudo ln -s /opt/node/bin/npm /usr/bin/npm
-cd ~
+    wget https://nodejs.org/dist/v12.16.1/node-v12.16.1-linux-armv7l.tar.xz
+    cd /opt
+    sudo tar -xJvf ~/node-v12.16.1-linux-armv7l.tar.xz
+    rm -f ~/node-v12.16.1-linux-armv7l.tar.xz
+    sudo ln -s /opt/node-v12.16.1-linux-armv7l /opt/node
+    sudo ln -s /opt/node/bin/node /usr/bin/node
+    sudo ln -s /opt/node/bin/npm /usr/bin/npm
+    cd ~
 
 ### 1b - nodejs  - ARM8
-wget https://nodejs.org/dist/v12.16.1/node-v12.16.1-linux-arm64.tar.xz
-cd /opt
-sudo tar -xJvf ~/node-v12.16.1-linux-arm64.tar.xz
-rm -f ~/node-v12.16.1-linux-arm64.tar.xz
-sudo ln -s /opt/node-v12.16.1-linux-arm64 /opt/node
-sudo ln -s /opt/node/bin/node /usr/bin/node
-sudo ln -s /opt/node/bin/npm /usr/bin/npm
-cd ~
+    wget https://nodejs.org/dist/v12.16.1/node-v12.16.1-linux-arm64.tar.xz
+    cd /opt
+    sudo tar -xJvf ~/node-v12.16.1-linux-arm64.tar.xz
+    rm -f ~/node-v12.16.1-linux-arm64.tar.xz
+    sudo ln -s /opt/node-v12.16.1-linux-arm64 /opt/node
+    sudo ln -s /opt/node/bin/node /usr/bin/node
+    sudo ln -s /opt/node/bin/npm /usr/bin/npm
+    cd ~
 
 ### 2 - git
-sudo apt-get update
-sudo apt-get --yes --force-yes install libcurl4-openssl-dev
-sudo apt-get  --yes --force-yes install git
+    sudo apt-get update
+    sudo apt-get --yes --force-yes install libcurl4-openssl-dev
+    sudo apt-get  --yes --force-yes install git
 
 ### 3 - smartsocket proxy server
-git clone https://github.com/jcoppieters/smartsocket.git
-cd smartcocket
-npm install
-npm install ejs
+    git clone https://github.com/jcoppieters/smartsocket.git
+    cd smartcocket
+    npm install
+    npm install ejs
 
 ### 4 - startup - pm2
-cd ~
-sudo npm install -g pm2
-sudo ln -s /opt/node/bin/pm2 /usr/bin/pm2
+    cd ~
+    sudo npm install -g pm2
+    sudo ln -s /opt/node/bin/pm2 /usr/bin/pm2
 
 ### 5 - use pm2 to start homebridge
-cd ~/smartsocket
-pm2 start index.js --name smartsocket
-pm2 save
-pm2 startup | grep "sudo" | bash
+    cd ~/smartsocket
+    pm2 start index.js --name smartsocket
+    pm2 save
+    pm2 startup | grep "sudo" | bash
 
 ### Follow the log file:
-tail -f ~/.pm2/logs/smartsocket-out.log
+    tail  -f ~/.pm2/logs/smartsocket-out.log
 
 
 ## Client Example:
