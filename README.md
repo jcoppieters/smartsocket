@@ -11,6 +11,7 @@ Use:
 
 ## v2, feb 2020, Johan Coppieters
 - includes the smartapp.
+- added install instructions
 
 ## Installation instructions on Raspberry
 Depends on version of Raspberry:
@@ -45,9 +46,8 @@ Depends on version of Raspberry:
 
 ### 3 - smartsocket proxy server
     git clone https://github.com/jcoppieters/smartsocket.git
-    cd smartcocket
+    cd smartsocket
     npm install
-    npm install ejs
 
 ### 4 - startup - pm2
     cd ~

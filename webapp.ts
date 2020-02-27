@@ -8,8 +8,6 @@ import * as fs from "fs";
 import * as url from "url";
 import * as qs from "querystring";
 import { Logger, LogFunction } from './logger';
-import { SpawnSyncOptionsWithStringEncoding } from 'child_process';
-
 
 
 export interface Params {[key: string]: string | Array<string>};
