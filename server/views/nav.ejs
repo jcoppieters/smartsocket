@@ -1,0 +1,12 @@
+<nav>
+  <div class="nav-wrapper">
+    <a href="#" class="brand-logo hide-on-small-only" >Duotecno</a>
+    <ul id="nav-mobile" class="right">
+      <li <%= (request === "homekit") ? 'class="active"' : '' %></li><a href="/homekit">Homekit</a></li>
+      <li <%= (request === "masters") ? 'class="active"' : '' %></li><a href="/masters">Masters</a></li>
+      <li <%= (request === "services") ? 'class="active"' : '' %></li><a href="/services">Services</a></li>
+      <% if (hasSmappee) { %><li <%= (request === "smappee") ? 'class="active"' : '' %></li><a href="/smappee">Smappee</a></li><% } %>
+      <li <%= (request === "switches") ? 'class="active"' : '' %></li><a href="/switches">Switches</a></li>
+    </ul>
+  </div>
+</nav>

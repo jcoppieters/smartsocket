@@ -1,0 +1,11 @@
+[B,
+  {
+    "name": "Smartbox 1",
+    "address": "178.118.70.181",
+    "port": 5001,
+    "password": "duotecno",
+    "debug": true,
+    "regime": "0",
+    "active": true
+  }
+]

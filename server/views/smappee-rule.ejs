@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+  <html>
+    <head>
+      <link type="text/css" rel="stylesheet" href="/assets/min.css"  media="screen,projection"/>
+
+      <!--Let browser know website is optimized for mobile-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon" />
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+      <%include /views/style %>
+    </head>
+
+    <body>
+      <%include /views/nav %>
+
+      <form method="POST" action="/smappee">
+        <input type="hidden" name="id" value="<%= id %>">
+        <h1>
+          Smappee rule #<%= id %>
+          <button class="right btn waves-effect waves-light" type="submit" name="action" value="cancel">Back</button>
+          <button class="right btn waves-effect waves-light" type="submit" name="action" value="delete">Delete</button>
+          <button class="right btn waves-effect waves-light" type="submit" name="action" value="change">Save</button>
+        </h1>
+
+        <div class="row">
+            <p><%= rule.actions[0].unitName || "?" %> (<%= hex(rule.actions[0].nodeNr) %>;<%= hex(rule.actions[0].unitNr) %>) ↜ <%= rule.actions[0].value %> <b>&lt; <%= rule.low %>W</b></b>
+            <p><b><%= rule.low %>W &le;</b> <%= rule.actions[1].unitName || "?" %> (<%= hex(rule.actions[1].nodeNr) %>;<%= hex(rule.actions[1].unitNr) %>) ↜ <%= rule.actions[1].value %> <b>&le; <%= rule.high %>W</b></p>
+            <p><b><%= rule.high %>W &lt;</b> <%= rule.actions[2].unitName || "?" %> (<%= hex(rule.actions[2].nodeNr) %>;<%= hex(rule.actions[2].unitNr) %>) ↜ <%= rule.actions[2].value %></p>
+            </div>
+          
+        <div class="row">
+          <div class="input-field col s12">
+            <input placeholder="power" id="type" name="type" type="text" value="<%= rule.type %>">
+            <label for="type">Type</label>
+          </div>
+        </div>
+      
+        <div class="row">
+            <div class="input-field col s12">
+              <input placeholder="0" id="channel" name="channel" type="text" value="<%= rule.channel %>">
+              <label for="channel">Channel</label>
+            </div>
+          </div>
+  
+        <div class="row">
+          <div class="input-field col s12">
+            <select name="master" id="master">
+              <% for (let m of masters) { %>
+                <option value="<%= m.getAddress() %>" "<%= (rule.actions[0].master == m.getAddress()) ? "selected" : "" %>"><%= m.getAddress() %></option>
+              <% } %>
+            </select>
+            <label for="master">Master</label>
+          </div>
+        </div>
+    
+        <div class="row">
+          <div class="input-field col s7">
+            <input placeholder="0" id="unitlow" name="unitlow" type="text" 
+                   value="<%= hex(rule.actions[0].nodeNr) %>;<%= hex(rule.actions[0].unitNr) %>">
+            <label for="unitlow">Low Unit Action</label>
+          </div>
+          <div class="input-field col s5">
+            <input placeholder="true" id="valuelow" name="valuelow" type="text" 
+                   value="<%= rule.actions[0].value %>">
+            <label for="valuelow">Value</label>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="input-field col s3"></div>
+          <div class="input-field col s9">
+            <input placeholder="10" id="low" name="low" type="text" value="<%= rule.low %>">
+            <label for="low">Low Threshold</label>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="input-field col s7">
+            <input placeholder="0" id="unitmid" name="unitmid" type="text" 
+                   value="<%= hex(rule.actions[1].nodeNr) %>;<%= hex(rule.actions[1].unitNr) %>">
+            <label for="unitmid">Mid Unit Action</label>
+          </div>
+          <div class="input-field col s5">
+            <input placeholder="true" id="valuemid" name="valuemid" type="text" 
+                   value="<%= rule.actions[1].value %>">
+            <label for="valuemid">Value</label>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="input-field col s3"></div>
+          <div class="input-field col s9">
+            <input placeholder="10" id="high" name="high" type="text" value="<%= rule.high %>">
+            <label for="high">High Threshold</label>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="input-field col s7">
+            <input placeholder="0" id="unithigh" name="unithigh" type="text" 
+                   value="<%= hex(rule.actions[2].nodeNr) %>;<%= hex(rule.actions[2].unitNr) %>">
+            <label for="unithigh">High Unit Action</label>
+          </div>
+          <div class="input-field col s5">
+            <input placeholder="true" id="valuehigh" name="valuehigh" type="text" 
+                   value="<%= rule.actions[2].value %>">
+            <label for="valuehigh">Value</label>
+          </div>
+        </div>  
+        <div class="row">
+          <strong>Values:</strong><br>
+          - Units can be entered by their name or by "nodeNr;unitNr" (example: 0x1a;0xc2), all on the same master<br>
+          - for moods: -1 = short puls, true/false or 1/0 = long toggle event<br>
+          - for dimmers: true/false = on/off, 0-99 = dimmer value
+        </div>
+      </form>
+      <%include /views/footer %>
+
+    </body>
+    <%include /views/scripts %>
+  </html>

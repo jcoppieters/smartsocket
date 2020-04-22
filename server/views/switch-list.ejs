@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+  <html>
+    <head>
+      <link type="text/css" rel="stylesheet" href="/assets/min.css"  media="screen,projection"/>
+
+      <!--Let browser know website is optimized for mobile-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon" />
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+      <%include /views/style %>
+    </head>
+
+    <body>
+      <%include /views/nav %>
+
+      <form method="POST" action="/switches">
+        <h1>
+          Switches
+          <button class="right btn waves-effect waves-light" type="submit" name="action" value="save">Save</button>
+          <button class="right btn waves-effect waves-light" type="submit" name="action" value="add">Add switch</button>
+        </h1>
+        
+        <table>
+          <thead>
+            <tr>
+              <th>Plug</th><th>Name</th><th>Addr</th><th>State</th>
+            </tr>
+          </thead>
+    
+          <tbody>
+            <% for (let inx in switches) { let swtch = switches[inx]; %>
+              <tr>
+                <td><a href="/switches/edit/<%= inx %>"><%= swtch.plug %></a></td>
+                <td><a href="/switches/edit/<%= inx %>"><%= swtch.unitName %></a></td>
+                <td><a href="/switches/edit/<%= inx %>"><%= hex(swtch.nodeNr) %>/<%= hex(swtch.unitNr) %></a></td>
+                <td>
+                  <div class="switch">
+                    <label>Off
+                      <input name="status_<%= swtch.unitName %>" <%= (swtch.value) ? 'checked' : '' %>
+                             type="checkbox" onchange="setStatus(this.checked, <%= inx %>)">
+                      <span class="lever"></span>On
+                    </label>
+                  </div>
+                </td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
+
+      </form>
+
+      <%include /views/footer %>
+    </body>
+    
+    <%include /views/scripts %>
+    <%include /views/switch-script %>
+    
+  </html>

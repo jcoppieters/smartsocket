@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+  <html>
+    <head>
+      <link type="text/css" rel="stylesheet" href="/assets/min.css"  media="screen,projection"/>
+
+      <!--Let browser know website is optimized for mobile-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon" />
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+      <%include /views/style %>
+    </head>
+
+    <body>
+      <%include /views/nav %>
+
+      <form method="POST" action="/smappee">
+        <h1>
+          Smappee
+          <button class="right btn waves-effect waves-light" type="submit" name="action" value="save">Save</button>
+          <button class="right btn waves-effect waves-light" type="submit" name="action" value="add">Add rule</button>
+        </h1>
+        
+        <div class="row">
+          <div class="input-field col s12">
+            <input placeholder="xx.xx.xx.xx" id="address" name="address" type="text" value="<%= config.address %>">
+            <label for="address">Address</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="uid" name="uid" type="text" value="<%= config.uid %>">
+            <label for="uid">UID</label>
+          </div>
+        </div>
+        
+
+        <h1>Rules</h1>
+        <table>
+          <thead>
+            <tr>
+              <th>Type</th><th>Channel</th><th>Result</th><th>Power</th><th>High/Low</th>
+            </tr>
+          </thead>
+    
+          <tbody>
+            <% for (let inx in rules) { let rule = rules[inx]; %>
+              <tr>
+                <td><a href="/smappee/rule/<%= inx %>"><%= rule.type %></a></td>
+                <td><a href="/smappee/rule/<%= inx %>"><%= rule.channel %></a></td>
+                <td><a href="/smappee/rule/<%= inx %>">
+                <%= (
+                     (rule.current == 2) ? 'high' : (
+                     (rule.current == 1) ? 'mid' : (
+                     (rule.current == 0) ? 'low' : '--'
+                    ))) %></a></td>
+                <td><a href="/smappee/rule/<%= inx %>"><%= ((rule.power) ? rule.power : '-') %></a></td>
+                <td><a href="/smappee/rule/<%= inx %>"><%= rule.low %>/<%= rule.high %></a></td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
+
+      </form>
+
+      <%include /views/footer %>
+
+    </body>
+    <%include /views/scripts %>
+  </html>

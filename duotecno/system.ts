@@ -1,0 +1,344 @@
+import { Master } from "./master";
+import { SystemConfig, MasterConfig, NodeConfig, UnitConfig, YN, GroupConfig, Sanitizers, LogFunction } from "./types";
+import { Node, Unit, Protocol } from "./protocol";
+import { Base } from "../server/base";
+
+
+export class System extends Base {
+  public masters: Array<Master>;
+  public config: SystemConfig;
+  public groups: Array<GroupConfig>;
+  public isBrowser: boolean = true;
+  public isSplitted: boolean = false;
+
+  // rebuild active services (units)
+  trigger = null;
+  public moods: Array<Unit> = [];
+  public controls: Array<Unit> = [];
+  public temperatures: Array<Unit> = [];
+  public stores: Array<Unit> = [];
+
+  constructor() {
+    super("system", false);
+
+    this.readConfig();
+    this.readGroups();
+
+    // open all masters listed in the config
+    this.masters = [];
+    this.openMasters();
+  }
+
+  setBrowser(isB: boolean) {
+    this.isBrowser = isB;
+  }
+
+  setLogger(logger: LogFunction) {
+    this.logger = logger;
+
+    // use my log function
+    Protocol.logger = logger;
+  }
+
+  async openMasters() {
+    for (let inx = 0; inx < this.config.cmasters.length; inx++) {
+      try {
+        await this.openMaster(this.config.cmasters[inx], inx);
+      } catch(err) {
+        this.log(err);
+      }
+    }
+  }
+  async closeMasters() {
+    for (let inx = 0; inx < this.masters.length; inx++) {
+      await this.closeMaster(this.masters[inx])
+    }  
+  }
+
+  async openMaster(config: MasterConfig, inx: number): Promise<Master> {
+
+    const master = new Master(this, config);
+    this.masters[inx] = master;
+    try {
+      // testing
+      if (!master.config.active) return;
+
+      this.log("opening master: " + master.getAddress());
+      await master.open();
+      if (! await master.login()) throw(new Error("Failed to log in"));
+      await master.getDatabase();
+      this.log("master: " + master.getAddress() + " opened with " + master.nodes.length + " nodes.");
+      this.triggerRebuild();
+      return master;
+
+    } catch(e) {
+      this.err("failed to open master (" + e.toString() + ")");
+      return null;
+      // throw(e);
+    }
+  }
+
+  async closeMaster(master: Master) {
+    // non-existing master or not open -> do nothing
+    if ((! master) || (!master.isOpen)) return;
+
+    // find its index (we need it to delete it from the list)
+    let inx = this.findMasterInx(master);
+
+    // close
+    try {
+      await master.close();
+    } catch(e) {
+      this.err("failed to close master on " + master.getAddress() + ":" + master.getConfig().port);
+    }
+
+    // remove from list
+    if (inx > -1)
+      this.masters.splice(inx, 1);
+  }
+
+  displayDatabases() {
+    this.masters.forEach(m => m.displayDatabase());
+  }
+  
+
+  //////////////////
+  // Config stuff //
+  //////////////////
+
+  async addMaster(cmaster: MasterConfig): Promise<Master> {
+    if (!cmaster.address) return;
+
+    // see if this master already exists
+    let inx = this.findCMasterInx(cmaster.address, cmaster.port);
+
+    // store in config if not yet known
+    if (inx < 0) {
+      this.config.cmasters.push(cmaster);
+      inx = this.masters.length;
+
+    } else {
+      // close to re-open
+      await this.closeMaster(this.masters[inx]);
+      this.config.cmasters[inx] = cmaster;
+    }
+    this.writeConfig();
+    return await this.openMaster(cmaster, inx);
+  }
+
+  async deleteMaster(master: Master) {
+    const masterAddress = master.getAddress();
+    const masterPort = master.getPort()
+    let inx = this.findCMasterInx(masterAddress, masterPort);
+
+    if (inx >= 0) {
+      await this.closeMaster(master);
+
+      // remove the master, it's nodes and their units from the config
+      this.config.cmasters.splice(inx, 1);
+      this.config.cunits = this.config.cunits.filter(unit => 
+        (unit.masterPort != masterPort) || (unit.masterAddress != masterAddress));
+
+      this.writeConfig();
+    }
+  }
+
+  setActiveState(item: Node | Unit) {
+    if (item instanceof Node) {
+      const masterAddress = item.master.getAddress();
+      const masterPort = item.master.getPort();
+      const unitConfig = this.config.cunits.find((cu: UnitConfig) => 
+        (cu.logicalNodeAddress === item.logicalAddress) && 
+        (cu.masterAddress === masterAddress) && 
+        (cu.masterPort == masterPort));
+
+      // exists in configured nodes
+      item.active = !! unitConfig;
+    }
+    if (item instanceof Unit) {
+      const masterAddress = item.node.master.getAddress();
+      const masterPort = item.node.master.getPort();
+      const config = this.config.cunits.find((cu: UnitConfig) => 
+        (cu.logicalAddress === item.logicalAddress) && 
+        (cu.logicalNodeAddress === item.logicalNodeAddress) && 
+        (cu.masterAddress === masterAddress) && 
+        (cu.masterPort == masterPort));
+      item.active = !! config;
+      if (config) {
+        item.group = config.group;
+      }
+    }
+  }
+
+
+  selectGroup(group: GroupConfig) {
+    if (this.config.multiple) {
+      // multiple groups = just turn on/off
+      group.visible = !group.visible;
+
+    } else {
+      // turn of other groups if this one becomes visible
+      if (!group.visible) 
+        this.groups.forEach(g => g.visible = false);
+      group.visible = ! group.visible;
+    }
+    this.writeGroups();
+  }
+
+  //////////////////////////////////////
+  // Finding masters, nodes and units //
+  //////////////////////////////////////
+
+  findMaster(master: Master | string, port?: number): Master {
+    if (typeof master === "string") {
+      if (typeof port === "undefined") port = 5001;
+      return this.masters.find((m: Master) => m.same(master, port))
+    } else {
+      return this.masters.find((m: Master) => m && m.same(master));
+    }
+  }
+  findMasterInx(master: Master): number {
+    return this.masters.findIndex((m: Master) => m && m.same(master));
+  }
+
+  findCMasterInx(address: string, port: number): number {
+    return this.config.cmasters.findIndex((m: MasterConfig) => (m.address == address) && (m.port == port));
+  }
+
+  findNode(master: Master, logicalAddress: number) {
+    if (master)
+      return master.nodes.find((n: Node) => n && (n.logicalAddress === logicalAddress));
+    else
+      return null;
+  }
+
+  findUnit(master: Master, logicalNodeAddress: number, logicalAddress: number) {
+    const node = this.findNode(master, logicalNodeAddress);
+    if (node)
+      return node.units.find((u: Unit) => u && (u.logicalAddress === logicalAddress));
+    else
+      return null;
+  }
+
+  findUnitByAddress(logicalNodeAddress: number, logicalAddress: number): Unit {
+    let unit: Unit = null;
+    this.masters.forEach((m: Master) => {
+      if (m) {
+        const node = this.findNode(m, logicalNodeAddress);
+        if (node)
+          unit = node.units.find((u: Unit) => u && (u.logicalAddress === logicalAddress));
+      }
+    });
+    return unit;
+  }
+
+  findUnitByName(master: string, name: string): Unit {
+    let unit: Unit = null;
+    this.masters.forEach((m: Master) => {
+      if (m && (m.getAddress() == master)) {
+        m.nodes.forEach((n: Node) => {
+          if (n) {
+            n.units.forEach(u => {
+              if ((u.displayName === name) || (u.name === name)) 
+                unit = u; 
+            });
+          }
+        });
+      }
+    });
+    return unit;
+  }
+
+  allActiveUnits(): Array<Unit> {
+    return this.masters
+      .reduce((acc, m) => acc.concat(m.nodes), [])
+      .reduce((acc, n) => acc.concat(n.units), [])
+      .filter(u => u.active);
+  }
+
+
+  //////////////////////////////////////////////////
+  // Getting the current state of units and nodes //
+  //////////////////////////////////////////////////
+  updateSystem(dontTrigger: boolean = false) {
+    this.config.cunits = this.allActiveUnits()
+      .map((u: Unit) => { return { active: <YN>"Y", group: u.group, 
+                                   masterAddress: u.node.master.getAddress(), masterPort: u.node.master.getPort(), 
+                                   logicalNodeAddress: u.node.logicalAddress, logicalAddress: u.logicalAddress}; });
+    this.writeConfig();
+    
+    if (dontTrigger)
+      this.triggerRebuild();
+  }
+
+  triggerRebuild(immediate: boolean = false) {
+    this.log("triggerRebuild requested")
+    if (this.trigger) {
+      this.log("killing pending rebuild")
+      clearTimeout(this.trigger);
+      this.trigger = null;
+    }
+
+    if (immediate) {
+      this.rebuildServices();
+    } else {
+      this.trigger = setTimeout(() => {
+        this.trigger = null;
+        this.rebuildServices();
+      }, 1000);
+    }
+  }
+
+  rebuildServices() {
+    function compare(a: Unit | Node | Master, b: Unit | Node | Master) {
+      const an = a.getSort();
+      const bn = b.getSort();
+      if (an < bn) return -1;
+      if (an > bn) return 1;
+      return 0;
+    }
+    function compareN(a: Unit, b: Unit) {
+      const aname = a.name.toLowerCase();
+      const bname = b.name.toLowerCase();
+      if (aname < bname) return -1;
+      if (aname > bname) return 1;
+      return 0;
+    }
+
+    // sort masters, nodes in masters, units in nodes.
+
+    this.log("rebuildMasters/Nodes")
+    this.masters.sort(compare);
+    this.masters.forEach((m: Master) => { 
+      m.nodes.sort(compare);
+      m.nodes.forEach((n: Node) => n.units.sort(compare));
+     });
+
+    // sort selected controls, temperatures and moods.
+    this.log("rebuildServices")
+    const services = this.allActiveUnits();
+
+    this.controls = services.filter(s => s.isCtrl()).sort(compareN);
+    this.temperatures = services.filter(s => s.isTemperature()).sort(compareN);
+    this.moods = services.filter(s => (s.isMood() || s.isInput())).sort(compareN);
+    this.stores = this.controls.filter(s => s.isUpDown());
+  }
+
+  //////////////////
+  // Config stuff //
+  //////////////////
+
+  readGroups() {
+    this.groups = this.read("groups");
+
+    // order the groups and reset the order indices
+    this.groups.sort((a,b) => a.order-b.order);
+    this.groups.forEach((g,i) => g.order = i);
+  }
+
+  writeGroups() {
+    this.groups = this.write("groups", this.groups);
+  }
+
+
+}

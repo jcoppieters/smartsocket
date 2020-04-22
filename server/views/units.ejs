@@ -1,0 +1,81 @@
+<table>
+  <thead>
+    <tr>
+      <%- (edit) ? "<th>Active</th>" : "" %>
+      <th>Name</th>
+      <th>State</th>
+    </tr>
+  </thead>
+
+  <tbody>
+  <% for (let unit of units) { %>
+    <tr>
+      <% if (edit) { %>
+        <td><label>
+            <input name="active_<%= unit.logicalAddress %>" type="checkbox" class="<%= (unit.active === 'X') ? 'indeterminate' : 'filled-in' %>" 
+                    id="active_<%= unit.logicalAddress %>"   value="Y"
+                    <%= (unit.active==='Y') ? 'checked' : '' %> />
+            <span></span>
+        </label></td>
+      <% } %>
+      <td>
+        <span><%= (edit) ? unit.displayName : unit.getDisplayName() %></span>
+        <br><span class="grey-text"><small><%= unit.typeName() %>
+          (<%= hex(unit.node.logicalAddress) %>;<%= hex(unit.logicalAddress) %>)
+        </small></span>
+        <input type="hidden" name="units" value="<%= unit.getName() %>">
+      </td>
+      <td>
+        <% if ((unit.type == 1) || (unit.type == 2) || (unit.type == 102)) { %>
+          <div class="switch">
+            <label>Off
+              <input name="status_<%= unit.getName() %>" <%= (unit.status) ? 'checked' : '' %>
+                      type="checkbox" onchange="setStatus(this.checked, '<%= unit.node.master.getAddress() %>', <%= unit.node.logicalAddress %>, <%= unit.logicalAddress %>)">
+              <span class="lever"></span>On
+            </label>
+          </div>
+          <% if (unit.type == 1) { %>
+            <p class="range-field">
+              <input type="range" name="status_<%= unit.getName() %>" min="1" max="99" value="<%= unit.value %>" 
+                      onchange="setStatus(this.value, '<%= unit.node.master.getAddress() %>', <%= unit.node.logicalAddress %>, <%= unit.logicalAddress %>)" />
+            </p>
+          <% } %>
+
+        <% } else if (unit.type == 7) { %>
+          <div>
+            <a class="btn-floating btn-small waves-effect waves-light" onclick="press(1, '<%= unit.node.master.getAddress() %>', <%= unit.node.logicalAddress %>, <%= unit.logicalAddress %>)"><i class="material-icons">adjust</i></a>
+          </div>
+
+        <% } else if ((unit.type == 8) || (unit.type == 102)) { %>
+          <%= unit.getDispayState() %><br>
+          <div>
+            <a class="btn-floating btn-small waves-effect waves-light" onclick="press(5, '<%= unit.node.master.getAddress() %>', <%= unit.node.logicalAddress %>, <%= unit.logicalAddress %>)"><i class="material-icons">arrow_downward</i></a>
+            <a class="btn-floating btn-small waves-effect waves-light" onclick="press(3, '<%= unit.node.master.getAddress() %>', <%= unit.node.logicalAddress %>, <%= unit.logicalAddress %>)"><i class="material-icons">stop</i></a>
+            <a class="btn-floating btn-small waves-effect waves-light" onclick="press(4, '<%= unit.node.master.getAddress() %>', <%= unit.node.logicalAddress %>, <%= unit.logicalAddress %>)"><i class="material-icons">arrow_upward</i></a>
+          </div>
+
+        <% } else { %>
+          <span><%= unit.getDispayState() %>
+        <% } %>
+      </td>
+    </tr>
+  <% } %>
+  </tbody>
+</table>
+
+<script>
+  function setStatus(state, master, node, unit) {
+    if (typeof state === "boolean") state = (state) ? "Y" : "N";
+    // console.log(state, master, node, unit);
+    ajax("http://<%= req.headers.host %>/units/set?master="+master+"&node="+node+"&unit="+unit+"&value="+state, function(data){ 
+      // console.log(data); 
+    });
+  }
+  function press(state, master, node, unit) {
+    if (typeof state === "boolean") state = (state) ? "Y" : "N";
+    // console.log(state, master, node, unit);
+    ajax("http://<%= req.headers.host %>/units/press?master="+master+"&node="+node+"&unit="+unit+"&value="+state, function(data){ 
+      // console.log(data); 
+    });
+  }
+</script>

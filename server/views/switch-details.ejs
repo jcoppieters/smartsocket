@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+  <html>
+    <head>
+      <link type="text/css" rel="stylesheet" href="/assets/min.css"  media="screen,projection"/>
+
+      <!--Let browser know website is optimized for mobile-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon" />
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+      <%include /views/style %>
+    </head>
+
+    <body>
+      <%include /views/nav %>
+
+      <form method="POST" action="/switches">
+        <input type="hidden" name="id" value="<%= id %>">
+        <h1>
+          Switch #<%= id %>
+          <button class="right btn waves-effect waves-light" type="submit" name="action" value="cancel">Back</button>
+          <button class="right btn waves-effect waves-light" type="submit" name="action" value="delete">Delete</button>
+          <button class="right btn waves-effect waves-light" type="submit" name="action" value="change">Save</button>
+        </h1>
+
+        <div class="row">
+          <div class="input-field col s12">
+            <select name="master" id="master">
+              <% for (let m of masters) { %>
+                <option value="<%= m.getAddress() %>" "<%= (swtch.master == m.getAddress()) ? "selected" : "" %>"><%= m.getAddress() %></option>
+              <% } %>
+            </select>
+            <label for="master">Master</label>
+          </div>
+        </div>
+    
+        <div class="row">
+          <div class="input-field col s12">
+            <input placeholder="0" id="unit" name="unit" type="text" 
+                   value="<%= hex(swtch.nodeNr) %>;<%= hex(swtch.unitNr) %><%= (swtch.unitName) ? (' (' + swtch.unitName + ')') : '' %>">
+            <label for="channel">Unit (hex or name)</label>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="input-field col s8">
+            <select name="type" id="type">
+              <option value="" <%= (swtch.type == '') ? 'selected' : '' %>>Select Type</option>
+              <option value="smappee" <%= (swtch.type == 'smappee') ? 'selected' : '' %>>Smappee</option>
+              <option value="RF" <%= (swtch.type == 'RF') ? 'selected' : '' %>>RF</option>
+            </select>
+            <label for="type">Type</label>
+          </div>
+          <div class="switch input-field col s4">
+            <label>Off
+              <input name="status_<%= swtch.unitName %>" <%= (swtch.value) ? 'checked' : '' %>
+                     type="checkbox" onchange="setStatus(this.checked, <%= id %>)">
+              <span class="lever"></span>On
+            </label>
+          </div>
+
+        </div>
+
+        <div class="row">
+          <div class="input-field col s12">
+            <input placeholder="0" id="plug" name="plug" type="text" 
+                   value="<%= swtch.plug %>">
+            <label for="plug">Plug</label>
+          </div>
+        </div>
+
+      </form>
+      <%include /views/footer %>
+
+    </body>
+
+    <%include /views/scripts %>
+    <%include /views/switch-script %>
+  </html>

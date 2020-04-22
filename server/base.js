@@ -1,0 +1,67 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const fs = require("fs");
+const protocol_1 = require("../duotecno/protocol");
+const types_1 = require("../duotecno/types");
+///////////////
+// Log Class //
+///////////////
+class Base {
+    constructor(type, debug = false, logger) {
+        this.debug = debug || false;
+        this.logger = (this.debug) ? console.log : function () { };
+        protocol_1.Protocol.setLogger(this.logger);
+        this.type = type || "base";
+    }
+    info(msg) {
+        if (this.debug) {
+            this.logger(this.type + " - " + msg);
+        }
+    }
+    log(msg) {
+        this.logger(this.type + " - " + msg);
+    }
+    err(msg) {
+        this.logger(this.type + " - *** " + msg + " ***");
+    }
+    //////////////////
+    // Config stuff //
+    //////////////////
+    readConfig() {
+        this.config = this.read(this.type);
+    }
+    writeConfig() {
+        this.write(this.type, this.config);
+    }
+    read(type) {
+        const fn = './config.' + type + '.json';
+        let config = null;
+        try {
+            const configBuf = fs.readFileSync(fn);
+            const configStr = configBuf.toString();
+            config = JSON.parse(configStr);
+        }
+        catch (err) {
+            this.log("Couldn't read my config file (" + fn + ") -- Creating empty config.");
+        }
+        // sanitize the config
+        const temp = types_1.Sanitizers[type](config);
+        // write if we created it (new intallations or new config params)
+        if (!config && temp)
+            this.write(type, temp);
+        return temp;
+    }
+    write(type, config) {
+        const fn = './config.' + type + '.json';
+        try {
+            config = types_1.Sanitizers[type](config);
+            fs.writeFileSync(fn, JSON.stringify(config, null, 2));
+        }
+        catch (err) {
+            this.err("Couldn't write my " + this.type + " config file (" + fn + ")");
+        }
+        return config;
+    }
+}
+exports.Base = Base;
+//# sourceMappingURL=base.js.map
