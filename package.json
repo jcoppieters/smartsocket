@@ -1,30 +1,40 @@
 {
   "name": "smart-socket",
-  "version": "1.0.0",
-  "description": "Proxy Websockets to TCP sockets",
+  "version": "2.0.0",
+  "description": "SmartServer (Proxy Websockets to TCP sockets, Smappee MQTT, Duotecno IP Nodes)",
   "main": "index.js",
-  "scripts": {},
+  "author": "Johan Coppieters",
+  "homepage": "http://www.duotecno.be",
+  "license": "ISC",
+  "private": true,
+  "scripts": {
+    "start": "DEBUG=* homebridge -D -P '/Users/johan/Library/Mobile Documents/com~apple~CloudDocs/Projects/Duotecno/ssoc'",
+    "deploy": "scp -r www/* root@akiworks.be:/usr/local/nodejs/smartsocket/www",
+    "addwww": "cp -r www/* '/Users/johan/Library/Mobile Documents/com~apple~CloudDocs/Projects/Duotecno/ssoc/www'"
+  },
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=8.0.0",
+    "homebridge": ">=0.4.0"
   },
   "keywords": [
     "websockets",
     "TCP",
     "sockets",
-    "proxy"
+    "proxy",
+    "duotecno",
+    "homebridge",
+    "homebridge-plugin"
   ],
   "repository": {
     "type": "git",
     "url": "https://github.com/jcoppieters/smartsocket.git"
   },
-  "author": "Johan Coppieters",
-  "license": "ISC",
   "dependencies": {
     "@types/mime-types": "^2.1.0",
-    "@types/ws": "^6.0.4",
-    "ejs": "^3.0.1",
     "mime-types": "^2.1.25",
-    "ws": "^7.2.1"
+    "@types/ws": "^6.0.4",
+    "ws": "^7.2.1",
+    "ejs": "^3.0.1"
   },
   "devDependencies": {
     "@types/node": "^11.15.3"

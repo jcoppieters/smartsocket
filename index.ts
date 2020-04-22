@@ -1,6 +1,8 @@
-#!/usr/bin/env node
+import { Platform } from "./server/platform";
 
-import { SocApp } from './socapp';
+console.log("running in directory: " + process.cwd());
 
-const socServer = new SocApp(9999, console.log);
-socServer.serve();
+module.exports = function (homebridge) {
+  console.log("registering Duotecno Platform");
+  homebridge.registerPlatform("homebridge-duotecno", "DuotecnoPlatform", Platform, false);
+};

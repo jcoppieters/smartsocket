@@ -30684,6 +30684,8 @@ ion-checkbox {
 
 page-config .toolbar img {
   margin-left: 10px;
+  width: 29px;
+  margin-top: 3px;
 }
 
 page-config .toolbar .bar-buttons {
@@ -30737,6 +30739,11 @@ page-config span.nonActive {
 page-config span.comm {
   font-size: 1.2rem;
   color: grey;
+}
+
+page-config .groups ion-item button {
+  padding-right: 5px;
+  background-color: #f2f2f2;
 }
 
 page-node .addr {

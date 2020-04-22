@@ -91,7 +91,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var System = /** @class */ (function (_super) {
     __extends(System, _super);
     function System(toastCtrl, events) {
-        var _this = _super.call(this, "system", false) || this;
+        var _this = _super.call(this, "system", true) || this;
         _this.toastCtrl = toastCtrl;
         _this.isBrowser = true;
         _this.isSplitted = false;
@@ -118,33 +118,11 @@ var System = /** @class */ (function (_super) {
         __WEBPACK_IMPORTED_MODULE_3__protocol__["c" /* Protocol */].logger = logger;
     };
     System.prototype.openMasters = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var inx, err_1;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        inx = 0;
-                        _a.label = 1;
-                    case 1:
-                        if (!(inx < this.config.cmasters.length)) return [3 /*break*/, 6];
-                        _a.label = 2;
-                    case 2:
-                        _a.trys.push([2, 4, , 5]);
-                        return [4 /*yield*/, this.openMaster(this.config.cmasters[inx], inx)];
-                    case 3:
-                        _a.sent();
-                        return [3 /*break*/, 5];
-                    case 4:
-                        err_1 = _a.sent();
-                        this.log(err_1);
-                        return [3 /*break*/, 5];
-                    case 5:
-                        inx++;
-                        return [3 /*break*/, 1];
-                    case 6: return [2 /*return*/];
-                }
-            });
-        });
+        // don't wait for the real open of the sockets
+        // some errors: the socket to the proxy opens, but the socket to the hardware fails
+        for (var inx = 0; inx < this.config.cmasters.length; inx++) {
+            this.openMaster(this.config.cmasters[inx], inx);
+        }
     };
     System.prototype.closeMasters = function () {
         return __awaiter(this, void 0, void 0, function () {
@@ -170,44 +148,42 @@ var System = /** @class */ (function (_super) {
     };
     System.prototype.openMaster = function (config, inx) {
         return __awaiter(this, void 0, void 0, function () {
-            var master, e_1;
+            var master;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         master = new __WEBPACK_IMPORTED_MODULE_1__master__["a" /* Master */](this, config, this.toastCtrl);
                         this.masters[inx] = master;
-                        _a.label = 1;
-                    case 1:
-                        _a.trys.push([1, 5, , 6]);
-                        // testing
                         if (!master.config.active)
                             return [2 /*return*/];
                         this.log("opening master: " + master.getAddress());
                         return [4 /*yield*/, master.open()];
-                    case 2:
-                        _a.sent();
+                    case 1:
+                        if (!_a.sent()) return [3 /*break*/, 6];
                         return [4 /*yield*/, master.login()];
-                    case 3:
-                        if (!(_a.sent()))
-                            throw (new Error("Failed to log in"));
+                    case 2:
+                        if (!_a.sent()) return [3 /*break*/, 4];
                         return [4 /*yield*/, master.getDatabase()];
-                    case 4:
+                    case 3:
                         _a.sent();
                         this.log("master: " + master.getAddress() + " opened with " + master.nodes.length + " nodes.");
                         this.triggerRebuild();
-                        return [3 /*break*/, 6];
-                    case 5:
-                        e_1 = _a.sent();
-                        this.err("failed to open master (" + e_1.toString() + ")");
-                        return [3 /*break*/, 6];
-                    case 6: return [2 /*return*/];
+                        return [3 /*break*/, 5];
+                    case 4:
+                        this.err("failed to log in on " + master.getAddress());
+                        _a.label = 5;
+                    case 5: return [3 /*break*/, 7];
+                    case 6:
+                        this.err("failed to open connection on " + master.getAddress());
+                        _a.label = 7;
+                    case 7: return [2 /*return*/];
                 }
             });
         });
     };
     System.prototype.closeMaster = function (master) {
         return __awaiter(this, void 0, void 0, function () {
-            var inx, e_2;
+            var inx, e_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -223,7 +199,7 @@ var System = /** @class */ (function (_super) {
                         _a.sent();
                         return [3 /*break*/, 4];
                     case 3:
-                        e_2 = _a.sent();
+                        e_1 = _a.sent();
                         this.err("failed to close master on " + master.getAddress() + ":" + master.getConfig().port);
                         return [3 /*break*/, 4];
                     case 4:
@@ -288,9 +264,8 @@ var System = /** @class */ (function (_super) {
                         this.config.cunits = this.config.cunits.filter(function (unit) {
                             return (unit.masterPort != masterPort) || (unit.masterAddress != masterAddress);
                         });
-                        this.config.cnodes = this.config.cnodes.filter(function (node) {
-                            return (node.masterPort != masterPort) || (node.masterAddress != masterAddress);
-                        });
+                        // this.config.cnodes = this.config.cnodes.filter(node => 
+                        //   (node.masterPort != masterPort) || (node.masterAddress != masterAddress));
                         this.writeConfig();
                         _a.label = 2;
                     case 2: return [2 /*return*/];
@@ -300,39 +275,29 @@ var System = /** @class */ (function (_super) {
     };
     System.prototype.setActiveState = function (item) {
         if (item instanceof __WEBPACK_IMPORTED_MODULE_3__protocol__["a" /* Node */]) {
-            var masterAddress_1 = item.master.getAddress();
-            var masterPort_1 = item.master.getPort();
-            var config = this.config.cnodes.find(function (cn) {
-                return (cn.logicalAddress === item.logicalAddress) &&
-                    (cn.masterAddress == masterAddress_1) &&
-                    (cn.masterPort == masterPort_1);
-            });
-            item.active = !!config;
+            // const masterAddress = item.master.getAddress();
+            // const masterPort = item.master.getPort();
+            // const nodeConfig = this.config.cnodes.find((cn: NodeConfig) => 
+            //   (cn.logicalAddress === item.logicalAddress) && 
+            //   (cn.masterAddress == masterAddress) && 
+            //   (cn.masterPort == masterPort));
+            // // exists in configured nodes
+            // item.active = !! nodeConfig;
         }
         if (item instanceof __WEBPACK_IMPORTED_MODULE_3__protocol__["e" /* Unit */]) {
-            var masterAddress_2 = item.node.master.getAddress();
-            var masterPort_2 = item.node.master.getPort();
-            var config = this.config.cunits.find(function (cu) {
+            var masterAddress_1 = item.node.master.getAddress();
+            var masterPort_1 = item.node.master.getPort();
+            var unitConfig = this.config.cunits.find(function (cu) {
                 return (cu.logicalAddress === item.logicalAddress) &&
                     (cu.logicalNodeAddress === item.logicalNodeAddress) &&
-                    (cu.masterAddress === masterAddress_2) &&
-                    (cu.masterPort == masterPort_2);
+                    (cu.masterAddress === masterAddress_1) &&
+                    (cu.masterPort == masterPort_1);
             });
-            item.active = !!config;
-            if (config) {
-                item.group = config.group;
+            // exists in configures units
+            item.active = !!unitConfig;
+            if (unitConfig) {
+                item.group = unitConfig.group;
             }
-        }
-    };
-    System.prototype.checkGroups = function () {
-        var cgroups = this.config.cgroups;
-        var last = cgroups.length - 1;
-        // delete last entry if empty and not used
-        if (!cgroups[last]) {
-            var used_1 = false;
-            this.masters.forEach(function (m) { return m.allUnits(function (u) { return used_1 = used_1 || (u.group == last); }); });
-            if (!used_1)
-                cgroups.pop();
         }
     };
     System.prototype.selectGroup = function (group) {
@@ -347,6 +312,25 @@ var System = /** @class */ (function (_super) {
             group.visible = !group.visible;
         }
         this.writeGroups();
+    };
+    System.prototype.deleteGroup = function (group) {
+        if (this.groups.length > 1) {
+            // delete the group
+            var inx = this.groups.indexOf(group);
+            this.groups.splice(inx, 1);
+            // renumber
+            this.groups.sort(function (a, b) { return a.order - b.order; });
+            this.groups.forEach(function (g, i) { return g.order = i; });
+            // set all items of the deleted group to group 0
+            var first_1 = this.groups[0].id;
+            this.masters.forEach(function (m) { return m.allUnits(function (u) {
+                if (u.group == group.id)
+                    u.group = first_1;
+            }); });
+            // save groups and changes units
+            this.writeGroups();
+            this.updateSystem(false);
+        }
     };
     //////////////////////////////////////
     // Finding masters, nodes and units //
@@ -405,20 +389,14 @@ var System = /** @class */ (function (_super) {
     //////////////////////////////////////////////////
     // Getting the current state of units and nodes //
     //////////////////////////////////////////////////
-    System.prototype.updateGroups = function () {
-        // write only the group info, but for now, do it all
-        this.updateSystem(true);
-    };
     System.prototype.updateSystem = function (dontTrigger) {
+        // this.config.cnodes = this.masters
+        //   .reduce((acc, m: Master) => acc.concat(m.nodes), [])
+        //   .filter((n: Node) => n.units.some(n => n.active))
+        //   .map((n: Node) => { return { active: <YN>"Y", 
+        //                                masterAddress: n.master.getAddress(), masterPort: n.master.getPort(), 
+        //                                logicalAddress: n.logicalAddress }; });
         if (dontTrigger === void 0) { dontTrigger = false; }
-        this.config.cnodes = this.masters
-            .reduce(function (acc, m) { return acc.concat(m.nodes); }, [])
-            .filter(function (n) { return n.units.some(function (n) { return n.active; }); })
-            .map(function (n) {
-            return { active: "Y",
-                masterAddress: n.master.getAddress(), masterPort: n.master.getPort(),
-                logicalAddress: n.logicalAddress };
-        });
         this.config.cunits = this.masters
             .reduce(function (acc, m) { return acc.concat(m.nodes); }, [])
             .reduce(function (acc, n) { return acc.concat(n.units); }, [])
@@ -538,6 +516,9 @@ var System = /** @class */ (function (_super) {
         else {
             this.groups = this.read("groups");
         }
+        // order the groups and reset the order indices
+        this.groups.sort(function (a, b) { return a.order - b.order; });
+        this.groups.forEach(function (g, i) { return g.order = i; });
     };
     System.prototype.writeGroups = function () {
         this.groups = this.write("groups", this.groups);
@@ -883,9 +864,6 @@ var ConfigPage = /** @class */ (function () {
     /////////////
     // General //
     /////////////
-    ConfigPage.prototype.saveConfig = function () {
-        this.system.writeConfig();
-    };
     ConfigPage.prototype.allowComm = function () {
         var _this = this;
         if (this.showcomm) {
@@ -899,16 +877,30 @@ var ConfigPage = /** @class */ (function () {
             }).present();
         }
     };
+    ConfigPage.prototype.saveConfig = function () {
+        this.system.writeConfig();
+    };
     ////////////
     // Groups //
     ////////////
     ConfigPage.prototype.addGroup = function () {
         // find max id
         var max = this.system.groups.reduce(function (m, g) { return (g.id > m) ? g.id : m; }, this.system.groups[0].id);
-        this.system.groups.push(__assign({}, __WEBPACK_IMPORTED_MODULE_5__system_types__["c" /* kEmptyGroup */], { id: max + 1 }));
+        this.system.groups.push(__assign({}, __WEBPACK_IMPORTED_MODULE_5__system_types__["d" /* kEmptyGroup */], { id: max + 1 }));
     };
     ConfigPage.prototype.saveGroups = function () {
         this.system.writeGroups();
+    };
+    ConfigPage.prototype.reorderGroups = function (indexes) {
+        this.system.groups[indexes.from].order = indexes.to;
+        this.system.groups[indexes.to].order = indexes.from;
+        this.system.groups.sort(function (a, b) { return a.order - b.order; });
+        this.saveGroups();
+    };
+    ConfigPage.prototype.tryDelete = function (group) {
+        if (this.system.groups.length > 1) {
+            this.system.deleteGroup(group);
+        }
     };
     /////////////
     // Masters //
@@ -923,7 +915,7 @@ var ConfigPage = /** @class */ (function () {
         var _this = this;
         var modal = this.modalCtl.create(__WEBPACK_IMPORTED_MODULE_3__master__["a" /* MasterPage */], data);
         modal.onDidDismiss(function (data) {
-            if (data.masterConfig) {
+            if (data && data.masterConfig) {
                 try {
                     _this.system.addMaster(data.masterConfig);
                 }
@@ -967,10 +959,22 @@ var ConfigPage = /** @class */ (function () {
         });
         modal.present();
     };
+    /////////////
+    // Backups //
+    /////////////
+    ConfigPage.prototype.doBackup = function () {
+        // write the config's to the server
+        // ... but then: the master should include the selected units... !!!
+        this.system.masters.forEach(function (m) { return m.backup(); });
+    };
+    ConfigPage.prototype.doRestore = function () {
+        // request the config's from the server
+        this.system.masters.forEach(function (m) { return m.restore(); });
+    };
     ConfigPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
             selector: 'page-config',
-            template: "\n  <ion-header>\n    <ion-toolbar>\n      <img src=\"/assets/icon/duotecno.png\" />\n      <ion-title>{{'Page.Config' |_ }}</ion-title>\n      <ion-buttons end *ngIf=\"what === 'groups' || what === 'masters'\">\n        <button ion-button icon-start (click)=\"addGroup()\" *ngIf=\"what === 'groups'\">\n          <ion-icon name=\"add\"></ion-icon>\n          {{\"Config.Group\" |_ }}\n        </button>\n        <button ion-button icon-start (click)=\"addMaster()\" *ngIf=\"what === 'masters'\">\n          <ion-icon name=\"add\"></ion-icon>\n          {{\"Config.Master\" |_ }}\n        </button>\n      </ion-buttons>\n    </ion-toolbar>\n  </ion-header>\n\n  <ion-content padding>\n    <ion-segment [(ngModel)]=\"what\">\n      <ion-segment-button value=\"general\">\n        <ion-icon name=\"settings\"></ion-icon> {{ \"Config.General\" |_ }}\n      </ion-segment-button>\n      <ion-segment-button value=\"groups\">\n        <ion-icon name=\"folder\"></ion-icon> {{ \"Config.Groups\" |_ }}\n      </ion-segment-button>\n      <ion-segment-button value=\"masters\">\n        <ion-icon name=\"code-working\"></ion-icon> {{ \"Config.Masters\" |_ }}\n      </ion-segment-button>\n    </ion-segment>\n\n\n    <form *ngIf=\"what === 'general'\">\n      <ion-list>\n        <ion-list-group>\n          <ion-item-divider color=\"light\">\n            {{ \"Config.Settings\" |_ }}\n          </ion-item-divider>\n          <ion-item>\n            <ion-label>{{ \"Config.Language\" |_ }}</ion-label>\n            <ion-select name=\"language\" interface=\"popover\" \n                        [(ngModel)]=\"system.config.language\" (ionChange)=\"saveConfig()\">\n              <ion-option value=\"EN\">English</ion-option>\n              <ion-option value=\"NL\">Nederlands</ion-option>\n              <ion-option value=\"FR\">Fran\u00E7ais</ion-option>\n            </ion-select>\n          </ion-item>\n          <ion-item>\n            <ion-label>{{ \"Config.SeparateStores\" |_ }}</ion-label>\n            <ion-toggle name=\"stores\" [(ngModel)]=\"system.config.stores\" (ionChange)=\"saveConfig()\"></ion-toggle>\n          </ion-item>\n          <ion-item>\n            <ion-label>{{ \"Config.MultipleGroups\" |_ }}</ion-label>\n            <ion-toggle name=\"multiple\" [(ngModel)]=\"system.config.multiple\" (ionChange)=\"saveConfig()\"></ion-toggle>\n          </ion-item>\n        </ion-list-group>\n\n\n        <ion-list-group>\n          <ion-item-divider color=\"light\">\n          {{ \"Config.Communication\" |_ }} <span class=\"comm\">({{ system.config.socketserver }})</span>\n          </ion-item-divider>\n          <ion-item>\n            <ion-label>{{ \"Config.Advanced\" |_ }}</ion-label>\n            <ion-toggle name=\"communication\" [(ngModel)]=\"showcomm\" (ionChange)=\"allowComm()\"></ion-toggle>\n          </ion-item>\n          <ion-item *ngIf=\"showcomm\">\n            <ion-label stacked>Socket server IP</ion-label>\n            <ion-input name=\"socketserver\" type=\"text\" [(ngModel)]=\"system.config.socketserver\" (ionBlur)=\"saveConfig()\"></ion-input>\n          </ion-item>\n          <ion-item *ngIf=\"showcomm\">\n            <ion-label stacked>Socket server port</ion-label>\n            <ion-input name=\"socketport\" type=\"text\" [(ngModel)]=\"system.config.socketport\" (ionBlur)=\"saveConfig()\"></ion-input>\n          </ion-item>\n        </ion-list-group>\n\n      </ion-list>\n    </form>\n\n    <form *ngIf=\"what === 'groups'\">\n      <ion-list>\n        <ion-item *ngFor=\"let group of system.groups; let inx = index\">\n          <ion-label stacked>Group {{inx+1}}</ion-label>\n          <ion-input type=\"text\" name=\"group{{inx+1}}\" [(ngModel)]=\"group.name\" (ionBlur)=\"saveGroups()\"></ion-input>\n        </ion-item>\n      </ion-list>\n    </form>\n\n    <ion-list *ngIf=\"what === 'masters'\">\n      <ion-list-group *ngFor=\"let master of system.masters; let inx=index\">\n        <ion-item class=\"address\">\n          <ion-icon name=\"code-working\" item-start></ion-icon>\n          <span [class.nonActive]=\"!master.config.active\">{{master.getAddress()}}<br>{{master.config.name}}</span>\n          <ion-buttons item-end>\n            <button ion-button expandable (click)=\"editMaster(master)\" color=\"primary\">\n              <ion-icon name=\"create\"></ion-icon>\n            </button>\n            <button ion-button expandable (click)=\"deleteMaster(master)\" color=\"danger\">\n              <ion-icon name=\"trash\"></ion-icon>\n            </button>\n          </ion-buttons>\n        </ion-item>\n\n        <ion-item class=\"schedule\" *ngIf=\"master.config.active\">\n          <ion-label stacked>Schedule</ion-label>\n          <ion-select [(ngModel)]=\"master.schedule\" name=\"schedule{{inx}}\" (ionChange)=\"changeSchedule(master)\">\n            <ion-option value=\"0\">{{ \"Config.Week\" |_ }} 1</ion-option>\n            <ion-option value=\"1\">{{ \"Config.Week\" |_ }} 2</ion-option>\n            <ion-option value=\"2\">{{ \"Config.Week\" |_ }} 3</ion-option>\n            <ion-option value=\"3\">{{ \"Config.Holiday\" |_ }}</ion-option>\n          </ion-select>\n        </ion-item>\n\n        <ion-item *ngFor=\"let node of master.nodes\" (click)=\"editNode(node)\" class=\"nodename\">\n          <ion-icon name=\"list\" item-end></ion-icon>\n          {{node.getName()}} <span class=\"addr\">({{node.getNumber()}}, {{node.units.length}}/{{node.nrUnits}})</span>\n        </ion-item>\n      </ion-list-group>\n    </ion-list>\n    <p class=\"version\"> v1.2.5 \u00A9 Johan Coppieters &amp; Duotecno</p>\n  </ion-content>\n  "
+            template: "\n  <ion-header>\n    <ion-toolbar>\n      <img src=\"/assets/icon/duotecno.png\" />\n      <ion-title>{{'Page.Config' |_ }}</ion-title>\n      <ion-buttons end *ngIf=\"what === 'groups' || what === 'masters'\">\n        <button ion-button icon-start (click)=\"addGroup()\" *ngIf=\"what === 'groups'\">\n          <ion-icon name=\"add\"></ion-icon>\n          {{\"Config.Group\" |_ }}\n        </button>\n        <button ion-button icon-start (click)=\"addMaster()\" *ngIf=\"what === 'masters'\">\n          <ion-icon name=\"add\"></ion-icon>\n          {{\"Config.Master\" |_ }}\n        </button>\n      </ion-buttons>\n    </ion-toolbar>\n  </ion-header>\n\n  <ion-content padding>\n    <ion-segment [(ngModel)]=\"what\">\n      <ion-segment-button value=\"general\">\n        <ion-icon name=\"settings\"></ion-icon> {{ \"Config.General\" |_ }}\n      </ion-segment-button>\n      <ion-segment-button value=\"groups\">\n        <ion-icon name=\"folder\"></ion-icon> {{ \"Config.Groups\" |_ }}\n      </ion-segment-button>\n      <ion-segment-button value=\"masters\">\n        <ion-icon name=\"code-working\"></ion-icon> {{ \"Config.Masters\" |_ }}\n      </ion-segment-button>\n    </ion-segment>\n\n\n    <form *ngIf=\"what === 'general'\">\n      <ion-list>\n        <ion-list-group>\n          <ion-item-divider color=\"light\">\n            {{ \"Config.Settings\" |_ }}\n          </ion-item-divider>\n          <ion-item>\n            <ion-label>{{ \"Config.Language\" |_ }}</ion-label>\n            <ion-select name=\"language\" interface=\"popover\" \n                        [(ngModel)]=\"system.config.language\" (ionChange)=\"saveConfig()\">\n              <ion-option value=\"EN\">English</ion-option>\n              <ion-option value=\"NL\">Nederlands</ion-option>\n              <ion-option value=\"FR\">Fran\u00E7ais</ion-option>\n            </ion-select>\n          </ion-item>\n          <ion-item>\n            <ion-label>{{ \"Config.SeparateStores\" |_ }}</ion-label>\n            <ion-toggle name=\"stores\" [(ngModel)]=\"system.config.stores\" (ionChange)=\"saveConfig()\"></ion-toggle>\n          </ion-item>\n          <ion-item>\n            <ion-label>{{ \"Config.MultipleGroups\" |_ }}</ion-label>\n            <ion-toggle name=\"multiple\" [(ngModel)]=\"system.config.multiple\" (ionChange)=\"saveConfig()\"></ion-toggle>\n          </ion-item>\n        </ion-list-group>\n\n\n        <ion-list-group>\n          <ion-item-divider color=\"light\">\n          {{ \"Config.Communication\" |_ }} <span class=\"comm\">({{ system.config.socketserver }})</span>\n          </ion-item-divider>\n          <ion-item>\n            <ion-label>{{ \"Config.Advanced\" |_ }}</ion-label>\n            <ion-toggle name=\"communication\" [(ngModel)]=\"showcomm\" (ionChange)=\"allowComm()\"></ion-toggle>\n          </ion-item>\n          <ion-item *ngIf=\"showcomm\">\n            <ion-label stacked>Socket server IP</ion-label>\n            <ion-input name=\"socketserver\" type=\"text\" [(ngModel)]=\"system.config.socketserver\" (ionBlur)=\"saveConfig()\"></ion-input>\n          </ion-item>\n          <ion-item *ngIf=\"showcomm\">\n            <ion-label stacked>Socket server port</ion-label>\n            <ion-input name=\"socketport\" type=\"text\" [(ngModel)]=\"system.config.socketport\" (ionBlur)=\"saveConfig()\"></ion-input>\n          </ion-item>\n        </ion-list-group>\n\n        <ion-list-group>\n          <ion-item-divider color=\"light\">\n          {{ \"Config.Settings\" |_ }}\n          </ion-item-divider>\n          <!--ion-item>\n          <button ion-button (click)=\"doBackup()\">{{ \"Config.Backup\" |_ }}</button>\n          <button ion-button (click)=\"doRestore()\">{{ \"Config.Restore\" |_ }}</button>\n          </ion-item -->\n        </ion-list-group>\n\n      </ion-list>\n    </form>\n\n    <form *ngIf=\"what === 'groups'\">\n      <ion-list reorder=\"true\" (ionItemReorder)=\"reorderGroups($event)\" class=\"groups\">\n        <ion-item *ngFor=\"let group of system.groups; let inx = index\">\n          <ion-label stacked>Group {{inx+1}}</ion-label>\n          <ion-buttons item-end *ngIf=\"system.groups.length > 1\">\n            <button ion-button (click)=\"tryDelete(group)\"><ion-icon item-end name=\"trash\" ></ion-icon></button>\n          </ion-buttons>\n          <ion-input type=\"text\" name=\"group{{inx+1}}\" [(ngModel)]=\"group.name\" (ionBlur)=\"saveGroups()\"></ion-input>\n        </ion-item>\n      </ion-list>\n    </form>\n\n    <ion-list *ngIf=\"what === 'masters'\">\n      <ion-list-group *ngFor=\"let master of system.masters; let inx=index\">\n        <ion-item class=\"address\">\n          <ion-icon name=\"code-working\" item-start color=\"{{ (master.isOpen) ? 'primary' : 'cool' }}\"></ion-icon>\n          <span [class.nonActive]=\"!master.config.active || !master.isOpen\">{{master.getAddress()}}<br>{{master.config.name}}</span>\n          <ion-buttons item-end>\n            <button ion-button expandable (click)=\"editMaster(master)\" color=\"{{ (master.isOpen) ? 'primary' : 'cool' }}\">\n              <ion-icon name=\"create\"></ion-icon>\n            </button>\n            <button ion-button expandable (click)=\"deleteMaster(master)\" color=\"primary\">\n              <ion-icon name=\"trash\"></ion-icon>\n            </button>\n          </ion-buttons>\n        </ion-item>\n\n        <ion-item class=\"schedule\" *ngIf=\"master.config.active\">\n          <ion-label stacked>Schedule</ion-label>\n          <ion-select [(ngModel)]=\"master.schedule\" name=\"schedule{{inx}}\" (ionChange)=\"changeSchedule(master)\">\n            <ion-option value=\"0\">{{ \"Config.Week\" |_ }} 1</ion-option>\n            <ion-option value=\"1\">{{ \"Config.Week\" |_ }} 2</ion-option>\n            <ion-option value=\"2\">{{ \"Config.Week\" |_ }} 3</ion-option>\n            <ion-option value=\"3\">{{ \"Config.Holiday\" |_ }}</ion-option>\n          </ion-select>\n        </ion-item>\n\n        <ion-item *ngFor=\"let node of master.nodes\" (click)=\"editNode(node)\" class=\"nodename\">\n          <ion-icon name=\"list\" item-end></ion-icon>\n          {{node.getName()}} <span class=\"addr\">({{node.getNumber()}}, {{node.units.length}}/{{node.nrUnits}})</span>\n        </ion-item>\n      </ion-list-group>\n    </ion-list>\n    <p class=\"version\"> v1.3.0 \u00A9 Johan Coppieters &amp; Duotecno</p>\n  </ion-content>\n  "
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* ModalController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* AlertController */],
             __WEBPACK_IMPORTED_MODULE_2__system_system__["a" /* System */]])
@@ -1284,6 +1288,11 @@ var SBox = /** @class */ (function () {
             SplashScreen.hide();
             _this.system.setBrowser(platform.is("core"));
         });
+        platform.resume.subscribe(function () {
+            // user opened the app from the background
+            console.log("** App resume **");
+            _this.system.events.publish("refresh");
+        });
     }
     SBox.prototype.select = function (group) {
         this.system.selectGroup(group);
@@ -1371,8 +1380,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 //import { Socket } from 'cz.blocshop.socketsforcordova/socket.js';
 var Master = /** @class */ (function (_super) {
     __extends(Master, _super);
-    // command was sent, no response received yet
-    /* system.config: {
+    /*
+    V2: no groups (store separate in "config.groups")
+  
+    system.config: {
       "socketserver": "akiworks.be",
       "socketport": 9999,
       "language": "EN",
@@ -1402,6 +1413,64 @@ var Master = /** @class */ (function (_super) {
         }, ...
       ]
     }
+  
+  
+    V3 (no cnodes):
+  
+    system.config: {
+      "socketserver": "akiworks.be",
+      "socketport": 9999,
+      "language": "EN",
+      "stores": true,
+      "multiple": true,
+      "cmasters": [
+        { "name": "Roos",
+          "address": "141.135.240.51",
+          "port": 5001,
+          "password": "duotecno",
+          "debug": true,
+          "active": true
+        }, ...],
+      "cunits": [
+        { "active": "Y",
+          "group": "1",
+          "masterAddress": "141.135.240.51",
+          "masterPort": 5001,
+          "logicalNodeAddress": 7,
+          "logicalAddress": 0
+        }, ...
+      ]
+    }
+  
+  
+    V4 (no cunits): -- still needed ??
+  
+     system.config: {
+      "version": 3,
+      "socketserver": "akiworks.be",
+      "socketport": 9999,
+      "language": "EN",
+      "stores": true,
+      "debug": true,
+      "multiple": true,
+      "masters": [
+        { "name": "Roos",
+          "address": "141.135.240.51",
+          "port": 5001,
+          "password": "duotecno",
+          "active": true,
+          "nodes": [
+            { "active": "Y",
+              "logicalAddress": 7,
+              "units": [
+                { "active": "Y",
+                  "group": "1",
+                  "logicalAddress": 0
+                }, ...
+              ]
+            }, ...]
+        }, ...]
+     }
     */
     function Master(system, config, toastCtrl) {
         var _this = _super.call(this, "master", system.debug) || this;
@@ -1471,24 +1540,20 @@ var Master = /** @class */ (function (_super) {
     Master.prototype.open = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.openWeb()];
-                    case 1: 
-                    // test:
-                    // if (!this.system.isBrowser) {
-                    //   try {
-                    //     let x = new Socket();
-                    //     if (x) 
-                    //       this.toast("socket is created")
-                    //     else
-                    //       this.toast("socket return null");
-                    //   } catch(e) {
-                    //     this.toast("socket throwed error: " + e);
-                    //   }
-                    // }
-                    //if (this.system.isBrowser) 
-                    return [2 /*return*/, _a.sent()];
-                }
+                // test:
+                // if (!this.system.isBrowser) {
+                //   try {
+                //     let x = new Socket();
+                //     if (x) 
+                //       this.toast("socket is created")
+                //     else
+                //       this.toast("socket return null");
+                //   } catch(e) {
+                //     this.toast("socket throwed error: " + e);
+                //   }
+                // }
+                //if (this.system.isBrowser) 
+                return [2 /*return*/, this.openWeb()];
             });
         });
     };
@@ -1508,11 +1573,13 @@ var Master = /** @class */ (function (_super) {
                             ////////////////////////////////
                             // try to open the connection //
                             _this.log("opening connection to the SmartSocket Server");
-                            var wsserver = _this.system.config.socketserver + ":" + _this.system.config.socketport;
-                            var tcpserver = _this.config.address + ":" + _this.config.port;
-                            _this.socket = new WebSocket("ws://" + wsserver + "/" + tcpserver);
-                            if (!_this.socket)
-                                throw (new Error("could create new web socket"));
+                            var wsserver_1 = _this.system.config.socketserver + ":" + _this.system.config.socketport;
+                            var tcpserver_1 = _this.config.address + ":" + _this.config.port;
+                            _this.socket = new WebSocket("ws://" + wsserver_1 + "/" + tcpserver_1);
+                            if (!_this.socket) {
+                                _this.err("could create new web socket to " + wsserver_1 + "/" + tcpserver_1);
+                                resolve(false);
+                            }
                             ///////////////////////
                             // set data listener //
                             _this.socket.onmessage = function (message) {
@@ -1522,14 +1589,14 @@ var Master = /** @class */ (function (_super) {
                             ///////////////////////////
                             // set an error listener //
                             _this.socket.onerror = function (err) {
-                                _this.err("Socket: " + err);
+                                _this.err("Socket: " + err + " on " + wsserver_1 + "/" + tcpserver_1);
                             };
                             ///////////////////////////////////////////
                             // set end: the server closed the socket //
                             _this.socket.onclose = function () {
                                 _this.isOpen = false;
                                 _this.isLoggedIn = false;
-                                _this.log("end -> socket got disconnected");
+                                _this.log("end -> socket disconnected on " + wsserver_1 + "/" + tcpserver_1);
                                 if (!_this.closeRequested) {
                                     // unexpected close
                                     _this.err("Socket: closed unexpectedly");
@@ -1538,14 +1605,14 @@ var Master = /** @class */ (function (_super) {
                             _this.socket.onopen = function () {
                                 _this.isOpen = true;
                                 // request a connection to the real socket
-                                _this.log("connection open on " + _this.config.address + " on port " + _this.config.port);
+                                _this.log("connection open on " + wsserver_1 + "/" + tcpserver_1);
                                 // resolve our promise with the opened socket
-                                resolve(_this.socket);
+                                resolve(true);
                             };
                         }
                         catch (e) {
                             _this.err("Failed to open a connection on port " + _this.getPort());
-                            reject(e);
+                            resolve(false);
                         }
                     })];
             });
@@ -1621,6 +1688,27 @@ var Master = /** @class */ (function (_super) {
             });
         });
     };
+    Master.prototype.backup = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var data;
+            return __generator(this, function (_a) {
+                data = JSON.stringify(this.config);
+                __WEBPACK_IMPORTED_MODULE_0__protocol__["c" /* Protocol */].write(this.socket, "[B," + data + "]");
+                return [2 /*return*/];
+            });
+        });
+    };
+    Master.prototype.restore = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                __WEBPACK_IMPORTED_MODULE_0__protocol__["c" /* Protocol */].write(this.socket, "[R]");
+                return [2 /*return*/];
+            });
+        });
+    };
+    Master.prototype.restoring = function (data) {
+        this.config = data;
+    };
     Master.prototype.handleData = function (message) {
         // put the incoming data into a buffer and only use complete data
         this.buffer += message;
@@ -1636,7 +1724,8 @@ var Master = /** @class */ (function (_super) {
         }
         else {
             this.log("incoming msg=" + Object(__WEBPACK_IMPORTED_MODULE_0__protocol__["i" /* recName */])(next.cmd) + ", status=" + next.isStatus +
-                ", data=" + ((next.message) ? next.message.join(",") : "--"));
+                ", data=" + ((!next.message) ?
+                "--" : ((next.message instanceof Array) ? next.message.join(",") : next.message)));
             this.Q.do();
             //this.q.pop();
             if (next.isStatus) {
@@ -1650,6 +1739,9 @@ var Master = /** @class */ (function (_super) {
             }
             else if (next.cmd === __WEBPACK_IMPORTED_MODULE_0__protocol__["d" /* Rec */].ScheduleStatus) {
                 this.receiveSchedule(next.message);
+            }
+            else if (next.cmd === -1) {
+                this.restoring(next.message);
             }
             else {
                 this.log("what to do with: " + next.message);
@@ -1711,12 +1803,11 @@ var Master = /** @class */ (function (_super) {
             __WEBPACK_IMPORTED_MODULE_1__types__["a" /* Sanitizers */].nodeInfo(nodeInfo, node);
         }
         this.system.setActiveState(node);
-        if (node.active && (node.nrUnits !== node.units.length)) {
-            this.fetchAllUnits(node);
-        }
-        else {
-            this.log("Skipping node: " + node.getDescription());
-        }
+        //if (node.active && (node.nrUnits !== node.units.length)) {
+        this.fetchAllUnits(node);
+        //} else {
+        //  this.log("Skipping node: " + node.getDescription());
+        //}
     };
     Master.prototype.receiveUnitInfo = function (message) {
         var unitInfo = __WEBPACK_IMPORTED_MODULE_0__protocol__["c" /* Protocol */].makeUnitInfo(message);
@@ -2426,7 +2517,7 @@ var DimmerControl = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
             selector: 'dimmer',
             inputs: ['service'],
-            template: "\n    <ion-item class=\"dimmer\">\n      <ion-label tappable (click)=\"labelClick()\">{{service.getName()}}\n        <ion-icon [name]=\"arrow()\"></ion-icon>\n        <span class=\"dimmer__value\">{{service.value}}%</span>\n        <ion-icon class=\"state\" *ngIf=\"service.status == 2\" name=\"time\" color=\"primary\"></ion-icon>\n      </ion-label>\n\n      <ion-toggle [(ngModel)]=\"service.status\" (ionChange)=\"change()\"></ion-toggle>\n    </ion-item>\n    <ion-item class=\"dimmer__slider\" *ngIf=\"visible()\">\n      <ion-range min=1 max=100 debounce=400 [(ngModel)]=\"service.value\" (ionChange)=\"changeValue()\">\n        <ion-icon range-left name=\"remove\" name=\"ios-remove\" (click)=\"changeValue(-5)\"></ion-icon>\n        <ion-icon range-right name=\"add\" name=\"ios-add\" (click)=\"changeValue(5)\"></ion-icon>\n      </ion-range>\n    </ion-item>\n  "
+            template: "\n    <ion-item class=\"dimmer\">\n      <ion-label tappable (click)=\"labelClick()\">{{service.getName()}}\n        <ion-icon [name]=\"arrow()\"></ion-icon>\n        <span class=\"dimmer__value\">{{service.value}}%</span>\n        <ion-icon class=\"state\" *ngIf=\"service.status == 2\" name=\"time\" color=\"primary\"></ion-icon>\n      </ion-label>\n\n      <ion-toggle [(ngModel)]=\"service.status\" (ionBlur)=\"change()\"></ion-toggle>\n    </ion-item>\n    <ion-item class=\"dimmer__slider\" *ngIf=\"visible()\">\n      <ion-range min=1 max=100 debounce=400 [(ngModel)]=\"service.value\" (ionChange)=\"changeValue()\">\n        <ion-icon range-left name=\"remove\" name=\"ios-remove\" (click)=\"changeValue(-5)\"></ion-icon>\n        <ion-icon range-right name=\"add\" name=\"ios-add\" (click)=\"changeValue(5)\"></ion-icon>\n      </ion-range>\n    </ion-item>\n  "
         })
     ], DimmerControl);
     return DimmerControl;
@@ -2534,7 +2625,7 @@ var SwitchControl = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
             selector: 'switch',
             inputs: ['service'],
-            template: "\n    <ion-item>\n      <ion-label tappable (click)=\"toggle(service)\">\n        {{service.getName()}}\n        <ion-icon class=\"state\" *ngIf=\"service.status === 2\" name=\"time\" color=\"primary\"></ion-icon>\n      </ion-label>\n\n      <ion-toggle [(ngModel)]=\"service.status\" \n                  (ionChange)=\"change(service)\"></ion-toggle>    \n    </ion-item>\n  "
+            template: "\n    <ion-item>\n      <ion-label tappable (click)=\"toggle(service)\">\n        {{service.getName()}}\n        <ion-icon class=\"state\" *ngIf=\"service.status === 2\" name=\"time\" color=\"primary\"></ion-icon>\n      </ion-label>\n\n      <ion-toggle [(ngModel)]=\"service.status\" \n                  (ionBlur)=\"change(service)\"></ion-toggle>    \n    </ion-item>\n  "
         })
     ], SwitchControl);
     return SwitchControl;
@@ -2668,7 +2759,7 @@ var MoodControl = /** @class */ (function () {
         toast.present();
     };
     MoodControl.prototype.moodColor = function () {
-        return this.service.status ? "primary" : "push";
+        return this.service.status ? "primary" : (this.service.isInput() ? "cool" : "push");
     };
     MoodControl.prototype.down = function (ev) {
         var _this = this;
@@ -2792,7 +2883,7 @@ var StdPage = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["n" /* Component */])({
             selector: 'std-page',
             inputs: ['services', 'showUpDowns'],
-            template: "  \n    <ion-list *ngIf=\"system.masters.length > 0\">\n      <ion-list-group *ngFor=\"let group of system.groups\">\n        <ion-item-divider color=\"light\" *ngIf=\"group.used && moreGroups(group)\">\n          <ion-label tappable (click)=\"toggle(group)\">\n            <ion-icon *ngIf=\"! system.isSplitted\" [name]=\"arrow(group)\"></ion-icon>\n            {{group.name}}\n          </ion-label>\n        </ion-item-divider>\n        <ng-container *ngIf=\"group.used && group.visible\">\n          <ng-container *ngFor=\"let service of system[services]\">\n            <dimmer      [service]=\"service\" *ngIf=\"(service.group == group.id) && service.isDimmer()\"></dimmer>\n            <updown      [service]=\"service\" *ngIf=\"(service.group == group.id) && showUpDowns && service.isUpDown()\"></updown>\n            <switch      [service]=\"service\" *ngIf=\"(service.group == group.id) && service.isSwitch()\"></switch>\n            <mood        [service]=\"service\" *ngIf=\"(service.group == group.id) && service.isMood()\"></mood>\n            <temperature [service]=\"service\" *ngIf=\"(service.group == group.id) && service.isTemperature()\"></temperature>\n          </ng-container>\n        </ng-container>\n      </ion-list-group>\n    </ion-list>\n\n    <div *ngIf=\"system.masters.length <= 0\" class=\"noMaster\">\n      <h1>No masters yet?</h1>\n      <p>Go to the tab \"Configure\" -> \"Masters\"<br>\n        Add a master by clicking on the \"+ Master\"<br>\n        Fill out the parameters.<br>\n        <br>\n        Once your first Node or Smartbox is visible<br>\n        Click on it and select the units you want to use.<br>\n        <br>\n        Later you can split the units (switches, temperature, dimmers, scenes, ...) in multiple sections by first adding more groups.\n    </div>\n"
+            template: "  \n    <ion-list *ngIf=\"system.masters.length > 0\">\n      <ion-list-group *ngFor=\"let group of system.groups\">\n        <ion-item-divider color=\"light\" *ngIf=\"group.used && moreGroups(group)\">\n          <ion-label tappable (click)=\"toggle(group)\">\n            <ion-icon *ngIf=\"! system.isSplitted\" [name]=\"arrow(group)\"></ion-icon>\n            {{group.name}}\n          </ion-label>\n        </ion-item-divider>\n        <ng-container *ngIf=\"group.used && group.visible\">\n          <ng-container *ngFor=\"let service of system[services]\">\n            <dimmer      [service]=\"service\" *ngIf=\"(service.group == group.id) && service.isDimmer()\"></dimmer>\n            <updown      [service]=\"service\" *ngIf=\"(service.group == group.id) && showUpDowns && service.isUpDown()\"></updown>\n            <switch      [service]=\"service\" *ngIf=\"(service.group == group.id) && service.isSwitch()\"></switch>\n            <mood        [service]=\"service\" *ngIf=\"(service.group == group.id) && (service.isMood() || service.isInput())\"></mood>\n            <temperature [service]=\"service\" *ngIf=\"(service.group == group.id) && service.isTemperature()\"></temperature>\n          </ng-container>\n        </ng-container>\n      </ion-list-group>\n    </ion-list>\n\n    <div *ngIf=\"system.masters.length <= 0\" class=\"noMaster\">\n      <h1>No masters yet?</h1>\n      <p>Go to the tab \"Configure\" -> \"Masters\"<br>\n        Add a master by clicking on the \"+ Master\"<br>\n        Fill out the parameters.<br>\n        <br>\n        Once your first Node or Smartbox is visible<br>\n        Click on it and select the units you want to use.<br>\n        <br>\n        Later you can split the units (switches, temperature, dimmers, scenes, ...) in multiple sections by first adding more groups.\n    </div>\n"
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__system_system__["a" /* System */]])
     ], StdPage);
@@ -2814,7 +2905,6 @@ var StdPage = /** @class */ (function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return UnitState; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return UnitMotorCmd; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return UnitType; });
-/* unused harmony export hex */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Node; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return Unit; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return Protocol; });
@@ -2968,10 +3058,6 @@ var UnitType;
 ;
 // kLightbulb  == kSwitch with no "stk" in the name
 // kGarageDoor == kSwitchingMotor with "!" in the name
-function hex(n) {
-    n = Math.floor(n);
-    return "0x" + n.toString(16);
-}
 /////////////////////////
 // Node in the network //
 /////////////////////////
@@ -3003,7 +3089,7 @@ var Node = /** @class */ (function () {
         return this.getName().toLowerCase();
     };
     Node.prototype.getNumber = function () {
-        return hex(this.logicalAddress);
+        return Object(__WEBPACK_IMPORTED_MODULE_0__types__["c" /* hex */])(this.logicalAddress);
     };
     Node.prototype.getDescription = function () {
         return this.getName() + ", active: " + this.active + ", type: " + this.typeName() + ", node: " + this.getName();
@@ -3072,7 +3158,7 @@ var Unit = /** @class */ (function () {
             return this.displayName;
     };
     Unit.prototype.getNumber = function () {
-        return this.node.getNumber() + ";" + hex(this.logicalAddress);
+        return this.node.getNumber() + ";" + Object(__WEBPACK_IMPORTED_MODULE_0__types__["c" /* hex */])(this.logicalAddress);
     };
     Unit.prototype.getSort = function () {
         var name = this.getName().toLowerCase();
@@ -3348,11 +3434,24 @@ var Protocol = {
                 if ((end <= nextRec.rest.length) && (nextRec.rest.charCodeAt(end + 1) === 0x0A))
                     end++;
                 nextRec.rest = nextRec.rest.substring(end + 1);
-                // convert to array and turn strings into numbers
-                nextRec.message = msg.split(",").map(function (c) { return parseInt(c); });
-                // get the first byte to see what kind of incoming data
-                nextRec.cmd = nextRec.message[0];
-                nextRec.isStatus = this.isStatus(nextRec.cmd);
+                if (msg[0] == 'B') {
+                    // delete the "B,"
+                    try {
+                        nextRec.message = JSON.parse(msg.substring(2));
+                    }
+                    catch (e) {
+                        nextRec.message = {};
+                    }
+                    ;
+                    nextRec.cmd = -1;
+                }
+                else {
+                    // convert to array and turn strings into numbers if IP command
+                    nextRec.message = msg.split(",").map(function (c) { return parseInt(c); });
+                    // get the first byte to see what kind of incoming data
+                    nextRec.cmd = nextRec.message[0];
+                    nextRec.isStatus = this.isStatus(nextRec.cmd);
+                }
                 // this.logger("processing: " + (nextRec.isStatus ? "status -> " : "") + msg);
             }
         }
@@ -3526,10 +3625,11 @@ var Protocol = {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return WriteError; });
 /* unused harmony export kEmptyCommRecord */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return kEmptyGroup; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return kEmptyGroup; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Sanitizers; });
 /* unused harmony export ascii */
 /* unused harmony export char */
+/* harmony export (immutable) */ __webpack_exports__["c"] = hex;
 /* unused harmony export two */
 /* unused harmony export now */
 /* unused harmony export single */
@@ -3582,7 +3682,8 @@ var Sanitizers = {
         config.socketserver = config.socketserver || "akiworks.be";
         config.socketport = config.socketport || 9999;
         config.cmasters = config.cmasters || [];
-        config.cnodes = config.cnodes || [];
+        // config.cnodes = config.cnodes || [];
+        delete config["cnodes"];
         config.cunits = config.cunits || [];
         // support old style groups, pre v1.1
         if (typeof config.cgroups != "undefined")
@@ -3660,6 +3761,10 @@ function ascii(char) {
 }
 function char(ascii) {
     return String.fromCharCode(ascii);
+}
+function hex(n) {
+    n = Math.floor(n);
+    return "0x" + n.toString(16);
 }
 function two(n) {
     return (n < 10) ? ("0" + n) : n.toString();

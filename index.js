@@ -1,7 +1,9 @@
-#!/usr/bin/env node
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const socapp_1 = require("./socapp");
-const socServer = new socapp_1.SocApp(9999, console.log);
-socServer.serve();
+const platform_1 = require("./server/platform");
+console.log("running in directory: " + process.cwd());
+module.exports = function (homebridge) {
+    console.log("registering Duotecno Platform");
+    homebridge.registerPlatform("homebridge-duotecno", "DuotecnoPlatform", platform_1.Platform, false);
+};
 //# sourceMappingURL=index.js.map
