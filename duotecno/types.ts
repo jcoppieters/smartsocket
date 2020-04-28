@@ -74,9 +74,6 @@ export interface BaseConfig {
 export interface PlatformConfig extends BaseConfig {
   manufacturer: string,
   platform: string,
-  smappee?: string,
-  smartapp?: string,
-  system?: string,
   [x: string]: any    // for other platforms
 };
 export interface AccessoryConfig {
@@ -91,7 +88,7 @@ export interface HomebridgeConfig {
   accessories?: Array<AccessoryConfig>
 };
 
-export interface WebAppConfig extends BaseConfig {
+export interface SmartAppConfig extends BaseConfig {
   port: number;
   switches: Array<Switch>;
 }
@@ -271,8 +268,8 @@ export const Sanitizers = {
     return config;
   },
 
-  webapp: function(config: WebAppConfig): WebAppConfig {
-    if (!config) config = <WebAppConfig>{};
+  smartapp: function(config: SmartAppConfig): SmartAppConfig {
+    if (!config) config = <SmartAppConfig>{};
     config.port = config.port || 5002;
     config.switches = config.switches || [];
     config.debug = config.debug || false;
@@ -282,7 +279,7 @@ export const Sanitizers = {
   smappee: function(config: SmappeeConfig): SmappeeConfig {
     if (!config) config = <SmappeeConfig>{};
     config.rules = config.rules || [];
-    config.address = config.address || "192.168.99.95";
+    config.address = config.address || "192.168.0.54";
     config.uid = config.uid || "--none--";
     config.debug = config.debug || false;
     return config;

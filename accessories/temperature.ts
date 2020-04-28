@@ -1,6 +1,6 @@
 import { Accessory } from "./accessory";
-import { LogFunction } from "../../types";
-import { Unit } from "../protocol";
+import { LogFunction } from "../duotecno/types";
+import { Unit } from "../duotecno/protocol";
 
 // Johan Coppieters Jan 2019
 //
@@ -28,11 +28,20 @@ export class Temperature extends Accessory {
   }
 
   getTemperature(next) {
-    if (this.unit)
-      this.unit.reqState()
-        .then(val => next(null, <number>val / 10.0))
-        .catch(err => next(err));
-    else
+    if (this.unit) {
+      this.unit.reqState(unit => {
+        this.log("reqState/getTemperature returned a value for " + this.unit.node.getName() + " - " + this.unit.getName() + " -> " + this.unit.value);
+        next(null, <number>unit.value / 10.0);
+      })
+      .catch(err => next(err));
+    } else {
       next( new Error("accessory -> getTemperature needs a unit.") );
+    }
   }
+
+  updateState() {
+    this.me.getCharacteristic(this.homebridge.Characteristic.CurrentTemperature).updateValue((<number>this.unit.value) / 10.0);
+    this.log("Received status change -> update temperature -> " + this.unit.getName() + " = " + this.unit.status + " / " + (<number>this.unit.value) / 10.0);
+  }
+
 }

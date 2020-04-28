@@ -45,6 +45,8 @@ export class Smappee extends Base {
 
   constructor(system: System, debug: boolean, log: LogFunction) {
     super("smappee", debug, log);
+    this.readConfig();
+    
     this.system = system;
 
     this.plugs = {};  // will grow when we encounter one in the mqtt stream.

@@ -1,0 +1,19 @@
+{
+  "bridge": {
+    "name": "Duotecno Bridge",
+    "username": "CC:22:3D:E3:A3:01",
+    "port": 51827,
+    "pin": "577-03-001"
+  },
+  "description": "Duotecno Platform",
+  "platforms": [
+    {
+      "manufacturer": "Duotecno-Coppieters",
+      "platform": "DuotecnoPlatform",
+      "smappee": "./config.smappee.json",
+      "smartapp": "./config.smartapp.json",
+      "system": "./config.system.json"
+    }
+  ],
+  "accessories": []
+}

@@ -144,10 +144,9 @@ try {
   }
 */
 class WebApp extends base_1.Base {
-    constructor(port, type, log) {
+    constructor(type, log) {
         super(type, true, log);
-        this.port = port || 80;
-        // Sanitize
+        this.port = 80;
         this.log("Creating http server");
         this.files = {};
         this.server = http.createServer((req, res) => {

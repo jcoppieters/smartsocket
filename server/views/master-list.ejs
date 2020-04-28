@@ -9,11 +9,11 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
       <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon" />
 
-      <%include /views/style %>
+      <%- include('/views/style'); -%>
     </head>
 
     <body>
-      <%include /views/nav %>
+      <%- include('/views/nav'); -%>
       <form method="POST" action="/masters/new">
         <h1>
           Masters
@@ -31,16 +31,16 @@
           <tbody>
           <% for (let master of masters) { if (master) { %>
             <tr>
-              <td><a href="/masters/edit/<%= master.config.address %>"><%= master.config.name %></a></td>
-              <td><a href="/masters/edit/<%= master.config.address %>"><%= master.config.address %>:<%= master.config.port %></a></td>
-              <td><a href="/masters/edit/<%= master.config.address %>"><%= master.nodes.length %></a></td>
+              <td><a href="/masters/edit/<%= master.config.address %>:<%= master.config.port %>"><%= master.config.name %></a></td>
+              <td><a href="/masters/edit/<%= master.config.address %>:<%= master.config.port %>"><%= master.config.address %></a></td>
+              <td><a href="/masters/edit/<%= master.config.address %>:<%= master.config.port %>"><%= master.nodes.length %></a></td>
             </tr>
           <% }} %>
           </tbody>
         </table>
       </form> 
 
-      <%include /views/footer %>
+      <%- include('/views/footer'); -%>
     </body>
-    <%include /views/scripts %>
+    <%- include('/views/scripts'); -%>
   </html>

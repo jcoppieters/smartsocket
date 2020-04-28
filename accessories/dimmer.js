@@ -21,9 +21,20 @@ class Dimmer extends accessory_1.Accessory {
             .on('set', this.setPower.bind(this));
         lightbulbService
             .getCharacteristic(this.homebridge.Characteristic.Brightness)
-            .on('get', this.getState.bind(this))
+            .on('get', this.getBrightness.bind(this))
             .on('set', this.setBrightness.bind(this));
         return [lightbulbService];
+    }
+    getBrightness(next) {
+        if (this.unit) {
+            this.unit.reqState(unit => {
+                next(null, unit.value);
+                this.log("getBrightness was called for " + this.unit.node.getName() + " - " + this.unit.getName() + " -> " + this.unit.value);
+            }).catch(err => next(err));
+        }
+        else {
+            next(new Error("accessory - getState needs to be overridden if no unit is provided."));
+        }
     }
     setPower(powerOn, next) {
         this.waitingSetPower = true;
@@ -53,6 +64,11 @@ class Dimmer extends accessory_1.Accessory {
         this.unit.setState(value)
             .then(() => next())
             .catch(err => next(err));
+    }
+    updateState() {
+        this.me.getCharacteristic(this.homebridge.Characteristic.On).updateValue(this.unit.status);
+        this.me.getCharacteristic(this.homebridge.Characteristic.Brightness).updateValue(this.unit.value);
+        this.log("Received status change -> update accessory -> " + this.unit.getName() + " = " + this.unit.status + " / " + this.unit.value);
     }
 }
 exports.Dimmer = Dimmer;

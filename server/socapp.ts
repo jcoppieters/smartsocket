@@ -121,17 +121,20 @@ function handleClient(client, req) {
 // Web server //
 ////////////////
 export class SocApp extends WebApp {
-  system: System;
 
-  constructor(port: number, type: string, log: LogFunction, system: System) {
-    super(port, type, log);
-    this.system = system;
+  constructor(type: string, log: LogFunction) {
+    super(type, log);
   }
 
   async doRequest(context: Context): Promise<HttpResponse> {
     if (context.request === "") {
       return this.serveFile("/index.html");
 
+    } else if (context.request === "restart") {
+      setTimeout(() => { process.exit(-1) }, 500);
+      // but ofcourse, someone needs to restart the server...
+      return this.renderRestart();
+      
     } else {
       try {
         return this.serveFile(context.path);

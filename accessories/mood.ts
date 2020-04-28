@@ -1,6 +1,6 @@
 import { Accessory } from "./accessory";
-import { LogFunction } from "../../types";
-import { Unit } from "../protocol";
+import { LogFunction } from "../duotecno/types";
+import { Unit } from "../duotecno/protocol";
 
 // Johan Coppieters Jan 2019
 //
@@ -18,7 +18,7 @@ export class Mood extends Accessory {
   }
 
   getAccessoryServices() {
-    const moodService = this.makeService(this.homebridge.Service.Lightbulb);
+    const moodService = this.makeService(this.homebridge.Service.Switch);
 
     moodService
       .getCharacteristic(this.homebridge.Characteristic.On)
@@ -30,6 +30,8 @@ export class Mood extends Accessory {
   }
 
   getMood(next) {
+    this.log("getMood was called for " + this.unit.node.getName() + " - " + this.unit.getName() + " -> false");
+
     next(null, false);
   }
   setMood(value, next) {
@@ -37,11 +39,13 @@ export class Mood extends Accessory {
       // always set to "off" after send the request.
       this.unit.setState(value)
         .then(() => { 
-          this.unit.value = false; 
           // try to update homekit's value to "off" again.
-          if (this.myService) 
-            this.myService.getCharacteristic(this.homebridge.Characteristic.On).updateValue(false);
-          next() 
+          setTimeout(() => {
+            this.unit.value = false;
+            this.updateState();
+          }, 1200);
+          
+          next();
         })
         .catch(err => next(err));
     else

@@ -1,6 +1,6 @@
 import { Accessory } from "./accessory";
-import { LogFunction } from "../../types";
-import { Unit } from "../protocol";
+import { LogFunction } from "../duotecno/types";
+import { Unit } from "../duotecno/protocol";
 
 // Johan Coppieters Jan 2019
 //

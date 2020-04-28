@@ -119,14 +119,18 @@ function handleClient(client, req) {
 // Web server //
 ////////////////
 class SocApp extends webapp_1.WebApp {
-    constructor(port, type, log, system) {
-        super(port, type, log);
-        this.system = system;
+    constructor(type, log) {
+        super(type, log);
     }
     doRequest(context) {
         return __awaiter(this, void 0, void 0, function* () {
             if (context.request === "") {
                 return this.serveFile("/index.html");
+            }
+            else if (context.request === "restart") {
+                setTimeout(() => { process.exit(-1); }, 500);
+                // but ofcourse, someone needs to restart the server...
+                return this.renderRestart();
             }
             else {
                 try {

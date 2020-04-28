@@ -1,6 +1,6 @@
 import { Accessory } from "./accessory";
-import { LogFunction } from "../../types";
-import { Unit } from "../protocol";
+import { LogFunction } from "../duotecno/types";
+import { Unit } from "../duotecno/protocol";
 
 // Johan Coppieters Jan 2019
 //
@@ -31,12 +31,22 @@ export class Dimmer extends Accessory {
 
     lightbulbService
       .getCharacteristic(this.homebridge.Characteristic.Brightness)
-        .on('get', this.getState.bind(this))
+        .on('get', this.getBrightness.bind(this))
         .on('set', this.setBrightness.bind(this))
 
     return [lightbulbService];
   }
 
+  getBrightness(next) {
+    if (this.unit) {
+      this.unit.reqState(unit => { 
+        next(null, unit.value);
+        this.log("getBrightness was called for " + this.unit.node.getName() + " - " + this.unit.getName() + " -> " + this.unit.value);
+      }).catch(err => next(err));
+    } else {
+      next( new Error("accessory - getState needs to be overridden if no unit is provided.") );
+    }
+  }
 
   setPower(powerOn, next) {
     this.waitingSetPower = true;
@@ -70,4 +80,11 @@ export class Dimmer extends Accessory {
       .then(() => next())
       .catch(err => next(err))
   }
+
+  updateState() {
+    this.me.getCharacteristic(this.homebridge.Characteristic.On).updateValue(this.unit.status);
+    this.me.getCharacteristic(this.homebridge.Characteristic.Brightness).updateValue(this.unit.value);
+    this.log("Received status change -> update accessory -> " + this.unit.getName() + " = " + this.unit.status + " / " + this.unit.value);
+  }
+
 }

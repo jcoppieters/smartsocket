@@ -4,7 +4,7 @@ import { System } from "./system";
 import { Base } from "../server/base";
 
 import { Q } from "./Q";
-//import { Socket } from 'cz.blocshop.socketsforcordova/socket.js';
+import { getSocket, SmartSocket } from "./smartsocket";
 
 export class Master extends Base {
 
@@ -16,13 +16,12 @@ export class Master extends Base {
   public isOpen: boolean;
   public isLoggedIn: boolean;
   private resolveLogin = null;
-  private closeRequested: boolean;
   private buffer: string;
 
   private Q: Q;
   
   config: MasterConfig;
-  private socket: WebSocket //  Socket;
+  private socket: SmartSocket;
 
   // command was sent, no response received yet
 
@@ -77,7 +76,6 @@ export class Master extends Base {
     this.socket = null;
     this.isOpen = false;
     this.isLoggedIn = false;
-    this.closeRequested = false;
   
     // incoming data
     this.buffer = "";
@@ -101,6 +99,9 @@ export class Master extends Base {
 
   getConfig(): MasterConfig {
     return this.config;
+  }
+  isMaster(ip: string, port: number): boolean {
+    return this.hasAddress(ip) && this.hasPort(port);
   }
   hasAddress(ip: string): boolean {
     return this.config.address === ip;
@@ -133,140 +134,29 @@ export class Master extends Base {
   /* Communication */
   /* ************* */
   async open() {
-    // test:
-    // if (!this.system.isBrowser) {
-    //   try {
-    //     let x = new Socket();
-    //     if (x) 
-    //       this.toast("socket is created")
-    //     else
-    //       this.toast("socket return null");
-    //   } catch(e) {
-    //     this.toast("socket throwed error: " + e);
-    //   }
-    // }
-    //if (this.system.isBrowser) 
-      return await this.openWeb();
-    //else 
-    //  return await this.openTCP();
-  }
-  async openTCP() {
-    return this.openWeb();
-  /*  
-    return new Promise((resolve, reject) => {
-      try {
-        ////////////////////////////////
-        // try to open the connection //
-        this.log("opening connection to direct TCP Socket");
-        this.socket = new Socket();
-        if (!this.socket) throw(new Error("could create new tcp socket"));
-
-        ///////////////////////
-        // set data listener //
-        this.socket.onData = (message) => {
-          // messages need to be buffered until "]" is received
-          this.handleData(message);
-        };
-
-        ///////////////////////////
-        // set an error listener //
-        this.socket.onError = (err) => {
-          this.err("TCP Socket: " + err);
-        };
-
-        ///////////////////////////////////////////
-        // set end: the server closed the socket //
-        this.socket.onClose = (err) => {
-          this.isOpen = false;
-          this.isLoggedIn = false;
-          this.log("end -> socket got disconnected");
-
-          if (!this.closeRequested) {
-            // unexpected close
-            this.err("Socket: closed unexpectedly -> " + err);
-          }
-        };
-
-        this.socket.open(this.config.address, this.config.port,
-          () => {
-            this.log("connection open on " + this.getAddress() + " on port " + this.getPort());
-            this.isOpen = true;
-            resolve(this.socket);
-          },
-          (err) => {
-            this.err("Failed to open a connection to " + this.getAddress() + " on port " + this.getPort());
-            reject(err)
-          }
-        );
-
-      } catch(e) {
-        this.err("Failed to open a connection to " + this.getAddress() + " on port " + this.getPort());
-        reject(e);
+    this.socket = await getSocket( this.config.address, this.config.port,
+      (msg) => { 
+        this.handleData(msg);
+      },
+      (end) => {
+        this.isOpen = false;
+        this.isLoggedIn = false;
+        this.log("end -> socket got disconnected");
+      },
+      (log) => {
+        this.log(log);
+      },
+      (err) => {
+        this.err(err);
       }
-    });
-    */
+    );
+    this.isOpen = true;
   }
-  async openWeb() {
-    return new Promise((resolve, reject) => {
-      try {
-        ////////////////////////////////
-        // try to open the connection //
-        this.log("opening connection to the SmartSocket Server");
-        const wsserver = this.system.config.socketserver + ":" + this.system.config.socketport;
-        const tcpserver = this.config.address + ":" + this.config.port;
-        this.socket = new WebSocket("ws://" + wsserver + "/" + tcpserver);
-        if (!this.socket) throw(new Error("could create new web socket"));
-
-        ///////////////////////
-        // set data listener //
-        this.socket.onmessage = (message) => {
-          // messages need to be buffered until "]" is received
-          this.handleData(message.data);
-        };
-
-        ///////////////////////////
-        // set an error listener //
-        this.socket.onerror = (err) => {
-          this.err("Socket: " + err);
-        };
-
-        ///////////////////////////////////////////
-        // set end: the server closed the socket //
-        this.socket.onclose = () => {
-          this.isOpen = false;
-          this.isLoggedIn = false;
-          this.log("end -> socket got disconnected");
-
-          if (!this.closeRequested) {
-            // unexpected close
-            this.err("Socket: closed unexpectedly");
-          }
-        };
-
-        this.socket.onopen = () => {
-          this.isOpen = true;
-
-          // request a connection to the real socket
-          this.log("connection open on " + this.config.address + " on port " + this.config.port);
-          
-          // resolve our promise with the opened socket
-          resolve(this.socket);
-        };
-
-
-      } catch(e) {
-        this.err("Failed to open a connection on port " + this.getPort());
-        reject(e);
-      }
-    });
-  }
-
 
   async close() {
     if (this.isOpen) {
       const message = Protocol.buildDisconnect();
       try {
-        this.closeRequested = true;
         await this.send(message);  
         // server will close the socket, no need to call socket.close()
 
@@ -446,9 +336,9 @@ export class Master extends Base {
   }
 
 
-  fetchAllUnits(node: Node) {
+  async fetchAllUnits(node: Node) {
     for (let unitInx=0; unitInx < node.nrUnits; unitInx++) {
-      this.fetchUnit(node, unitInx);
+      await this.fetchUnit(node, unitInx);
     }
   }
 
@@ -484,22 +374,33 @@ export class Master extends Base {
   }
 
 
-  async getDatabase(readUnits: boolean = true) {
+  async getDatabase(readDB: boolean = false) {
     this.nodes = [];
 
     await this.fetchDbInfo();
+
+    if (readDB)
+      setTimeout(async () => {
+        this.system.allMasters(m => {
+          this.log("reading node db of " + m.getAddress() + ":" + m.getPort());
+          m.allNodes(async n => {
+            this.log("reading unit db of " + n.getName());
+            await m.fetchAllUnits(n);
+          });
+        });
+      }, 1000);
   }
 
-  allNodes(callback:(n: Node) => void) {
+  allNodes(doToNode:(n: Node) => void) {
     this.nodes.forEach(node => {
-      callback(node)
+      doToNode(node)
     });
   }
 
-  allUnits(callback:(u: Unit) => void) {
+  allUnits(doToUnit:(u: Unit) => void) {
     this.nodes.forEach(node => {
       node.units.forEach(unit => {
-        callback(unit)
+        doToUnit(unit)
       });
     });
   }

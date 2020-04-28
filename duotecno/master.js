@@ -13,7 +13,7 @@ const protocol_1 = require("./protocol");
 const types_1 = require("./types");
 const base_1 = require("../server/base");
 const Q_1 = require("./Q");
-//import { Socket } from 'cz.blocshop.socketsforcordova/socket.js';
+const smartsocket_1 = require("./smartsocket");
 class Master extends base_1.Base {
     // command was sent, no response received yet
     /* system.config: {
@@ -63,7 +63,6 @@ class Master extends base_1.Base {
         this.socket = null;
         this.isOpen = false;
         this.isLoggedIn = false;
-        this.closeRequested = false;
         // incoming data
         this.buffer = "";
     }
@@ -82,6 +81,9 @@ class Master extends base_1.Base {
     }
     getConfig() {
         return this.config;
+    }
+    isMaster(ip, port) {
+        return this.hasAddress(ip) && this.hasPort(port);
     }
     hasAddress(ip) {
         return this.config.address === ip;
@@ -113,129 +115,18 @@ class Master extends base_1.Base {
     /* ************* */
     open() {
         return __awaiter(this, void 0, void 0, function* () {
-            // test:
-            // if (!this.system.isBrowser) {
-            //   try {
-            //     let x = new Socket();
-            //     if (x) 
-            //       this.toast("socket is created")
-            //     else
-            //       this.toast("socket return null");
-            //   } catch(e) {
-            //     this.toast("socket throwed error: " + e);
-            //   }
-            // }
-            //if (this.system.isBrowser) 
-            return yield this.openWeb();
-            //else 
-            //  return await this.openTCP();
-        });
-    }
-    openTCP() {
-        return __awaiter(this, void 0, void 0, function* () {
-            return this.openWeb();
-            /*
-              return new Promise((resolve, reject) => {
-                try {
-                  ////////////////////////////////
-                  // try to open the connection //
-                  this.log("opening connection to direct TCP Socket");
-                  this.socket = new Socket();
-                  if (!this.socket) throw(new Error("could create new tcp socket"));
-          
-                  ///////////////////////
-                  // set data listener //
-                  this.socket.onData = (message) => {
-                    // messages need to be buffered until "]" is received
-                    this.handleData(message);
-                  };
-          
-                  ///////////////////////////
-                  // set an error listener //
-                  this.socket.onError = (err) => {
-                    this.err("TCP Socket: " + err);
-                  };
-          
-                  ///////////////////////////////////////////
-                  // set end: the server closed the socket //
-                  this.socket.onClose = (err) => {
-                    this.isOpen = false;
-                    this.isLoggedIn = false;
-                    this.log("end -> socket got disconnected");
-          
-                    if (!this.closeRequested) {
-                      // unexpected close
-                      this.err("Socket: closed unexpectedly -> " + err);
-                    }
-                  };
-          
-                  this.socket.open(this.config.address, this.config.port,
-                    () => {
-                      this.log("connection open on " + this.getAddress() + " on port " + this.getPort());
-                      this.isOpen = true;
-                      resolve(this.socket);
-                    },
-                    (err) => {
-                      this.err("Failed to open a connection to " + this.getAddress() + " on port " + this.getPort());
-                      reject(err)
-                    }
-                  );
-          
-                } catch(e) {
-                  this.err("Failed to open a connection to " + this.getAddress() + " on port " + this.getPort());
-                  reject(e);
-                }
-              });
-              */
-        });
-    }
-    openWeb() {
-        return __awaiter(this, void 0, void 0, function* () {
-            return new Promise((resolve, reject) => {
-                try {
-                    ////////////////////////////////
-                    // try to open the connection //
-                    this.log("opening connection to the SmartSocket Server");
-                    const wsserver = this.system.config.socketserver + ":" + this.system.config.socketport;
-                    const tcpserver = this.config.address + ":" + this.config.port;
-                    this.socket = new WebSocket("ws://" + wsserver + "/" + tcpserver);
-                    if (!this.socket)
-                        throw (new Error("could create new web socket"));
-                    ///////////////////////
-                    // set data listener //
-                    this.socket.onmessage = (message) => {
-                        // messages need to be buffered until "]" is received
-                        this.handleData(message.data);
-                    };
-                    ///////////////////////////
-                    // set an error listener //
-                    this.socket.onerror = (err) => {
-                        this.err("Socket: " + err);
-                    };
-                    ///////////////////////////////////////////
-                    // set end: the server closed the socket //
-                    this.socket.onclose = () => {
-                        this.isOpen = false;
-                        this.isLoggedIn = false;
-                        this.log("end -> socket got disconnected");
-                        if (!this.closeRequested) {
-                            // unexpected close
-                            this.err("Socket: closed unexpectedly");
-                        }
-                    };
-                    this.socket.onopen = () => {
-                        this.isOpen = true;
-                        // request a connection to the real socket
-                        this.log("connection open on " + this.config.address + " on port " + this.config.port);
-                        // resolve our promise with the opened socket
-                        resolve(this.socket);
-                    };
-                }
-                catch (e) {
-                    this.err("Failed to open a connection on port " + this.getPort());
-                    reject(e);
-                }
+            this.socket = yield smartsocket_1.getSocket(this.config.address, this.config.port, (msg) => {
+                this.handleData(msg);
+            }, (end) => {
+                this.isOpen = false;
+                this.isLoggedIn = false;
+                this.log("end -> socket got disconnected");
+            }, (log) => {
+                this.log(log);
+            }, (err) => {
+                this.err(err);
             });
+            this.isOpen = true;
         });
     }
     close() {
@@ -243,7 +134,6 @@ class Master extends base_1.Base {
             if (this.isOpen) {
                 const message = protocol_1.Protocol.buildDisconnect();
                 try {
-                    this.closeRequested = true;
                     yield this.send(message);
                     // server will close the socket, no need to call socket.close()
                 }
@@ -416,9 +306,11 @@ class Master extends base_1.Base {
         this.system.setActiveState(unit);
     }
     fetchAllUnits(node) {
-        for (let unitInx = 0; unitInx < node.nrUnits; unitInx++) {
-            this.fetchUnit(node, unitInx);
-        }
+        return __awaiter(this, void 0, void 0, function* () {
+            for (let unitInx = 0; unitInx < node.nrUnits; unitInx++) {
+                yield this.fetchUnit(node, unitInx);
+            }
+        });
     }
     fetchDbInfo() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -454,21 +346,31 @@ class Master extends base_1.Base {
             }
         });
     }
-    getDatabase(readUnits = true) {
+    getDatabase(readDB = false) {
         return __awaiter(this, void 0, void 0, function* () {
             this.nodes = [];
             yield this.fetchDbInfo();
+            if (readDB)
+                setTimeout(() => __awaiter(this, void 0, void 0, function* () {
+                    this.system.allMasters(m => {
+                        this.log("reading node db of " + m.getAddress() + ":" + m.getPort());
+                        m.allNodes((n) => __awaiter(this, void 0, void 0, function* () {
+                            this.log("reading unit db of " + n.getName());
+                            yield m.fetchAllUnits(n);
+                        }));
+                    });
+                }), 1000);
         });
     }
-    allNodes(callback) {
+    allNodes(doToNode) {
         this.nodes.forEach(node => {
-            callback(node);
+            doToNode(node);
         });
     }
-    allUnits(callback) {
+    allUnits(doToUnit) {
         this.nodes.forEach(node => {
             node.units.forEach(unit => {
-                callback(unit);
+                doToUnit(unit);
             });
         });
     }

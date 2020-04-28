@@ -22,35 +22,82 @@ const mood_1 = require("../accessories/mood");
 const temperature_1 = require("../accessories/temperature");
 const base_1 = require("./base");
 class Platform extends base_1.Base {
-    constructor(log, debug, config, api) {
-        super("homebridge", debug, log);
+    constructor(log, config, homebridge) {
+        // set debug to true for new config files
+        super("homebridge", (config && ("debug" in config)) ? config.debug : true, log);
         this.accessoryList = [];
-        this.readConfig();
+        this.ready = false;
+        this.config = Object.assign({}, config);
+        this.config.debug = (config && ("debug" in config)) ? config.debug : true;
+        console.log("**** config:", config);
+        //console.log("homebridge:", homebridge);
         this.log("running in directory: " + process.cwd());
-        this.homebridge = api;
-        if (!config.system) {
-            this.log("platform - Can't run without a System configuration.");
-            return;
-        }
-        this.system = new system_1.System();
+        this.homebridge = homebridge;
+        if (this.config.system)
+            try {
+                this.system = new system_1.System(this.config.debug, log);
+                this.system.openMasters(true);
+                this.system.emitter.on('ready', this.addMasters.bind(this));
+                this.system.emitter.on('ready', () => console.log("------ received update ------"));
+                protocol_1.Protocol.setEmitter(this.system.emitter);
+                this.system.emitter.on('update', this.updateState.bind(this));
+            }
+            catch (err) {
+                this.log(err);
+                if (!this.system) {
+                    this.log("platform - Can't run without a System.");
+                    return;
+                }
+            }
         // startup a Smappee MQTT subscriber, if one is configured
-        if (config.smappee) {
-            this.smappee = new smappee_1.Smappee(this.system, debug, log);
-        }
-        else {
-            this.log("platform - No Smappee configured.");
-        }
-        // startup a smartApp if there is a port defined
-        if (config.smartapp) {
-            this.smartapp = new smartapp_1.SmartApp(config.smartapp.port, this.system, this.smappee, this, log);
-            this.smartapp.serve();
-        }
-        else {
-            this.log("platform - No Webapp configured.");
-        }
+        if (this.config.smappee)
+            try {
+                this.smappee = new smappee_1.Smappee(this.system, this.config.debug, log);
+            }
+            catch (err) {
+                this.log(err);
+                if (!this.smappee) {
+                    this.log("platform - No Smappee configured.");
+                }
+            }
+        // startup a smartApp if configured
+        if (this.config.smartapp)
+            try {
+                this.smartapp = new smartapp_1.SmartApp(this.system, this.smappee, this, log);
+                this.smartapp.serve();
+            }
+            catch (err) {
+                this.log(err);
+                if (!this.smartapp) {
+                    this.log("platform - No Webapp configured.");
+                }
+            }
+    }
+    updateState(unit) {
+        this.log("received updateState " + unit.getName());
+        const accessory = this.accessoryList.find((acc) => unit.isUnit(acc.unit));
+        if (accessory)
+            accessory.updateState();
+    }
+    addMasters(nr) {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.log("received update -> addMasters: " + nr);
+            this.ready = true;
+        });
     }
     accessories(callback) {
-        this.log("platform - accessories()");
+        // waiting until the database is complete
+        if (this.ready) {
+            this.log(">>>>> done >>>>>>>");
+            this.doAccessories(callback);
+        }
+        else {
+            this.log(">>>>> waiting >>>>>>>");
+            setTimeout(() => { this.accessories(callback); }, 1000);
+        }
+    }
+    doAccessories(callback) {
+        this.log("platform - accessories() called by Homebridge");
         this.addAccessories()
             .then(list => {
             this.log("platform - addAccessories returned: " + list.length + " accessories.");
@@ -65,10 +112,10 @@ class Platform extends base_1.Base {
         return __awaiter(this, void 0, void 0, function* () {
             if (!this.system) {
                 this.log("platform - No System -> No accessories");
+                this.accessoryList = [];
                 return;
             }
-            yield this.system.openMasters();
-            this.log("platform - addAccessories: system masters are all open");
+            this.log("platform - addAccessories for " + this.system.masters.length + " masters");
             // clear our list
             this.accessoryList = [];
             // make a log function

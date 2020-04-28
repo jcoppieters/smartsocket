@@ -12,22 +12,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const master_1 = require("./master");
 const protocol_1 = require("./protocol");
 const base_1 = require("../server/base");
+const events_1 = require("events");
 class System extends base_1.Base {
-    constructor() {
-        super("system", false);
+    constructor(debug = false, logger) {
+        super("system", debug, logger);
         this.isBrowser = true;
         this.isSplitted = false;
-        // rebuild active services (units)
-        this.trigger = null;
         this.moods = [];
         this.controls = [];
         this.temperatures = [];
         this.stores = [];
+        this.trigger = null;
+        this.emitter = new events_1.EventEmitter();
+        protocol_1.Protocol.setEmitter(this.emitter);
         this.readConfig();
         this.readGroups();
         // open all masters listed in the config
         this.masters = [];
-        this.openMasters();
     }
     setBrowser(isB) {
         this.isBrowser = isB;
@@ -37,11 +38,11 @@ class System extends base_1.Base {
         // use my log function
         protocol_1.Protocol.logger = logger;
     }
-    openMasters() {
+    openMasters(readDB = false) {
         return __awaiter(this, void 0, void 0, function* () {
             for (let inx = 0; inx < this.config.cmasters.length; inx++) {
                 try {
-                    yield this.openMaster(this.config.cmasters[inx], inx);
+                    yield this.openMaster(this.config.cmasters[inx], inx, readDB);
                 }
                 catch (err) {
                     this.log(err);
@@ -56,7 +57,7 @@ class System extends base_1.Base {
             }
         });
     }
-    openMaster(config, inx) {
+    openMaster(config, inx, readDB = false) {
         return __awaiter(this, void 0, void 0, function* () {
             const master = new master_1.Master(this, config);
             this.masters[inx] = master;
@@ -68,7 +69,7 @@ class System extends base_1.Base {
                 yield master.open();
                 if (!(yield master.login()))
                     throw (new Error("Failed to log in"));
-                yield master.getDatabase();
+                yield master.getDatabase(readDB);
                 this.log("master: " + master.getAddress() + " opened with " + master.nodes.length + " nodes.");
                 this.triggerRebuild();
                 return master;
@@ -85,7 +86,7 @@ class System extends base_1.Base {
             // non-existing master or not open -> do nothing
             if ((!master) || (!master.isOpen))
                 return;
-            // find its index (we need it to delete it from the list)
+            // find its index (we need it to delete it from the master list)
             let inx = this.findMasterInx(master);
             // close
             try {
@@ -129,13 +130,33 @@ class System extends base_1.Base {
         return __awaiter(this, void 0, void 0, function* () {
             const masterAddress = master.getAddress();
             const masterPort = master.getPort();
+            // remove from the config
             let inx = this.findCMasterInx(masterAddress, masterPort);
             if (inx >= 0) {
-                yield this.closeMaster(master);
-                // remove the master, it's nodes and their units from the config
+                // remove the master (from the master list and the config list), 
                 this.config.cmasters.splice(inx, 1);
+                // remove it's units from the config
                 this.config.cunits = this.config.cunits.filter(unit => (unit.masterPort != masterPort) || (unit.masterAddress != masterAddress));
                 this.writeConfig();
+            }
+            else {
+                this.err("didn't find the master " + master.getAddress() + ":" + master.getConfig().port + " in the config");
+            }
+            // remove from the active masters
+            inx = this.findMasterInx(master);
+            if (inx >= 0) {
+                this.masters.splice(inx, 1);
+                try {
+                    if (master.isOpen) {
+                        yield master.close();
+                    }
+                }
+                catch (e) {
+                    this.err("failed to close master on " + master.getAddress() + ":" + master.getConfig().port);
+                }
+            }
+            else {
+                this.err("didn't find the master " + master.getAddress() + ":" + master.getConfig().port + " in the active master list");
             }
         });
     }
@@ -240,6 +261,9 @@ class System extends base_1.Base {
             .reduce((acc, n) => acc.concat(n.units), [])
             .filter(u => u.active);
     }
+    allMasters(doToMaster) {
+        this.masters.forEach(m => doToMaster(m));
+    }
     //////////////////////////////////////////////////
     // Getting the current state of units and nodes //
     //////////////////////////////////////////////////
@@ -291,7 +315,7 @@ class System extends base_1.Base {
             return 0;
         }
         // sort masters, nodes in masters, units in nodes.
-        this.log("rebuildMasters/Nodes");
+        this.log("rebuildMasters (" + this.masters.length + ") -> nodes -> units");
         this.masters.sort(compare);
         this.masters.forEach((m) => {
             m.nodes.sort(compare);
@@ -304,6 +328,11 @@ class System extends base_1.Base {
         this.temperatures = services.filter(s => s.isTemperature()).sort(compareN);
         this.moods = services.filter(s => (s.isMood() || s.isInput())).sort(compareN);
         this.stores = this.controls.filter(s => s.isUpDown());
+        let complete = true;
+        this.allMasters(m => m.allNodes(n => { if (n.nrUnits != n.units.length)
+            complete = false; }));
+        if (complete)
+            this.emitter.emit('ready', this.masters.length);
     }
     //////////////////
     // Config stuff //

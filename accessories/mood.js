@@ -11,7 +11,7 @@ class Mood extends accessory_1.Accessory {
         super(log, homebridge, unit);
     }
     getAccessoryServices() {
-        const moodService = this.makeService(this.homebridge.Service.Lightbulb);
+        const moodService = this.makeService(this.homebridge.Service.Switch);
         moodService
             .getCharacteristic(this.homebridge.Characteristic.On)
             .on('get', this.getMood.bind(this))
@@ -20,6 +20,7 @@ class Mood extends accessory_1.Accessory {
         return [moodService];
     }
     getMood(next) {
+        this.log("getMood was called for " + this.unit.node.getName() + " - " + this.unit.getName() + " -> false");
         next(null, false);
     }
     setMood(value, next) {
@@ -27,10 +28,11 @@ class Mood extends accessory_1.Accessory {
             // always set to "off" after send the request.
             this.unit.setState(value)
                 .then(() => {
-                this.unit.value = false;
                 // try to update homekit's value to "off" again.
-                if (this.myService)
-                    this.myService.getCharacteristic(this.homebridge.Characteristic.On).updateValue(false);
+                setTimeout(() => {
+                    this.unit.value = false;
+                    this.updateState();
+                }, 1200);
                 next();
             })
                 .catch(err => next(err));

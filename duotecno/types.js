@@ -122,7 +122,7 @@ exports.Sanitizers = {
         //for (let a in config.accessories) this.accessory(config.accessories[a]);
         return config;
     },
-    webapp: function (config) {
+    smartapp: function (config) {
         if (!config)
             config = {};
         config.port = config.port || 5002;
@@ -134,7 +134,7 @@ exports.Sanitizers = {
         if (!config)
             config = {};
         config.rules = config.rules || [];
-        config.address = config.address || "192.168.99.95";
+        config.address = config.address || "192.168.0.54";
         config.uid = config.uid || "--none--";
         config.debug = config.debug || false;
         return config;

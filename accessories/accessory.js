@@ -16,7 +16,8 @@ class Accessory {
     }
     makeService(service) {
         this.log("accessory - Making service: " + this.unit.getName() + ", serial: " + this.unit.getSerialNr());
-        return new service(this.unit.getDisplayName(), "unit" + this.unit.logicalAddress);
+        this.me = new service(this.unit.getDisplayName(), "unit" + this.unit.logicalAddress);
+        return this.me;
     }
     getInformationService() {
         var informationService = new this.homebridge.Service.AccessoryInformation();
@@ -46,12 +47,26 @@ class Accessory {
         return this.services;
     }
     getState(next) {
-        if (this.unit)
-            this.unit.reqState()
-                .then(val => next(null, val))
-                .catch(err => next(err));
-        else
+        if (this.unit) {
+            this.unit.reqState(unit => {
+                next(null, unit.status);
+                this.log("getState was called for " + this.unit.node.getName() + " - " + this.unit.getName() + " -> " + this.unit.status);
+            }).catch(err => next(err));
+        }
+        else {
             next(new Error("accessory - getState needs to be overridden if no unit is provided."));
+        }
+    }
+    getValue(next) {
+        if (this.unit) {
+            this.unit.reqState(unit => {
+                next(null, unit.value);
+                this.log("getState was called for " + this.unit.node.getName() + " - " + this.unit.getName() + " -> " + this.unit.value);
+            }).catch(err => next(err));
+        }
+        else {
+            next(new Error("accessory - getState needs to be overridden if no unit is provided."));
+        }
     }
     setState(value, next) {
         if (this.unit)
@@ -60,6 +75,18 @@ class Accessory {
                 .catch(err => next(err));
         else
             next(new Error("accessory - setState needs to be overridden if no unit is provided."));
+    }
+    setValue(value, next) {
+        if (this.unit)
+            this.unit.setState(value)
+                .then(() => next())
+                .catch(err => next(err));
+        else
+            next(new Error("accessory - setState needs to be overridden if no unit is provided."));
+    }
+    updateState() {
+        this.me.getCharacteristic(this.homebridge.Characteristic.On).updateValue(this.unit.status);
+        this.log("Received status change -> update accessory -> " + this.unit.getName() + " = " + this.unit.status + " / " + this.unit.value);
     }
 }
 exports.Accessory = Accessory;

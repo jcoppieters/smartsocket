@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const types_1 = require("./types");
+const master_1 = require("./master");
 // Duotecno master IP protocol implementation
 // Johan Coppieters
 //
@@ -185,8 +186,19 @@ class Unit {
         if (!this.displayName)
             this.displayName = this.getSerialNr();
     }
-    isUnit(nodeLogicalAddress, unitLogicalAddress) {
-        return ((this.node.logicalAddress == nodeLogicalAddress) && (this.logicalAddress == unitLogicalAddress));
+    isUnit(master, nodeLogicalAddress, unitLogicalAddress) {
+        if (master instanceof master_1.Master) {
+            return ((this.node.master.isMaster(master.getAddress(), master.getPort())) &&
+                (this.node.logicalAddress == nodeLogicalAddress) &&
+                (this.logicalAddress == unitLogicalAddress));
+        }
+        else if (master instanceof Unit) {
+            const unit = master;
+            master = unit.node.master;
+            return ((this.node.master.isMaster(master.getAddress(), master.getPort())) &&
+                (this.node.logicalAddress == unit.node.logicalAddress) &&
+                (this.logicalAddress == unit.logicalAddress));
+        }
     }
     sameValue(value) {
         if ((this.type === UnitType.kSwitchingMotor) || (this.type === UnitType.kGarageDoor))
@@ -306,9 +318,11 @@ class Unit {
     inMultiNode() {
         return this.node.inMultiNode();
     }
-    reqState() {
+    reqState(callback) {
         return __awaiter(this, void 0, void 0, function* () {
             yield this.node.master.requestUnitStatus(this);
+            if (callback)
+                exports.Protocol.addSubscriber(callback, this);
         });
     }
     setState(value) {
@@ -344,14 +358,31 @@ class Unit {
     }
 }
 exports.Unit = Unit;
-/////////////////////////////////////
-// IP node protocol implementation //
-/////////////////////////////////////
+// callbacks, waiting to be called when a status for them arrives
+const subscribers = [];
 exports.Protocol = {
     // set to a different value if needed.
     logger: console.log,
+    emitter: null,
     setLogger(logger) {
         this.logger = logger;
+    },
+    setEmitter(emitter) {
+        this.emitter = emitter;
+    },
+    /////////////////
+    // Subscribers //
+    /////////////////
+    alertSubscriber(unit) {
+        const inx = subscribers.findIndex(vs => vs.unit.isUnit(unit));
+        if (inx >= 0) {
+            subscribers[inx].deliver(unit);
+            subscribers.splice(inx, 1);
+        }
+        this.emitter.emit('update', unit);
+    },
+    addSubscriber(deliver, unit) {
+        subscribers.push({ deliver, unit });
     },
     ////////////////////
     // Helper methods //
@@ -401,7 +432,7 @@ exports.Protocol = {
     ////////////////////
     // Socket methods //
     ////////////////////
-    write: function (socket /* | Socket */, data) {
+    write: function (socket, data) {
         const cmd = parseInt(data[0]);
         if (data instanceof Array) {
             data = data.join(",");
@@ -413,7 +444,7 @@ exports.Protocol = {
             this.logger("sending: " + cmdName(cmd) + " - " + data);
             try {
                 // append a LF char and send
-                socket.send(data + String.fromCharCode(10));
+                socket.write(data + String.fromCharCode(10));
                 return types_1.WriteError.writeOK;
             }
             catch (err) {
@@ -585,21 +616,26 @@ exports.Protocol = {
             // switch -> boolean
             unit.status = next.message[6];
             unit.value = (next.message[6] > 0);
+            this.logger("received switch = " + unit.value);
         }
         else if (next.cmd === Rec.Dimmer) {
             // dimmer -> 0 .. 99
             unit.status = next.message[6];
             unit.value = next.message[7];
+            this.logger("received dimmer -> value=" + unit.value + " / status=" + unit.status);
         }
         else if (next.cmd === Rec.Mood) {
             // control -> boolean
             unit.status = next.message[6];
             unit.value = (next.message[6] != 0);
+            this.logger("received mood = " + unit.value);
         }
         else if (next.cmd === Rec.Motor) {
             // motor -> boolean/status
-            unit.status = next.message[6]; // 0 = stopped, 1 stopped/down, 2 = stopped/up, busy/down, busy/up
-            unit.value = next.message[6]; // (unit.status == 1);    // true=closed
+            // 0 = stopped, 1 stopped/down, 2 = stopped/up, busy/down, busy/up
+            unit.status = next.message[6];
+            unit.value = next.message[6];
+            this.logger("received motor = " + unit.value);
         }
         else if (next.cmd = Rec.Macro) {
             // = EV_UNITMACROCOMMANDO
@@ -607,7 +643,9 @@ exports.Protocol = {
             //          Off:    [69,0,NodeAddress,UnitAddress,6,0,0]
             unit.status = next.message[5];
             unit.value = next.message[6];
+            this.logger("received macro -> value=" + unit.value + " / status=" + unit.status);
         }
+        this.alertSubscriber(unit);
     },
     makeDBInfo(res) {
         return { nrNodes: res[2] };

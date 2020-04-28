@@ -42,6 +42,7 @@ const base_1 = require("./base");
 class Smappee extends base_1.Base {
     constructor(system, debug, log) {
         super("smappee", debug, log);
+        this.readConfig();
         this.system = system;
         this.plugs = {}; // will grow when we encounter one in the mqtt stream.
         this.copyAndSanitizeRules(this.config.rules);

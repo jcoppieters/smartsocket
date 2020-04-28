@@ -1,5 +1,7 @@
 import { CommRecord, Message, Sanitizers, NodeInfo, UnitInfo, DBInfo, WriteError, LogFunction, hex } from "./types";
 import { Master } from "./master";
+import { SmartSocket } from "./smartsocket";
+import { EventEmitter } from "events";
 
 // Duotecno master IP protocol implementation
 // Johan Coppieters
@@ -204,8 +206,20 @@ export class Unit {
     if (!this.displayName) this.displayName = this.getSerialNr();
   }
 
-  isUnit(nodeLogicalAddress: number, unitLogicalAddress: number) {
-    return ((this.node.logicalAddress == nodeLogicalAddress) && (this.logicalAddress == unitLogicalAddress));
+  isUnit(unit: Unit): boolean;
+  isUnit(master: Master, nodeLogicalAddress: number, unitLogicalAddress: number): boolean;
+  isUnit(master: Master | Unit, nodeLogicalAddress?: number, unitLogicalAddress?: number): boolean {
+    if (master instanceof Master) {
+      return ((this.node.master.isMaster(master.getAddress(), master.getPort())) &&
+              (this.node.logicalAddress == nodeLogicalAddress) && 
+              (this.logicalAddress == unitLogicalAddress));
+    } else if (master instanceof Unit) {
+      const unit = master;
+      master = unit.node.master;
+      return ((this.node.master.isMaster(master.getAddress(), master.getPort())) &&
+              (this.node.logicalAddress == unit.node.logicalAddress) && 
+              (this.logicalAddress == unit.logicalAddress));
+    }
   }
 
   sameValue(value): boolean {
@@ -327,8 +341,9 @@ export class Unit {
     return this.node.inMultiNode();
   }
 
-  async reqState() {
+  async reqState(callback?: DeliverStatus): Promise<void> {
     await this.node.master.requestUnitStatus(this);
+    if (callback) Protocol.addSubscriber(callback, this);
   }
   async setState(value) {
     await this.node.master.setUnitStatus(this, value);
@@ -364,12 +379,36 @@ export class Unit {
 /////////////////////////////////////
 // IP node protocol implementation //
 /////////////////////////////////////
+type DeliverStatus = (unit: Unit) => void;
+type ValueSubscribtion = {deliver: DeliverStatus, unit: Unit};
+// callbacks, waiting to be called when a status for them arrives
+const subscribers: Array<ValueSubscribtion> = [];
+
 export const Protocol = {
   // set to a different value if needed.
   logger: console.log,
+  emitter: null,
 
   setLogger(logger: LogFunction) {
     this.logger = logger;
+  },
+  setEmitter(emitter: EventEmitter) {
+    this.emitter = emitter;
+  },
+
+  /////////////////
+  // Subscribers //
+  /////////////////
+  alertSubscriber(unit: Unit) {
+    const inx = subscribers.findIndex(vs => vs.unit.isUnit(unit));
+    if (inx >= 0) {
+      subscribers[inx].deliver(unit);
+      subscribers.splice(inx, 1);
+    }
+    this.emitter.emit('update', unit);
+  },
+  addSubscriber(deliver: DeliverStatus, unit: Unit) {
+    subscribers.push({deliver, unit});
   },
 
   ////////////////////
@@ -429,7 +468,7 @@ export const Protocol = {
   // Socket methods //
   ////////////////////
 
-  write: function(socket: WebSocket /* | Socket */, data: Message | string): WriteError {
+  write: function(socket: SmartSocket, data: Message | string): WriteError {
     const cmd = parseInt(<string> data[0]);
     if (data instanceof Array) {
       data = data.join(",");
@@ -442,7 +481,7 @@ export const Protocol = {
 
       try {
         // append a LF char and send
-        socket.send(data+String.fromCharCode(10));
+        socket.write(data+String.fromCharCode(10));
         return WriteError.writeOK;
 
       } catch(err) {
@@ -638,21 +677,26 @@ export const Protocol = {
       // switch -> boolean
       unit.status = next.message[6];
       unit.value = (next.message[6] > 0);
+      this.logger("received switch = " + unit.value);
   
     } else if (next.cmd === Rec.Dimmer) {
       // dimmer -> 0 .. 99
       unit.status = next.message[6];
       unit.value = next.message[7];
+      this.logger("received dimmer -> value=" + unit.value + " / status=" + unit.status);
   
     } else if (next.cmd === Rec.Mood) {
       // control -> boolean
       unit.status = next.message[6];
       unit.value = (next.message[6] != 0);
+      this.logger("received mood = " + unit.value);
 
     } else if (next.cmd === Rec.Motor) {
       // motor -> boolean/status
-      unit.status = next.message[6];               // 0 = stopped, 1 stopped/down, 2 = stopped/up, busy/down, busy/up
-      unit.value = next.message[6];                // (unit.status == 1);    // true=closed
+      // 0 = stopped, 1 stopped/down, 2 = stopped/up, busy/down, busy/up
+      unit.status = next.message[6];
+      unit.value = next.message[6];
+      this.logger("received motor = " + unit.value);
 
     } else if (next.cmd = Rec.Macro) {
       // = EV_UNITMACROCOMMANDO
@@ -660,8 +704,10 @@ export const Protocol = {
       //          Off:    [69,0,NodeAddress,UnitAddress,6,0,0]
       unit.status = next.message[5];
       unit.value = next.message[6];
+      this.logger("received macro -> value=" + unit.value + " / status=" + unit.status);
 
     }
+    this.alertSubscriber(unit);
   },
 
   makeDBInfo(res: Message): DBInfo {

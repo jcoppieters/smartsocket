@@ -8,11 +8,11 @@
       <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon" />
       <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-      <%include /views/style %>
+      <%- include('/views/style'); -%>
     </head>
 
     <body>
-      <%include /views/nav %>
+      <%- include('/views/nav', this); -%>
 
       <form method="POST" action="/switches">
         <input type="hidden" name="id" value="<%= id %>">
@@ -70,10 +70,10 @@
         </div>
 
       </form>
-      <%include /views/footer %>
+      <%- include('/views/footer'); -%>
 
     </body>
 
-    <%include /views/scripts %>
-    <%include /views/switch-script %>
+    <%- include('/views/scripts'); -%>
+    <%- include('/views/switch-script'); -%>
   </html>

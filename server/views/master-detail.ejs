@@ -9,11 +9,11 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
       <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon" />
 
-      <%include /views/style %>
+      <%- include('/views/style'); -%>
     </head>
 
     <body>
-      <%include /views/nav %>
+      <%- include('/views/nav'); -%>
       <form method="POST" action="/masters">
         <h1>
           Master
@@ -48,7 +48,18 @@
             <label for="password">Password</label>
           </div>
         </div>
-
+        <div class="row">
+          <div class="col s6">
+            Active
+          </div>
+          <div class="switch col s6">
+            <label class="right">Off
+              <input type="checkbox" name="active" id="active" <%= (config.active) ? 'checked' : '' %> >
+              <span class="lever"></span>On
+            </label>
+          </div>
+        </div>
+     
         <% if (typeof nodes !== "undefined") { %>
         <h1>Nodes</h1>
         <table>
@@ -75,7 +86,7 @@
                 </td>
                 <td>
                   <a href="/units/<%= config.address %>:<%= config.port %>/<%= node.logicalAddress %>"><span><%= node.units.length %></span></a><br>
-                  <input name="name_<%= node.logicalAddress %>" type="hidden" value="<%= node.getDisplayName() %>">
+                  <input name="name_<%= node.logicalAddress %>" type="hidden" value="<%= node.getName() %>">
                   <span class="grey-text"><small>Logical: <%= hex(node.logicalAddress) %></small></span>
                 </td>
               </tr>
@@ -84,7 +95,7 @@
         </table>
         <% } %>
       </form>
-      <%include footer %>
+      <%- include('/views/footer'); -%>
     </body>
-    <%include /views/scripts %>
+    <%- include('/views/scripts'); -%>
   </html>

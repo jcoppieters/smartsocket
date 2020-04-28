@@ -8,23 +8,21 @@
       <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon" />
       <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-      <%include /views/style %>
+      <%- include('/views/style'); -%>
     </head>
 
     <body>
-      <%include /views/nav %>
+      <%- include('/views/nav'); -%>
 
       <form method="POST" action="/units/save">
         <h1>
           Services
         </h1>
-
-        <% let edit = false; %>
-        <%include /views/units %> 
+        <%- include('/views/units', {edit: false, units: units, hex: hex }); -%> 
 
       </form>
-      <%include /views/footer %>
+      <%- include('/views/footer'); -%>
 
     </body>
-    <%include /views/scripts %>
+    <%- include('/views/scripts'); -%>
   </html>

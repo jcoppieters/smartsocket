@@ -19,12 +19,20 @@ class Temperature extends accessory_1.Accessory {
         return [temperatureService];
     }
     getTemperature(next) {
-        if (this.unit)
-            this.unit.reqState()
-                .then(val => next(null, val / 10.0))
+        if (this.unit) {
+            this.unit.reqState(unit => {
+                this.log("reqState/getTemperature returned a value for " + this.unit.node.getName() + " - " + this.unit.getName() + " -> " + this.unit.value);
+                next(null, unit.value / 10.0);
+            })
                 .catch(err => next(err));
-        else
+        }
+        else {
             next(new Error("accessory -> getTemperature needs a unit."));
+        }
+    }
+    updateState() {
+        this.me.getCharacteristic(this.homebridge.Characteristic.CurrentTemperature).updateValue(this.unit.value / 10.0);
+        this.log("Received status change -> update temperature -> " + this.unit.getName() + " = " + this.unit.status + " / " + this.unit.value / 10.0);
     }
 }
 exports.Temperature = Temperature;

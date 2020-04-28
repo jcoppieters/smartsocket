@@ -8,29 +8,28 @@
       <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon" />
       <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-      <%include /views/style %>
+      <%- include('/views/style'); -%>
     </head>
 
     <body>
-      <%include /views/nav %>
+      <%- include('/views/nav', this); -%>
 
       <form method="POST" action="/units">
         <input type="hidden" name="master" value="<%= masterAddress %>">
+        <input type="hidden" name="port" value="<%= masterPort %>">
         <input type="hidden" name="node" value="<%= node.logicalAddress %>">
         <h1>
-          <%= node.getDisplayName() %><br>
+          <%= node.getName() %><br>
           <span class="grey-text"><small>Physical = <%= hex(node.physicalAddress) %> - Logical = <%= hex(node.logicalAddress) %></small></span>
           <button class="right btn waves-effect waves-light" type="submit" name="action" value="cancel">Back</button>
           <button class="right btn waves-effect waves-light" type="submit" name="action" value="save">Save</button>
         </h1>
 
-        <% let units = node.units; %>
-        <% let edit = true; %>
-        <%include /views/units %> 
+        <%- include('/views/units', {units: node.units, edit: true, hex: hex}); -%> 
 
       </form>
-      <%include /views/footer %>
+      <%- include('/views/footer'); -%>
 
     </body>
-    <%include /views/scripts %>
+    <%- include('/views/scripts'); -%>
   </html>

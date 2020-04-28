@@ -46,8 +46,8 @@ export class Base {
   }
 
 
-  read(type: string) {
-    const fn = './config.' + type + '.json';
+  read(type: string, fname: string = "") {
+    const fn = fname || ('./config.' + type + '.json');
     let config = null;
 
     try {
@@ -63,12 +63,12 @@ export class Base {
     const temp = Sanitizers[type](config);
 
     // write if we created it (new intallations or new config params)
-    if (!config && temp) this.write(type, temp);
+    if (!config && temp) this.write(type, temp, fname);
     return temp;
   }
 
-  write(type: string, config) {
-    const fn = './config.' + type + '.json';
+  write(type: string, config, fname: string = "") {
+    const fn = fname || ('./config.' + type + '.json');
     try {
       config = Sanitizers[type](config); 
       fs.writeFileSync(fn, JSON.stringify(config, null, 2));

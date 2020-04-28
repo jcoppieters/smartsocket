@@ -6,9 +6,11 @@
 //
 // Johan Coppieters, Feb 2019.
 //
+// v2.0: mar/apr 2020
 
+import { homedir } from 'os';
 import { Context, HttpResponse } from "./webapp";
-import { LogFunction, Sanitizers, Rule, kEmptyRule, actionValue, Action, kEmptySwitch, Switch, SwitchType } from "../duotecno/types";
+import { LogFunction, Sanitizers, Rule, kEmptyRule, actionValue, Action, kEmptySwitch, Switch, SwitchType, HomebridgeConfig } from "../duotecno/types";
 import { System } from "../duotecno/system";
 import { Node, Unit } from "../duotecno/protocol";
 import { Smappee } from "./smappee";
@@ -19,6 +21,7 @@ import { SocApp } from "./socapp";
 const kMaster = {name: "master", type: "string", default: "0.0.0.0"} as const;
 const kAddress = {name: "address", type: "string", default: "0.0.0.0"} as const;
 const kPort = {name: "port", type: "integer", default: 80} as const;
+const kActive = {name: "active", type: "string", default: "N"} as const;
 const kUID = {name: "uid", type: "string", default: ""} as const;
 const kName = {name: "name", type: "string", default: "no name"} as const;
 const kPassword = {name: "password", type: "string", default: "no password"} as const;
@@ -43,27 +46,34 @@ export class SmartApp extends SocApp {
   switches: Array<Switch>;
 
 
-  constructor(port: number, system: System, smappee: Smappee, platform: Platform, log?: LogFunction) {
-    super(port, "system", log, system);
+  constructor(system: System, smappee: Smappee, platform: Platform, log?: LogFunction) {
+    super("smartapp", log);
+
+    // get some configurated params
+    this.readConfig();
+    this.port = this.config.port || this.port || 80;
+    this.debug = !! this.config.debug;
+    
     this.system = system;
     // if (system) system.smartapp = this;
     this.smappee = smappee;
     this.platform = platform;
     
-    this.addFile("masterList", "./smartapp/views/master-list.ejs", "text/html");
-    this.addFile("masterDetail", "./smartapp/views/master-detail.ejs", "text/html");
-    this.addFile("nodeDetail", "./smartapp/views/node-details.ejs", "text/html");
-    this.addFile("serviceList", "./smartapp/views/service-list.ejs", "text/html");
-    this.addFile("smappee", "./smartapp/views/smappee.ejs", "text/html");
-    this.addFile("homekit", "./smartapp/views/homekit.ejs", "text/html");
-    this.addFile("switchDetail", "./smartapp/views/switch-details.ejs", "text/html");
-    this.addFile("switchList", "./smartapp/views/switch-list.ejs", "text/html");
-    this.addFile("smappeeRule", "./smartapp/views/smappee-rule.ejs", "text/html");
-    this.addFile("materializeCSS", "./smartapp/views/assets/materialize.min.css", "text/css");
-    this.addFile("materializeJS", "./smartapp/views/assets/materialize.min.js", "text/javascript");
-    this.addFile("favicon", "./smartapp/views/assets/favicon.ico", "image/x-icon");
+    this.addFile("masterList", "./server/views/master-list.ejs", "text/html");
+    this.addFile("masterDetail", "./server/views/master-detail.ejs", "text/html");
+    this.addFile("nodeDetail", "./server/views/node-details.ejs", "text/html");
+    this.addFile("serviceList", "./server/views/service-list.ejs", "text/html");
+    this.addFile("smappee", "./server/views/smappee.ejs", "text/html");
+    this.addFile("homekit", "./server/views/homekit.ejs", "text/html");
+    this.addFile("switchDetail", "./server/views/switch-details.ejs", "text/html");
+    this.addFile("switchList", "./server/views/switch-list.ejs", "text/html");
+    this.addFile("smappeeRule", "./server/views/smappee-rule.ejs", "text/html");
+    this.addFile("materializeCSS", "./server/views/assets/materialize.min.css", "text/css");
+    this.addFile("materializeJS", "./server/views/assets/materialize.min.js", "text/javascript");
+    this.addFile("favicon", "./server/views/assets/favicon.ico", "image/x-icon");
 
     this.copyAndSanitizeSwitches(this.config.switches);
+
   }
 
   //////////////////////////////
@@ -137,26 +147,36 @@ export class SmartApp extends SocApp {
   // Homekit                  //
   //////////////////////////////
   async doHomekit(context: Context): Promise<HttpResponse> {
+    const kFN = homedir() + "/.homebridge/config.json";
     let message;
+    let config;
 
     if (context.action === "restart") {
       context.request = "restart";
       return super.doRequest(context);
 
     } else if (context.action === "save") {
-        this.scrapePlatformConfig(context);
-        this.platform.writeConfig();
-        message = "Config saved. You need to restart before you can use it";
+      const bridge = this.scrapePlatformConfig(context);
+      config = this.read("homebridge", kFN);
+      config.bridge = bridge;
+      this.log("writing config"); console.log(config);
+      this.write("homebridge", config, kFN);
+      message = "Config saved. You need to restart before you can use it";
+
+    } else {
+      config = this.read("homebridge", kFN)
     }
     
-    return this.ejs("homekit", context, { config: this.platform.config, pins: kAccessoryPins, message });
+    return this.ejs("homekit", context, { config, pins: kAccessoryPins, message });
   }
 
-  scrapePlatformConfig(context: Context) {
-    const bridge = this.platform.config.bridge;
-    bridge.name = context.getParam(kName);
-    bridge.pin = context.getParam(kPin);
-    bridge.username = kAccessoryPins[bridge.pin];
+  scrapePlatformConfig(context: Context): any {
+    const pin = context.getParam(kPin);
+    return {
+      name: context.getParam(kName),
+      pin,
+      username: kAccessoryPins[pin] 
+    };
   }
 
   //////////////////////////////
@@ -271,10 +291,14 @@ export class SmartApp extends SocApp {
   }
   
 
-  informChange(m: Master, u: Unit) {
-    this.switches.forEach((swtch, inx) => {
-      if (m.hasAddress(swtch.master) && u.isUnit(swtch.nodeNr, swtch.unitNr)) {
-        this.setSwitch(swtch, !!u.status)
+  informChange(u: Unit) {
+    this.switches.forEach(swtch => {
+      const master = this.system.findMaster(swtch.master, swtch.port);
+      if (master) {
+        const unit = this.system.findUnit(master, swtch.nodeNr, swtch.unitNr)
+        if (unit) {
+          this.setSwitch(swtch, !!u.status);
+        }
       }
     });
   }
@@ -349,14 +373,15 @@ export class SmartApp extends SocApp {
         return this.ejs("masterDetail", context, { config: Sanitizers.masterConfig(null) });
 
       } else if (context.action === "edit") {
-        const master = this.system.masters.find(m => m && m.hasAddress(context.id));
+        const masterString = context.id.split(":");
+        const master = this.system.findMaster(masterString[0], parseInt(masterString[1]));
         if (master)
           return this.ejs("masterDetail", context, { nodes: master.nodes, config: master.getConfig() });
         else
           message = "Error: Master not found";
 
       } else if (context.action === "delete") {
-        const master = this.system.masters.find(m => m && m.hasAddress(context.getParam(kAddress)));
+        const master = this.system.findMaster(context.getParam(kAddress), context.getParam(kPort));
         if (master)
           await this.system.deleteMaster(master);
         else
@@ -366,7 +391,7 @@ export class SmartApp extends SocApp {
       } else if (context.action === "save") {
         const master = await this.system.addMaster({ address: context.getParam(kAddress), port: context.getParam(kPort), 
                                                      password: context.getParam(kPassword), name: context.getParam(kName),
-                                                     active: true });
+                                                     active: context.getParam(kActive) != "N" });
         this.updateNodes(master, context.params.nodes, context.params);
         this.system.writeConfig();
       }
@@ -405,7 +430,7 @@ export class SmartApp extends SocApp {
 
     if (context.action === "cancel") {
       // return to previous screen -> show master info + list of nodes.
-      context.id = context.getParam(kMaster);
+      context.id = context.getParam(kMaster) + ":" + context.getParam(kPort);
       context.request = "masters";
       context.action = "edit";
       return this.doRequest(context);  
@@ -428,7 +453,7 @@ export class SmartApp extends SocApp {
       const nodeLogicalAddress = parseInt(context.id);
       
       let response = await this.getNodeInfo(master, nodeLogicalAddress);
-      return this.ejs("nodeDetail", context, { masterAddress, ...response });
+      return this.ejs("nodeDetail", context, { masterAddress, masterPort, ...response });
     }    
   }
 
@@ -508,7 +533,7 @@ export class SmartApp extends SocApp {
 
   renderImage(context: Context) {
     const file = context.action;
-    return this.image("./smartapp/views/images/" + file, "jpeg"); 
+    return this.image("./server/views/images/" + file, "jpeg"); 
   }
 
 }

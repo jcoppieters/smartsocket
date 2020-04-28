@@ -185,13 +185,11 @@ export class WebApp extends Base {
   server: http.Server;
   port: number;
 
-  constructor(port: number, type: string, log: LogFunction) {
+  constructor(type: string, log: LogFunction) {
     super(type, true, log);
-    this.port = port || 80;
+    this.port = 80;
 
-    // Sanitize
     this.log("Creating http server");
-
     this.files = {};
 
     this.server = http.createServer( (req: http.IncomingMessage, res: http.ServerResponse) => {
