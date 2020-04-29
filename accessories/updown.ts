@@ -18,6 +18,7 @@ import { Unit, UnitState, UnitMotorCmd } from "../duotecno/protocol";
 // after some time
 //  received 2/2 => stored 0 (= HB.open)
 // => Windows was open
+
 // ... clicked on button
 //  received setTartget(0) => send cmd 5 (DT.close) -> SetMotor - [182,5,3,28]
 //  received 0/0 => stored 4 (= HB.stopped)
@@ -26,6 +27,22 @@ import { Unit, UnitState, UnitMotorCmd } from "../duotecno/protocol";
 //  received 1/1 => stored 1 (= HB.closed)
 // => Windows was closed
 
+/*
+homebridge - Received updateState from Master -> UpDown for SB 1 - up/down -> 2 / 2 -> passing: 0
+  EventedHTTPServer [::ffff:192.168.0.104] Sending HTTP event '3.17' with data: {"characteristics":[{"aid":3,"iid":17,"value":0}]} +49s
+homebridge - setting CurrentPosition to 100
+  EventedHTTPServer [::ffff:192.168.0.104] Sending HTTP event '3.10' with data: {"characteristics":[{"aid":3,"iid":10,"value":100}]} +1ms
+
+homebridge - Received updateState from Master -> UpDown for SB 1 - up/down -> 0 / 0 -> passing: 4
+  EventedHTTPServer [::ffff:192.168.0.105] Sending HTTP event '3.17' with data: {"characteristics":[{"aid":3,"iid":17,"value":4}]} +1ms
+homebridge - received updateState up/down
+homebridge - Received updateState from Master -> UpDown for SB 1 - up/down -> 3 / 3 -> passing: 3
+
+homebridge - Received updateState from Master -> UpDown for SB 1 - up/down -> 1 / 1 -> passing: 1
+  EventedHTTPServer [::ffff:192.168.0.104] Sending HTTP event '3.17' with data: {"characteristics":[{"aid":3,"iid":17,"value":1}]} +53s
+homebridge - setting CurrentPosition to 0
+  EventedHTTPServer [::ffff:192.168.0.104] Sending HTTP event '3.10' with data: {"characteristics":[{"aid":3,"iid":10,"value":0}]} +0ms
+*/
 
 
 export class UpDown extends Accessory {
