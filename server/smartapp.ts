@@ -498,6 +498,8 @@ export class SmartApp extends SocApp {
   }
 
   async setState(master: Master, nodeLogicalAddress: number, unitLogicalAddress: number, val: any) {
+    this.log("setState requested with node = " + nodeLogicalAddress + ", unit = " + unitLogicalAddress + " -> " + val);
+
     if ((val === "Y") || (val === "N"))
       val = (val === "Y")
     else {

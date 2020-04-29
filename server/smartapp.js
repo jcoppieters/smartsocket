@@ -473,6 +473,7 @@ class SmartApp extends socapp_1.SocApp {
     }
     setState(master, nodeLogicalAddress, unitLogicalAddress, val) {
         return __awaiter(this, void 0, void 0, function* () {
+            this.log("setState requested with node = " + nodeLogicalAddress + ", unit = " + unitLogicalAddress + " -> " + val);
             if ((val === "Y") || (val === "N"))
                 val = (val === "Y");
             else {

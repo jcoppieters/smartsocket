@@ -7,14 +7,15 @@
     </tr>
   </thead>
 
-  <tbody> |length=<%= units.length %>|
+  <tbody>
   <% for (let unit of units) { %>
     <tr>
       <% if (edit) { %>
         <td><label>
-            <input name="active_<%= unit.logicalAddress %>" type="checkbox" class="<%= (unit.active === 'X') ? 'indeterminate' : 'filled-in' %>" 
-                    id="active_<%= unit.logicalAddress %>"   value="Y"
-                    <%= (unit.active==='Y') ? 'checked' : '' %> />
+            <input name="active_<%= unit.logicalAddress %>" type="checkbox" 
+                   class="<%= (unit.active === 'X') ? 'indeterminate' : 'filled-in' %>" 
+                   id="active_<%= unit.logicalAddress %>"   value="Y"
+                   <%= (unit.active) ? 'checked' : '' %> />
             <span></span>
         </label></td>
       <% } %>
@@ -30,28 +31,28 @@
           <div class="switch">
             <label>Off
               <input name="status_<%= unit.getName() %>" <%= (unit.status) ? 'checked' : '' %>
-                      type="checkbox" onchange="setStatus(this.checked, '<%= unit.node.master.getAddress() %>', <%= unit.node.logicalAddress %>, <%= unit.logicalAddress %>)">
+                     type="checkbox" onchange="setStatus(this.checked, '<%= unit.node.master.getAddress() %>', <%= unit.node.master.getPort() %>, <%= unit.node.logicalAddress %>, <%= unit.logicalAddress %>)">
               <span class="lever"></span>On
             </label>
           </div>
           <% if (unit.type == 1) { %>
             <p class="range-field">
               <input type="range" name="status_<%= unit.getName() %>" min="1" max="99" value="<%= unit.value %>" 
-                      onchange="setStatus(this.value, '<%= unit.node.master.getAddress() %>', <%= unit.node.logicalAddress %>, <%= unit.logicalAddress %>)" />
+                     onchange="setStatus(this.value, '<%= unit.node.master.getAddress() %>', <%= unit.node.master.getPort() %>, <%= unit.node.logicalAddress %>, <%= unit.logicalAddress %>)" />
             </p>
           <% } %>
 
-        <% } else if (unit.type == 7) { %>
+        <% } else if ((unit.type == 7) || (unit.type = 3)) { %>
           <div>
-            <a class="btn-floating btn-small waves-effect waves-light" onclick="press(1, '<%= unit.node.master.getAddress() %>', <%= unit.node.logicalAddress %>, <%= unit.logicalAddress %>)"><i class="material-icons">adjust</i></a>
+            <a class="btn-floating btn-small waves-effect waves-light" onclick="press(1, '<%= unit.node.master.getAddress() %>', <%= unit.node.master.getPort() %>, <%= unit.node.logicalAddress %>, <%= unit.logicalAddress %>)"><i class="material-icons">adjust</i></a>
           </div>
 
         <% } else if ((unit.type == 8) || (unit.type == 102)) { %>
           <%= unit.getDispayState() %><br>
           <div>
-            <a class="btn-floating btn-small waves-effect waves-light" onclick="press(5, '<%= unit.node.master.getAddress() %>', <%= unit.node.logicalAddress %>, <%= unit.logicalAddress %>)"><i class="material-icons">arrow_downward</i></a>
-            <a class="btn-floating btn-small waves-effect waves-light" onclick="press(3, '<%= unit.node.master.getAddress() %>', <%= unit.node.logicalAddress %>, <%= unit.logicalAddress %>)"><i class="material-icons">stop</i></a>
-            <a class="btn-floating btn-small waves-effect waves-light" onclick="press(4, '<%= unit.node.master.getAddress() %>', <%= unit.node.logicalAddress %>, <%= unit.logicalAddress %>)"><i class="material-icons">arrow_upward</i></a>
+            <a class="btn-floating btn-small waves-effect waves-light" onclick="press(5, '<%= unit.node.master.getAddress() %>', <%= unit.node.master.getPort() %>, <%= unit.node.logicalAddress %>, <%= unit.logicalAddress %>)"><i class="material-icons">arrow_downward</i></a>
+            <a class="btn-floating btn-small waves-effect waves-light" onclick="press(3, '<%= unit.node.master.getAddress() %>', <%= unit.node.master.getPort() %>, <%= unit.node.logicalAddress %>, <%= unit.logicalAddress %>)"><i class="material-icons">stop</i></a>
+            <a class="btn-floating btn-small waves-effect waves-light" onclick="press(4, '<%= unit.node.master.getAddress() %>', <%= unit.node.master.getPort() %>, <%= unit.node.logicalAddress %>, <%= unit.logicalAddress %>)"><i class="material-icons">arrow_upward</i></a>
           </div>
 
         <% } else { %>
@@ -64,18 +65,14 @@
 </table>
 
 <script>
-  function setStatus(state, master, node, unit) {
+  function setStatus(state, master, port, node, unit) {
     if (typeof state === "boolean") state = (state) ? "Y" : "N";
-    // console.log(state, master, node, unit);
-    ajax("http://<%= req.headers.host %>/units/set?master="+master+"&node="+node+"&unit="+unit+"&value="+state, function(data){ 
-      // console.log(data); 
+    ajax("http://<%= req.headers.host %>/units/set?master="+master+"&port="+port+"&node="+node+"&unit="+unit+"&value="+state, function(data){ 
     });
   }
-  function press(state, master, node, unit) {
+  function press(state, master, port, node, unit) {
     if (typeof state === "boolean") state = (state) ? "Y" : "N";
-    // console.log(state, master, node, unit);
-    ajax("http://<%= req.headers.host %>/units/press?master="+master+"&node="+node+"&unit="+unit+"&value="+state, function(data){ 
-      // console.log(data); 
+    ajax("http://<%= req.headers.host %>/units/press?master="+master+"&port="+port+"&node="+node+"&unit="+unit+"&value="+state, function(data){ 
     });
   }
 </script>
