@@ -37,7 +37,7 @@
         <div class="row">
           <div class="input-field col s12">
             <input placeholder="0" id="unit" name="unit" type="text" 
-                   value="<%= hex(swtch.nodeNr) %>;<%= hex(swtch.unitNr) %><%= (swtch.unitName) ? (' (' + swtch.unitName + ')') : '' %>">
+                   value="<%= hex(swtch.nodeNr) %>;<%= hex(swtch.unitNr) %><%= (swtch.name) ? (' (' + swtch.name + ')') : '' %>">
             <label for="channel">Unit (hex or name)</label>
           </div>
         </div>
@@ -53,7 +53,7 @@
           </div>
           <div class="switch input-field col s4">
             <label>Off
-              <input name="status_<%= swtch.unitName %>" <%= (swtch.value) ? 'checked' : '' %>
+              <input name="status_<%= swtch.name %>" <%= (swtch.value) ? 'checked' : '' %>
                      type="checkbox" onchange="setStatus(this.checked, <%= id %>)">
               <span class="lever"></span>On
             </label>

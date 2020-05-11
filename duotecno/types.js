@@ -3,6 +3,7 @@
 // v1 - server version, Apr 2019
 // v2 - app version, Jan 2020
 // v3 - smart server version, Mar 2020
+// v3.1 - added scenes from app version, May 2020
 Object.defineProperty(exports, "__esModule", { value: true });
 const protocol_1 = require("./protocol");
 // For the SmartApp
@@ -25,7 +26,7 @@ var SwitchType;
     SwitchType["kSmappee"] = "smappee";
     SwitchType["kRF"] = "RF";
 })(SwitchType = exports.SwitchType || (exports.SwitchType = {}));
-exports.kEmptyUnit = { master: "0.0.0.0", port: 5001, unitName: "unit", unitNr: 0, nodeNr: 0 };
+exports.kEmptyUnit = { masterAddress: "0.0.0.0", masterPort: 5001, name: "unit", logicalAddress: 0, logicalNodeAddress: 0 };
 exports.kEmptyAction = Object.assign(Object.assign({}, exports.kEmptyUnit), { value: false });
 ;
 exports.kEmptyRule = {
@@ -42,7 +43,8 @@ exports.kEmptySwitch = Object.assign(Object.assign({}, exports.kEmptyUnit), { pl
 ;
 ;
 ;
-;
+exports.kEmptyUnitScene = Object.assign(Object.assign({}, exports.kEmptyUnit), { value: true });
+exports.kEmptyScene = { name: 'Scene', trigger: exports.kEmptyUnitScene, order: 0, units: [] };
 exports.kEmptyGroup = { name: "Home", id: 0, order: 0, visible: true };
 ;
 ;
@@ -143,8 +145,8 @@ exports.Sanitizers = {
         aSwitch.id = makeInt(aSwitch.id);
         aSwitch.unitNr = makeInt(aSwitch.unitNr);
         aSwitch.nodeNr = makeInt(aSwitch.nodeNr);
-        if (typeof aSwitch.unitName != "string")
-            aSwitch.unitName = "";
+        if (typeof aSwitch.name != "string")
+            aSwitch.name = "";
         return aSwitch;
     },
     ruleConfig(rule) {
@@ -159,8 +161,8 @@ exports.Sanitizers = {
             action.value = actionValue(action.value);
             action.unitNr = makeInt(action.unitNr);
             action.nodeNr = makeInt(action.nodeNr);
-            if (typeof action.unitName != "string")
-                action.unitName = "";
+            if (typeof action.name != "string")
+                action.name = "";
         });
         return rule;
     },
@@ -252,6 +254,29 @@ exports.Sanitizers = {
         if (into)
             Object.keys(info).forEach(prop => into[prop] = info[prop]);
         return info;
+    },
+    sceneConfig: function (config) {
+        // don't change -> create new clean record for writing to config files
+        if (!config) {
+            return Object.assign({}, exports.kEmptyScene);
+        }
+        const newConfig = Object.assign({}, exports.kEmptyScene);
+        newConfig.name = config.name || exports.kEmptyScene.name;
+        if (typeof config.order === 'string') {
+            newConfig.order = parseInt(config.order);
+        }
+        newConfig.order = config.order || exports.kEmptyScene.order;
+        newConfig.trigger = this.unitScene(config.trigger);
+        config.units = config.units || exports.kEmptyScene.units;
+        newConfig.units = config.units.map(u => this.unitScene(u));
+        return newConfig;
+    },
+    scenes: function (config) {
+        if (!config) {
+            return [this.sceneConfig()];
+        }
+        config.forEach(s => this.sceneConfig(s));
+        return config;
     }
 };
 //////////////////////

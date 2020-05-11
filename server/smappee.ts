@@ -185,7 +185,7 @@ export class Smappee extends Base {
             .then((val) => {this.log("## sent command -> " + rule.type + 
                                      ", power = " + power.power + ", channel = " + rule.channel + 
                                      " -> current = " + newCurrent + 
-                                     " (unit: " + rule.actions[newCurrent].unitName + ", value: " + rule.actions[newCurrent].value + ")");
+                                     " (unit: " + rule.actions[newCurrent].name + ", value: " + rule.actions[newCurrent].value + ")");
                             rule.current = newCurrent;})
             .catch((e) => this.err(e));
         }
@@ -193,11 +193,11 @@ export class Smappee extends Base {
     }
   }
   async applyCommand(action: Action) {
-    const unit = this.system.findUnit(this.system.findMaster(action.master, action.port), action.nodeNr, action.unitNr);
+    const unit = this.system.findUnit(this.system.findMaster(action.masterAddress, action.masterPort), action.logicalNodeAddress, action.logicalAddress);
     if (unit)
       await unit.setState(action.value);
     else
-      this.log("***** UNIT NOT FOUND " + action.master + " - " + action.nodeNr + ";" + action.unitNr + " *****");
+      this.log("***** UNIT NOT FOUND " + action.masterAddress + " - " + action.logicalNodeAddress + ";" + action.logicalAddress + " *****");
   }
 
   updateRule(inx: number, rule: Rule) {

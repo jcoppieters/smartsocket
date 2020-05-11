@@ -2,6 +2,7 @@
 // v1 - server version, Apr 2019
 // v2 - app version, Jan 2020
 // v3 - smart server version, Mar 2020
+// v3.1 - added scenes from app version, May 2020
 
 import { NodeType, UnitType, Unit } from "./protocol";
 
@@ -25,14 +26,14 @@ export enum SwitchType {kNoType = "", kSmappee = "smappee", kRF = "RF"}
 
 
 export interface UnitDef {
-  unitName: string;
-  master: string;
-  port: number;
-  unitNr: number,
-  nodeNr: number,
+  name: string;
+  masterAddress: string;
+  masterPort: number;
+  logicalAddress: number,
+  logicalNodeAddress: number,
   unit?: Unit
 }
-export const kEmptyUnit: UnitDef = { master: "0.0.0.0", port: 5001, unitName: "unit", unitNr: 0, nodeNr: 0 };
+export const kEmptyUnit: UnitDef = { masterAddress: "0.0.0.0", masterPort: 5001, name: "unit", logicalAddress: 0, logicalNodeAddress: 0 };
 
 export interface Action extends UnitDef {
   value: number | boolean;
@@ -124,17 +125,30 @@ export interface NodeConfig {
   masterPort: number;         // port of master node
   logicalAddress?: number;
 };
-export interface UnitConfig {
+
+
+export interface UnitConfig extends UnitDef {
   active: YNX;                 // export / don't export to homebridge
-  masterAddress: string;      // address of master node
-  masterPort: number;         // port of master node
-  logicalNodeAddress: number;
-  logicalAddress: number;
   group: number;              // id of group
-};
+}
+
 export interface UnitSetting extends UnitConfig {
   value: number;
 }
+export interface UnitScene extends UnitDef {
+  value: number | boolean;
+}
+export const kEmptyUnitScene: UnitScene = { ...kEmptyUnit, value: true}
+
+
+export interface SceneConfig {
+  name: string;
+  trigger: UnitScene;
+  order: number;
+  units: Array<UnitScene>;
+}
+export const kEmptyScene: SceneConfig = {name: 'Scene', trigger: kEmptyUnitScene, order: 0, units: []};
+
 
 export interface GroupConfig {
   name: string;
@@ -289,7 +303,7 @@ export const Sanitizers = {
     aSwitch.id = makeInt(aSwitch.id);
     aSwitch.unitNr = makeInt(aSwitch.unitNr);
     aSwitch.nodeNr = makeInt(aSwitch.nodeNr);
-    if (typeof aSwitch.unitName != "string") aSwitch.unitName = "";
+    if (typeof aSwitch.name != "string") aSwitch.name = "";
 
     return aSwitch;
   },
@@ -305,7 +319,7 @@ export const Sanitizers = {
       action.value = actionValue(action.value);
       action.unitNr = makeInt(action.unitNr);
       action.nodeNr = makeInt(action.nodeNr);
-      if (typeof action.unitName != "string") action.unitName = "";
+      if (typeof action.name != "string") action.name = "";
     });
     return rule;
   },
@@ -404,6 +418,31 @@ export const Sanitizers = {
       Object.keys(info).forEach(prop => into[prop] = info[prop]);
 
     return info;
+  },
+
+  
+  sceneConfig: function(config?: SceneConfig): SceneConfig {
+    // don't change -> create new clean record for writing to config files
+    if (!config) { return {...kEmptyScene}; }
+
+    const newConfig: SceneConfig = {...kEmptyScene};
+    newConfig.name = config.name || kEmptyScene.name;
+    if (typeof config.order === 'string') { newConfig.order = parseInt(config.order); }
+    newConfig.order = config.order || kEmptyScene.order;
+
+    newConfig.trigger = this.unitScene(config.trigger);
+
+    config.units = config.units || kEmptyScene.units;
+    newConfig.units = config.units.map(u => this.unitScene(u));
+
+    return newConfig;
+  },
+
+  scenes: function(config?: Array<SceneConfig>): Array<SceneConfig> {
+    if (!config) { return [this.sceneConfig()]; }
+
+    config.forEach(s => this.sceneConfig(s));
+    return config;
   }
 
 };

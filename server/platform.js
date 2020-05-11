@@ -78,6 +78,9 @@ class Platform extends base_1.Base {
         const accessory = this.accessoryList.find((acc) => unit.isUnit(acc.unit));
         if (accessory)
             accessory.updateState();
+        if (this.system) {
+            this.system.checkScenes(unit);
+        }
     }
     addMasters(nr) {
         return __awaiter(this, void 0, void 0, function* () {

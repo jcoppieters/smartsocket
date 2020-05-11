@@ -1,5 +1,5 @@
 import { Master } from "./master";
-import { SystemConfig, MasterConfig, UnitConfig, YN, GroupConfig, LogFunction } from "./types";
+import { SystemConfig, MasterConfig, UnitConfig, YN, GroupConfig, LogFunction, SceneConfig } from "./types";
 import { Node, Unit, Protocol } from "./protocol";
 import { Base } from "../server/base";
 import { EventEmitter } from "events";
@@ -19,6 +19,7 @@ export class System extends Base {
   public controls: Array<Unit> = [];
   public temperatures: Array<Unit> = [];
   public stores: Array<Unit> = [];
+  public scenes: Array<SceneConfig> = [];
 
   constructor(debug: boolean = false, logger?: LogFunction) {
     super("system", debug, logger);
@@ -28,6 +29,7 @@ export class System extends Base {
 
     this.readConfig();
     this.readGroups();
+    this.readScenes();
 
     // open all masters listed in the config
     this.masters = [];
@@ -105,9 +107,9 @@ export class System extends Base {
   }
   
 
-  //////////////////
-  // Config stuff //
-  //////////////////
+  ////////////////
+  // Setting up //
+  ////////////////
 
   async addMaster(cmaster: MasterConfig): Promise<Master> {
     if (!cmaster.address) return;
@@ -233,10 +235,18 @@ export class System extends Base {
       return null;
   }
 
-  findUnit(master: Master, logicalNodeAddress: number, logicalAddress: number) {
-    const node = this.findNode(master, logicalNodeAddress);
+  findUnit(master: string, port: number, logicalNodeAddress: number, logicalAddress: number): Unit;
+  findUnit(master: Master, logicalNodeAddress: number, logicalAddress: number): Unit;
+  findUnit(master: Master | string, A: number, B: number, C?: number): Unit {
+    let nodeNr = A; 
+    let unitNr = B;
+    if (typeof master === "string") {
+      master = this.findMaster(master, A);
+      nodeNr = B; unitNr = C;
+    }
+    const node = this.findNode(master, nodeNr);
     if (node)
-      return node.units.find((u: Unit) => u && (u.logicalAddress === logicalAddress));
+      return node.units.find((u: Unit) => u && (u.logicalAddress === unitNr));
     else
       return null;
   }
@@ -287,7 +297,7 @@ export class System extends Base {
   //////////////////////////////////////////////////
   updateSystem(dontTrigger: boolean = false) {
     this.config.cunits = this.allActiveUnits()
-      .map((u: Unit) => { return { active: <YN>"Y", group: u.group, 
+      .map((u: Unit) => { return { active: <YN>"Y", group: u.group, name: u.name,
                                    masterAddress: u.node.master.getAddress(), masterPort: u.node.master.getPort(), 
                                    logicalNodeAddress: u.node.logicalAddress, logicalAddress: u.logicalAddress}; });
     this.writeConfig();
@@ -354,6 +364,28 @@ export class System extends Base {
       this.emitter.emit('ready', this.masters.length);
   }
 
+
+  ////////////
+  // Scenes //
+  ////////////
+  checkScenes(unit: Unit) {
+    // called by updateState that is listing for status changes
+    const scene = this.scenes.find(s => unit.isUnit(s.trigger.masterAddress, s.trigger.masterPort, s.trigger.logicalNodeAddress, s.trigger.logicalAddress));
+    if (scene) {
+      this.log("scene found -> " + scene.name);
+
+      if (unit.sameValue(scene.trigger.value)) {
+        scene.units.forEach(u => {
+          const unit = this.findUnit(u.masterAddress, u.masterPort, u.logicalNodeAddress, u.logicalAddress);
+          if (unit) {
+            this.log(" - unit found " + unit.getDisplayName() + " -> " + u.value);
+            unit.setState(u.value);
+          }
+        });
+      }
+    }
+  }
+
   //////////////////
   // Config stuff //
   //////////////////
@@ -364,6 +396,17 @@ export class System extends Base {
     // order the groups and reset the order indices
     this.groups.sort((a,b) => a.order-b.order);
     this.groups.forEach((g,i) => g.order = i);
+  }
+  readScenes() {
+    this.scenes = this.read("scenes");
+
+    // order the groups and reset the order indices
+    this.scenes.sort((a,b) => a.order-b.order);
+    this.scenes.forEach((g,i) => g.order = i);
+  }
+
+  writeScenes() {
+    this.groups = this.write("scenes", this.scenes);
   }
 
   writeGroups() {

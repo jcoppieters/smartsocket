@@ -43,7 +43,7 @@ const kAccessoryPins = {
 };
 class SmartApp extends socapp_1.SocApp {
     constructor(system, smappee, platform, log) {
-        super("smartapp", log);
+        super(system, "smartapp", log);
         // get some configurated params
         this.readConfig();
         this.port = this.config.port || this.port || 80;
@@ -114,25 +114,25 @@ class SmartApp extends socapp_1.SocApp {
     }
     scrapeUnit(context, boundary) {
         let unit = null;
-        let unitName = context.getParam({ name: "unit" + boundary, type: "string", default: "--" });
+        let name = context.getParam({ name: "unit" + boundary, type: "string", default: "--" });
         let value = types_1.actionValue(context.getParam({ name: "value" + boundary, type: "string", default: "0" }));
         let master = context.getParam(kMaster);
         let port = context.getParam(kPort);
-        let nodeNr, unitNr;
+        let logicalNodeAddress, logicalAddress;
         // hex addresses or name
-        if ((unitName[0] === "0") && (unitName[1] === "x")) {
-            const parts = unitName.split(";");
-            nodeNr = parseInt(parts[0], 16);
-            unitNr = parseInt((parts.length > 1) ? parts[1] : "0", 16);
-            unit = this.system.findUnit(master, nodeNr, unitNr);
-            unitName = (unit) ? unit.displayName : "--";
+        if ((name[0] === "0") && (name[1] === "x")) {
+            const parts = name.split(";");
+            logicalNodeAddress = parseInt(parts[0], 16);
+            logicalAddress = parseInt((parts.length > 1) ? parts[1] : "0", 16);
+            unit = this.system.findUnit(master, logicalNodeAddress, logicalAddress);
+            name = (unit) ? unit.displayName : "--";
         }
         else {
-            unit = this.system.findUnitByName(master, unitName);
-            nodeNr = (unit) ? unit.node.logicalAddress : 0;
-            unitNr = (unit) ? unit.logicalAddress : 0;
+            unit = this.system.findUnitByName(master, name);
+            logicalNodeAddress = (unit) ? unit.node.logicalAddress : 0;
+            logicalAddress = (unit) ? unit.logicalAddress : 0;
         }
-        return { unitName, value, master, port, unitNr, nodeNr };
+        return { name, value, masterAddress: master, masterPort: port, logicalAddress, logicalNodeAddress };
     }
     //////////////////////////////
     // Homekit                  //
@@ -207,9 +207,9 @@ class SmartApp extends socapp_1.SocApp {
         });
     }
     scrapeAction(context, boundary) {
-        const { unitName, value, master, port, unitNr, nodeNr } = this.scrapeUnit(context, boundary);
+        const { name, value, masterAddress, masterPort, logicalAddress, logicalNodeAddress } = this.scrapeUnit(context, boundary);
         return {
-            unitName, value, master, port, unitNr, nodeNr
+            name, value, masterAddress, masterPort, logicalAddress, logicalNodeAddress
         };
     }
     scrapeRule(context) {
@@ -230,7 +230,7 @@ class SmartApp extends socapp_1.SocApp {
     //////////////
     initSwitchUnits() {
         this.switches.forEach(swtch => {
-            swtch.unit = swtch.unit || this.system.findUnit(this.system.findMaster(swtch.master, swtch.port), swtch.nodeNr, swtch.unitNr);
+            swtch.unit = swtch.unit || this.system.findUnit(this.system.findMaster(swtch.masterAddress, swtch.masterPort), swtch.logicalNodeAddress, swtch.logicalAddress);
             if ((this.smappee) && (swtch.type === types_1.SwitchType.kSmappee)) {
                 for (let key in this.smappee.plugs) {
                     if (parseInt(key) === swtch.plug)
@@ -275,9 +275,9 @@ class SmartApp extends socapp_1.SocApp {
     }
     informChange(u) {
         this.switches.forEach(swtch => {
-            const master = this.system.findMaster(swtch.master, swtch.port);
+            const master = this.system.findMaster(swtch.masterAddress, swtch.masterPort);
             if (master) {
-                const unit = this.system.findUnit(master, swtch.nodeNr, swtch.unitNr);
+                const unit = this.system.findUnit(master, swtch.logicalNodeAddress, swtch.logicalAddress);
                 if (unit) {
                     this.setSwitch(swtch, !!u.status);
                 }
@@ -285,10 +285,10 @@ class SmartApp extends socapp_1.SocApp {
         });
     }
     scrapeSwitch(context) {
-        const { unitName, master, port, unitNr, nodeNr } = this.scrapeUnit(context, '');
+        const { name, masterAddress, masterPort, logicalAddress, logicalNodeAddress } = this.scrapeUnit(context, '');
         const plug = context.getParam({ name: "plug", type: "integer", default: 0 });
         const stype = context.getParam({ name: "type", type: "string", default: types_1.SwitchType.kNoType });
-        return { unitName, master, port, unitNr, nodeNr, type: stype, plug };
+        return { name, masterAddress, masterPort, logicalAddress, logicalNodeAddress, type: stype, plug };
     }
     updateSwitch(inx, swtch) {
         if ((inx >= 0) && (inx < this.switches.length)) {

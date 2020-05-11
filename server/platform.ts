@@ -86,7 +86,11 @@ export class Platform extends Base {
   updateState(unit: Unit) {
     this.log("received updateState " + unit.getName());
     const accessory = this.accessoryList.find((acc: Accessory) => unit.isUnit(acc.unit));
-    if (accessory) accessory.updateState()
+    if (accessory) accessory.updateState();
+
+    if (this.system) {
+      this.system.checkScenes(unit);
+    }
   }
 
   async addMasters(nr: number) {

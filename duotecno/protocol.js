@@ -10,7 +10,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const types_1 = require("./types");
-const master_1 = require("./master");
 // Duotecno master IP protocol implementation
 // Johan Coppieters
 //
@@ -60,6 +59,7 @@ var Rec;
     Rec[Rec["DBInfo"] = 0] = "DBInfo";
     Rec[Rec["NodeInfo"] = 1] = "NodeInfo";
     Rec[Rec["UnitInfo"] = 2] = "UnitInfo";
+    Rec[Rec["Internal"] = 9] = "Internal";
     Rec[Rec["ErrorMessage"] = 17] = "ErrorMessage";
     Rec[Rec["ConnectStatus"] = 67] = "ConnectStatus";
     Rec[Rec["ScheduleStatus"] = 73] = "ScheduleStatus";
@@ -186,18 +186,17 @@ class Unit {
         if (!this.displayName)
             this.displayName = this.getSerialNr();
     }
-    isUnit(master, nodeLogicalAddress, unitLogicalAddress) {
-        if (master instanceof master_1.Master) {
-            return ((this.node.master.isMaster(master.getAddress(), master.getPort())) &&
-                (this.node.logicalAddress == nodeLogicalAddress) &&
-                (this.logicalAddress == unitLogicalAddress));
-        }
-        else if (master instanceof Unit) {
+    isUnit(master, port, nodeLogicalAddress, unitLogicalAddress) {
+        if (master instanceof Unit) {
             const unit = master;
-            master = unit.node.master;
-            return ((this.node.master.isMaster(master.getAddress(), master.getPort())) &&
+            return ((this.node.master.isMaster(unit.node.master.getAddress(), unit.node.master.getPort())) &&
                 (this.node.logicalAddress == unit.node.logicalAddress) &&
                 (this.logicalAddress == unit.logicalAddress));
+        }
+        else { /* if (typeof master === "string") */
+            return ((this.node.master.isMaster(master, port)) &&
+                (this.node.logicalAddress == nodeLogicalAddress) &&
+                (this.logicalAddress == unitLogicalAddress));
         }
     }
     sameValue(value) {
@@ -488,24 +487,11 @@ exports.Protocol = {
                 if ((end <= nextRec.rest.length) && (nextRec.rest.charCodeAt(end + 1) === 0x0A))
                     end++;
                 nextRec.rest = nextRec.rest.substring(end + 1);
-                if (msg[0] == 'B') {
-                    // Backup -> delete the "B," get the master/port/.... what is enough??
-                    try {
-                        nextRec.message = JSON.parse(msg.substring(2));
-                    }
-                    catch (e) {
-                        nextRec.message = [];
-                    }
-                    ;
-                    nextRec.cmd = -1;
-                }
-                else {
-                    // convert to array and turn strings into numbers if IP command
-                    nextRec.message = msg.split(",").map(c => parseInt(c));
-                    // get the first byte to see what kind of incoming data
-                    nextRec.cmd = nextRec.message[0];
-                    nextRec.isStatus = this.isStatus(nextRec.cmd);
-                }
+                // convert to array and turn strings into numbers if IP command
+                nextRec.message = msg.split(",").map(c => parseInt(c));
+                // get the first byte to see what kind of incoming data
+                nextRec.cmd = nextRec.message[0];
+                nextRec.isStatus = this.isStatus(nextRec.cmd);
                 // this.logger("processing: " + (nextRec.isStatus ? "status -> " : "") + msg);
             }
         }

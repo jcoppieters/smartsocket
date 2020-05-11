@@ -67,6 +67,8 @@ export enum Rec {
   NodeInfo = 1,
   UnitInfo = 2,
 
+  Internal = 9,     // smartsystem defined (not Duotecno)
+
   ErrorMessage = 17,
   ConnectStatus = 67,
   ScheduleStatus = 73,
@@ -207,19 +209,19 @@ export class Unit {
   }
 
   isUnit(unit: Unit): boolean;
-  isUnit(master: Master, nodeLogicalAddress: number, unitLogicalAddress: number): boolean;
-  isUnit(master: Master | Unit, nodeLogicalAddress?: number, unitLogicalAddress?: number): boolean {
-    if (master instanceof Master) {
-      return ((this.node.master.isMaster(master.getAddress(), master.getPort())) &&
-              (this.node.logicalAddress == nodeLogicalAddress) && 
-              (this.logicalAddress == unitLogicalAddress));
-    } else if (master instanceof Unit) {
+  isUnit(master: string, port: number, nodeLogicalAddress: number, unitLogicalAddress: number): boolean;
+  isUnit(master: Unit | string, port?: number, nodeLogicalAddress?: number, unitLogicalAddress?: number): boolean {
+    if (master instanceof Unit) {
       const unit = master;
-      master = unit.node.master;
-      return ((this.node.master.isMaster(master.getAddress(), master.getPort())) &&
+      return ((this.node.master.isMaster(unit.node.master.getAddress(), unit.node.master.getPort())) &&
               (this.node.logicalAddress == unit.node.logicalAddress) && 
               (this.logicalAddress == unit.logicalAddress));
-    }
+
+    } else { /* if (typeof master === "string") */
+      return ((this.node.master.isMaster(master, port)) &&
+              (this.node.logicalAddress == nodeLogicalAddress) && 
+              (this.logicalAddress == unitLogicalAddress));
+    } 
   }
 
   sameValue(value): boolean {
@@ -529,20 +531,12 @@ export const Protocol = {
         if ((end <= nextRec.rest.length) && (nextRec.rest.charCodeAt(end+1) === 0x0A)) end++;
           nextRec.rest = nextRec.rest.substring(end+1);
 
-        if (msg[0]=='B') {
-          // Backup -> delete the "B," get the master/port/.... what is enough??
-          try { nextRec.message = JSON.parse(msg.substring(2)) }
-          catch (e) { nextRec.message = []};
-          nextRec.cmd = -1;
+        // convert to array and turn strings into numbers if IP command
+        nextRec.message = msg.split(",").map(c => parseInt(c));
 
-        } else {
-          // convert to array and turn strings into numbers if IP command
-          nextRec.message = msg.split(",").map(c => parseInt(c));
-
-          // get the first byte to see what kind of incoming data
-          nextRec.cmd = <number>nextRec.message[0];
-          nextRec.isStatus = this.isStatus(nextRec.cmd);
-        }
+        // get the first byte to see what kind of incoming data
+        nextRec.cmd = <number>nextRec.message[0];
+        nextRec.isStatus = this.isStatus(nextRec.cmd);
 
         // this.logger("processing: " + (nextRec.isStatus ? "status -> " : "") + msg);
       }

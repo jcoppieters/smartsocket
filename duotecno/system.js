@@ -22,11 +22,13 @@ class System extends base_1.Base {
         this.controls = [];
         this.temperatures = [];
         this.stores = [];
+        this.scenes = [];
         this.trigger = null;
         this.emitter = new events_1.EventEmitter();
         protocol_1.Protocol.setEmitter(this.emitter);
         this.readConfig();
         this.readGroups();
+        this.readScenes();
         // open all masters listed in the config
         this.masters = [];
     }
@@ -103,9 +105,9 @@ class System extends base_1.Base {
     displayDatabases() {
         this.masters.forEach(m => m.displayDatabase());
     }
-    //////////////////
-    // Config stuff //
-    //////////////////
+    ////////////////
+    // Setting up //
+    ////////////////
     addMaster(cmaster) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!cmaster.address)
@@ -221,10 +223,17 @@ class System extends base_1.Base {
         else
             return null;
     }
-    findUnit(master, logicalNodeAddress, logicalAddress) {
-        const node = this.findNode(master, logicalNodeAddress);
+    findUnit(master, A, B, C) {
+        let nodeNr = A;
+        let unitNr = B;
+        if (typeof master === "string") {
+            master = this.findMaster(master, A);
+            nodeNr = B;
+            unitNr = C;
+        }
+        const node = this.findNode(master, nodeNr);
         if (node)
-            return node.units.find((u) => u && (u.logicalAddress === logicalAddress));
+            return node.units.find((u) => u && (u.logicalAddress === unitNr));
         else
             return null;
     }
@@ -270,7 +279,7 @@ class System extends base_1.Base {
     updateSystem(dontTrigger = false) {
         this.config.cunits = this.allActiveUnits()
             .map((u) => {
-            return { active: "Y", group: u.group,
+            return { active: "Y", group: u.group, name: u.name,
                 masterAddress: u.node.master.getAddress(), masterPort: u.node.master.getPort(),
                 logicalNodeAddress: u.node.logicalAddress, logicalAddress: u.logicalAddress };
         });
@@ -334,6 +343,25 @@ class System extends base_1.Base {
         if (complete)
             this.emitter.emit('ready', this.masters.length);
     }
+    ////////////
+    // Scenes //
+    ////////////
+    checkScenes(unit) {
+        // called by updateState that is listing for status changes
+        const scene = this.scenes.find(s => unit.isUnit(s.trigger.masterAddress, s.trigger.masterPort, s.trigger.logicalNodeAddress, s.trigger.logicalAddress));
+        if (scene) {
+            this.log("scene found -> " + scene.name);
+            if (unit.sameValue(scene.trigger.value)) {
+                scene.units.forEach(u => {
+                    const unit = this.findUnit(u.masterAddress, u.masterPort, u.logicalNodeAddress, u.logicalAddress);
+                    if (unit) {
+                        this.log(" - unit found " + unit.getDisplayName() + " -> " + u.value);
+                        unit.setState(u.value);
+                    }
+                });
+            }
+        }
+    }
     //////////////////
     // Config stuff //
     //////////////////
@@ -342,6 +370,15 @@ class System extends base_1.Base {
         // order the groups and reset the order indices
         this.groups.sort((a, b) => a.order - b.order);
         this.groups.forEach((g, i) => g.order = i);
+    }
+    readScenes() {
+        this.scenes = this.read("scenes");
+        // order the groups and reset the order indices
+        this.scenes.sort((a, b) => a.order - b.order);
+        this.scenes.forEach((g, i) => g.order = i);
+    }
+    writeScenes() {
+        this.groups = this.write("scenes", this.scenes);
     }
     writeGroups() {
         this.groups = this.write("groups", this.groups);

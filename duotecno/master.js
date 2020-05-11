@@ -173,20 +173,6 @@ class Master extends base_1.Base {
             }));
         });
     }
-    backup() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const data = JSON.stringify(this.config);
-            protocol_1.Protocol.write(this.socket, "[B," + data + "]");
-        });
-    }
-    restore() {
-        return __awaiter(this, void 0, void 0, function* () {
-            protocol_1.Protocol.write(this.socket, "[R]");
-        });
-    }
-    restoring(data) {
-        this.config = data;
-    }
     handleData(message) {
         // put the incoming data into a buffer and only use complete data
         this.buffer += message;
@@ -217,9 +203,6 @@ class Master extends base_1.Base {
             }
             else if (next.cmd === protocol_1.Rec.ScheduleStatus) {
                 this.receiveSchedule(next.message);
-            }
-            else if (next.cmd === -1) {
-                this.restoring(next.message);
             }
             else {
                 this.log("what to do with: " + next.message);

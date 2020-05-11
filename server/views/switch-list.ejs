@@ -32,12 +32,12 @@
             <% for (let inx in switches) { let swtch = switches[inx]; %>
               <tr>
                 <td><a href="/switches/edit/<%= inx %>"><%= swtch.plug %></a></td>
-                <td><a href="/switches/edit/<%= inx %>"><%= swtch.unitName %></a></td>
+                <td><a href="/switches/edit/<%= inx %>"><%= swtch.name %></a></td>
                 <td><a href="/switches/edit/<%= inx %>"><%= hex(swtch.nodeNr) %>/<%= hex(swtch.unitNr) %></a></td>
                 <td>
                   <div class="switch">
                     <label>Off
-                      <input name="status_<%= swtch.unitName %>" <%= (swtch.value) ? 'checked' : '' %>
+                      <input name="status_<%= swtch.name %>" <%= (swtch.value) ? 'checked' : '' %>
                              type="checkbox" onchange="setStatus(this.checked, <%= inx %>)">
                       <span class="lever"></span>On
                     </label>

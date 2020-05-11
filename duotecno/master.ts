@@ -194,17 +194,6 @@ export class Master extends Base {
     });
   }
 
-  async backup() {
-    const data = JSON.stringify(this.config);
-    Protocol.write(this.socket, "[B," + data + "]");
-  }
-  async restore() {
-    Protocol.write(this.socket, "[R]");
-  }
-  restoring(data) {
-    this.config = data;
-  }
-
   handleData(message: string) {
     // put the incoming data into a buffer and only use complete data
     this.buffer += message;
@@ -241,9 +230,6 @@ export class Master extends Base {
       } else if (next.cmd === Rec.ScheduleStatus) {
         this.receiveSchedule(next.message);
 
-      } else if (next.cmd === -1) {
-        this.restoring(next.message);
-      
       } else {
         this.log("what to do with: " + next.message);
 
