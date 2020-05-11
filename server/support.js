@@ -13,7 +13,7 @@ class Support extends base_1.Base {
         this.system = system;
     }
     noSB(str) {
-        return str.replace('§', ' ').replace(']', '§');
+        return str.replace(/§/g, ']');
     }
     updateScenes(msg) {
     }
@@ -31,7 +31,7 @@ class Support extends base_1.Base {
         catch (e) {
             this.log("error: " + e.message);
         }
-        return "";
+        return null;
     }
     doRestore(type) {
         try {
@@ -44,9 +44,20 @@ class Support extends base_1.Base {
             return null;
         }
     }
+    doScenes(type, data) {
+        this.doBackup(type, data);
+        try {
+            this.log("setting scenes to: " + this.noSB(data));
+            this.system.scenes = JSON.parse(this.noSB(data));
+        }
+        catch (e) {
+            this.log("error: " + e.message);
+        }
+        return null;
+    }
     // Format:
     //  [9,K-type-address:data]
-    // K = B(ackup), R(estore)
+    // K = B(ackup), R(estore), S(end scenes)
     // type = name of config like "system", "scenes", "groups", ...
     // 
     // Writing to, reading from files 
@@ -56,6 +67,8 @@ class Support extends base_1.Base {
             return 'B';
         else if ((msg[0] == '[') && (msg[1] == '9') && (msg[2] == ',') && (msg[3] == 'R'))
             return 'R';
+        else if ((msg[0] == '[') && (msg[1] == '9') && (msg[2] == ',') && (msg[3] == 'S'))
+            return 'S';
         else
             return 'X';
     }
@@ -68,7 +81,7 @@ class Support extends base_1.Base {
     }
     handle(msg) {
         const kind = this.getKind(msg);
-        // no internal message -> tell it to the caller
+        // no internal message -> tell it to the caller and let's get out of here
         if (kind === 'X')
             return { done: false };
         // get type for restore or backup if any
@@ -82,6 +95,10 @@ class Support extends base_1.Base {
         }
         else if (kind === 'R') {
             return { done: true, answer: this.doRestore(type) };
+            //scenes
+        }
+        else if (kind === 'S') {
+            return { done: true, answer: this.doScenes(type, msg) };
         }
         else {
             // we should not get here...

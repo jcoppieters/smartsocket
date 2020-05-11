@@ -4,7 +4,7 @@ import * as fs from 'fs';
 import * as mime from 'mime-types';
 import { WebApp, HttpResponse, Context} from "./webapp";
 import { LogFunction } from '../duotecno/types';
-import { isSupport, Support } from './support';
+import { Support } from './support';
 import { System } from '../duotecno/system';
 
 
