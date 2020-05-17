@@ -21,7 +21,10 @@ const support_1 = require("./support");
 class SocApp extends webapp_1.WebApp {
     constructor(system, type, log) {
         super(type, log);
-        this.connected = false;
+        // hashmap with all connected clients
+        this.clients = {};
+        this.readConfig();
+        this.port = this.config.port || this.port || 80;
         this.system = system;
         this.support = new support_1.Support(system, type, true, log);
     }
@@ -29,6 +32,9 @@ class SocApp extends webapp_1.WebApp {
         return __awaiter(this, void 0, void 0, function* () {
             if (context.request === "") {
                 return this.serveFile("/index.html");
+            }
+            else if (context.request === "log") {
+                return this.renderLog();
             }
             else if (context.request === "restart") {
                 setTimeout(() => { process.exit(-1); }, 500);
@@ -61,9 +67,26 @@ class SocApp extends webapp_1.WebApp {
             return { status: 200, data, type };
         });
     }
+    renderLog() {
+        const clientKeys = Object.keys(this.clients);
+        const seen = clientKeys.length;
+        const connected = clientKeys.reduce((acc, k) => acc + (this.clients[k].connected ? 1 : 0), 0);
+        const cList = clientKeys.filter(k => this.clients[k].connected).map(k => `<li>${k}: ${this.clients[k].lastseen}</li>`).join("");
+        const sList = clientKeys.filter(k => !this.clients[k].connected).map(k => `<li>${k}: ${this.clients[k].lastseen}</li>`).join("");
+        return { status: 200, type: "text/html", data: `
+      <html><head><title>Akiworks SmartServer status</title></head>
+       <body>
+        <h1>Connections: ${seen}</h1>
+        <h2>Open: ${connected}</h2>
+        <ul>${cList}</ul>
+        <h2>closed: ${seen - connected}</h2>
+        <ul>${sList}</ul>
+       </body>
+      </html>
+    ` };
+    }
     // Handle new incomming WebSocket client
     handleClient(client, req) {
-        this.client = client;
         let target;
         const clientAddr = client._socket.remoteAddress;
         const log = (msg) => this.log('Proxy - ' + clientAddr + ': ' + msg);
@@ -83,15 +106,16 @@ class SocApp extends webapp_1.WebApp {
         // Target connection handling  //
         /////////////////////////////////
         target = net.createConnection(portNr, ipAddress, () => {
-            this.connected = true;
             target.setNoDelay(); // disable Nagle
             log("connected to target -> " + url);
+            this.clients[url] = { connected: true, lastseen: new Date() };
         });
         target.on('data', (data) => {
             const msg = data.toString();
             log("received from target: " + msg.substr(0, msg.length - 1));
             try {
                 client.send(msg);
+                this.clients[url].lastseen = new Date();
             }
             catch (e) {
                 log("client sending error: " + e.message + ", cleaning up target");
@@ -101,13 +125,13 @@ class SocApp extends webapp_1.WebApp {
         target.on('end', () => {
             log('target disconnected');
             client.close();
-            this.connected = false;
+            this.clients[url].connected = false;
         });
         target.on('error', (err) => {
             log('target error' + err);
             target.end();
             client.close();
-            this.connected = false;
+            this.clients[url].connected = false;
         });
         ///////////////////////////////////
         // websocket connection handling //
@@ -115,13 +139,14 @@ class SocApp extends webapp_1.WebApp {
         client.on('message', (msg) => {
             // log('got message from websocket: ' + msg.substr(0, msg.length-1));
             // Let's hope the socket is buffering even before the connection is fully open
-            // if (! this.connected) log('Not yet connected!!') else
+            // if (! connected) log('Not yet connected!!') else
             const result = this.support.handle(msg);
             if (result.done) {
                 if (result.answer)
-                    this.client.send(result.answer);
+                    client.send(result.answer);
             }
             else {
+                log('received from client: ' + msg.substr(0, msg.length - 1));
                 target.write(msg);
             }
         });

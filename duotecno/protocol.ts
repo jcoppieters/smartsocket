@@ -407,7 +407,6 @@ export const Protocol = {
       subscribers[inx].deliver(unit);
       subscribers.splice(inx, 1);
     }
-    this.emitter.emit('update', unit);
   },
   addSubscriber(deliver: DeliverStatus, unit: Unit) {
     subscribers.push({deliver, unit});
@@ -702,6 +701,7 @@ export const Protocol = {
 
     }
     this.alertSubscriber(unit);
+    this.emitter.emit('update', unit);
   },
 
   makeDBInfo(res: Message): DBInfo {

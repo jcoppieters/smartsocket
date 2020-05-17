@@ -378,7 +378,6 @@ exports.Protocol = {
             subscribers[inx].deliver(unit);
             subscribers.splice(inx, 1);
         }
-        this.emitter.emit('update', unit);
     },
     addSubscriber(deliver, unit) {
         subscribers.push({ deliver, unit });
@@ -632,6 +631,7 @@ exports.Protocol = {
             this.logger("received macro -> value=" + unit.value + " / status=" + unit.status);
         }
         this.alertSubscriber(unit);
+        this.emitter.emit('update', unit);
     },
     makeDBInfo(res) {
         return { nrNodes: res[2] };

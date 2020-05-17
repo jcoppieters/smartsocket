@@ -5,7 +5,8 @@ console.log("running in directory: " + process.cwd());
 function adder(plugin, platform, list) {
     console.log("************* plugin: " + plugin + ", platform: " + platform, list);
 }
-const platform = new platform_1.Platform(console.log, { debug: true, smappee: true, smartapp: true, system: true, manufacturer: "Duotecno", platform: "ssoc" }, { registerPlatformAccessories: adder });
+const platform = new platform_1.Platform(console.log, { debug: true, smappee: true, smartapp: true, socapp: false, system: true,
+    manufacturer: "Duotecno", platform: "ssoc" }, { registerPlatformAccessories: adder });
 //if (platform) { 
 //  platform.accessories((list) => {
 //    console.log("Added accessories: ", list);

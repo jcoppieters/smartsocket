@@ -12,9 +12,7 @@ import { Mood } from "../accessories/mood";
 import { Temperature } from "../accessories/temperature";
 import { Base } from "./base";
 import { Accessory } from "../accessories/accessory";
-
-
-
+import { SocApp } from "./socapp";
 
 
 export class Platform extends Base {
@@ -23,6 +21,7 @@ export class Platform extends Base {
   system: System;
   smappee: Smappee;
   smartapp: SmartApp;
+  smartsoc: SocApp;
   accessoryList = [];
   ready = false;
 
@@ -38,7 +37,7 @@ export class Platform extends Base {
     this.log("running in directory: " + process.cwd());
     this.homebridge = homebridge;
 
-    if (this.config.system)
+    if (this.config.system) {
       try {
         this.system = new System(this.config.debug, log);
         this.system.openMasters(true);
@@ -56,21 +55,28 @@ export class Platform extends Base {
           return;
         }
       }
+    } else {
+      this.log("platform - No System configured -> can't run !!!");
+      return;
+    }
 
     // startup a Smappee MQTT subscriber, if one is configured
-    if (this.config.smappee)
+    if (this.config.smappee) {
       try {
         this.smappee = new Smappee(this.system, this.config.debug, log);
 
       } catch(err) {
         this.log(err);
         if (!this.smappee) {
-          this.log("platform - No Smappee configured.");
+          this.log("platform - No Smappee started.");
         }
       }
+    } else {
+      this.log("platform - No Smappee configured.");
+    }
 
-    // startup a smartApp if configured
-    if (this.config.smartapp)
+    // startup a smartApp if configured -> only on Raspberry's
+    if (this.config.smartapp) {
       try {
         this.smartapp = new SmartApp(this.system, this.smappee, this, log);
         this.smartapp.serve();
@@ -78,19 +84,35 @@ export class Platform extends Base {
       } catch(err) {
         this.log(err);
         if (!this.smartapp) {
-          this.log("platform - No Webapp configured.");
+          this.log("platform - No SmartApp started.");
         }
       }
+    } else {
+      this.log("platform - No SmartApp configured.");
+    }
+
+    // startup a SocApp if configured -> for servers
+    if (this.config.socapp) {
+      try {
+        // reuse the config file from the smartapp
+        this.smartsoc = new SocApp(this.system, 'smartapp', log);
+        this.smartsoc.serve();
+
+      } catch(err) {
+        this.log(err);
+        if (!this.smartsoc) {
+          this.log("platform - No SocApp started.");
+        }
+      }
+    } else {
+      this.log("platform - No SocApp configured.");
+    }
   }
 
   updateState(unit: Unit) {
     this.log("received updateState " + unit.getName());
     const accessory = this.accessoryList.find((acc: Accessory) => unit.isUnit(acc.unit));
     if (accessory) accessory.updateState();
-
-    if (this.system) {
-      this.system.checkScenes(unit);
-    }
   }
 
   async addMasters(nr: number) {

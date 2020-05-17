@@ -1,0 +1,15 @@
+[
+  {
+    "name": "Scene",
+    "trigger": {
+      "masterAddress": "0.0.0.0",
+      "masterPort": 5001,
+      "name": "unit",
+      "logicalAddress": 0,
+      "logicalNodeAddress": 0,
+      "value": true
+    },
+    "order": 0,
+    "units": []
+  }
+]

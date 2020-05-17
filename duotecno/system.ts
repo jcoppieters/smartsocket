@@ -24,8 +24,10 @@ export class System extends Base {
   constructor(debug: boolean = false, logger?: LogFunction) {
     super("system", debug, logger);
     this.trigger = null;
+
     this.emitter = new EventEmitter();
     Protocol.setEmitter(this.emitter);
+    this.emitter.on('update', this.checkScenes.bind(this));
 
     this.readConfig();
     this.readGroups();
@@ -369,7 +371,7 @@ export class System extends Base {
   // Scenes //
   ////////////
   checkScenes(unit: Unit) {
-    // called by updateState that is listing for status changes
+    // called by updateState that is listening for status changes
     const scene = this.scenes.find(s => unit.isUnit(s.trigger.masterAddress, s.trigger.masterPort, s.trigger.logicalNodeAddress, s.trigger.logicalAddress));
     if (scene) {
       this.log("scene found -> " + scene.name);

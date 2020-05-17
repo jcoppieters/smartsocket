@@ -12,10 +12,11 @@ class Support extends base_1.Base {
         super(type, debug, logger);
         this.system = system;
     }
-    noSB(str) {
+    fromTransport(str) {
         return str.replace(/§/g, ']');
     }
-    updateScenes(msg) {
+    toTransport(str) {
+        return str.replace(/]/g, '§');
     }
     getFN(type) {
         return "./data/" + type + ".json";
@@ -24,9 +25,7 @@ class Support extends base_1.Base {
         try {
             this.log("Backup - " + type + " -> " + data.substr(0, 40) + "...");
             fs.mkdirSync("./data", { recursive: true });
-            fs.writeFileSync(this.getFN(type), this.noSB(data));
-            if (type === "scenes")
-                this.updateScenes(data);
+            fs.writeFileSync(this.getFN(type), this.fromTransport(data));
         }
         catch (e) {
             this.log("error: " + e.message);
@@ -37,7 +36,7 @@ class Support extends base_1.Base {
         try {
             const data = fs.readFileSync(this.getFN(type)).toString();
             this.log("Restore - " + type + " -> " + data.substr(0, 40) + "...");
-            return "[9,R-" + type + ":" + this.noSB(data) + "]";
+            return "[9,R-" + type + ":" + this.toTransport(data) + "]";
         }
         catch (e) {
             this.log("error: " + e.message);
@@ -47,8 +46,8 @@ class Support extends base_1.Base {
     doScenes(type, data) {
         this.doBackup(type, data);
         try {
-            this.log("setting scenes to: " + this.noSB(data));
-            this.system.scenes = JSON.parse(this.noSB(data));
+            this.log("setting scenes to: " + this.fromTransport(data));
+            this.system.scenes = JSON.parse(this.fromTransport(data));
         }
         catch (e) {
             this.log("error: " + e.message);

@@ -6,7 +6,32 @@
 // v3.1 - added scenes from app version, May 2020
 Object.defineProperty(exports, "__esModule", { value: true });
 const protocol_1 = require("./protocol");
-// For the SmartApp
+;
+;
+;
+;
+exports.kEmptyUnit = { masterAddress: "0.0.0.0", masterPort: 5001, name: "unit", logicalAddress: 0, logicalNodeAddress: 0 };
+;
+;
+;
+exports.kEmptyUnitScene = Object.assign(Object.assign({}, exports.kEmptyUnit), { value: true });
+;
+exports.kEmptyScene = { name: 'Scene', trigger: exports.kEmptyUnitScene, order: 0, units: [] };
+;
+exports.kEmptyGroup = { name: "Home", id: 0, order: 0, visible: true };
+;
+;
+;
+var WriteError;
+(function (WriteError) {
+    WriteError[WriteError["writeFatal"] = -1] = "writeFatal";
+    WriteError[WriteError["writeError"] = 0] = "writeError";
+    WriteError[WriteError["writeOK"] = 1] = "writeOK";
+})(WriteError = exports.WriteError || (exports.WriteError = {}));
+exports.kEmptyCommRecord = { status: false, cmd: -1, message: [-1, 0, 0], rest: "" };
+//////////////
+// SmartApp //
+//////////////
 var Boundaries;
 (function (Boundaries) {
     Boundaries[Boundaries["kLow"] = 0] = "kLow";
@@ -26,7 +51,6 @@ var SwitchType;
     SwitchType["kSmappee"] = "smappee";
     SwitchType["kRF"] = "RF";
 })(SwitchType = exports.SwitchType || (exports.SwitchType = {}));
-exports.kEmptyUnit = { masterAddress: "0.0.0.0", masterPort: 5001, name: "unit", logicalAddress: 0, logicalNodeAddress: 0 };
 exports.kEmptyAction = Object.assign(Object.assign({}, exports.kEmptyUnit), { value: false });
 ;
 exports.kEmptyRule = {
@@ -40,22 +64,6 @@ exports.kEmptySwitch = Object.assign(Object.assign({}, exports.kEmptyUnit), { pl
 ;
 ;
 ;
-;
-;
-;
-exports.kEmptyUnitScene = Object.assign(Object.assign({}, exports.kEmptyUnit), { value: true });
-exports.kEmptyScene = { name: 'Scene', trigger: exports.kEmptyUnitScene, order: 0, units: [] };
-exports.kEmptyGroup = { name: "Home", id: 0, order: 0, visible: true };
-;
-;
-;
-var WriteError;
-(function (WriteError) {
-    WriteError[WriteError["writeFatal"] = -1] = "writeFatal";
-    WriteError[WriteError["writeError"] = 0] = "writeError";
-    WriteError[WriteError["writeOK"] = 1] = "writeOK";
-})(WriteError = exports.WriteError || (exports.WriteError = {}));
-exports.kEmptyCommRecord = { status: false, cmd: -1, message: [-1, 0, 0], rest: "" };
 /////////////
 // Smappee //
 /////////////
@@ -193,6 +201,8 @@ exports.Sanitizers = {
         config.cunits = config.cunits || [];
         return config;
     },
+    ////////////
+    // Groups //
     group: function (config) {
         if (!config)
             return exports.kEmptyGroup;
@@ -208,6 +218,8 @@ exports.Sanitizers = {
         config.forEach(g => exports.Sanitizers["group"](g));
         return config;
     },
+    //////////
+    // Node //
     nodeConfig: function (config) {
         if (!config)
             config = {};
@@ -217,20 +229,70 @@ exports.Sanitizers = {
         config.logicalAddress = config.logicalAddress || 0;
         return config;
     },
+    //////////
+    // Unit //
+    unitDef: function (info, into) {
+        info.logicalNodeAddress = info.logicalNodeAddress || 0;
+        info.logicalAddress = info.logicalAddress || 0;
+        info.masterAddress = info.masterAddress || '';
+        info.masterPort = info.masterPort || 5001;
+        return info;
+    },
     unitConfig: function (config) {
-        if (!config)
+        if (!config) {
             config = {};
-        config.active = config.active || "N";
-        config.logicalAddress = config.logicalAddress || 0;
-        config.logicalNodeAddress = config.logicalNodeAddress || 0;
-        config.masterAddress = config.masterAddress || "";
-        config.masterPort = config.masterPort || 5001;
-        if (typeof config.group === "string")
+        }
+        this.unitDef(config);
+        config.active = config.active || 'N';
+        if (typeof config.group === 'string') {
             config.group = parseInt(config.group);
+        }
         config.group = config.group || 0;
         return config;
     },
-    // for data coming from the hardware
+    unitScene: function (config) {
+        // change + create new clean record for writing to config files
+        if (!config) {
+            config = {};
+        }
+        this.unitDef(config);
+        if (typeof config.value === "undefined")
+            config.value = 0;
+        if (typeof config.value === "string")
+            config.value = parseInt(config.value);
+        return { logicalNodeAddress: config.logicalNodeAddress,
+            logicalAddress: config.logicalAddress,
+            masterAddress: config.masterAddress,
+            masterPort: config.masterPort,
+            value: config.value };
+    },
+    ////////////
+    // Scenes //
+    sceneConfig: function (config) {
+        // don't change -> create new clean record for writing to config files
+        if (!config) {
+            return Object.assign({}, exports.kEmptyScene);
+        }
+        const newConfig = Object.assign({}, exports.kEmptyScene);
+        newConfig.name = config.name || exports.kEmptyScene.name;
+        if (typeof config.order === 'string') {
+            newConfig.order = parseInt(config.order);
+        }
+        newConfig.order = config.order || exports.kEmptyScene.order;
+        newConfig.trigger = this.unitScene(config.trigger);
+        config.units = config.units || exports.kEmptyScene.units;
+        newConfig.units = config.units.map(u => this.unitScene(u));
+        return newConfig;
+    },
+    scenes: function (config) {
+        if (!config) {
+            return [this.sceneConfig()];
+        }
+        config.forEach(s => this.sceneConfig(s));
+        return config;
+    },
+    ///////////////////////////////////
+    // Data coming from the hardware //
     nodeInfo: function (info, into) {
         info.name = info.name || "";
         info.index = info.index || -1;
@@ -254,29 +316,6 @@ exports.Sanitizers = {
         if (into)
             Object.keys(info).forEach(prop => into[prop] = info[prop]);
         return info;
-    },
-    sceneConfig: function (config) {
-        // don't change -> create new clean record for writing to config files
-        if (!config) {
-            return Object.assign({}, exports.kEmptyScene);
-        }
-        const newConfig = Object.assign({}, exports.kEmptyScene);
-        newConfig.name = config.name || exports.kEmptyScene.name;
-        if (typeof config.order === 'string') {
-            newConfig.order = parseInt(config.order);
-        }
-        newConfig.order = config.order || exports.kEmptyScene.order;
-        newConfig.trigger = this.unitScene(config.trigger);
-        config.units = config.units || exports.kEmptyScene.units;
-        newConfig.units = config.units.map(u => this.unitScene(u));
-        return newConfig;
-    },
-    scenes: function (config) {
-        if (!config) {
-            return [this.sceneConfig()];
-        }
-        config.forEach(s => this.sceneConfig(s));
-        return config;
     }
 };
 //////////////////////

@@ -437,17 +437,12 @@ class Master extends base_1.Base {
         const unitLogical = next.message[3];
         const unit = node.units.find(unit => unit && (unit.logicalAddress == unitLogical));
         if (!unit) {
-            //this.err("status message " + next.cmd + " for unknown unit = " + unitLogical + 
-            //          " in node = " + nodeLogical);
+            this.err("status message " + next.cmd + " for unknown unit = " + unitLogical +
+                " in node = " + nodeLogical);
             return;
         }
-        // Parse the status into the unit
+        // Parse the status into the unit and propagate
         protocol_1.Protocol.receiveStatus(next, unit);
-        /*
-        // inform the system if a change was detected or if macro command (69)
-        if ((currValue != unit.value) || (currStatus != unit.status) || (next.cmd == 69))
-          this.system.informStatusChange(this, unit);
-        */
     }
     requestStatus() {
         return __awaiter(this, void 0, void 0, function* () {

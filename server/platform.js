@@ -21,6 +21,7 @@ const garagedoor_1 = require("../accessories/garagedoor");
 const mood_1 = require("../accessories/mood");
 const temperature_1 = require("../accessories/temperature");
 const base_1 = require("./base");
+const socapp_1 = require("./socapp");
 class Platform extends base_1.Base {
     constructor(log, config, homebridge) {
         // set debug to true for new config files
@@ -33,7 +34,7 @@ class Platform extends base_1.Base {
         //console.log("homebridge:", homebridge);
         this.log("running in directory: " + process.cwd());
         this.homebridge = homebridge;
-        if (this.config.system)
+        if (this.config.system) {
             try {
                 this.system = new system_1.System(this.config.debug, log);
                 this.system.openMasters(true);
@@ -49,19 +50,28 @@ class Platform extends base_1.Base {
                     return;
                 }
             }
+        }
+        else {
+            this.log("platform - No System configured -> can't run !!!");
+            return;
+        }
         // startup a Smappee MQTT subscriber, if one is configured
-        if (this.config.smappee)
+        if (this.config.smappee) {
             try {
                 this.smappee = new smappee_1.Smappee(this.system, this.config.debug, log);
             }
             catch (err) {
                 this.log(err);
                 if (!this.smappee) {
-                    this.log("platform - No Smappee configured.");
+                    this.log("platform - No Smappee started.");
                 }
             }
-        // startup a smartApp if configured
-        if (this.config.smartapp)
+        }
+        else {
+            this.log("platform - No Smappee configured.");
+        }
+        // startup a smartApp if configured -> only on Raspberry's
+        if (this.config.smartapp) {
             try {
                 this.smartapp = new smartapp_1.SmartApp(this.system, this.smappee, this, log);
                 this.smartapp.serve();
@@ -69,18 +79,36 @@ class Platform extends base_1.Base {
             catch (err) {
                 this.log(err);
                 if (!this.smartapp) {
-                    this.log("platform - No Webapp configured.");
+                    this.log("platform - No SmartApp started.");
                 }
             }
+        }
+        else {
+            this.log("platform - No SmartApp configured.");
+        }
+        // startup a SocApp if configured -> for servers
+        if (this.config.socapp) {
+            try {
+                // reuse the config file from the smartapp
+                this.smartsoc = new socapp_1.SocApp(this.system, 'smartapp', log);
+                this.smartsoc.serve();
+            }
+            catch (err) {
+                this.log(err);
+                if (!this.smartsoc) {
+                    this.log("platform - No SocApp started.");
+                }
+            }
+        }
+        else {
+            this.log("platform - No SocApp configured.");
+        }
     }
     updateState(unit) {
         this.log("received updateState " + unit.getName());
         const accessory = this.accessoryList.find((acc) => unit.isUnit(acc.unit));
         if (accessory)
             accessory.updateState();
-        if (this.system) {
-            this.system.checkScenes(unit);
-        }
     }
     addMasters(nr) {
         return __awaiter(this, void 0, void 0, function* () {

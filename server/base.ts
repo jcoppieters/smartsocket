@@ -74,7 +74,7 @@ export class Base {
       fs.writeFileSync(fn, JSON.stringify(config, null, 2));
 
     } catch(err) {
-      this.err("Couldn't write my " + this.type + " config file (" + fn + ")");
+      this.err("Couldn't write my " + type + " config file (" + fn + ")");
     }
     return config;
   }

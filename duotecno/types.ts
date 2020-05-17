@@ -6,102 +6,16 @@
 
 import { NodeType, UnitType, Unit } from "./protocol";
 
-
-// coming from Homebridge or from unit tests
-export type LogFunction = (message: any, ...optionalParams: any[]) => void;
-
-// for Homebridge
-export type Service = new (nodeName: string, unitName: string) => any;
-
-
 // for Active=Y/N or New=X
 export type YNX =  "Y" | "N" | "X";
 export type YN =  "Y" | "N";
 
 
-// For the SmartApp
-export enum Boundaries {kLow = 0, kMid = 1, kHigh = 2};
-export enum RuleType {kPower = "power", kCurrent = "current", kWater = "water"}
-export enum SwitchType {kNoType = "", kSmappee = "smappee", kRF = "RF"}
+//////////////
+// Duotecno //
+//////////////
 
-
-export interface UnitDef {
-  name: string;
-  masterAddress: string;
-  masterPort: number;
-  logicalAddress: number,
-  logicalNodeAddress: number,
-  unit?: Unit
-}
-export const kEmptyUnit: UnitDef = { masterAddress: "0.0.0.0", masterPort: 5001, name: "unit", logicalAddress: 0, logicalNodeAddress: 0 };
-
-export interface Action extends UnitDef {
-  value: number | boolean;
-}
-export const kEmptyAction: Action = { ...kEmptyUnit, value: false };
-
-export interface Rule {
-  type: string;
-  channel: number;
-  low: number;
-  high: number;
-  current?: number;
-  power?: number;
-  actions: Array<Action>;
-};
-export const kEmptyRule: Rule = { 
-  type: "power", channel: 0, low: 30, high: 900, 
-  actions: [{...kEmptyUnit, value: false}, {...kEmptyUnit, value: 50}, {...kEmptyUnit, value: true}] 
-};
-
-export interface Switch extends UnitDef {
-  type: SwitchType,
-  plug: number,
-  value?: number | boolean
-};
-export const kEmptySwitch: Switch = { ...kEmptyUnit, plug: 0, type: SwitchType.kNoType};
-
-
-export interface Bridge {
-  name: string,
-  username: string,   // CC:22:3D:E3:A3:03
-  port: number,
-  pin: string         // "577-02-003"
-};
-
-export interface BaseConfig {
-  debug?: boolean;
-}
-export interface PlatformConfig extends BaseConfig {
-  manufacturer: string,
-  platform: string,
-  [x: string]: any    // for other platforms
-};
-export interface AccessoryConfig {
-  accessory: string,
-  name: string,
-  [x: string]: any    // for other accessories
-};
-export interface HomebridgeConfig {
-  bridge: Bridge,                         
-  description: string,
-  platforms?: Array<PlatformConfig>
-  accessories?: Array<AccessoryConfig>
-};
-
-export interface SmartAppConfig extends BaseConfig {
-  port: number;
-  switches: Array<Switch>;
-}
-
-export interface SmappeeConfig extends BaseConfig {
-  address: string;
-  rules: Array<Rule>;
-  uid: string;
-};
-
-
-// Duotecno configuration (see duotecno/system.ts)
+// Configuration (see duotecno/system.ts)
 export interface SystemConfig {
   socketserver: string;
   socketport: number;
@@ -111,6 +25,7 @@ export interface SystemConfig {
   cmasters: Array<MasterConfig>;
   cunits: Array<UnitConfig>;
 };
+
 export interface MasterConfig {
   name?: string;
   address: string;
@@ -119,6 +34,7 @@ export interface MasterConfig {
   debug?: boolean;
   active: boolean;
 };
+
 export interface NodeConfig {
   active: YNX;                 // if found with "N": don't even query, "X": new node
   masterAddress: string;      // address of master node
@@ -126,19 +42,29 @@ export interface NodeConfig {
   logicalAddress?: number;
 };
 
+export interface UnitDef {
+  name: string;
+  masterAddress: string;
+  masterPort: number;
+  logicalAddress: number,
+  logicalNodeAddress: number,
+  unit?: Unit
+};
+export const kEmptyUnit: UnitDef = { masterAddress: "0.0.0.0", masterPort: 5001, name: "unit", logicalAddress: 0, logicalNodeAddress: 0 };
+
 
 export interface UnitConfig extends UnitDef {
-  active: YNX;                 // export / don't export to homebridge
+  active: YN;                 // export / don't export to homebridge
   group: number;              // id of group
-}
+};
 
 export interface UnitSetting extends UnitConfig {
   value: number;
-}
+};
 export interface UnitScene extends UnitDef {
   value: number | boolean;
-}
-export const kEmptyUnitScene: UnitScene = { ...kEmptyUnit, value: true}
+};
+export const kEmptyUnitScene: UnitScene = { ...kEmptyUnit, value: true};
 
 
 export interface SceneConfig {
@@ -146,7 +72,7 @@ export interface SceneConfig {
   trigger: UnitScene;
   order: number;
   units: Array<UnitScene>;
-}
+};
 export const kEmptyScene: SceneConfig = {name: 'Scene', trigger: kEmptyUnitScene, order: 0, units: []};
 
 
@@ -156,8 +82,9 @@ export interface GroupConfig {
   visible: boolean;
   used?: boolean;
   order: number;
-}
+};
 export const kEmptyGroup: GroupConfig = {name: "Home", id: 0, order: 0, visible: true};
+
 
 
 // from Protocol//Hardware to Nodes and Units
@@ -208,6 +135,92 @@ export interface CommRecord {
   rest: string;
 }
 export const kEmptyCommRecord = { status: false, cmd: -1, message: [-1,0,0], rest: ""};
+
+
+//////////////
+// SmartApp //
+//////////////
+
+export enum Boundaries {kLow = 0, kMid = 1, kHigh = 2};
+export enum RuleType {kPower = "power", kCurrent = "current", kWater = "water"}
+export enum SwitchType {kNoType = "", kSmappee = "smappee", kRF = "RF"}
+
+
+export interface Action extends UnitDef {
+  value: number | boolean;
+}
+export const kEmptyAction: Action = { ...kEmptyUnit, value: false };
+
+export interface Rule {
+  type: string;
+  channel: number;
+  low: number;
+  high: number;
+  current?: number;
+  power?: number;
+  actions: Array<Action>;
+};
+export const kEmptyRule: Rule = { 
+  type: "power", channel: 0, low: 30, high: 900, 
+  actions: [{...kEmptyUnit, value: false}, {...kEmptyUnit, value: 50}, {...kEmptyUnit, value: true}] 
+};
+
+export interface Switch extends UnitDef {
+  type: SwitchType,
+  plug: number,
+  value?: number | boolean
+};
+export const kEmptySwitch: Switch = { ...kEmptyUnit, plug: 0, type: SwitchType.kNoType};
+
+
+export interface SmartAppConfig extends BaseConfig {
+  port: number;
+  switches: Array<Switch>;
+}
+
+export interface SmappeeConfig extends BaseConfig {
+  address: string;
+  rules: Array<Rule>;
+  uid: string;
+};
+
+////////////////
+// Homebridge //
+////////////////
+
+// coming from Homebridge or from unit tests
+export type LogFunction = (message: any, ...optionalParams: any[]) => void;
+// needed as return objects to Homebridge
+export type Service = new (nodeName: string, unitName: string) => any;
+
+
+export interface Bridge {
+  name: string,
+  username: string,   // CC:22:3D:E3:A3:03
+  port: number,
+  pin: string         // "577-02-003"
+};
+
+export interface BaseConfig {
+  debug?: boolean;
+}
+export interface PlatformConfig extends BaseConfig {
+  manufacturer: string,
+  platform: string,
+  [x: string]: any    // for other platforms
+};
+export interface AccessoryConfig {
+  accessory: string,
+  name: string,
+  [x: string]: any    // for other accessories
+};
+export interface HomebridgeConfig {
+  bridge: Bridge,                         
+  description: string,
+  platforms?: Array<PlatformConfig>
+  accessories?: Array<AccessoryConfig>
+};
+
 
 /////////////
 // Smappee //
@@ -350,6 +363,8 @@ export const Sanitizers = {
     return config;
   },
 
+  ////////////
+  // Groups //
   group: function(config?: GroupConfig): GroupConfig {
     if (!config) return kEmptyGroup;
 
@@ -367,6 +382,8 @@ export const Sanitizers = {
     return config;
   },
 
+  //////////
+  // Node //
   nodeConfig: function(config?: NodeConfig) {
     if (!config) config = <NodeConfig>{};
     config.active = config.active || "N";
@@ -375,52 +392,49 @@ export const Sanitizers = {
     config.logicalAddress = config.logicalAddress || 0;
     return config;
   },
-  
-  unitConfig: function(config?: UnitConfig) {
-    if (!config) config = <UnitConfig>{};
-    config.active = config.active || "N";
-    config.logicalAddress = config.logicalAddress || 0;
-    config.logicalNodeAddress = config.logicalNodeAddress || 0;
-    config.masterAddress = config.masterAddress || "";
-    config.masterPort = config.masterPort || 5001;
 
-    if (typeof config.group === "string") config.group = parseInt(config.group);
+  //////////
+  // Unit //
+  unitDef: function(info: UnitDef, into?: object) {
+    info.logicalNodeAddress = info.logicalNodeAddress || 0;
+    info.logicalAddress = info.logicalAddress || 0;
+    info.masterAddress = info.masterAddress || '';
+    info.masterPort = info.masterPort || 5001;
+
+    return info;
+  },
+
+
+  unitConfig: function(config?: UnitConfig) {  // unitDef + active + group
+    if (!config) { config = <UnitConfig>{}; }
+    this.unitDef(config);
+
+    config.active = config.active || 'N';
+
+    if (typeof config.group === 'string') { config.group = parseInt(config.group); }
     config.group = config.group || 0;
+
     return config;
   },
 
-  // for data coming from the hardware
-  nodeInfo: function(info: NodeInfo, into?: object) {
-    info.name = info.name || "";
-    info.index = info.index || -1;
-    info.logicalAddress = info.logicalAddress || 0;
-    info.physicalAddress = info.physicalAddress || 0;
-    info.type = info.type || NodeType.kNoNode;
-    info.flags = info.flags || 0;
-    info.nrUnits = info.nrUnits || 0;
-
-    if (into)
-      Object.keys(info).forEach(prop => into[prop] = info[prop]);
-
-    return info;
-    },
   
-  unitInfo: function(info: UnitInfo, into?: object) {
-    info.name = info.name || "";
-    info.logicalReqNodeAddress = info.logicalReqNodeAddress || 0;
-    info.index = info.index || -1;
-    info.logicalNodeAddress = info.logicalNodeAddress || 0;
-    info.logicalAddress = info.logicalAddress || 0;
-    info.type = info.type || UnitType.kNoType;
-    info.flags = info.flags || 0;
+  unitScene: function(config?: UnitScene) {  // unitDef + value 
+    // change + create new clean record for writing to config files
+    if (!config) { config = <UnitScene>{}; }
+    this.unitDef(config);
+    if (typeof config.value === "undefined") config.value = 0;
+    if (typeof config.value === "string") config.value = parseInt(config.value);
 
-    if (into)
-      Object.keys(info).forEach(prop => into[prop] = info[prop]);
-
-    return info;
+    return { logicalNodeAddress: config.logicalNodeAddress,
+             logicalAddress: config.logicalAddress,
+             masterAddress: config.masterAddress,
+             masterPort: config.masterPort,
+             value: config.value };
   },
 
-  
+
+  ////////////
+  // Scenes //
   sceneConfig: function(config?: SceneConfig): SceneConfig {
     // don't change -> create new clean record for writing to config files
     if (!config) { return {...kEmptyScene}; }
@@ -443,6 +457,36 @@ export const Sanitizers = {
 
     config.forEach(s => this.sceneConfig(s));
     return config;
+  },
+  
+  ///////////////////////////////////
+  // Data coming from the hardware //
+  nodeInfo: function(info: NodeInfo, into?: object) {
+    info.name = info.name || "";
+    info.index = info.index || -1;
+    info.logicalAddress = info.logicalAddress || 0;
+    info.physicalAddress = info.physicalAddress || 0;
+    info.type = info.type || NodeType.kNoNode;
+    info.flags = info.flags || 0;
+    info.nrUnits = info.nrUnits || 0;
+
+    if (into)
+      Object.keys(info).forEach(prop => into[prop] = info[prop]);
+    return info;
+    },
+  
+    unitInfo: function(info: UnitInfo, into?: object) {
+    info.name = info.name || "";
+    info.logicalReqNodeAddress = info.logicalReqNodeAddress || 0;
+    info.index = info.index || -1;
+    info.logicalNodeAddress = info.logicalNodeAddress || 0;
+    info.logicalAddress = info.logicalAddress || 0;
+    info.type = info.type || UnitType.kNoType;
+    info.flags = info.flags || 0;
+
+    if (into)
+      Object.keys(info).forEach(prop => into[prop] = info[prop]);
+    return info;
   }
 
 };
