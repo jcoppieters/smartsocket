@@ -351,16 +351,17 @@ class System extends base_1.Base {
         // called by updateState that is listening for status changes
         const scene = this.scenes.find(s => unit.isUnit(s.trigger.masterAddress, s.trigger.masterPort, s.trigger.logicalNodeAddress, s.trigger.logicalAddress));
         if (scene) {
-            this.log("scene found -> " + scene.name);
-            if (unit.sameValue(scene.trigger.value)) {
-                scene.units.forEach(u => {
-                    const unit = this.findUnit(u.masterAddress, u.masterPort, u.logicalNodeAddress, u.logicalAddress);
-                    if (unit) {
-                        this.log(" - unit found " + unit.getDisplayName() + " -> " + u.value);
-                        unit.setState(u.value);
-                    }
-                });
-            }
+            this.log("scene found -> " + scene.name + ", value = " + scene.trigger.value + " unit = " + unit.value);
+            console.log(scene);
+            //  if (unit.sameValue(scene.trigger.value)) {
+            scene.units.forEach(u => {
+                const unit = this.findUnit(u.masterAddress, u.masterPort, u.logicalNodeAddress, u.logicalAddress);
+                if (unit) {
+                    this.log(" - unit found " + unit.getDisplayName() + " -> " + u.value);
+                    unit.setState(u.value);
+                }
+            });
+            //  }
         }
     }
     //////////////////

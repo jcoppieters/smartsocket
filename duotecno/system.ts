@@ -372,11 +372,12 @@ export class System extends Base {
   ////////////
   checkScenes(unit: Unit) {
     // called by updateState that is listening for status changes
-    const scene = this.scenes.find(s => unit.isUnit(s.trigger.masterAddress, s.trigger.masterPort, s.trigger.logicalNodeAddress, s.trigger.logicalAddress));
+    const scene = this.scenes.find(s => unit.isUnit(s.trigger.masterAddress, s.trigger.masterPort, 
+                                          s.trigger.logicalNodeAddress, s.trigger.logicalAddress));
     if (scene) {
-      this.log("scene found -> " + scene.name);
+      this.log("scene found -> " + scene.name + ", value = " + scene.trigger.value + " unit = " + unit.value);console.log(scene);
 
-      if (unit.sameValue(scene.trigger.value)) {
+    //  if (unit.sameValue(scene.trigger.value)) {
         scene.units.forEach(u => {
           const unit = this.findUnit(u.masterAddress, u.masterPort, u.logicalNodeAddress, u.logicalAddress);
           if (unit) {
@@ -384,7 +385,7 @@ export class System extends Base {
             unit.setState(u.value);
           }
         });
-      }
+    //  }
     }
   }
 
