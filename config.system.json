@@ -12,6 +12,14 @@
       "name": "Smartbox",
       "active": true,
       "debug": false
+    },
+    {
+      "address": "178.118.70.181",
+      "port": 5001,
+      "password": "duotecno",
+      "name": "Smartbox",
+      "active": true,
+      "debug": false
     }
   ],
   "cunits": [

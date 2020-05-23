@@ -320,10 +320,28 @@ class SmartApp extends socapp_1.SocApp {
             if ((swtch.type === types_1.SwitchType.kSmappee) && (this.smappee)) {
                 this.smappee.setPlug(swtch.plug, state);
             }
+            else if (swtch.type === types_1.SwitchType.kHTTP) {
+                this.httpSwitch(swtch.plug, state);
+            }
             else {
                 this.err("Don't know how to set a switch of type " + swtch.type);
             }
         }
+    }
+    //////////////////////////
+    // http driven switches //
+    //////////////////////////
+    httpSwitch(url, value) {
+        const parts = url.split("|");
+        let base = parts[0];
+        const inx = value + 1;
+        if (parts.length > (inx))
+            base += parts[inx];
+        this.wget(base);
+    }
+    wget(url) {
+        fetch(url).then(r => this.log("http switch OK -> " + r))
+            .catch(e => this.log("http switch NOK -> " + e));
     }
     //////////////////////////////
     // Services                 //
@@ -447,6 +465,8 @@ class SmartApp extends socapp_1.SocApp {
                 return { node: new protocol_1.Node(this.system.masters[0], { name: "No node" }), message: "Node not found" };
             }
             else {
+                if (node.nrUnits != node.units.length)
+                    yield master.fetchAllUnits(node);
                 yield node.master.requestNodeStatus(node);
                 return { node };
             }

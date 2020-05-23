@@ -343,12 +343,31 @@ export class SmartApp extends SocApp {
     } else {
       if ((swtch.type === SwitchType.kSmappee) && (this.smappee)) {
         this.smappee.setPlug(swtch.plug, state);
+      } else if (swtch.type === SwitchType.kHTTP) {
+        this.httpSwitch(swtch.plug, state)
       } else {
         this.err("Don't know how to set a switch of type " + swtch.type);
       }
     }
   }
 
+  //////////////////////////
+  // http driven switches //
+  //////////////////////////
+
+  httpSwitch(url, value) {
+    const parts = url.split("|");
+    let base = parts[0];
+    const inx = value + 1;
+    if (parts.length > (inx))
+      base += parts[inx];
+    this.wget(base);
+  }
+
+  wget(url: string) {
+    fetch(url).then(r => this.log("http switch OK -> " + r))
+              .catch(e => this.log("http switch NOK -> " + e))
+  }
 
 
   //////////////////////////////
@@ -474,6 +493,8 @@ export class SmartApp extends SocApp {
       return { node: new Node(this.system.masters[0], {name: "No node"}), message: "Node not found" };
 
     } else {
+      if (node.nrUnits != node.units.length) 
+        await master.fetchAllUnits(node);
       await node.master.requestNodeStatus(node);
       return { node };
     }

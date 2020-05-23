@@ -47,6 +47,7 @@
             <select name="type" id="type">
               <option value="" <%= (swtch.type == '') ? 'selected' : '' %>>Select Type</option>
               <option value="smappee" <%= (swtch.type == 'smappee') ? 'selected' : '' %>>Smappee</option>
+              <option value="http" <%= (swtch.type == 'http') ? 'selected' : '' %>>HTTP</option>
               <option value="RF" <%= (swtch.type == 'RF') ? 'selected' : '' %>>RF</option>
             </select>
             <label for="type">Type</label>
