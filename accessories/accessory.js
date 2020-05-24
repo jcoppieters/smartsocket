@@ -86,7 +86,7 @@ class Accessory {
     }
     updateState() {
         this.me.getCharacteristic(this.homebridge.Characteristic.On).updateValue(this.unit.status);
-        this.log("Received status change -> update accessory -> " + this.unit.getName() + " = " + this.unit.status + " / " + this.unit.value);
+        this.log("Received status change -> update accessory -> " + this.unit.getName() + " -> on = " + this.unit.status);
     }
 }
 exports.Accessory = Accessory;

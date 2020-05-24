@@ -66,9 +66,9 @@ class Dimmer extends accessory_1.Accessory {
             .catch(err => next(err));
     }
     updateState() {
-        this.me.getCharacteristic(this.homebridge.Characteristic.On).updateValue(this.unit.status);
+        super.updateState();
         this.me.getCharacteristic(this.homebridge.Characteristic.Brightness).updateValue(this.unit.value);
-        this.log("Received status change -> update accessory -> " + this.unit.getName() + " = " + this.unit.status + " / " + this.unit.value);
+        this.log("Received status change -> update accessory -> " + this.unit.getName() + " -> Brightness = " + this.unit.value);
     }
 }
 exports.Dimmer = Dimmer;

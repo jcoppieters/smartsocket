@@ -32,7 +32,7 @@ class Temperature extends accessory_1.Accessory {
     }
     updateState() {
         this.me.getCharacteristic(this.homebridge.Characteristic.CurrentTemperature).updateValue(this.unit.value / 10.0);
-        this.log("Received status change -> update temperature -> " + this.unit.getName() + " = " + this.unit.status + " / " + this.unit.value / 10.0);
+        this.log("Received status change -> update temperature -> " + this.unit.getName() + " -> temp = " + this.unit.value / 10.0);
     }
 }
 exports.Temperature = Temperature;

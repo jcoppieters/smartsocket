@@ -22,7 +22,7 @@ export class Platform extends Base {
   smappee: Smappee;
   smartapp: SmartApp;
   smartsoc: SocApp;
-  accessoryList = [];
+  accessoryList: Array<Accessory> = [];
   ready = false;
 
   constructor(log: LogFunction, config: PlatformConfig, homebridge) {
