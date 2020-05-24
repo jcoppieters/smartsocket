@@ -4,5 +4,5 @@ console.log("index.ts - running in directory: " + process.cwd());
 
 module.exports = function (homebridge) {
   console.log("registering Duotecno Platform");
-  homebridge.registerPlatform("homebridge-duotecno", "DuotecnoPlatform", Platform, true);
+  homebridge.registerPlatform("homebridge-smartsystem", "DuotecnoPlatform", Platform, true);
 };
