@@ -377,26 +377,13 @@ pm2 startup | grep "sudo" | bash
 ## New v2.0 All in one script
 ```
 cd ~
-wget https://nodejs.org/dist/v12.16.3/node-v12.16.3-linux-armv7l.tar.gz
-cd /opt
-sudo tar xzf ~/node-v12.16.3-linux-armv7l.tar.gz
-rm -f ~/node-v12.16.3-linux-armv7l.tar.gz
-cd ~
-sudo ln -sf /opt/node-v12.16.3-linux-armv7l /opt/node
-sudo ln -sf /opt/node/bin/node /usr/bin/node
-sudo ln -sf /opt/node/bin/npm /usr/bin/npm
-
-sudo apt-get  --yes --force-yes install libavahi-compat-libdnssd-dev
-sudo chmod a+rwx /opt/node/lib/node_modules/
+curl -sL https://deb.nodesource.com/setup_12.x | sudo bash -
+sudo apt-get install -y nodejs  # for dev tools add: gcc g++ make python
+sudo npm install -g npm
+### install homebridge
 sudo npm install -g --unsafe-perm homebridge
-sudo ln -sf /opt/node/lib/node_modules/homebridge/bin/homebridge /usr/bin/homebridge
-
-sudo apt-get update
-sudo apt-get install libcurl4-openssl-dev
-sudo apt-get  --yes --force-yes install git
-
+### install mqtt
 sudo npm install mqtt -g
-sudo ln -sf /opt/node/bin/mqtt /usr/bin/mqtt
 
 git clone https://github.com/jcoppieters/smartsocket.git
 cd smartsocket
@@ -406,7 +393,7 @@ npm install
 mkdir -p /home/pi/.homebridge
 cp ~/smartsocket/config.homebridge.json ~/.homebridge/config.json
 cd ~/smartsocket
-ln -sf /home/pi/smartsocket/ /opt/node/lib/node_modules/smartsocket  # install the plugin via a link
+sudo ln -sf /home/pi/smartsocket/ /usr/lib/node_modules/homebridge-system  # install the plugin via a link
 cd ~
 
 sudo npm install -g pm2
