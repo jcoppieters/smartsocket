@@ -145,7 +145,7 @@ exports.Sanitizers = {
         if (!config)
             config = {};
         config.rules = config.rules || [];
-        config.address = config.address || "192.168.0.54";
+        config.address = config.address || "";
         config.uid = config.uid || "--none--";
         config.debug = config.debug || false;
         return config;
@@ -156,6 +156,7 @@ exports.Sanitizers = {
         aSwitch.nodeNr = makeInt(aSwitch.nodeNr);
         if (typeof aSwitch.name != "string")
             aSwitch.name = "";
+        aSwitch.value = aSwitch.value || 0;
         return aSwitch;
     },
     ruleConfig(rule) {

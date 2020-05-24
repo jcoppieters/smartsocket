@@ -168,7 +168,7 @@ export const kEmptyRule: Rule = {
 export interface Switch extends UnitDef {
   type: SwitchType,
   plug: number,
-  value?: number | boolean
+  value?: number | boolean | string
 };
 export const kEmptySwitch: Switch = { ...kEmptyUnit, plug: 0, type: SwitchType.kNoType};
 
@@ -306,7 +306,7 @@ export const Sanitizers = {
   smappee: function(config: SmappeeConfig): SmappeeConfig {
     if (!config) config = <SmappeeConfig>{};
     config.rules = config.rules || [];
-    config.address = config.address || "192.168.0.54";
+    config.address = config.address || "";
     config.uid = config.uid || "--none--";
     config.debug = config.debug || false;
     return config;
@@ -317,6 +317,7 @@ export const Sanitizers = {
     aSwitch.unitNr = makeInt(aSwitch.unitNr);
     aSwitch.nodeNr = makeInt(aSwitch.nodeNr);
     if (typeof aSwitch.name != "string") aSwitch.name = "";
+    aSwitch.value = aSwitch.value || 0;
 
     return aSwitch;
   },
