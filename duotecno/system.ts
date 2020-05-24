@@ -218,7 +218,7 @@ export class System extends Base {
   findMaster(master: Master | string, port?: number): Master {
     if (typeof master === "string") {
       if (typeof port === "undefined") port = 5001;
-      return this.masters.find((m: Master) => m.same(master, port))
+      return this.masters.find((m: Master) => m && m.same(master, port))
     } else {
       return this.masters.find((m: Master) => m && m.same(master));
     }

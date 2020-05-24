@@ -207,7 +207,7 @@ class System extends base_1.Base {
         if (typeof master === "string") {
             if (typeof port === "undefined")
                 port = 5001;
-            return this.masters.find((m) => m.same(master, port));
+            return this.masters.find((m) => m && m.same(master, port));
         }
         else {
             return this.masters.find((m) => m && m.same(master));
