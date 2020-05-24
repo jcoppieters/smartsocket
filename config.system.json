@@ -10,7 +10,7 @@
       "port": 5001,
       "password": "duotecno",
       "name": "Smartbox",
-      "active": true,
+      "active": false,
       "debug": false
     },
     {

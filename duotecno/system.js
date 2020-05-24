@@ -45,7 +45,8 @@ class System extends base_1.Base {
         return __awaiter(this, void 0, void 0, function* () {
             for (let inx = 0; inx < this.config.cmasters.length; inx++) {
                 try {
-                    yield this.openMaster(this.config.cmasters[inx], inx, readDB);
+                    if (this.config.cmasters[inx].active)
+                        yield this.openMaster(this.config.cmasters[inx], inx, readDB);
                 }
                 catch (err) {
                     this.log(err);

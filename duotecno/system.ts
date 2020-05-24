@@ -51,7 +51,8 @@ export class System extends Base {
   async openMasters(readDB: boolean = false) {
     for (let inx = 0; inx < this.config.cmasters.length; inx++) {
       try {
-        await this.openMaster(this.config.cmasters[inx], inx, readDB);
+        if (this.config.cmasters[inx].active)
+          await this.openMaster(this.config.cmasters[inx], inx, readDB);
       } catch(err) {
         this.log(err);
       }
