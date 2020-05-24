@@ -376,31 +376,41 @@ pm2 startup | grep "sudo" | bash
 
 ## New v2.0 All in one script
 ```
+## old systems remove
+sudo npm -g remove pm2
+sudo npm -g remove homebridge
+
+## start intstall
 cd ~
 curl -sL https://deb.nodesource.com/setup_12.x | sudo bash -
 sudo apt-get install -y nodejs  # for dev tools add: gcc g++ make python
 sudo npm install -g npm
+
 ### install homebridge
 sudo npm install -g --unsafe-perm homebridge
 ### install mqtt
 sudo npm install mqtt -g
 
+### install smartsystem
 git clone https://github.com/jcoppieters/smartsocket.git
 cd smartsocket
 git checkout v2.0
 npm install
 
+### config smartsystem
 mkdir -p /home/pi/.homebridge
 cp ~/smartsocket/config.homebridge.json ~/.homebridge/config.json
 cd ~/smartsocket
 sudo ln -sf /home/pi/smartsocket/ /usr/lib/node_modules/homebridge-system  # install the plugin via a link
 cd ~
 
+### install pm2 - process mgr
 sudo npm install -g pm2
-sudo ln -sf /opt/node/bin/pm2 /usr/bin/pm2
 
+### start the system and save for reboots
 cd ~/smartsocket
 pm2 start homebridge
 pm2 save
 pm2 startup | grep "sudo" | bash
+
 ```
