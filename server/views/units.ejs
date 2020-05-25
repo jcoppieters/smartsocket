@@ -42,7 +42,7 @@
             </p>
           <% } %>
 
-        <% } else if ((unit.type == 7) || (unit.type = 3)) { %>
+        <% } else if ((unit.type == 7) || (unit.type == 3)) { %>
           <div>
             <a class="btn-floating btn-small waves-effect waves-light" onclick="press(1, '<%= unit.node.master.getAddress() %>', <%= unit.node.master.getPort() %>, <%= unit.node.logicalAddress %>, <%= unit.logicalAddress %>)"><i class="material-icons">adjust</i></a>
           </div>
