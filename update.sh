@@ -6,6 +6,6 @@ git pull
 git fetch
 git reset --hard origin/v2.0
 cp -f backup/temp/config.*.json .
-mv backup/temp backup/backup_`date +"%Y-%m-%d_%H:%m"`
+mv backup/temp backup/backup_`date +"%Y-%m-%d_%H:%M"`
 #
 pm2 restart homebridge
