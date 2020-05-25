@@ -27,7 +27,7 @@
         <input type="hidden" name="units" value="<%= unit.getName() %>">
       </td>
       <td>
-        <% if ((unit.type == 1) || (unit.type == 2) || (unit.type == 102)) { %>
+        <% if ((unit.type == 1) || (unit.type == 2) || (unit.type == 101)) { %>
           <div class="switch">
             <label>Off
               <input name="status_<%= unit.getName() %>" <%= (unit.status) ? 'checked' : '' %>
