@@ -50,7 +50,7 @@ var SwitchType;
     SwitchType["kNoType"] = "";
     SwitchType["kSmappee"] = "smappee";
     SwitchType["kRF"] = "RF";
-    SwitchType["kHTTP"] = "HTTP";
+    SwitchType["kHTTP"] = "http";
 })(SwitchType = exports.SwitchType || (exports.SwitchType = {}));
 exports.kEmptyAction = Object.assign(Object.assign({}, exports.kEmptyUnit), { value: false });
 ;

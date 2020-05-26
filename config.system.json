@@ -10,7 +10,7 @@
       "port": 5001,
       "password": "duotecno",
       "name": "Smartbox",
-      "active": false,
+      "active": true,
       "debug": false
     },
     {
@@ -26,6 +26,7 @@
     {
       "active": "Y",
       "group": 0,
+      "name": "T1|Sens",
       "masterAddress": "192.168.0.98",
       "masterPort": 5001,
       "logicalNodeAddress": 3,
@@ -34,6 +35,7 @@
     {
       "active": "Y",
       "group": 0,
+      "name": "up/down",
       "masterAddress": "192.168.0.98",
       "masterPort": 5001,
       "logicalNodeAddress": 3,
@@ -42,6 +44,34 @@
     {
       "active": "Y",
       "group": 0,
+      "name": "0|Dimmer",
+      "masterAddress": "192.168.0.98",
+      "masterPort": 5001,
+      "logicalNodeAddress": 3,
+      "logicalAddress": 29
+    },
+    {
+      "active": "Y",
+      "group": 0,
+      "name": "2|Dimmer",
+      "masterAddress": "192.168.0.98",
+      "masterPort": 5001,
+      "logicalNodeAddress": 3,
+      "logicalAddress": 31
+    },
+    {
+      "active": "Y",
+      "group": 0,
+      "name": "3|Dimmer",
+      "masterAddress": "192.168.0.98",
+      "masterPort": 5001,
+      "logicalNodeAddress": 3,
+      "logicalAddress": 32
+    },
+    {
+      "active": "Y",
+      "group": 0,
+      "name": "Blue LED",
       "masterAddress": "192.168.0.98",
       "masterPort": 5001,
       "logicalNodeAddress": 3,
@@ -50,6 +80,7 @@
     {
       "active": "Y",
       "group": 0,
+      "name": "4|switch",
       "masterAddress": "192.168.0.98",
       "masterPort": 5001,
       "logicalNodeAddress": 3,
@@ -58,6 +89,7 @@
     {
       "active": "Y",
       "group": 0,
+      "name": "I-Mood 1",
       "masterAddress": "192.168.0.98",
       "masterPort": 5001,
       "logicalNodeAddress": 3,
@@ -66,6 +98,7 @@
     {
       "active": "Y",
       "group": 0,
+      "name": "I-Mood 2",
       "masterAddress": "192.168.0.98",
       "masterPort": 5001,
       "logicalNodeAddress": 3,
@@ -74,10 +107,29 @@
     {
       "active": "Y",
       "group": 0,
+      "name": "4|Input",
+      "masterAddress": "192.168.0.98",
+      "masterPort": 5001,
+      "logicalNodeAddress": 3,
+      "logicalAddress": 16
+    },
+    {
+      "active": "Y",
+      "group": 0,
+      "name": "I-State 1",
       "masterAddress": "192.168.0.98",
       "masterPort": 5001,
       "logicalNodeAddress": 3,
       "logicalAddress": 13
+    },
+    {
+      "active": "Y",
+      "group": 0,
+      "name": "I-State 2",
+      "masterAddress": "192.168.0.98",
+      "masterPort": 5001,
+      "logicalNodeAddress": 3,
+      "logicalAddress": 14
     }
   ]
 }

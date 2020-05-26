@@ -47,7 +47,7 @@
           <div class="input-field col s12">
             <select name="master" id="master">
               <% for (let m of masters) { %>
-                <option value="<%= m.getAddress() %>" "<%= (rule.actions[0].master == m.getAddress()) ? "selected" : "" %>"><%= m.getAddress() %></option>
+                <option value="<%= m.getURL() %>" "<%= (m.same(rule.actions[0].master, rule.actions[0].port)) ? "selected" : "" %>"><%= m.getURL() %></option>
               <% } %>
             </select>
             <label for="master">Master</label>

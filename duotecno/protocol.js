@@ -189,12 +189,12 @@ class Unit {
     isUnit(master, port, nodeLogicalAddress, unitLogicalAddress) {
         if (master instanceof Unit) {
             const unit = master;
-            return ((this.node.master.isMaster(unit.node.master.getAddress(), unit.node.master.getPort())) &&
+            return ((this.node.master.same(unit.node.master)) &&
                 (this.node.logicalAddress == unit.node.logicalAddress) &&
                 (this.logicalAddress == unit.logicalAddress));
         }
         else { /* if (typeof master === "string") */
-            return ((this.node.master.isMaster(master, port)) &&
+            return ((this.node.master.same(master, port)) &&
                 (this.node.logicalAddress == nodeLogicalAddress) &&
                 (this.logicalAddress == unitLogicalAddress));
         }

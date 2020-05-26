@@ -266,10 +266,17 @@ export class System extends Base {
     return unit;
   }
 
-  findUnitByName(master: string, name: string): Unit {
+  findUnitByName(master: string, port: number, name: string): Unit;
+  findUnitByName(master: Master, name: string): Unit;
+  findUnitByName(master: string | Master, A: number | string, name?: string): Unit {
     let unit: Unit = null;
+    if (typeof master === "string") {
+      master = this.findMaster(master, <number>A);
+    } else {
+      name = <string>A;
+    }
     this.masters.forEach((m: Master) => {
-      if (m && (m.getAddress() == master)) {
+      if (m && m.same(master)) {
         m.nodes.forEach((n: Node) => {
           if (n) {
             n.units.forEach(u => {

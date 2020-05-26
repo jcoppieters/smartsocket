@@ -17,8 +17,9 @@ import { Smappee } from "./smappee";
 import { Master } from "../duotecno/master";
 import { Platform } from "./platform";
 import { SocApp } from "./socapp";
+const fetch = require("node-fetch");
 
-const kMaster = {name: "master", type: "string", default: "0.0.0.0"} as const;
+const kMaster = {name: "master", type: "string", default: "0.0.0.0:5001"} as const;
 const kAddress = {name: "address", type: "string", default: "0.0.0.0"} as const;
 const kPort = {name: "port", type: "integer", default: 80} as const;
 const kActive = {name: "active", type: "string", default: "N"} as const;
@@ -48,6 +49,9 @@ export class SmartApp extends SocApp {
 
   constructor(system: System, smappee: Smappee, platform: Platform, log?: LogFunction) {
     super(system, "smartapp", log);
+
+    // get status change updates
+    this.system.emitter.on('update', this.informChange.bind(this));
 
     // get some configurated params
     this.readConfig();
@@ -122,11 +126,14 @@ export class SmartApp extends SocApp {
 
   scrapeUnit(context: Context, boundary: string): Action {
     let unit: Unit = null;
+    let logicalNodeAddress: number, logicalAddress: number;
     let name = context.getParam({ name: "unit"+boundary, type: "string", default: "--" });
-    let value = actionValue(context.getParam({ name: "value"+boundary, type: "string", default: "0" }));
-    let master = context.getParam(kMaster);
-    let port  = context.getParam(kPort);
-    let logicalNodeAddress, logicalAddress;
+    const value = actionValue(context.getParam({ name: "value"+boundary, type: "string", default: "0" }));
+
+    const ipAndPort = context.getParam(kMaster).split(":");
+    const ip = ipAndPort[0];
+    const port = parseInt(ipAndPort[1] || "5001");
+    const master = this.system.findMaster(ip, port);
 
     // hex addresses or name
     if ((name[0] === "0") && (name[1] === "x")) {
@@ -140,7 +147,7 @@ export class SmartApp extends SocApp {
       logicalNodeAddress = (unit) ? unit.node.logicalAddress : 0;
       logicalAddress = (unit) ? unit.logicalAddress : 0; 
     }
-    return { name, value, masterAddress: master, masterPort: port, logicalAddress, logicalNodeAddress };
+    return { name, value, masterAddress: ip, masterPort: port, logicalAddress, logicalNodeAddress };
   }
 
   //////////////////////////////
@@ -293,6 +300,12 @@ export class SmartApp extends SocApp {
 
   informChange(u: Unit) {
     this.switches.forEach(swtch => {
+      if (u.isUnit(swtch.masterAddress, swtch.masterPort, swtch.logicalNodeAddress, swtch.logicalAddress)) {
+        this.setSwitch(swtch, !!u.status);
+      }
+    });
+    /* old stuff
+    this.switches.forEach(swtch => {
       const master = this.system.findMaster(swtch.masterAddress, swtch.masterPort);
       if (master) {
         const unit = this.system.findUnit(master, swtch.logicalNodeAddress, swtch.logicalAddress)
@@ -301,11 +314,12 @@ export class SmartApp extends SocApp {
         }
       }
     });
+    */
   }
 
   scrapeSwitch(context: Context): Switch {
     const { name, masterAddress, masterPort, logicalAddress, logicalNodeAddress } = this.scrapeUnit(context, '');
-    const plug = context.getParam({name: "plug", type: "integer", default: 0 });
+    const plug = context.getParam({name: "plug", type: "string", default: "0" });
     const stype = context.getParam({name: "type", type: "string", default: SwitchType.kNoType });
     return { name, masterAddress, masterPort, logicalAddress, logicalNodeAddress, type: stype, plug  };
   }
@@ -334,6 +348,7 @@ export class SmartApp extends SocApp {
         swtch = this.switches[inx];
       }
     } else {
+      // a Swtich was passed as first param
       swtch = inx;
     }
 
@@ -342,7 +357,7 @@ export class SmartApp extends SocApp {
 
     } else {
       if ((swtch.type === SwitchType.kSmappee) && (this.smappee)) {
-        this.smappee.setPlug(swtch.plug, state);
+        this.smappee.setPlug(parseInt(swtch.plug), state);
       } else if (swtch.type === SwitchType.kHTTP) {
         this.httpSwitch(swtch.plug, state)
       } else {
@@ -361,12 +376,18 @@ export class SmartApp extends SocApp {
     const inx = value + 1;
     if (parts.length > (inx))
       base += parts[inx];
+
+    this.log("Switch: " + url + " -> " + value + " -> " + base);
     this.wget(base);
   }
 
   wget(url: string) {
+    try {
     fetch(url).then(r => this.log("http switch OK -> " + r))
-              .catch(e => this.log("http switch NOK -> " + e))
+              .catch(e => this.log("http switch NOK -> " + e));
+    } catch (e) {
+      this.log("Error " + e.message + ", calling url: " + url);
+    }
   }
 
 

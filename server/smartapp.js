@@ -22,7 +22,8 @@ const os_1 = require("os");
 const types_1 = require("../duotecno/types");
 const protocol_1 = require("../duotecno/protocol");
 const socapp_1 = require("./socapp");
-const kMaster = { name: "master", type: "string", default: "0.0.0.0" };
+const fetch = require("node-fetch");
+const kMaster = { name: "master", type: "string", default: "0.0.0.0:5001" };
 const kAddress = { name: "address", type: "string", default: "0.0.0.0" };
 const kPort = { name: "port", type: "integer", default: 80 };
 const kActive = { name: "active", type: "string", default: "N" };
@@ -44,6 +45,8 @@ const kAccessoryPins = {
 class SmartApp extends socapp_1.SocApp {
     constructor(system, smappee, platform, log) {
         super(system, "smartapp", log);
+        // get status change updates
+        this.system.emitter.on('update', this.informChange.bind(this));
         // get some configurated params
         this.readConfig();
         this.port = this.config.port || this.port || 80;
@@ -114,11 +117,13 @@ class SmartApp extends socapp_1.SocApp {
     }
     scrapeUnit(context, boundary) {
         let unit = null;
-        let name = context.getParam({ name: "unit" + boundary, type: "string", default: "--" });
-        let value = types_1.actionValue(context.getParam({ name: "value" + boundary, type: "string", default: "0" }));
-        let master = context.getParam(kMaster);
-        let port = context.getParam(kPort);
         let logicalNodeAddress, logicalAddress;
+        let name = context.getParam({ name: "unit" + boundary, type: "string", default: "--" });
+        const value = types_1.actionValue(context.getParam({ name: "value" + boundary, type: "string", default: "0" }));
+        const ipAndPort = context.getParam(kMaster).split(":");
+        const ip = ipAndPort[0];
+        const port = parseInt(ipAndPort[1] || "5001");
+        const master = this.system.findMaster(ip, port);
         // hex addresses or name
         if ((name[0] === "0") && (name[1] === "x")) {
             const parts = name.split(";");
@@ -132,7 +137,7 @@ class SmartApp extends socapp_1.SocApp {
             logicalNodeAddress = (unit) ? unit.node.logicalAddress : 0;
             logicalAddress = (unit) ? unit.logicalAddress : 0;
         }
-        return { name, value, masterAddress: master, masterPort: port, logicalAddress, logicalNodeAddress };
+        return { name, value, masterAddress: ip, masterPort: port, logicalAddress, logicalNodeAddress };
     }
     //////////////////////////////
     // Homekit                  //
@@ -275,18 +280,25 @@ class SmartApp extends socapp_1.SocApp {
     }
     informChange(u) {
         this.switches.forEach(swtch => {
-            const master = this.system.findMaster(swtch.masterAddress, swtch.masterPort);
-            if (master) {
-                const unit = this.system.findUnit(master, swtch.logicalNodeAddress, swtch.logicalAddress);
-                if (unit) {
-                    this.setSwitch(swtch, !!u.status);
-                }
+            if (u.isUnit(swtch.masterAddress, swtch.masterPort, swtch.logicalNodeAddress, swtch.logicalAddress)) {
+                this.setSwitch(swtch, !!u.status);
             }
         });
+        /* old stuff
+        this.switches.forEach(swtch => {
+          const master = this.system.findMaster(swtch.masterAddress, swtch.masterPort);
+          if (master) {
+            const unit = this.system.findUnit(master, swtch.logicalNodeAddress, swtch.logicalAddress)
+            if (unit) {
+              this.setSwitch(swtch, !!u.status);
+            }
+          }
+        });
+        */
     }
     scrapeSwitch(context) {
         const { name, masterAddress, masterPort, logicalAddress, logicalNodeAddress } = this.scrapeUnit(context, '');
-        const plug = context.getParam({ name: "plug", type: "integer", default: 0 });
+        const plug = context.getParam({ name: "plug", type: "string", default: "0" });
         const stype = context.getParam({ name: "type", type: "string", default: types_1.SwitchType.kNoType });
         return { name, masterAddress, masterPort, logicalAddress, logicalNodeAddress, type: stype, plug };
     }
@@ -311,6 +323,7 @@ class SmartApp extends socapp_1.SocApp {
             }
         }
         else {
+            // a Swtich was passed as first param
             swtch = inx;
         }
         if (!swtch) {
@@ -318,7 +331,7 @@ class SmartApp extends socapp_1.SocApp {
         }
         else {
             if ((swtch.type === types_1.SwitchType.kSmappee) && (this.smappee)) {
-                this.smappee.setPlug(swtch.plug, state);
+                this.smappee.setPlug(parseInt(swtch.plug), state);
             }
             else if (swtch.type === types_1.SwitchType.kHTTP) {
                 this.httpSwitch(swtch.plug, state);
@@ -337,11 +350,17 @@ class SmartApp extends socapp_1.SocApp {
         const inx = value + 1;
         if (parts.length > (inx))
             base += parts[inx];
+        this.log("Switch: " + url + " -> " + value + " -> " + base);
         this.wget(base);
     }
     wget(url) {
-        fetch(url).then(r => this.log("http switch OK -> " + r))
-            .catch(e => this.log("http switch NOK -> " + e));
+        try {
+            fetch(url).then(r => this.log("http switch OK -> " + r))
+                .catch(e => this.log("http switch NOK -> " + e));
+        }
+        catch (e) {
+            this.log("Error " + e.message + ", calling url: " + url);
+        }
     }
     //////////////////////////////
     // Services                 //

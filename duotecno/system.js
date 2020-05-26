@@ -250,10 +250,16 @@ class System extends base_1.Base {
         });
         return unit;
     }
-    findUnitByName(master, name) {
+    findUnitByName(master, A, name) {
         let unit = null;
+        if (typeof master === "string") {
+            master = this.findMaster(master, A);
+        }
+        else {
+            name = A;
+        }
         this.masters.forEach((m) => {
-            if (m && (m.getAddress() == master)) {
+            if (m && m.same(master)) {
                 m.nodes.forEach((n) => {
                     if (n) {
                         n.units.forEach(u => {

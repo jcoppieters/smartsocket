@@ -1,5 +1,38 @@
 {
-  "rules": [],
+  "rules": [
+    {
+      "type": "power",
+      "channel": 1,
+      "low": 30,
+      "high": 900,
+      "actions": [
+        {
+          "name": "--",
+          "value": false,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": null,
+          "logicalNodeAddress": null
+        },
+        {
+          "name": "--",
+          "value": 50,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": null,
+          "logicalNodeAddress": null
+        },
+        {
+          "name": "--",
+          "value": true,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": null,
+          "logicalNodeAddress": null
+        }
+      ]
+    }
+  ],
   "address": "192.168.0.198",
   "uid": "57e3e0d8-bb05-4b04-8662-1a9871998f3f",
   "debug": true

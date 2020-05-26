@@ -100,9 +100,7 @@ export class Master extends Base {
   getConfig(): MasterConfig {
     return this.config;
   }
-  isMaster(ip: string, port: number): boolean {
-    return this.hasAddress(ip) && this.hasPort(port);
-  }
+
   hasAddress(ip: string): boolean {
     return this.config.address === ip;
   }
@@ -115,6 +113,9 @@ export class Master extends Base {
   hasPort(port: number): boolean {
     return this.config.port == port;
   }
+  getURL(): string {
+    return this.config.address + ":" + this.config.port;
+  }
 
   inMultiNode(): boolean {
     return (this.nodes.length > 1);
@@ -122,8 +123,14 @@ export class Master extends Base {
 
   same(master: Master | string, port?: number): boolean {
     if (typeof master === "string") {
-      if (typeof port === "undefined") port = 5001;
+      if (typeof port === "undefined") { 
+        // master is probably url ip:port
+        const url = master.split(":");
+        master = url[0];
+        port = parseInt(url[1] || "5001");
+      }
       return this.hasAddress(master) && this.hasPort(port);
+
     } else {
       return master && this.hasAddress(master.getAddress()) && this.hasPort(master.getPort());
     }

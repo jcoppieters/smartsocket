@@ -143,7 +143,7 @@ export const kEmptyCommRecord = { status: false, cmd: -1, message: [-1,0,0], res
 
 export enum Boundaries {kLow = 0, kMid = 1, kHigh = 2};
 export enum RuleType {kPower = "power", kCurrent = "current", kWater = "water"}
-export enum SwitchType {kNoType = "", kSmappee = "smappee", kRF = "RF", kHTTP = "HTTP"}
+export enum SwitchType {kNoType = "", kSmappee = "smappee", kRF = "RF", kHTTP = "http"}
 
 
 export interface Action extends UnitDef {
@@ -167,7 +167,7 @@ export const kEmptyRule: Rule = {
 
 export interface Switch extends UnitDef {
   type: SwitchType,
-  plug: number,
+  plug: number | string,
   value?: number | boolean | string
 };
 export const kEmptySwitch: Switch = { ...kEmptyUnit, plug: 0, type: SwitchType.kNoType};

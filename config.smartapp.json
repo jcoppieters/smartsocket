@@ -1,5 +1,15 @@
 {
   "port": 5002,
-  "switches": [],
+  "switches": [
+    {
+      "name": "Dimmer 2",
+      "masterAddress": "192.168.0.98",
+      "masterPort": 5001,
+      "logicalAddress": 31,
+      "logicalNodeAddress": 3,
+      "type": "http",
+      "plug": "http://192.168.0.101/relay/0?turn=|off|on"
+    }
+  ],
   "debug": true
 }
