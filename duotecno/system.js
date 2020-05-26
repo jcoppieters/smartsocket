@@ -226,16 +226,16 @@ class System extends base_1.Base {
             return null;
     }
     findUnit(master, A, B, C) {
-        let nodeNr = A;
-        let unitNr = B;
+        let logicalNodeAddress = A;
+        let logicalAddress = B;
         if (typeof master === "string") {
             master = this.findMaster(master, A);
-            nodeNr = B;
-            unitNr = C;
+            logicalNodeAddress = B;
+            logicalAddress = C;
         }
-        const node = this.findNode(master, nodeNr);
+        const node = this.findNode(master, logicalNodeAddress);
         if (node)
-            return node.units.find((u) => u && (u.logicalAddress === unitNr));
+            return node.units.find((u) => u && (u.logicalAddress === logicalAddress));
         else
             return null;
     }

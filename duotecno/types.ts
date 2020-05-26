@@ -117,8 +117,8 @@ export interface UnitInfo {
 export type Message = Array<number>;
 export type ISignature = {
   status: boolean, 
-  nodeNr: number, 
-  unitNr: number
+  logicalNodeAddress: number, 
+  logicalAddress: number
 };
 export type PromiseObject = { 
   resolver: (result: Message) => void, 
@@ -314,8 +314,8 @@ export const Sanitizers = {
 
   switchConfig: function(aSwitch): Switch {
     aSwitch.id = makeInt(aSwitch.id);
-    aSwitch.unitNr = makeInt(aSwitch.unitNr);
-    aSwitch.nodeNr = makeInt(aSwitch.nodeNr);
+    aSwitch.logicalAddress = makeInt(aSwitch.logicalAddress);
+    aSwitch.logicalNodeAddress = makeInt(aSwitch.logicalNodeAddress);
     if (typeof aSwitch.name != "string") aSwitch.name = "";
     aSwitch.value = aSwitch.value || 0;
 
@@ -331,8 +331,8 @@ export const Sanitizers = {
     while (rule.actions.length < 2) rule.actions.push(kEmptyAction);
     rule.actions.forEach( action => {
       action.value = actionValue(action.value);
-      action.unitNr = makeInt(action.unitNr);
-      action.nodeNr = makeInt(action.nodeNr);
+      action.logicalAddress = makeInt(action.logicalAddress);
+      action.logicalNodeAddress = makeInt(action.logicalNodeAddress);
       if (typeof action.name != "string") action.name = "";
     });
     return rule;

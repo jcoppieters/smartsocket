@@ -241,15 +241,15 @@ export class System extends Base {
   findUnit(master: string, port: number, logicalNodeAddress: number, logicalAddress: number): Unit;
   findUnit(master: Master, logicalNodeAddress: number, logicalAddress: number): Unit;
   findUnit(master: Master | string, A: number, B: number, C?: number): Unit {
-    let nodeNr = A; 
-    let unitNr = B;
+    let logicalNodeAddress = A; 
+    let logicalAddress = B;
     if (typeof master === "string") {
       master = this.findMaster(master, A);
-      nodeNr = B; unitNr = C;
+      logicalNodeAddress = B; logicalAddress = C;
     }
-    const node = this.findNode(master, nodeNr);
+    const node = this.findNode(master, logicalNodeAddress);
     if (node)
-      return node.units.find((u: Unit) => u && (u.logicalAddress === unitNr));
+      return node.units.find((u: Unit) => u && (u.logicalAddress === logicalAddress));
     else
       return null;
   }

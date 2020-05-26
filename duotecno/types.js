@@ -152,8 +152,8 @@ exports.Sanitizers = {
     },
     switchConfig: function (aSwitch) {
         aSwitch.id = makeInt(aSwitch.id);
-        aSwitch.unitNr = makeInt(aSwitch.unitNr);
-        aSwitch.nodeNr = makeInt(aSwitch.nodeNr);
+        aSwitch.logicalAddress = makeInt(aSwitch.logicalAddress);
+        aSwitch.logicalNodeAddress = makeInt(aSwitch.logicalNodeAddress);
         if (typeof aSwitch.name != "string")
             aSwitch.name = "";
         aSwitch.value = aSwitch.value || 0;
@@ -169,8 +169,8 @@ exports.Sanitizers = {
             rule.actions.push(exports.kEmptyAction);
         rule.actions.forEach(action => {
             action.value = actionValue(action.value);
-            action.unitNr = makeInt(action.unitNr);
-            action.nodeNr = makeInt(action.nodeNr);
+            action.logicalAddress = makeInt(action.logicalAddress);
+            action.logicalNodeAddress = makeInt(action.logicalNodeAddress);
             if (typeof action.name != "string")
                 action.name = "";
         });
