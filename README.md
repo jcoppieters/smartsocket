@@ -264,6 +264,7 @@ mv config.system.json temp.system.config
 mv config.smappee.json temp.smappee.config
 git fetch https://github.com/jcoppieters/smartsocket.git
 git reset --hard origin/v2.0
+npm install
 mv -f temp.system.config config.system.json
 mv -f temp.smappee.config config.smappee.json
 ```
@@ -275,18 +276,19 @@ mv -f temp.smappee.config config.smappee.json
 sudo npm -g remove pm2
 sudo npm -g remove homebridge
 
-## start intstall
+## start intstall: node, npm, git
 cd ~
 curl -sL https://deb.nodesource.com/setup_12.x | sudo bash -
 sudo apt-get install -y nodejs  # for dev tools add: gcc g++ make python
 sudo npm install -g npm
+sudo apt-get install -y git
 
-### install homebridge
+### install: homebridge
 sudo npm install -g --unsafe-perm homebridge
 ### install mqtt
 sudo npm install mqtt -g
 
-### install smartsystem
+### install: smartsystem
 git clone https://github.com/jcoppieters/smartsocket.git
 cd smartsocket
 git checkout v2.0
