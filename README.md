@@ -14,7 +14,7 @@ Use:
 - added install instructions
 
 
-## v5, march 2020, Johan Coppieters -- merge with smartApp
+## v5, march 2020, Johan Coppieters -- merge with smartApp, align versions.
 inherited versions of smartApp 
 - v1.0 - smartbox / 2019
 - v2.0 - multiple masters / mei 2019
@@ -23,6 +23,12 @@ inherited versions of smartApp
 - v3.1.1 - added unit-macro cmd status changes / september 2019
 
 ## v5.0.1, March 2020, Johan, first merge working
+- new separate branch "v2.0"
+
+## v5.0.2, May 2020, Johan, working version of 
+- backup, restore
+- store scenes and execute them on status changes
+- add http switches (next to smappee - mqqt) like Shelly
 
 
 
@@ -49,11 +55,16 @@ and (if configured) to a Smappee Infinity.
   * if high/low + messages are defined, executes them
   * send plug on/off to Smappee
 
+* Raspberry implements
+  * switches that are triggered on status changes of Duotecno units and emit a http request
+  * scenes (a collection of units + a state) that are triggers by a status change (moods, inputs, ...)
+  * backup / restore
+
 
 ## How to set up
 1. Configure IP address of the Raspberry on the SDCard on a PC or Mac (put it in, edit cmdline.txt and you’re done), perhaps DHCP?
 2. Put it into the Raspberry and boot it up
-3. Connect with a web browser to it’s address on port 3001 (ex: http://192.168.1.71:3001 ) to start configuring.
+3. Connect with a web browser to it’s address on port 5002 (ex: http://192.168.1.71:5002 ) to start configuring.
 4. Configure the IP addresses of the Duotecno’s IP Nodes that you want to use as main database node, incl port and password.
 5. Configure the nodes you want to use and for each node the units you want to export to homekit, new nodes are highlighted.
 6. (optional from here) Configure the IP address of a Smappee infinity
@@ -257,7 +268,7 @@ git pull https://duotecno:xxx@github.com/jcoppieters/duotecno.git
 pm2 restart homebridge
 ```
 
-How to overwrite local changes:
+### How to overwrite local changes:
 ```
 cd ~/duotecno
 mv config.system.json temp.system.config
