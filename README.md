@@ -289,15 +289,17 @@ sudo npm -g remove homebridge
 
 ## start intstall: node, npm, git
 cd ~
+sudo rm /opt/node
 curl -sL https://deb.nodesource.com/setup_12.x | sudo bash -
 sudo apt-get install -y nodejs  # for dev tools add: gcc g++ make python
 sudo npm install -g npm
 sudo apt-get install -y git
 
 ### install: homebridge
-sudo npm install -g --unsafe-perm homebridge
+sudo rm -f /usr/bin/homebridge
+sudo npm install -g --force --unsafe-perm homebridge
 ### install mqtt
-sudo npm install mqtt -g
+sudo npm install -g --force mqtt
 
 ### install: smartsystem
 git clone https://github.com/jcoppieters/smartsocket.git
@@ -313,7 +315,8 @@ sudo ln -sf /home/pi/smartsocket/ /usr/lib/node_modules/homebridge-system  # ins
 cd ~
 
 ### install pm2 - process mgr
-sudo npm install -g pm2
+sudo rm -f /usr/bin/pm2
+sudo npm install -g --force pm2
 
 ### start the system and save for reboots
 cd ~/smartsocket

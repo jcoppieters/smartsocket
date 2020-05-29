@@ -1,5 +1,6 @@
 #!/bin/bash
 # save current config files
+cd ~/duotecno
 mkdir -p backup/temp
 mv config.*.json backup/temp/
 git pull
