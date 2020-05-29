@@ -51,6 +51,8 @@ class Master extends base_1.Base {
         super("master");
         this.resolveLogin = null;
         this.Q = new Q_1.Q(system.logger);
+        console.log("constructor master");
+        console.log(config);
         // save my eco system
         this.system = system;
         // save this masters config settings
@@ -131,6 +133,7 @@ class Master extends base_1.Base {
                 this.err(err);
             });
             this.isOpen = true;
+            console.log("master opened -> " + this.config.address);
         });
     }
     close() {
