@@ -370,8 +370,10 @@ export class System extends Base {
 
     let complete = true;
     //this.allMasters(m => m.allNodes(n => {if (n.nrUnits != n.units.length) complete = false; }))
-    if (complete)
+    if (complete) {
+      this.log("emitting READY");
       this.emitter.emit('ready', this.masters.length);
+    }
   }
 
 
