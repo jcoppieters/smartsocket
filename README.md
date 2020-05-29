@@ -181,27 +181,75 @@ sudo ln -s /opt/node/bin/npm /usr/bin/npm
 cd ~
 ```
 
-### homebridge (10Mb)
+## New v2.0 All in one script
 ```
-sudo apt-get  --yes --force-yes install libavahi-compat-libdnssd-dev
-sudo chmod a+rwx /opt/node/lib/node_modules/
-sudo npm install -g --unsafe-perm homebridge
-sudo ln -s /opt/node/lib/node_modules/homebridge/bin/homebridge /usr/bin/homebridge
+## old systems remove
+sudo npm -g remove pm2
+sudo rm -f /usr/bin/pm2
+
+sudo npm -g remove homebridge
+sudo rm -f /usr/bin/homebridge
+
+sudo npm -g remove mqtt
+sudo rm -f /usr/bin/mqtt
+
+
+## start intstall: node, npm, git
+cd ~
+sudo rm -f /opt/node
+curl -sL https://deb.nodesource.com/setup_12.x | sudo bash -
+sudo apt-get install -y nodejs  # for dev tools add: gcc g++ make python
+sudo npm install -g npm
+sudo apt-get install -y git
+
+### install: homebridge
+sudo npm install -g --force --unsafe-perm homebridge
+### install mqtt
+sudo npm install -g --force mqtt
+
+### install: smartsystem
+git clone https://github.com/jcoppieters/smartsocket.git
+cd smartsocket
+git checkout v2.0
+npm install
+
+### config smartsystem
+mkdir -p /home/pi/.homebridge
+cp ~/smartsocket/config.homebridge.json ~/.homebridge/config.json
+cd ~/smartsocket
+sudo ln -sf /home/pi/smartsocket/ /usr/lib/node_modules/homebridge-system  # install the plugin via a link
+cd ~
+
+### install pm2 - process mgr
+sudo npm install -g --force pm2
+
+### IF NEEDED COPY OLD configs
+cp -v duotecno/*.json smartsocket/
+
+### start the system and save for reboots
+cd ~/smartsocket
+pm2 start homebridge
+pm2 save
+pm2 startup | grep "sudo" | bash
+
 ```
 
-### git (1Mb)
-```
-sudo apt-get update
-sudo apt-get install libcurl4-openssl-dev
-sudo apt-get --yes --force-yes install git
-```
+## New v2.0 Update script 
 
-### smappee + mqtt (12Mb)
-install mqtt as command -> install global
-```
-sudo npm install mqtt -g
-sudo ln -s /opt/node/bin/mqtt /usr/bin/mqtt
-```
+#!/bin/bash
+# save current config files
+cd ~/duotecno
+mkdir -p backup/temp
+mv config.*.json backup/temp/
+git pull
+git fetch
+git reset --hard origin/v2.0
+cp -f backup/temp/config.*.json .
+mv backup/temp backup/backup_`date +"%Y-%m-%d_%H:%M"`
+npm install
+#
+pm2 restart homebridge
+
 
 ### testing smappee
 find uuid ->
@@ -279,54 +327,6 @@ npm install
 mv -f temp.system.config config.system.json
 mv -f temp.smappee.config config.smappee.json
 ```
-
-
-## New v2.0 All in one script
-```
-## old systems remove
-sudo npm -g remove pm2
-sudo npm -g remove homebridge
-
-## start intstall: node, npm, git
-cd ~
-sudo rm /opt/node
-curl -sL https://deb.nodesource.com/setup_12.x | sudo bash -
-sudo apt-get install -y nodejs  # for dev tools add: gcc g++ make python
-sudo npm install -g npm
-sudo apt-get install -y git
-
-### install: homebridge
-sudo rm -f /usr/bin/homebridge
-sudo npm install -g --force --unsafe-perm homebridge
-### install mqtt
-sudo npm install -g --force mqtt
-
-### install: smartsystem
-git clone https://github.com/jcoppieters/smartsocket.git
-cd smartsocket
-git checkout v2.0
-npm install
-
-### config smartsystem
-mkdir -p /home/pi/.homebridge
-cp ~/smartsocket/config.homebridge.json ~/.homebridge/config.json
-cd ~/smartsocket
-sudo ln -sf /home/pi/smartsocket/ /usr/lib/node_modules/homebridge-system  # install the plugin via a link
-cd ~
-
-### install pm2 - process mgr
-sudo rm -f /usr/bin/pm2
-sudo npm install -g --force pm2
-
-### start the system and save for reboots
-cd ~/smartsocket
-pm2 start homebridge
-pm2 save
-pm2 startup | grep "sudo" | bash
-
-```
-
-## New v2.0 Update script 
 
 
 
