@@ -171,19 +171,19 @@ class System extends base_1.Base {
             const unitConfig = this.config.cunits.find((cu) => (cu.logicalNodeAddress === item.logicalAddress) &&
                 (cu.masterAddress === masterAddress) &&
                 (cu.masterPort == masterPort));
-            // exists in configured nodes
+            // there exists an active unit of this node
             item.active = !!unitConfig;
         }
         if (item instanceof protocol_1.Unit) {
             const masterAddress = item.node.master.getAddress();
             const masterPort = item.node.master.getPort();
-            const config = this.config.cunits.find((cu) => (cu.logicalAddress === item.logicalAddress) &&
+            const unitConfig = this.config.cunits.find((cu) => (cu.logicalAddress === item.logicalAddress) &&
                 (cu.logicalNodeAddress === item.logicalNodeAddress) &&
                 (cu.masterAddress === masterAddress) &&
                 (cu.masterPort == masterPort));
-            item.active = !!config;
-            if (config) {
-                item.group = config.group;
+            item.active = (!!unitConfig) && (unitConfig.active === "Y");
+            if (unitConfig) {
+                item.group = unitConfig.group;
             }
         }
     }

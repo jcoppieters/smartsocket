@@ -11,24 +11,24 @@
           "value": false,
           "masterAddress": "192.168.0.98",
           "masterPort": 5001,
-          "logicalAddress": null,
-          "logicalNodeAddress": null
+          "logicalAddress": 1,
+          "logicalNodeAddress": 0
         },
         {
           "name": "--",
           "value": 50,
           "masterAddress": "192.168.0.98",
           "masterPort": 5001,
-          "logicalAddress": null,
-          "logicalNodeAddress": null
+          "logicalAddress": 0,
+          "logicalNodeAddress": 0
         },
         {
           "name": "--",
           "value": true,
           "masterAddress": "192.168.0.98",
           "masterPort": 5001,
-          "logicalAddress": null,
-          "logicalNodeAddress": null
+          "logicalAddress": 0,
+          "logicalNodeAddress": 0
         }
       ]
     }

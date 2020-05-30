@@ -71,6 +71,21 @@ and (if configured) to a Smappee Infinity.
 7. Add rules to the Smappee config to execute commands (mood, light, …) when exceeding a defined high or low of a specific channel.
 
 
+## Setting units
+
+http://[ip of Raspberry]:[port of Raspberry]/units/set?master=[ip of duotecno node]&port=[port of duotecno node]&unit=[node and unit logical address]&value=[Y/N/0/1... other value]
+
+Example: http://localhost:5002/units/set?master=192.168.0.98&port=5001&unit=0x10;0x1&value=1
+
+## Giving switch url for http switches
+
+the url field contains 3 parts
+ fixed url part | zero part | one part
+ if the status of the unit = 0 we send "fixed"+"zero part", 
+  if = 1 "fixed"+"one part"
+  
+Example: http://192.168.0.101/relay/0?turn=|off|on
+
 
 ## How to set up a Raspberry Pi
 
@@ -262,72 +277,16 @@ add uuid ->
 mqtt sub -t 'servicelocation/9c46e636-e946-4af7-9000-5cd03c57a4ee/#' -h '192.168.99.2' -v
 ```
 
-
-### duotecno (13Mb)
-```
-cd ~
-git clone https://duotecno:xxx@github.com/jcoppieters/duotecno.git
-mkdir .homebridge
-cp duotecno/config.json ~/.homebridge/config.json
-cd duotecno/
-npm install
-ln -s /home/pi/duotecno/ /opt/node/lib/node_modules/duotecno  # install the plugin via a link
-```
-
 ### test it:
 ```
 cd ~/duotecno
 DEBUG=* homebridge -D
 ```
 
-### install pm2 (63Mb)
-```
-cd ~
-sudo npm install -g pm2
-sudo ln -s /opt/node/bin/pm2 /usr/bin/pm2
-```
-
-### use pm2 to start homebridge
-```
-cd ~/duotecno
-pm2 start index.js --name smartapp
-pm2 save
-pm2 startup | grep "sudo" | bash
-tail  -f ~/.pm2/logs/smartapp-out.log
-```
-
-### startup pm2 on boot
-```
-pm2 startup | grep "sudo" | bash
-# or do: pm2 startup  # and follow the instructions on screen
-```
-
-
 ### shutdown the machine and make a copy
 ```
 sudo shutdown -h now
 ```
-
-
-## update the homebridge plugin
-```
-cd ~/duotecno
-git pull https://duotecno:xxx@github.com/jcoppieters/duotecno.git
-pm2 restart homebridge
-```
-
-### How to overwrite local changes:
-```
-cd ~/duotecno
-mv config.system.json temp.system.config
-mv config.smappee.json temp.smappee.config
-git fetch https://github.com/jcoppieters/smartsocket.git
-git reset --hard origin/v2.0
-npm install
-mv -f temp.system.config config.system.json
-mv -f temp.smappee.config config.smappee.json
-```
-
 
 
 ## Client Example:

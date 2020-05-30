@@ -10,7 +10,8 @@ const protocol_1 = require("./protocol");
 ;
 ;
 ;
-exports.kEmptyUnit = { masterAddress: "0.0.0.0", masterPort: 5001, name: "unit", logicalAddress: 0, logicalNodeAddress: 0 };
+exports.kEmptyUnit = { masterAddress: "0.0.0.0", masterPort: 5001,
+    name: "unit", logicalAddress: 0, logicalNodeAddress: 0 };
 ;
 ;
 ;
@@ -303,8 +304,9 @@ exports.Sanitizers = {
         info.type = info.type || protocol_1.NodeType.kNoNode;
         info.flags = info.flags || 0;
         info.nrUnits = info.nrUnits || 0;
-        if (into)
+        if (into) {
             Object.keys(info).forEach(prop => into[prop] = info[prop]);
+        }
         return info;
     },
     unitInfo: function (info, into) {
@@ -315,8 +317,9 @@ exports.Sanitizers = {
         info.logicalAddress = info.logicalAddress || 0;
         info.type = info.type || protocol_1.UnitType.kNoType;
         info.flags = info.flags || 0;
-        if (into)
+        if (into) {
             Object.keys(info).forEach(prop => into[prop] = info[prop]);
+        }
         return info;
     }
 };

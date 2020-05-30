@@ -178,20 +178,20 @@ export class System extends Base {
         (cu.masterAddress === masterAddress) && 
         (cu.masterPort == masterPort));
 
-      // exists in configured nodes
+      // there exists an active unit of this node
       item.active = !! unitConfig;
     }
     if (item instanceof Unit) {
       const masterAddress = item.node.master.getAddress();
       const masterPort = item.node.master.getPort();
-      const config = this.config.cunits.find((cu: UnitConfig) => 
+      const unitConfig = this.config.cunits.find((cu: UnitConfig) => 
         (cu.logicalAddress === item.logicalAddress) && 
         (cu.logicalNodeAddress === item.logicalNodeAddress) && 
         (cu.masterAddress === masterAddress) && 
         (cu.masterPort == masterPort));
-      item.active = !! config;
-      if (config) {
-        item.group = config.group;
+      item.active = (!! unitConfig) && (unitConfig.active === "Y");
+      if (unitConfig) {
+        item.group = unitConfig.group;
       }
     }
   }

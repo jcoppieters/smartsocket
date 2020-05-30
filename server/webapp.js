@@ -74,6 +74,29 @@ class Context {
         n = Math.floor(n);
         return "0x" + n.toString(16);
     }
+    makeInt(i) {
+        if ((i[0] === '0') && (i[1] === 'x'))
+            return parseInt(i.substr(2), 16);
+        else
+            return parseInt(i);
+    }
+    addr(a) {
+        const parts = a.split(";");
+        return { logicalNodeAddress: parseInt(parts[0], 16),
+            logicalAddress: parseInt((parts.length > 1) ? parts[1] : "0", 16) };
+    }
+    getUnit() {
+        const unitStr = this.getParam({ name: "unit", type: "string" });
+        if (unitStr.indexOf(";") > 0) {
+            // unit=0x23;0x12
+            return this.addr(unitStr);
+        }
+        else {
+            // node=0x23, unit=0x12  or  node=35, unit=17
+            return { logicalNodeAddress: this.getParam({ name: "node", type: "integer" }),
+                logicalAddress: this.getParam({ name: "unit", type: "integer" }) };
+        }
+    }
     getParam(spec) {
         // infer a type if non is given
         if (typeof spec.type === "undefined") {
@@ -92,7 +115,7 @@ class Context {
         }
         let val = this.params[spec.name];
         if (spec.type === "integer") {
-            let num = parseInt(single(val));
+            let num = this.makeInt(single(val));
             return (isNaN(num) ? spec.default : num);
         }
         else if ((typeof val === "undefined") || (val === null)) {
@@ -105,7 +128,7 @@ class Context {
             if (val instanceof Array)
                 return val.map(s => parseInt(s));
             else {
-                let num = parseInt(single(val));
+                let num = this.makeInt(single(val));
                 return (isNaN(num) ? spec.default : [num]);
             }
         }

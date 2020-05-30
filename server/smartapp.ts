@@ -137,9 +137,7 @@ export class SmartApp extends SocApp {
 
     // hex addresses or name
     if ((name[0] === "0") && (name[1] === "x")) {
-      const parts = name.split(";");
-      logicalNodeAddress = parseInt(parts[0], 16);
-      logicalAddress = parseInt((parts.length > 1) ? parts[1] : "0", 16);
+      ({ logicalNodeAddress, logicalAddress } = context.addr(name));
       unit = this.system.findUnit(master, logicalNodeAddress, logicalAddress);
       name = (unit) ? unit.displayName : "--";
     } else {
@@ -264,7 +262,7 @@ export class SmartApp extends SocApp {
   }
 
   async doSwitches(context: Context): Promise<HttpResponse> {
-    const inx: number = parseInt(context.id);
+    let inx: number = parseInt(context.id);
 
     // new IP Nodes, hence Units could be online
     this.initSwitchUnits();
@@ -273,8 +271,9 @@ export class SmartApp extends SocApp {
     try {
       if (context.action === "add") {
         this.switches.push(kEmptySwitch);
-        return this.ejs("switchDetail", context, { config: this.config, swtch: this.switches[this.switches.length-1], 
-                                                   masters: this.system.masters });
+        inx = this.switches.length-1;
+        return this.ejs("switchDetail", context, { config: this.config, swtch: this.switches[inx], 
+                                                   masters: this.system.masters, id: inx });
 
       } else if (context.action === "edit") {
         return this.ejs("switchDetail", context, { rule: kEmptyRule, swtch: this.switches[inx], 
@@ -476,12 +475,13 @@ export class SmartApp extends SocApp {
       return this.doRequest(context);  
 
     } else if (context.action === "set") {
-      const response = await this.setState(master, context.getParam(kNode), 
-                                           context.getParam(kUnit), context.getParam(kValue));
+      const { logicalNodeAddress, logicalAddress } = context.getUnit();
+      const response = await this.setState(master, logicalNodeAddress, logicalAddress, context.getParam(kValue));
       return this.json(response);
       
     } else if (context.action === "press") {
-      const response = await this.doPress(master, context.getParam(kNode), context.getParam(kUnit), context.getParam(kIntValue));
+      const { logicalNodeAddress, logicalAddress } = context.getUnit();
+      const response = await this.doPress(master, logicalNodeAddress, logicalAddress, context.getParam(kIntValue));
       return this.json(response);
       
     } else {

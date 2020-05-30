@@ -61,9 +61,6 @@ export class Master extends Base {
     super("master");
     this.Q = new Q(system.logger);
 
-    console.log("constructor master");
-    console.log(config);
-
     // save my eco system
     this.system = system;
   

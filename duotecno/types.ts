@@ -37,8 +37,8 @@ export interface MasterConfig {
 
 export interface NodeConfig {
   active: YNX;                 // if found with "N": don't even query, "X": new node
-  masterAddress: string;      // address of master node
-  masterPort: number;         // port of master node
+  masterAddress: string;       // address of master node
+  masterPort: number;          // port of master node
   logicalAddress?: number;
 };
 
@@ -50,7 +50,8 @@ export interface UnitDef {
   logicalNodeAddress: number,
   unit?: Unit
 };
-export const kEmptyUnit: UnitDef = { masterAddress: "0.0.0.0", masterPort: 5001, name: "unit", logicalAddress: 0, logicalNodeAddress: 0 };
+export const kEmptyUnit: UnitDef = { masterAddress: "0.0.0.0", masterPort: 5001, 
+                                     name: "unit", logicalAddress: 0, logicalNodeAddress: 0 };
 
 
 export interface UnitConfig extends UnitDef {
@@ -471,12 +472,13 @@ export const Sanitizers = {
     info.flags = info.flags || 0;
     info.nrUnits = info.nrUnits || 0;
 
-    if (into)
+    if (into) {
       Object.keys(info).forEach(prop => into[prop] = info[prop]);
+    }
     return info;
-    },
+  },
   
-    unitInfo: function(info: UnitInfo, into?: object) {
+    unitInfo: function(info: UnitInfo, into?: Unit) {
     info.name = info.name || "";
     info.logicalReqNodeAddress = info.logicalReqNodeAddress || 0;
     info.index = info.index || -1;
@@ -485,8 +487,9 @@ export const Sanitizers = {
     info.type = info.type || UnitType.kNoType;
     info.flags = info.flags || 0;
 
-    if (into)
+    if (into) {
       Object.keys(info).forEach(prop => into[prop] = info[prop]);
+    }
     return info;
   }
 
