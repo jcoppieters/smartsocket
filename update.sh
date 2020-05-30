@@ -1,6 +1,6 @@
 #!/bin/bash
 # save current config files
-cd ~/duotecno
+cd ~/smartsocket
 mkdir -p backup/temp
 mv config.*.json backup/temp/
 git pull
