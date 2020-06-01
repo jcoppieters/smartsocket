@@ -64,10 +64,10 @@ class System extends base_1.Base {
     openMaster(config, inx, readDB = false) {
         return __awaiter(this, void 0, void 0, function* () {
             const master = new master_1.Master(this, config);
-            this.masters[inx] = master;
+            this.masters.push(master);
             try {
-                // testing
-                if (!master.config.active)
+                // check for old configs that don't contain the active flag
+                if ((typeof master.config.active === "boolean") && (!master.config.active))
                     return;
                 this.log("opening master: " + master.getAddress());
                 yield master.open();
@@ -205,8 +205,16 @@ class System extends base_1.Base {
     //////////////////////////////////////
     findMaster(master, port) {
         if (typeof master === "string") {
-            if (typeof port === "undefined")
-                port = 5001;
+            if (typeof port === "undefined") {
+                const parts = master.split(":");
+                if (parts.length > 1) {
+                    master = parts[0];
+                    port = parseInt(parts[1]);
+                }
+                else {
+                    port = 5001;
+                }
+            }
             return this.masters.find((m) => m && m.same(master, port));
         }
         else {

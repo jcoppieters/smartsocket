@@ -8,10 +8,7 @@
       "logicalAddress": 31,
       "logicalNodeAddress": 3,
       "type": "http",
-      "plug": "http://192.168.0.101/relay/0?turn=|off|on",
-      "id": 0,
-      "value": 0,
-      "unit": null
+      "plug": "http://192.168.0.101/relay/0?turn=|off|on"
     },
     {
       "name": "--",
@@ -20,7 +17,10 @@
       "logicalAddress": 16,
       "logicalNodeAddress": 23,
       "type": "http",
-      "plug": "hahahah"
+      "plug": "hahahah",
+      "id": 0,
+      "value": 0,
+      "unit": null
     }
   ],
   "debug": true

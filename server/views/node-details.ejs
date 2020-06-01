@@ -23,6 +23,7 @@
           <span class="grey-text"><small>Physical = <%= hex(node.physicalAddress) %> - Logical = <%= hex(node.logicalAddress) %></small></span>
           <button class="right btn waves-effect waves-light" type="submit" name="action" value="cancel">Back</button>
           <button class="right btn waves-effect waves-light" type="submit" name="action" value="save">Save</button>
+          <a href="/units/<%= masterAddress %>:<%= masterPort %>/<%= node.logicalAddress %>" class="right btn waves-effect waves-light">Refresh</a>
         </h1>
 
         <%- include('/views/units', {units: node.units, edit: true, hex: hex}); -%> 

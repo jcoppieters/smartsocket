@@ -125,15 +125,13 @@ export class SmartApp extends SocApp {
   }
 
   scrapeUnit(context: Context, boundary: string): Action {
+    const { masterAddress, masterPort } = context.getMaster("master");
+    const master = this.system.findMaster(masterAddress, masterPort);
+
     let unit: Unit = null;
     let logicalNodeAddress: number, logicalAddress: number;
     let name = context.getParam({ name: "unit"+boundary, type: "string", default: "--" });
     const value = actionValue(context.getParam({ name: "value"+boundary, type: "string", default: "0" }));
-
-    const ipAndPort = context.getParam(kMaster).split(":");
-    const ip = ipAndPort[0];
-    const port = parseInt(ipAndPort[1] || "5001");
-    const master = this.system.findMaster(ip, port);
 
     // hex addresses or name
     if ((name[0] === "0") && (name[1] === "x")) {
@@ -145,7 +143,7 @@ export class SmartApp extends SocApp {
       logicalNodeAddress = (unit) ? unit.node.logicalAddress : 0;
       logicalAddress = (unit) ? unit.logicalAddress : 0; 
     }
-    return { name, value, masterAddress: ip, masterPort: port, logicalAddress, logicalNodeAddress };
+    return { name, value, masterAddress, masterPort, logicalAddress, logicalNodeAddress };
   }
 
   //////////////////////////////
@@ -412,8 +410,8 @@ export class SmartApp extends SocApp {
         return this.ejs("masterDetail", context, { config: Sanitizers.masterConfig(null) });
 
       } else if (context.action === "edit") {
-        const masterString = context.id.split(":");
-        const master = this.system.findMaster(masterString[0], parseInt(masterString[1]));
+        const { masterAddress, masterPort } = context.getMaster("id");
+        const master = this.system.findMaster(masterAddress, masterPort);
         if (master)
           return this.ejs("masterDetail", context, { nodes: master.nodes, config: master.getConfig() });
         else
@@ -457,8 +455,11 @@ export class SmartApp extends SocApp {
   //////////////////////////////
   // Units                    //
   //////////////////////////////
-  async doUnits(context: Context): Promise<HttpResponse> {
-    const master = this.system.findMaster(context.getParam(kMaster), context.getParam(kPort));
+  async doUnits(context: Context): Promise<HttpResponse> {    
+    const {masterAddress, masterPort} = context.getMaster("action");
+    const master = this.system.findMaster(masterAddress, masterPort);
+
+    
 
     if (context.action === "save") {
       // store changes in units into master config
@@ -469,7 +470,7 @@ export class SmartApp extends SocApp {
 
     if (context.action === "cancel") {
       // return to previous screen -> show master info + list of nodes.
-      context.id = context.getParam(kMaster) + ":" + context.getParam(kPort);
+      context.id = masterAddress + ":" + masterPort;
       context.request = "masters";
       context.action = "edit";
       return this.doRequest(context);  
@@ -486,12 +487,7 @@ export class SmartApp extends SocApp {
       
     } else {
       // reponding to  /units/[master ip address:port]/[logical node address]
-      const masterString = context.action.split(":");
-      const masterAddress = masterString[0];
-      const masterPort = parseInt(masterString[1] || "5001");
-      const master = this.system.findMaster(masterAddress, masterPort);
       const nodeLogicalAddress = parseInt(context.id);
-      
       let response = await this.getNodeInfo(master, nodeLogicalAddress);
       return this.ejs("nodeDetail", context, { masterAddress, masterPort, ...response });
     }    

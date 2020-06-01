@@ -1,6 +1,6 @@
 {
   "name": "homebridge-smartsystem",
-  "version": "2.0.0",
+  "version": "5.0.4",
   "description": "SmartServer (Proxy Websockets to TCP sockets, Smappee MQTT, Duotecno IP Nodes)",
   "main": "index.js",
   "author": "Johan Coppieters",

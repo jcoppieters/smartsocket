@@ -85,6 +85,25 @@ class Context {
         return { logicalNodeAddress: parseInt(parts[0], 16),
             logicalAddress: parseInt((parts.length > 1) ? parts[1] : "0", 16) };
     }
+    getMaster(name) {
+        const suggestion = this[name] || this.params[name];
+        if (suggestion && (suggestion.indexOf(":") > 0)) {
+            const parts = suggestion.split(":");
+            this["masterAddress"] = parts[0];
+            const masterPort = (parts.length > 1) ? parseInt(parts[1]) : 5001;
+            this["masterPort"] = masterPort;
+            return { masterAddress: parts[0], masterPort };
+        }
+        else {
+            // the traditional way
+            if (this.params["masterAddress"])
+                return { masterAddress: this.getParam({ name: "masterAddress", type: "string" }),
+                    masterPort: this.getParam({ name: "masterPort", type: "integer", default: 5001 }) };
+            else
+                return { masterAddress: this.getParam({ name: "master", type: "string" }),
+                    masterPort: this.getParam({ name: "port", type: "integer", default: 5001 }) };
+        }
+    }
     getUnit() {
         const unitStr = this.getParam({ name: "unit", type: "string" });
         if (unitStr.indexOf(";") > 0) {

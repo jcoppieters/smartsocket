@@ -11,8 +11,552 @@
           "value": false,
           "masterAddress": "192.168.0.98",
           "masterPort": 5001,
-          "logicalAddress": 1,
+          "logicalAddress": 24,
+          "logicalNodeAddress": 23
+        },
+        {
+          "name": "--",
+          "value": 50,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 0,
           "logicalNodeAddress": 0
+        },
+        {
+          "name": "--",
+          "value": true,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 0,
+          "logicalNodeAddress": 0
+        }
+      ]
+    },
+    {
+      "type": "power",
+      "channel": 2,
+      "low": 30,
+      "high": 900,
+      "actions": [
+        {
+          "name": "--",
+          "value": false,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 24,
+          "logicalNodeAddress": 23
+        },
+        {
+          "name": "--",
+          "value": 50,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 0,
+          "logicalNodeAddress": 0
+        },
+        {
+          "name": "--",
+          "value": true,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 0,
+          "logicalNodeAddress": 0
+        }
+      ]
+    },
+    {
+      "type": "power",
+      "channel": 3,
+      "low": 30,
+      "high": 900,
+      "actions": [
+        {
+          "name": "--",
+          "value": false,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 24,
+          "logicalNodeAddress": 23
+        },
+        {
+          "name": "--",
+          "value": 50,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 0,
+          "logicalNodeAddress": 0
+        },
+        {
+          "name": "--",
+          "value": true,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 0,
+          "logicalNodeAddress": 0
+        }
+      ]
+    },
+    {
+      "type": "power",
+      "channel": 4,
+      "low": 30,
+      "high": 900,
+      "actions": [
+        {
+          "name": "--",
+          "value": false,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 24,
+          "logicalNodeAddress": 23
+        },
+        {
+          "name": "--",
+          "value": 50,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 0,
+          "logicalNodeAddress": 0
+        },
+        {
+          "name": "--",
+          "value": true,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 0,
+          "logicalNodeAddress": 0
+        }
+      ]
+    },
+    {
+      "type": "power",
+      "channel": 5,
+      "low": 30,
+      "high": 900,
+      "actions": [
+        {
+          "name": "--",
+          "value": false,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 24,
+          "logicalNodeAddress": 23
+        },
+        {
+          "name": "--",
+          "value": 50,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 0,
+          "logicalNodeAddress": 0
+        },
+        {
+          "name": "--",
+          "value": true,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 0,
+          "logicalNodeAddress": 0
+        }
+      ]
+    },
+    {
+      "type": "power",
+      "channel": 6,
+      "low": 30,
+      "high": 900,
+      "actions": [
+        {
+          "name": "--",
+          "value": false,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 24,
+          "logicalNodeAddress": 23
+        },
+        {
+          "name": "--",
+          "value": 50,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 0,
+          "logicalNodeAddress": 0
+        },
+        {
+          "name": "--",
+          "value": true,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 0,
+          "logicalNodeAddress": 0
+        }
+      ]
+    },
+    {
+      "type": "power",
+      "channel": 7,
+      "low": 30,
+      "high": 900,
+      "actions": [
+        {
+          "name": "--",
+          "value": false,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 24,
+          "logicalNodeAddress": 23
+        },
+        {
+          "name": "--",
+          "value": 50,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 0,
+          "logicalNodeAddress": 0
+        },
+        {
+          "name": "--",
+          "value": true,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 0,
+          "logicalNodeAddress": 0
+        }
+      ]
+    },
+    {
+      "type": "power",
+      "channel": 8,
+      "low": 30,
+      "high": 900,
+      "actions": [
+        {
+          "name": "--",
+          "value": false,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 24,
+          "logicalNodeAddress": 23
+        },
+        {
+          "name": "--",
+          "value": 50,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 0,
+          "logicalNodeAddress": 0
+        },
+        {
+          "name": "--",
+          "value": true,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 0,
+          "logicalNodeAddress": 0
+        }
+      ]
+    },
+    {
+      "type": "power",
+      "channel": 9,
+      "low": 30,
+      "high": 900,
+      "actions": [
+        {
+          "name": "--",
+          "value": false,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 24,
+          "logicalNodeAddress": 23
+        },
+        {
+          "name": "--",
+          "value": 50,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 0,
+          "logicalNodeAddress": 0
+        },
+        {
+          "name": "--",
+          "value": true,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 0,
+          "logicalNodeAddress": 0
+        }
+      ]
+    },
+    {
+      "type": "power",
+      "channel": 10,
+      "low": 30,
+      "high": 900,
+      "actions": [
+        {
+          "name": "--",
+          "value": false,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 24,
+          "logicalNodeAddress": 23
+        },
+        {
+          "name": "--",
+          "value": 50,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 0,
+          "logicalNodeAddress": 0
+        },
+        {
+          "name": "--",
+          "value": true,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 0,
+          "logicalNodeAddress": 0
+        }
+      ]
+    },
+    {
+      "type": "power",
+      "channel": 11,
+      "low": 30,
+      "high": 900,
+      "actions": [
+        {
+          "name": "--",
+          "value": false,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 24,
+          "logicalNodeAddress": 23
+        },
+        {
+          "name": "--",
+          "value": 50,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 0,
+          "logicalNodeAddress": 0
+        },
+        {
+          "name": "--",
+          "value": true,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 0,
+          "logicalNodeAddress": 0
+        }
+      ]
+    },
+    {
+      "type": "power",
+      "channel": 12,
+      "low": 30,
+      "high": 900,
+      "actions": [
+        {
+          "name": "--",
+          "value": false,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 24,
+          "logicalNodeAddress": 23
+        },
+        {
+          "name": "--",
+          "value": 50,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 0,
+          "logicalNodeAddress": 0
+        },
+        {
+          "name": "--",
+          "value": true,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 0,
+          "logicalNodeAddress": 0
+        }
+      ]
+    },
+    {
+      "type": "power",
+      "channel": 13,
+      "low": 30,
+      "high": 900,
+      "actions": [
+        {
+          "name": "--",
+          "value": false,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 24,
+          "logicalNodeAddress": 23
+        },
+        {
+          "name": "--",
+          "value": 50,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 0,
+          "logicalNodeAddress": 0
+        },
+        {
+          "name": "--",
+          "value": true,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 0,
+          "logicalNodeAddress": 0
+        }
+      ]
+    },
+    {
+      "type": "power",
+      "channel": 14,
+      "low": 30,
+      "high": 900,
+      "actions": [
+        {
+          "name": "--",
+          "value": false,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 24,
+          "logicalNodeAddress": 23
+        },
+        {
+          "name": "--",
+          "value": 50,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 0,
+          "logicalNodeAddress": 0
+        },
+        {
+          "name": "--",
+          "value": true,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 0,
+          "logicalNodeAddress": 0
+        }
+      ]
+    },
+    {
+      "type": "power",
+      "channel": 15,
+      "low": 30,
+      "high": 900,
+      "actions": [
+        {
+          "name": "--",
+          "value": false,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 24,
+          "logicalNodeAddress": 23
+        },
+        {
+          "name": "--",
+          "value": 50,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 0,
+          "logicalNodeAddress": 0
+        },
+        {
+          "name": "--",
+          "value": true,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 0,
+          "logicalNodeAddress": 0
+        }
+      ]
+    },
+    {
+      "type": "power",
+      "channel": 160,
+      "low": 30,
+      "high": 900,
+      "actions": [
+        {
+          "name": "--",
+          "value": false,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 24,
+          "logicalNodeAddress": 23
+        },
+        {
+          "name": "--",
+          "value": 50,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 0,
+          "logicalNodeAddress": 0
+        },
+        {
+          "name": "--",
+          "value": true,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 0,
+          "logicalNodeAddress": 0
+        }
+      ]
+    },
+    {
+      "type": "power",
+      "channel": 17,
+      "low": 300,
+      "high": 900,
+      "actions": [
+        {
+          "name": "--",
+          "value": false,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 24,
+          "logicalNodeAddress": 23
+        },
+        {
+          "name": "--",
+          "value": 50,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 0,
+          "logicalNodeAddress": 0
+        },
+        {
+          "name": "--",
+          "value": true,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 0,
+          "logicalNodeAddress": 0
+        }
+      ]
+    },
+    {
+      "type": "power",
+      "channel": 18,
+      "low": 318,
+      "high": 900,
+      "actions": [
+        {
+          "name": "--",
+          "value": false,
+          "masterAddress": "192.168.0.98",
+          "masterPort": 5001,
+          "logicalAddress": 24,
+          "logicalNodeAddress": 23
         },
         {
           "name": "--",

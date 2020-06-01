@@ -66,10 +66,10 @@ export class System extends Base {
 
   async openMaster(config: MasterConfig, inx: number, readDB: boolean = false): Promise<Master> {
     const master = new Master(this, config);
-    this.masters[inx] = master;
+    this.masters.push(master);
     try {
-      // testing
-      if (!master.config.active) return;
+      // check for old configs that don't contain the active flag
+      if ((typeof master.config.active === "boolean") && (!master.config.active)) return;
 
       this.log("opening master: " + master.getAddress());
       await master.open();
@@ -217,7 +217,15 @@ export class System extends Base {
 
   findMaster(master: Master | string, port?: number): Master {
     if (typeof master === "string") {
-      if (typeof port === "undefined") port = 5001;
+      if (typeof port === "undefined") {
+        const parts = master.split(":");
+        if (parts.length > 1) {
+          master = parts[0];
+          port = parseInt(parts[1]);
+        } else {
+          port = 5001;
+        }
+      }
       return this.masters.find((m: Master) => m && m.same(master, port))
     } else {
       return this.masters.find((m: Master) => m && m.same(master));

@@ -75,9 +75,8 @@
                 <td><label>
                     <input type="hidden" name="nodes" value="<%= node.logicalAddress %>">
                     <input name="active_<%= node.logicalAddress %>" type="checkbox" value="Y"
-                           class="<%= (node.active === 'X') ? 'indeterminate' : 'filled-in' %>" 
                            id="active_<%= node.logicalAddress %>"
-                           <%= (node.active=='Y') ? 'checked' : '' %> />
+                           <%= node.active ? 'checked' : '' %> />
                     <span><%= node.isNew %></span>
                 </label></td>
                 <td>
