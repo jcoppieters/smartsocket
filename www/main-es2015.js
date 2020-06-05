@@ -1009,7 +1009,9 @@ StdPage = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Once your first Node or Smartbox is visible<br>
         Click on it and select the units you want to use.<br>
         <br>
-        Later you can split the units (switches, temperature, dimmers, scenes, ...) in multiple sections by first adding more groups.
+        Later you can split the units (switches, temperature, dimmers, scenes, ...) in multiple sections by first adding more groups.<br>
+        <br>
+        Download the <a href="https://www.duotecno.be/wp-content/uploads/2020/05/Duotecno-smartbox-app-1.pdf">manual</a>.
       </p>
     </div>
 `
@@ -2145,22 +2147,26 @@ class Master extends _logger__WEBPACK_IMPORTED_MODULE_3__["Logger"] {
     getAddress() {
         return this.config.address;
     }
-    isMaster(ip, port) {
-        return this.hasAddress(ip) && this.hasPort(port);
-    }
     getPort() {
         return this.config.port;
     }
     hasPort(port) {
         return this.config.port == port;
     }
+    getURL() {
+        return this.config.address + ":" + this.config.port;
+    }
     inMultiNode() {
         return (this.nodes.length > 1);
     }
     same(master, port) {
         if (typeof master === "string") {
-            if (typeof port === "undefined")
-                port = 5001;
+            if (typeof port === "undefined") {
+                // master is probably url ip:port
+                const url = master.split(":");
+                master = url[0];
+                port = parseInt(url[1] || "5001");
+            }
             return this.hasAddress(master) && this.hasPort(port);
         }
         else {
@@ -2825,11 +2831,13 @@ var UnitType;
     UnitType[UnitType["kVideo"] = 14] = "kVideo";
     UnitType[UnitType["kLightbulb"] = 101] = "kLightbulb";
     UnitType[UnitType["kGarageDoor"] = 102] = "kGarageDoor";
+    UnitType[UnitType["kCondition"] = 103] = "kCondition";
     UnitType[UnitType["kNoType"] = 0] = "kNoType";
 })(UnitType || (UnitType = {}));
 ;
-// kLightbulb  == kSwitch with no "stk" in the name
+// kLightbulb  == kSwitch with no "#" in the name
 // kGarageDoor == kSwitchingMotor with "!" in the name
+// kCondition  == kMood with "*" in the name
 /////////////////////////
 // Node in the network //
 /////////////////////////
@@ -2893,12 +2901,12 @@ class Unit {
     isUnit(master, port, nodeLogicalAddress, unitLogicalAddress) {
         if (master instanceof Unit) {
             const unit = master;
-            return ((this.node.master.isMaster(unit.node.master.getAddress(), unit.node.master.getPort())) &&
+            return ((this.node.master.same(unit.node.master.getAddress(), unit.node.master.getPort())) &&
                 (this.node.logicalAddress == unit.node.logicalAddress) &&
                 (this.logicalAddress == unit.logicalAddress));
         }
         else { /* if (typeof master === "string") */
-            return ((this.node.master.isMaster(master, port)) &&
+            return ((this.node.master.same(master, port)) &&
                 (this.node.logicalAddress == nodeLogicalAddress) &&
                 (this.logicalAddress == unitLogicalAddress));
         }
@@ -2922,6 +2930,7 @@ class Unit {
             case UnitType.kTemperature: return 'Temperature sensor';
             case UnitType.kExtendedAudio: return 'Extended audio';
             case UnitType.kMood: return 'Virtual mood';
+            case UnitType.kCondition: return 'Condidtion';
             case UnitType.kSwitchingMotor: return 'Switch motor';
             case UnitType.kGarageDoor: return 'Garagedoor';
             case UnitType.kAudio: return 'Basic audio';
@@ -2948,32 +2957,44 @@ class Unit {
     getSort() {
         const name = this.getName().toLowerCase();
         switch (this.type) {
-            case UnitType.kTemperature: return '01|' + name;
-            case UnitType.kSwitchingMotor: return '02|' + name;
-            case UnitType.kGarageDoor: return '02|' + name;
-            case UnitType.kDimmer: return '03|' + name;
-            case UnitType.kLightbulb: return '04|' + name;
-            case UnitType.kSwitch: return '04|' + name;
-            case UnitType.kInput: return '11|' + name;
-            case UnitType.kExtendedAudio: return '12|' + name;
-            case UnitType.kMood: return '09|' + name;
-            case UnitType.kAudio: return '12|' + name;
-            case UnitType.kAV: return '13|' + name;
-            case UnitType.kIRTX: return '19|' + name;
-            case UnitType.kVideo: return '14|' + name;
-            default: return '99|' + name;
+            case UnitType.kTemperature: return "01|" + name;
+            case UnitType.kSwitchingMotor: return "02|" + name;
+            case UnitType.kGarageDoor: return "02|" + name;
+            case UnitType.kDimmer: return "03|" + name;
+            case UnitType.kLightbulb: return "04|" + name;
+            case UnitType.kSwitch: return "04|" + name;
+            case UnitType.kInput: return "11|" + name;
+            case UnitType.kExtendedAudio: "12|" + name;
+            case UnitType.kMood: return "09|" + name;
+            case UnitType.kCondition: return "10|" + name;
+            case UnitType.kAudio: return "12|" + name;
+            case UnitType.kAV: return "13|" + name;
+            case UnitType.kIRTX: return "19|" + name;
+            case UnitType.kVideo: return "14|" + name;
+            default: return "99|" + name;
         }
     }
     getType() {
-        // as default we consider a switch as a light unless it has "stk" in the name
-        if ((this.type === UnitType.kSwitch) &&
-            (this.name.indexOf('STK') < 0) && (this.name.indexOf('stk') < 0) && (this.name.indexOf('Stk') < 0)) {
+        // Extension on Duotecno's types
+        //  updown =>
+        //      if name contains !   => "door""
+        //      else                 => "window-covering"
+        //  mood =>
+        //      if name contains *   => "condition" (2 state, don't reset after "on")
+        //      else                 => "mood" (turns of 1.2 seconds after being turned on)
+        //  switch =>
+        //      if name contains #   => "switch"     (used to be stk)
+        //      else                 => "lightbulb" 
+        //
+        // exceptions
+        if ((this.type === UnitType.kSwitch) && (this.name.indexOf('#') < 0)) {
             return UnitType.kLightbulb;
         }
-        // as default we consider a switch-motor as a window covering unless it has "!" in the name
-        if ((this.type === UnitType.kSwitchingMotor) &&
-            (this.name.indexOf('!') >= 0)) {
+        if ((this.type === UnitType.kSwitchingMotor) && (this.name.indexOf('!') >= 0)) {
             return UnitType.kGarageDoor;
+        }
+        if ((this.type === UnitType.kMood) && (this.name.indexOf('*') >= 0)) {
+            return UnitType.kCondition;
         }
         return this.type;
     }
@@ -2992,7 +3013,7 @@ class Unit {
         return (this.type === UnitType.kSwitch) || (this.type === UnitType.kLightbulb);
     }
     isMood() {
-        return (this.type === UnitType.kMood);
+        return (this.type === UnitType.kMood) || (this.type === UnitType.kCondition);
     }
     isInput() {
         return (this.type === UnitType.kInput);
@@ -3041,12 +3062,18 @@ class Unit {
     }
     getDispayState() {
         switch (this.type) {
-            case UnitType.kDimmer: return ((this.status) ? 'on' : 'off') + ' (' + this.value + '%)';
+            case UnitType.kDimmer:
+                return ((this.status) ? 'on' : 'off') + ' (' + this.value + '%)';
             case UnitType.kSwitch:
-            case UnitType.kLightbulb: return (this.status) ? 'on' : 'off';
-            case UnitType.kInput: return (this.status) ? 'on' : 'off';
-            case UnitType.kTemperature: return (this.value / 10.0) + 'C';
-            case UnitType.kMood: return (this.status) ? 'on' : 'off';
+            case UnitType.kLightbulb:
+                return (this.status) ? 'on' : 'off';
+            case UnitType.kInput:
+                return (this.status) ? 'on' : 'off';
+            case UnitType.kTemperature:
+                return isNaN(this.value) ? "-" : ((this.value / 10.0) + 'C');
+            case UnitType.kCondition:
+            case UnitType.kMood:
+                return (this.status) ? 'on' : 'off';
             case UnitType.kGarageDoor:
             case UnitType.kSwitchingMotor:
                 if (this.status === UnitState.kOpening) {
@@ -3065,7 +3092,7 @@ class Unit {
                     return 'stopped';
                 }
         }
-        return (this.status) ? this.status.toString() : 'unknown';
+        return (typeof this.status != "undefined") ? this.status.toString() : 'unknown';
     }
     getDescription() {
         return this.getDisplayName() + ', active: ' + this.active + ', type: ' + this.typeName() + ', status: ' + this.status + ', value: ' + this.value;
@@ -3243,6 +3270,7 @@ const Protocol = {
                 return { cmd: Cmd.SetSwitch, method: (value) ? 3 : 2 };
             case UnitType.kInput:
             case UnitType.kMood:
+            case UnitType.kCondition:
                 if (value < 0) {
                     return { cmd: Cmd.SetControl, method: 2 };
                 } // short pulse
@@ -3578,7 +3606,7 @@ let System = class System extends _logger__WEBPACK_IMPORTED_MODULE_5__["Logger"]
         if (typeof master === "string") {
             if (typeof port === "undefined")
                 port = 5001;
-            return this.masters.find((m) => m.same(master, port));
+            return this.masters.find((m) => m && m.same(master, port));
         }
         else {
             return this.masters.find((m) => m && m.same(master));
@@ -3625,16 +3653,21 @@ let System = class System extends _logger__WEBPACK_IMPORTED_MODULE_5__["Logger"]
         });
         return unit;
     }
-    findUnitByName(master, name) {
+    findUnitByName(master, A, name) {
         let unit = null;
+        if (typeof master === "string") {
+            master = this.findMaster(master, A);
+        }
+        else {
+            name = A;
+        }
         this.masters.forEach((m) => {
-            if (m && (m.getAddress() == master)) {
+            if (m && m.same(master)) {
                 m.nodes.forEach((n) => {
                     if (n) {
                         n.units.forEach(u => {
-                            if ((u.displayName === name) || (u.name === name)) {
+                            if ((u.displayName === name) || (u.name === name))
                                 unit = u;
-                            }
                         });
                     }
                 });

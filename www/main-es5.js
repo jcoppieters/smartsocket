@@ -1318,7 +1318,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     StdPage = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["Component"])({
       selector: 'std-page',
       inputs: ['services', 'showUpDowns'],
-      template: "\n    <ion-list *ngIf=\"system.masters.length > 0\">\n      <ion-item-group *ngFor=\"let group of system.groups\">\n        <ion-list-header *ngIf=\"group.used && moreGroups(group)\">\n          <ion-label>{{group.name}}</ion-label>\n          <ion-icon *ngIf=\"! system.isSplitted\" [ngClass]=\"arrow(group)\" (click)=\"toggle(group)\" name=\"chevron-forward-outline\"></ion-icon>\n        </ion-list-header>\n        <ng-container *ngIf=\"group.used && group.visible\">\n          <ng-container *ngFor=\"let service of system[services]\">\n            <dimmer      [service]=\"service\" *ngIf=\"(service.group == group.id) \n                                                    && service.isDimmer()\"></dimmer>\n            <updown      [service]=\"service\" *ngIf=\"(service.group == group.id) \n                                                    && showUpDowns && service.isUpDown()\"></updown>\n            <switch      [service]=\"service\" *ngIf=\"(service.group == group.id) \n                                                    && service.isSwitch()\"></switch>\n            <mood        [service]=\"service\" *ngIf=\"(service.group == group.id) \n                                                    && (service.isMood() || service.isInput())\"></mood>\n            <temperature [service]=\"service\" *ngIf=\"(service.group == group.id) \n                                                    && service.isTemperature()\"></temperature>\n          </ng-container>\n        </ng-container>\n      </ion-item-group>\n    </ion-list>\n\n    <div *ngIf=\"system.masters.length <= 0\" class=\"noMaster\">\n      <h1>No masters yet?</h1>\n      <p>Go to the tab \"Configure\" -> \"Masters\"<br>\n        Add a master by clicking on the \"+ Master\"<br>\n        Fill out the parameters.<br>\n        <br>\n        Once your first Node or Smartbox is visible<br>\n        Click on it and select the units you want to use.<br>\n        <br>\n        Later you can split the units (switches, temperature, dimmers, scenes, ...) in multiple sections by first adding more groups.\n      </p>\n    </div>\n"
+      template: "\n    <ion-list *ngIf=\"system.masters.length > 0\">\n      <ion-item-group *ngFor=\"let group of system.groups\">\n        <ion-list-header *ngIf=\"group.used && moreGroups(group)\">\n          <ion-label>{{group.name}}</ion-label>\n          <ion-icon *ngIf=\"! system.isSplitted\" [ngClass]=\"arrow(group)\" (click)=\"toggle(group)\" name=\"chevron-forward-outline\"></ion-icon>\n        </ion-list-header>\n        <ng-container *ngIf=\"group.used && group.visible\">\n          <ng-container *ngFor=\"let service of system[services]\">\n            <dimmer      [service]=\"service\" *ngIf=\"(service.group == group.id) \n                                                    && service.isDimmer()\"></dimmer>\n            <updown      [service]=\"service\" *ngIf=\"(service.group == group.id) \n                                                    && showUpDowns && service.isUpDown()\"></updown>\n            <switch      [service]=\"service\" *ngIf=\"(service.group == group.id) \n                                                    && service.isSwitch()\"></switch>\n            <mood        [service]=\"service\" *ngIf=\"(service.group == group.id) \n                                                    && (service.isMood() || service.isInput())\"></mood>\n            <temperature [service]=\"service\" *ngIf=\"(service.group == group.id) \n                                                    && service.isTemperature()\"></temperature>\n          </ng-container>\n        </ng-container>\n      </ion-item-group>\n    </ion-list>\n\n    <div *ngIf=\"system.masters.length <= 0\" class=\"noMaster\">\n      <h1>No masters yet?</h1>\n      <p>Go to the tab \"Configure\" -> \"Masters\"<br>\n        Add a master by clicking on the \"+ Master\"<br>\n        Fill out the parameters.<br>\n        <br>\n        Once your first Node or Smartbox is visible<br>\n        Click on it and select the units you want to use.<br>\n        <br>\n        Later you can split the units (switches, temperature, dimmers, scenes, ...) in multiple sections by first adding more groups.<br>\n        <br>\n        Download the <a href=\"https://www.duotecno.be/wp-content/uploads/2020/05/Duotecno-smartbox-app-1.pdf\">manual</a>.\n      </p>\n    </div>\n"
     }), tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_system_system__WEBPACK_IMPORTED_MODULE_1__["System"]])], StdPage);
     /***/
   },
@@ -2816,11 +2816,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           return this.config.address;
         }
       }, {
-        key: "isMaster",
-        value: function isMaster(ip, port) {
-          return this.hasAddress(ip) && this.hasPort(port);
-        }
-      }, {
         key: "getPort",
         value: function getPort() {
           return this.config.port;
@@ -2831,6 +2826,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           return this.config.port == port;
         }
       }, {
+        key: "getURL",
+        value: function getURL() {
+          return this.config.address + ":" + this.config.port;
+        }
+      }, {
         key: "inMultiNode",
         value: function inMultiNode() {
           return this.nodes.length > 1;
@@ -2839,7 +2839,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         key: "same",
         value: function same(master, port) {
           if (typeof master === "string") {
-            if (typeof port === "undefined") port = 5001;
+            if (typeof port === "undefined") {
+              // master is probably url ip:port
+              var url = master.split(":");
+              master = url[0];
+              port = parseInt(url[1] || "5001");
+            }
+
             return this.hasAddress(master) && this.hasPort(port);
           } else {
             return master && this.hasAddress(master.getAddress()) && this.hasPort(master.getPort());
@@ -4026,11 +4032,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       UnitType[UnitType["kVideo"] = 14] = "kVideo";
       UnitType[UnitType["kLightbulb"] = 101] = "kLightbulb";
       UnitType[UnitType["kGarageDoor"] = 102] = "kGarageDoor";
+      UnitType[UnitType["kCondition"] = 103] = "kCondition";
       UnitType[UnitType["kNoType"] = 0] = "kNoType";
     })(UnitType || (UnitType = {}));
 
-    ; // kLightbulb  == kSwitch with no "stk" in the name
+    ; // kLightbulb  == kSwitch with no "#" in the name
     // kGarageDoor == kSwitchingMotor with "!" in the name
+    // kCondition  == kMood with "*" in the name
     /////////////////////////
     // Node in the network //
     /////////////////////////
@@ -4145,10 +4153,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         value: function isUnit(master, port, nodeLogicalAddress, unitLogicalAddress) {
           if (master instanceof Unit) {
             var unit = master;
-            return this.node.master.isMaster(unit.node.master.getAddress(), unit.node.master.getPort()) && this.node.logicalAddress == unit.node.logicalAddress && this.logicalAddress == unit.logicalAddress;
+            return this.node.master.same(unit.node.master.getAddress(), unit.node.master.getPort()) && this.node.logicalAddress == unit.node.logicalAddress && this.logicalAddress == unit.logicalAddress;
           } else {
             /* if (typeof master === "string") */
-            return this.node.master.isMaster(master, port) && this.node.logicalAddress == nodeLogicalAddress && this.logicalAddress == unitLogicalAddress;
+            return this.node.master.same(master, port) && this.node.logicalAddress == nodeLogicalAddress && this.logicalAddress == unitLogicalAddress;
           }
         }
       }, {
@@ -4184,6 +4192,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
             case UnitType.kMood:
               return 'Virtual mood';
+
+            case UnitType.kCondition:
+              return 'Condidtion';
 
             case UnitType.kSwitchingMotor:
               return 'Switch motor';
@@ -4233,59 +4244,76 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
           switch (this.type) {
             case UnitType.kTemperature:
-              return '01|' + name;
+              return "01|" + name;
 
             case UnitType.kSwitchingMotor:
-              return '02|' + name;
+              return "02|" + name;
 
             case UnitType.kGarageDoor:
-              return '02|' + name;
+              return "02|" + name;
 
             case UnitType.kDimmer:
-              return '03|' + name;
+              return "03|" + name;
 
             case UnitType.kLightbulb:
-              return '04|' + name;
+              return "04|" + name;
 
             case UnitType.kSwitch:
-              return '04|' + name;
+              return "04|" + name;
 
             case UnitType.kInput:
-              return '11|' + name;
+              return "11|" + name;
 
             case UnitType.kExtendedAudio:
-              return '12|' + name;
+              "12|" + name;
 
             case UnitType.kMood:
-              return '09|' + name;
+              return "09|" + name;
+
+            case UnitType.kCondition:
+              return "10|" + name;
 
             case UnitType.kAudio:
-              return '12|' + name;
+              return "12|" + name;
 
             case UnitType.kAV:
-              return '13|' + name;
+              return "13|" + name;
 
             case UnitType.kIRTX:
-              return '19|' + name;
+              return "19|" + name;
 
             case UnitType.kVideo:
-              return '14|' + name;
+              return "14|" + name;
 
             default:
-              return '99|' + name;
+              return "99|" + name;
           }
         }
       }, {
         key: "getType",
         value: function getType() {
-          // as default we consider a switch as a light unless it has "stk" in the name
-          if (this.type === UnitType.kSwitch && this.name.indexOf('STK') < 0 && this.name.indexOf('stk') < 0 && this.name.indexOf('Stk') < 0) {
+          // Extension on Duotecno's types
+          //  updown =>
+          //      if name contains !   => "door""
+          //      else                 => "window-covering"
+          //  mood =>
+          //      if name contains *   => "condition" (2 state, don't reset after "on")
+          //      else                 => "mood" (turns of 1.2 seconds after being turned on)
+          //  switch =>
+          //      if name contains #   => "switch"     (used to be stk)
+          //      else                 => "lightbulb" 
+          //
+          // exceptions
+          if (this.type === UnitType.kSwitch && this.name.indexOf('#') < 0) {
             return UnitType.kLightbulb;
-          } // as default we consider a switch-motor as a window covering unless it has "!" in the name
-
+          }
 
           if (this.type === UnitType.kSwitchingMotor && this.name.indexOf('!') >= 0) {
             return UnitType.kGarageDoor;
+          }
+
+          if (this.type === UnitType.kMood && this.name.indexOf('*') >= 0) {
+            return UnitType.kCondition;
           }
 
           return this.type;
@@ -4312,7 +4340,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "isMood",
         value: function isMood() {
-          return this.type === UnitType.kMood;
+          return this.type === UnitType.kMood || this.type === UnitType.kCondition;
         }
       }, {
         key: "isInput",
@@ -4480,8 +4508,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
               return this.status ? 'on' : 'off';
 
             case UnitType.kTemperature:
-              return this.value / 10.0 + 'C';
+              return isNaN(this.value) ? "-" : this.value / 10.0 + 'C';
 
+            case UnitType.kCondition:
             case UnitType.kMood:
               return this.status ? 'on' : 'off';
 
@@ -4509,7 +4538,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
           }
 
-          return this.status ? this.status.toString() : 'unknown';
+          return typeof this.status != "undefined" ? this.status.toString() : 'unknown';
         }
       }, {
         key: "getDescription",
@@ -4738,6 +4767,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
           case UnitType.kInput:
           case UnitType.kMood:
+          case UnitType.kCondition:
             if (value < 0) {
               return {
                 cmd: Cmd.SetControl,
@@ -5363,7 +5393,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           if (typeof master === "string") {
             if (typeof port === "undefined") port = 5001;
             return this.masters.find(function (m) {
-              return m.same(master, port);
+              return m && m.same(master, port);
             });
           } else {
             return this.masters.find(function (m) {
@@ -5436,16 +5466,21 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }
       }, {
         key: "findUnitByName",
-        value: function findUnitByName(master, name) {
+        value: function findUnitByName(master, A, name) {
           var unit = null;
+
+          if (typeof master === "string") {
+            master = this.findMaster(master, A);
+          } else {
+            name = A;
+          }
+
           this.masters.forEach(function (m) {
-            if (m && m.getAddress() == master) {
+            if (m && m.same(master)) {
               m.nodes.forEach(function (n) {
                 if (n) {
                   n.units.forEach(function (u) {
-                    if (u.displayName === name || u.name === name) {
-                      unit = u;
-                    }
+                    if (u.displayName === name || u.name === name) unit = u;
                   });
                 }
               });
