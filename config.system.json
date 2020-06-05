@@ -35,6 +35,15 @@
     {
       "active": "Y",
       "group": 0,
+      "name": "T1|Sens",
+      "masterAddress": "192.168.0.98",
+      "masterPort": 5001,
+      "logicalNodeAddress": 3,
+      "logicalAddress": 1
+    },
+    {
+      "active": "Y",
+      "group": 0,
       "name": "up/down",
       "masterAddress": "192.168.0.98",
       "masterPort": 5001,
