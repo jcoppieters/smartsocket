@@ -88,7 +88,7 @@ export class SmartApp extends SocApp {
     if (context.request === "") context.request= "masters";
     context["hasSmappee"] = !!this.smappee;
 
-    if (context.request === "assets") {
+    if (context.request === "files") {
       return this.renderAssets(context);
 
     } else if (context.request === "images") {
