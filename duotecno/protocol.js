@@ -121,11 +121,13 @@ var UnitType;
     UnitType[UnitType["kVideo"] = 14] = "kVideo";
     UnitType[UnitType["kLightbulb"] = 101] = "kLightbulb";
     UnitType[UnitType["kGarageDoor"] = 102] = "kGarageDoor";
+    UnitType[UnitType["kCondition"] = 103] = "kCondition";
     UnitType[UnitType["kNoType"] = 0] = "kNoType";
 })(UnitType = exports.UnitType || (exports.UnitType = {}));
 ;
-// kLightbulb  == kSwitch with no "stk" in the name
+// kLightbulb  == kSwitch with no "#" in the name
 // kGarageDoor == kSwitchingMotor with "!" in the name
+// kCondition  == kMood with "*" in the name
 /////////////////////////
 // Node in the network //
 /////////////////////////
@@ -209,20 +211,21 @@ class Unit {
     }
     typeName() {
         switch (this.type) {
-            case UnitType.kDimmer: return "Dimmer";
-            case UnitType.kSwitch: return "Switch/Relay";
-            case UnitType.kLightbulb: return "Lightbulb";
-            case UnitType.kInput: return "Control input";
-            case UnitType.kTemperature: return "Temperature sensor";
-            case UnitType.kExtendedAudio: return "Extended audio";
-            case UnitType.kMood: return "Virtual mood";
-            case UnitType.kSwitchingMotor: return "Switch motor";
-            case UnitType.kGarageDoor: return "Garagedoor";
-            case UnitType.kAudio: return "Basic audio";
-            case UnitType.kAV: return "AV Matrix";
-            case UnitType.kIRTX: return "IRTX";
-            case UnitType.kVideo: return "Video multiplexer";
-            default: return "Unknown unit type (" + this.type + ")";
+            case UnitType.kDimmer: return 'Dimmer';
+            case UnitType.kSwitch: return 'Switch/Relay';
+            case UnitType.kLightbulb: return 'Lightbulb';
+            case UnitType.kInput: return 'Control input';
+            case UnitType.kTemperature: return 'Temperature sensor';
+            case UnitType.kExtendedAudio: return 'Extended audio';
+            case UnitType.kMood: return 'Virtual mood';
+            case UnitType.kCondition: return 'Condidtion';
+            case UnitType.kSwitchingMotor: return 'Switch motor';
+            case UnitType.kGarageDoor: return 'Garagedoor';
+            case UnitType.kAudio: return 'Basic audio';
+            case UnitType.kAV: return 'AV Matrix';
+            case UnitType.kIRTX: return 'IRTX';
+            case UnitType.kVideo: return 'Video multiplexer';
+            default: return 'Unknown unit type (' + this.type + ')';
         }
     }
     getName() {
@@ -249,6 +252,7 @@ class Unit {
             case UnitType.kInput: return "11|" + name;
             case UnitType.kExtendedAudio: "12|" + name;
             case UnitType.kMood: return "09|" + name;
+            case UnitType.kCondition: return "10|" + name;
             case UnitType.kAudio: return "12|" + name;
             case UnitType.kAV: return "13|" + name;
             case UnitType.kIRTX: return "19|" + name;
@@ -257,6 +261,17 @@ class Unit {
         }
     }
     getType() {
+        // Extension on Duotecno's types
+        //  updown =>
+        //      if name contains !   => "door""
+        //      else                 => "window-covering"
+        //  mood =>
+        //      if name contains *   => "condition" (2 state, don't reset after "on")
+        //      else                 => "mood" (turns of 1.2 seconds after being turned on)
+        //  switch =>
+        //      if name contains #   => "switch"     (used to be stk)
+        //      else                 => "lightbulb" 
+        //
         // as default we consider a switch as a light unless it has "stk" in the name
         if ((this.type === UnitType.kSwitch) &&
             (this.name.indexOf("STK") < 0) && (this.name.indexOf("stk") < 0) && (this.name.indexOf("Stk") < 0))
@@ -331,26 +346,37 @@ class Unit {
     }
     getDispayState() {
         switch (this.type) {
-            case UnitType.kDimmer: return ((this.status) ? "on" : "off") + " (" + this.value + "%)";
+            case UnitType.kDimmer:
+                return ((this.status) ? 'on' : 'off') + ' (' + this.value + '%)';
             case UnitType.kSwitch:
-            case UnitType.kLightbulb: return (this.status) ? "on" : "off";
-            case UnitType.kInput: return (this.status) ? "on" : "off";
-            case UnitType.kTemperature: return (this.value / 10.0) + "C";
-            case UnitType.kMood: return (this.status) ? "on" : "off";
+            case UnitType.kLightbulb:
+                return (this.status) ? 'on' : 'off';
+            case UnitType.kInput:
+                return (this.status) ? 'on' : 'off';
+            case UnitType.kTemperature:
+                return isNaN(this.value) ? "-" : ((this.value / 10.0) + 'C');
+            case UnitType.kCondition:
+            case UnitType.kMood:
+                return (this.status) ? 'on' : 'off';
             case UnitType.kGarageDoor:
             case UnitType.kSwitchingMotor:
-                if (this.status === UnitState.kOpening)
-                    return "opening";
-                if (this.status === UnitState.kClosing)
-                    return "closing";
-                if (this.status === UnitState.kOpen)
-                    return "open";
-                if (this.status === UnitState.kClosed)
-                    return "closed";
-                if (this.status === UnitState.kStopped)
-                    return "stopped";
+                if (this.status === UnitState.kOpening) {
+                    return 'opening';
+                }
+                if (this.status === UnitState.kClosing) {
+                    return 'closing';
+                }
+                if (this.status === UnitState.kOpen) {
+                    return 'open';
+                }
+                if (this.status === UnitState.kClosed) {
+                    return 'closed';
+                }
+                if (this.status === UnitState.kStopped) {
+                    return 'stopped';
+                }
         }
-        return (this.status) ? this.status.toString() : "unknown";
+        return (typeof this.status != "undefined") ? this.status.toString() : 'unknown';
     }
     getDescription() {
         return this.getDisplayName() + ", active: " + this.active + ", type: " + this.typeName() + ", status: " + this.status + ", value: " + this.value;

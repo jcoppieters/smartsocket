@@ -1,6 +1,6 @@
 import { Accessory } from "./accessory";
 import { LogFunction } from "../duotecno/types";
-import { Unit } from "../duotecno/protocol";
+import { Unit, UnitType } from "../duotecno/protocol";
 
 // Johan Coppieters Jan 2019
 //
@@ -35,21 +35,24 @@ export class Mood extends Accessory {
     next(null, false);
   }
   setMood(value, next) {
-    if (this.unit)
-      // always set to "off" after send the request.
+    if (this.unit) {
       this.unit.setState(value)
         .then(() => { 
-          // try to update homekit's value to "off" again.
-          setTimeout(() => {
-            this.unit.value = false;
-            this.updateState();
-          }, 1200);
-          
+          if (this.unit.getType() === UnitType.kMood) {
+            // always set to "off" after sending the request.
+            setTimeout(() => {
+              this.unit.value = false;
+              // try to update homekit's value to "off" again.
+              this.updateState();
+            }, 1200);
+          }
           next();
         })
         .catch(err => next(err));
-    else
+
+    } else {
       next( new Error("accessory -> setState needs to be overridden if no unit is provided.") );
+    }
   }
 
 }

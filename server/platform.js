@@ -170,6 +170,7 @@ class Platform extends base_1.Base {
                         this.accessoryList.push(new garagedoor_1.GarageDoor(logger, this.homebridge, unit));
                         break;
                     case protocol_1.UnitType.kMood:
+                    case protocol_1.UnitType.kCondition:
                         this.accessoryList.push(new mood_1.Mood(logger, this.homebridge, unit));
                         break;
                     case protocol_1.UnitType.kTemperature:

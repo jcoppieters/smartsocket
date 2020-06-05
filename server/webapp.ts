@@ -112,7 +112,7 @@ export class Context {
   }
 
   makeInt(i: string): number {
-    if ((i[0]==='0') && (i[1]==='x'))
+    if (i && (i[0]==='0') && (i[1]==='x'))
       return parseInt(i.substr(2), 16)
     else
       return parseInt(i);
@@ -124,24 +124,38 @@ export class Context {
              logicalAddress: parseInt((parts.length > 1) ? parts[1] : "0", 16) };
   }
 
-  getMaster(name): {masterAddress: string, masterPort: number} {
-    const suggestion = this[name] || this.params[name];
-    if (suggestion && (suggestion.indexOf(":") > 0)) {
-      const parts = suggestion.split(":");
+  parseAddress(suggestion): boolean  {
+    const parts = suggestion.split(":");
+    if (parts.length > 1) {
       this["masterAddress"] = parts[0];
-      const masterPort = (parts.length > 1) ? parseInt(parts[1]) : 5001
-      this["masterPort"] = masterPort;
-      return { masterAddress: parts[0], masterPort };
-      
+      this["masterPort"] = parseInt(parts[1]);
+      return true;
     } else {
-      // the traditional way
-      if (this.params["masterAddress"])
-        return { masterAddress: this.getParam({name: "masterAddress", type: "string"}),
-                 masterPort: this.getParam({name: "masterPort", type: "integer", default: 5001}) };
-      else 
-        return { masterAddress: this.getParam({name: "master", type: "string"}),
-                 masterPort: this.getParam({name: "port", type: "integer", default: 5001}) };
+      return false;
+    }
+  }
 
+  getMaster(tryName: string, newAction?: string) {
+    const suggestion = this[tryName] || <string>this.params[tryName];
+    // try "in 1 variable" in the "action" part of the URL
+    if (this.parseAddress(suggestion)) {
+      // replace action if one was suggested
+      if (newAction) this.action = newAction;
+
+    } else {
+      const master = (this.params["masterAddress"]) ?
+        this.getParam({name: "masterAddress", type: "string"}) :
+        this.getParam({name: "master", type: "string"});
+      
+      // try "in 1 variable" in the "masterAddress" or "master" 
+      if (! this.parseAddress(master)) {
+
+        // old fashion way -> in 2 variables
+        this["masterAddress"] = master;
+        this["masterPort"] = (this.params["masterPort"]) ?
+        this.getParam({name: "masterPort", type: "integer", default: 5001}) :
+        this.getParam({name: "port", type: "integer", default: 5001})
+      }
     }
   }
 

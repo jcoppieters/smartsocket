@@ -23,9 +23,20 @@
           <span class="grey-text"><small>Physical = <%= hex(node.physicalAddress) %> - Logical = <%= hex(node.logicalAddress) %></small></span>
           <button class="right btn waves-effect waves-light" type="submit" name="action" value="cancel">Back</button>
           <button class="right btn waves-effect waves-light" type="submit" name="action" value="save">Save</button>
-          <a href="/units/<%= masterAddress %>:<%= masterPort %>/<%= node.logicalAddress %>" class="right btn waves-effect waves-light">Refresh</a>
+          <a href="/units/<%= masterAddress %>:<%= masterPort %>/<%= node.logicalAddress %>?sortOnAddr=<%= sortOnAddr ? 'Y' : 'N' %>" class="right btn waves-effect waves-light">Refresh</a>
         </h1>
 
+        <div class="right">
+          <label>Sort on: </label>
+          <% if (sortOnAddr == 'Y') { %>
+            on address |
+            <a href="/units/<%= masterAddress %>:<%= masterPort %>/<%= node.logicalAddress %>?sortOnAddr=N">on name</a>
+          <% } else { %>
+            <a href="/units/<%= masterAddress %>:<%= masterPort %>/<%= node.logicalAddress %>?sortOnAddr=Y">on address</a> |
+            on name
+          <% } %> 
+        </div>
+        
         <%- include('/views/units', {units: node.units, edit: true, hex: hex}); -%> 
 
       </form>

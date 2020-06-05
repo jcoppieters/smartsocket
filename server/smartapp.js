@@ -116,8 +116,8 @@ class SmartApp extends socapp_1.SocApp {
         });
     }
     scrapeUnit(context, boundary) {
-        const { masterAddress, masterPort } = context.getMaster("master");
-        const master = this.system.findMaster(masterAddress, masterPort);
+        context.getMaster("action");
+        const master = this.system.findMaster(context["masterAddress"], context["masterPort"]);
         let unit = null;
         let logicalNodeAddress, logicalAddress;
         let name = context.getParam({ name: "unit" + boundary, type: "string", default: "--" });
@@ -133,7 +133,8 @@ class SmartApp extends socapp_1.SocApp {
             logicalNodeAddress = (unit) ? unit.node.logicalAddress : 0;
             logicalAddress = (unit) ? unit.logicalAddress : 0;
         }
-        return { name, value, masterAddress, masterPort, logicalAddress, logicalNodeAddress };
+        return { name, value, masterAddress: context["masterAddress"], masterPort: context["masterPort"],
+            logicalAddress, logicalNodeAddress };
     }
     //////////////////////////////
     // Homekit                  //
@@ -382,8 +383,8 @@ class SmartApp extends socapp_1.SocApp {
                     return this.ejs("masterDetail", context, { config: types_1.Sanitizers.masterConfig(null) });
                 }
                 else if (context.action === "edit") {
-                    const { masterAddress, masterPort } = context.getMaster("id");
-                    const master = this.system.findMaster(masterAddress, masterPort);
+                    context.getMaster("id");
+                    const master = this.system.findMaster(context["masterAddress"], context["masterPort"]);
                     if (master)
                         return this.ejs("masterDetail", context, { nodes: master.nodes, config: master.getConfig() });
                     else
@@ -430,8 +431,9 @@ class SmartApp extends socapp_1.SocApp {
     //////////////////////////////
     doUnits(context) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { masterAddress, masterPort } = context.getMaster("action");
-            const master = this.system.findMaster(masterAddress, masterPort);
+            // get masterAddress and Port
+            context.getMaster("action", "node");
+            const master = this.system.findMaster(context["masterAddress"], context["masterPort"]);
             if (context.action === "save") {
                 // store changes in units into master config
                 this.updateUnits(master, context.getParam(kNode), context.params);
@@ -440,7 +442,7 @@ class SmartApp extends socapp_1.SocApp {
             }
             if (context.action === "cancel") {
                 // return to previous screen -> show master info + list of nodes.
-                context.id = masterAddress + ":" + masterPort;
+                context.id = context["masterAddress"] + ":" + context["masterPort"];
                 context.request = "masters";
                 context.action = "edit";
                 return this.doRequest(context);
@@ -455,13 +457,29 @@ class SmartApp extends socapp_1.SocApp {
                 const response = yield this.doPress(master, logicalNodeAddress, logicalAddress, context.getParam(kIntValue));
                 return this.json(response);
             }
-            else {
+            else { // context.action === "node"
                 // reponding to  /units/[master ip address:port]/[logical node address]
                 const nodeLogicalAddress = parseInt(context.id);
                 let response = yield this.getNodeInfo(master, nodeLogicalAddress);
-                return this.ejs("nodeDetail", context, Object.assign({ masterAddress, masterPort }, response));
+                let N = this.sortCopy(response.node, context);
+                return this.ejs("nodeDetail", context, { message: response.message, node: N });
             }
         });
+    }
+    sortCopy(N, context) {
+        // only need to re-sort if onAddress is requested, units should always be sorted on name
+        const S = context["sortOnAddr"] = context.getParam({ name: "sortOnAddr", type: "string", default: "N" });
+        if (S === "Y") {
+            // don't sort the original array / node
+            if (N.units) {
+                const units = N.units.map(u => u);
+                N = new protocol_1.Node(N.master, N);
+                N.units = units;
+                N.nrUnits = units.length;
+                N.units.sort((a, b) => a.logicalAddress - b.logicalAddress);
+            }
+        }
+        return N;
     }
     updateUnits(master, nodeLogicalAddress, params) {
         let node = this.system.findNode(master, nodeLogicalAddress);

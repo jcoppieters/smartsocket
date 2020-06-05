@@ -30,6 +30,10 @@ inherited versions of smartApp
 - store scenes and execute them on status changes
 - add http switches (next to smappee - mqqt) like Shelly
 
+## v5.0.5, June 2020, Johan, feature release
+- added "Condition" moods
+- sort on logical unit address
+- added: #, *, ! type modifiers
 
 
 ## Hardware 
@@ -43,7 +47,7 @@ and (if configured) to a Smappee Infinity.
   * select desired nodes / units to use with
   * setup the IP address of the Smappee
   * configure rules for the Smappee (high, low values + Duotecno message — see example below)
-  * control remote plugs
+  * control remote Smappee plugs, remote Shelly switches
 
 * Raspberry runs a homebridge server
   * allowing homekit to connect
@@ -62,20 +66,21 @@ and (if configured) to a Smappee Infinity.
 
 
 ## How to set up
-1. Configure IP address of the Raspberry on the SDCard on a PC or Mac (put it in, edit cmdline.txt and you’re done), perhaps DHCP?
+1. Configure IP address of the Raspberry on the SDCard on a PC or Mac (put it in, edit cmdline.txt and you’re done), perhaps DHCP? WiFi?
 2. Put it into the Raspberry and boot it up
 3. Connect with a web browser to it’s address on port 5002 (ex: http://192.168.1.71:5002 ) to start configuring.
 4. Configure the IP addresses of the Duotecno’s IP Nodes that you want to use as main database node, incl port and password.
 5. Configure the nodes you want to use and for each node the units you want to export to homekit, new nodes are highlighted.
 6. (optional from here) Configure the IP address of a Smappee infinity
 7. Add rules to the Smappee config to execute commands (mood, light, …) when exceeding a defined high or low of a specific channel.
+8. Add switches, see below for status callback's
 
 
 ## Setting units
 
-http://[ip of Raspberry]:[port of Raspberry]/units/set?master=[ip of duotecno node]&port=[port of duotecno node]&unit=[node and unit logical address]&value=[Y/N/0/1... other value]
+http://[ip of Raspberry]:[port of Raspberry]/units/set?master=[ip of duotecno node]:[port of duotecno node]&unit=[node logical address]:[unit logical address]&value=[Y/N/0/1... other value]
 
-Example: http://localhost:5002/units/set?master=192.168.0.98&port=5001&unit=0x10;0x1&value=1
+Example: http://192.168.0.99:5002/units/set?master=192.168.0.98:5001&unit=0x3;0x1c&value=1
 
 ## Giving switch url for http switches
 
@@ -104,7 +109,7 @@ sudo dd if=~/Desktop/raspberrypi.dmg of=/dev/disk2
 ```
 
 
-## Install on ARM7
+## Install on ARM7/8/9
 
 ### make sd card
 download rasbian-stretch-lite.img from https://www.raspberrypi.org/downloads/raspbian/
@@ -287,71 +292,3 @@ DEBUG=* homebridge -D
 ```
 sudo shutdown -h now
 ```
-
-
-## Client Example:
-
-    private socket: WebSocket;
-
-    async open() {
-      return new Promise((resolve, reject) => {
-        try {
-          ////////////////////////////////
-          // try to open the connection //
-          this.log("opening connection to the SmartSocket Server");
-          const wsserver = this.system.config.socketserver + ":" + this.system.config.socketport;
-          const tcpserver = this.config.address + ":" + this.config.port;
-          this.socket = new WebSocket("ws://" + wsserver + "/" + tcpserver);
-          if (!this.socket) throw(new Error("could create new socket"));
-
-          ///////////////////////
-          // set data listener //
-          this.socket.onmessage = (message) => {
-            this.handleData(message.data);
-          };
-
-          ///////////////////////////
-          // set an error listener //
-          this.socket.onerror = (err) => {
-            this.err("Socket: " + err);
-          };
-
-          ///////////////////////////////////////////
-          // set end: the server closed the socket //
-          this.socket.onclose = () => {
-            this.isOpen = false;
-            this.isLoggedIn = false;
-            this.log("end -> socket got disconnected");
-
-            if (!this.closeRequested) {
-              // unexpected close
-              this.err("Socket: closed unexpectedly");
-            }
-          };
-
-          this.socket.onopen = () => {
-            this.isOpen = true;
-
-            // request a connection to the real socket
-            this.log("connection open on " + this.config.address + " on port " + this.config.port);
-            
-            // resolve our promise with the opened socket
-            resolve(this.socket);
-          };
-
-
-        } catch(e) {
-          this.err("Failed to open a connection on port " + this.getPort());
-          reject(e);
-        }
-      });
-    }
-
-    // send data to the tcp sockter over the websocket proxy
-    try {
-      socket.send(data);
-    } catch(err) {
-      console.log("error sending through socket " + err.message);
-    }
-
-

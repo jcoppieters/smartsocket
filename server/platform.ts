@@ -184,6 +184,7 @@ export class Platform extends Base {
           break;
 
         case UnitType.kMood:
+        case UnitType.kCondition:
           this.accessoryList.push( new Mood(logger, this.homebridge, unit) );
           break;
 
