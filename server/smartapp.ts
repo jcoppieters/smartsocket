@@ -375,7 +375,7 @@ export class SmartApp extends SocApp {
     if (parts.length > (inx))
       base += parts[inx];
 
-    this.log("Switch: " + url + " -> " + value + " -> " + base);
+    this.log("Switch: " + value + " -> " + base);
     this.wget(base);
   }
 
