@@ -381,8 +381,8 @@ export class SmartApp extends SocApp {
 
   wget(url: string) {
     try {
-    fetch(url).then(r => this.log("http switch OK -> " + r))
-              .catch(e => this.log("http switch NOK -> " + e));
+    fetch(url).then(r => this.log("http switch OK -> " + JSON.stringify(r)))
+              .catch(e => this.log("http switch NOK -> " + JSON.stringify(e)));
     } catch (e) {
       this.log("Error " + e.message + ", calling url: " + url);
     }
