@@ -176,8 +176,8 @@ export class Master extends Base {
 
   async login() {
     return new Promise((resolve, reject) => {
-      const message = Protocol.buildLogin(this.config.password) 
       try {
+        const message = Protocol.buildLogin(this.config.password) 
         Protocol.write(this.socket, message);
         // to be called when logged in
         this.resolveLogin = resolve;

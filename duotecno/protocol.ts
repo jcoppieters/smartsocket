@@ -574,7 +574,7 @@ export const Protocol = {
 
 
   buildLogin: function(password: string): Message {
-    password = password || this.config.password;
+    password = password || "";
     return [Cmd.Login, reqConnect, password.length, 
             ...password.split('').map(c => c.charCodeAt(0))];
   },

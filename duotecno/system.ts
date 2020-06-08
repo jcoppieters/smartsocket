@@ -52,7 +52,7 @@ export class System extends Base {
     for (let inx = 0; inx < this.config.cmasters.length; inx++) {
       try {
         if (this.config.cmasters[inx].active)
-          await this.openMaster(this.config.cmasters[inx], inx, readDB);
+          await this.openMaster(this.config.cmasters[inx], readDB);
       } catch(err) {
         this.log(err);
       }
@@ -64,13 +64,14 @@ export class System extends Base {
     }  
   }
 
-  async openMaster(config: MasterConfig, inx: number, readDB: boolean = false): Promise<Master> {
+  async openMaster(config: MasterConfig, readDB: boolean = false): Promise<Master> {
     const master = new Master(this, config);
     this.masters.push(master);
-    try {
-      // check for old configs that don't contain the active flag
-      if ((typeof master.config.active === "boolean") && (!master.config.active)) return;
 
+    // check for old configs that don't contain the active flag
+    if ((typeof master.config.active === "boolean") && (!master.config.active)) return;
+
+    try {
       this.log("opening master: " + master.getAddress());
       await master.open();
       if (! await master.login()) throw(new Error("Failed to log in"));
@@ -87,21 +88,23 @@ export class System extends Base {
   }
 
   async closeMaster(master: Master) {
-    // non-existing master or not open -> do nothing
-    if ((! master) || (!master.isOpen)) return;
+    // non-existing master -> do nothing
+    if (! master) return;
 
     // find its index (we need it to delete it from the master list)
     let inx = this.findMasterInx(master);
 
-    // close
-    try {
-      await master.close();
-    } catch(e) {
-      this.err("failed to close master on " + master.getAddress() + ":" + master.getConfig().port);
+    // close if open
+    if (master.isOpen) {
+      try {
+        await master.close();
+      } catch(e) {
+        this.err("failed to close master on " + master.getAddress() + ":" + master.getPort());
+      }
     }
 
     // remove from list
-    if (inx > -1)
+    if (inx >= 0)
       this.masters.splice(inx, 1);
   }
 
@@ -123,15 +126,19 @@ export class System extends Base {
     // store in config if not yet known
     if (inx < 0) {
       this.config.cmasters.push(cmaster);
-      inx = this.masters.length;
+      inx = this.masters.length-1;
 
     } else {
-      // close to re-open
-      await this.closeMaster(this.masters[inx]);
+      // close to re-open (master is deleted from the master array)
+      const master = this.findMaster(cmaster.address, cmaster.port);
+      await this.closeMaster(master);
+
+      // update the config
       this.config.cmasters[inx] = cmaster;
     }
     this.writeConfig();
-    return await this.openMaster(cmaster, inx);
+    // master is openened and added to the master array
+    return await this.openMaster(cmaster);
   }
 
   async deleteMaster(master: Master) {
@@ -141,7 +148,10 @@ export class System extends Base {
     // remove from the config
     let inx = this.findCMasterInx(masterAddress, masterPort);
     if (inx >= 0) {
-      // remove the master (from the master list and the config list), 
+      // remove from the active masters
+      await this.closeMaster(master);
+
+      // remove the master from the config list
       this.config.cmasters.splice(inx, 1);
 
       // remove it's units from the config
@@ -153,20 +163,6 @@ export class System extends Base {
       this.err("didn't find the master " + master.getAddress() + ":" + master.getConfig().port + " in the config");
     }
 
-    // remove from the active masters
-    inx = this.findMasterInx(master);
-    if (inx >= 0) {
-      this.masters.splice(inx, 1);
-      try {
-        if (master.isOpen) {
-          await master.close();
-        }
-      } catch(e) {
-        this.err("failed to close master on " + master.getAddress() + ":" + master.getConfig().port);
-      }
-    } else {
-      this.err("didn't find the master " + master.getAddress() + ":" + master.getConfig().port + " in the active master list");
-    }
   }
 
   setActiveState(item: Node | Unit) {
