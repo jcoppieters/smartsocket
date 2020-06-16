@@ -1,6 +1,6 @@
 {
   "name": "homebridge-smartsystem",
-  "version": "5.0.7",
+  "version": "5.0.9",
   "description": "SmartServer (Proxy Websockets to TCP sockets, Smappee MQTT, Duotecno IP Nodes)",
   "main": "index.js",
   "author": "Johan Coppieters",
@@ -9,8 +9,6 @@
   "private": true,
   "scripts": {
     "start": "DEBUG=* homebridge -D -P '/Users/johan/Library/Mobile Documents/com~apple~CloudDocs/Projects/Duotecno/ssoc'",
-    "deploy": "scp -r www/* root@akiworks.be:/usr/local/nodejs/smartsocket/www",
-    "addwww": "cp -r www/* '/Users/johan/Library/Mobile Documents/com~apple~CloudDocs/Projects/Duotecno/ssoc/www'"
   },
   "engines": {
     "node": ">=8.0.0",

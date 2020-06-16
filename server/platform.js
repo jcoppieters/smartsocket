@@ -105,10 +105,12 @@ class Platform extends base_1.Base {
         }
     }
     updateState(unit) {
-        this.log("received updateState " + unit.getName());
+        this.log("received updateState " + unit.getName() + ", status = " + unit.status + ", value = " + unit.value);
         const accessory = this.accessoryList.find((acc) => unit.isUnit(acc.unit));
-        if (accessory)
+        if (accessory) {
+            this.log("passing to homekit accessory");
             accessory.updateState();
+        }
     }
     addMasters(nr) {
         this.log("received update -> addMasters: " + nr);

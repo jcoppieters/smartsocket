@@ -110,9 +110,12 @@ export class Platform extends Base {
   }
 
   updateState(unit: Unit) {
-    this.log("received updateState " + unit.getName());
+    this.log("received updateState " + unit.getName() + ", status = " + unit.status + ", value = " + unit.value);
     const accessory = this.accessoryList.find((acc: Accessory) => unit.isUnit(acc.unit));
-    if (accessory) accessory.updateState();
+    if (accessory) {
+      this.log("passing to homekit accessory");
+      accessory.updateState();
+    }
   }
 
   addMasters(nr: number) {
