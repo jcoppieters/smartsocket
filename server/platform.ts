@@ -113,7 +113,6 @@ export class Platform extends Base {
     this.log("received updateState " + unit.getName() + ", status = " + unit.status + ", value = " + unit.value);
     const accessory = this.accessoryList.find((acc: Accessory) => unit.isUnit(acc.unit));
     if (accessory) {
-      this.log("passing to homekit accessory");
       accessory.updateState();
     }
   }
@@ -121,6 +120,15 @@ export class Platform extends Base {
   addMasters(nr: number) {
     this.log("received update -> addMasters: " + nr);
     this.ready = true;
+
+    // trigger status request of all active units in 2 seconds.
+    setTimeout( async() => {
+      let units = this.system.allActiveUnits();
+      for (let u of units) {
+        await u.node.master.requestUnitStatus(u)
+      }
+    }, 2000);
+    
   }
 
   accessories(callback) {
@@ -179,11 +187,11 @@ export class Platform extends Base {
           break;
 
         case UnitType.kSwitchingMotor:
-          this.accessoryList.push( new GarageDoor(logger, this.homebridge, unit) );
+          this.accessoryList.push( new WindowCovering(logger, this.homebridge, unit) );
           break;
 
         case UnitType.kGarageDoor:
-          this.accessoryList.push( new WindowCovering(logger, this.homebridge, unit) );
+          this.accessoryList.push( new GarageDoor(logger, this.homebridge, unit) );
           break;
 
         case UnitType.kMood:

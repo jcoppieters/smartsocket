@@ -108,13 +108,19 @@ class Platform extends base_1.Base {
         this.log("received updateState " + unit.getName() + ", status = " + unit.status + ", value = " + unit.value);
         const accessory = this.accessoryList.find((acc) => unit.isUnit(acc.unit));
         if (accessory) {
-            this.log("passing to homekit accessory");
             accessory.updateState();
         }
     }
     addMasters(nr) {
         this.log("received update -> addMasters: " + nr);
         this.ready = true;
+        // trigger status request of all active units in 2 seconds.
+        setTimeout(() => __awaiter(this, void 0, void 0, function* () {
+            let units = this.system.allActiveUnits();
+            for (let u of units) {
+                yield u.node.master.requestUnitStatus(u);
+            }
+        }), 2000);
     }
     accessories(callback) {
         // waiting until the database is complete
@@ -164,10 +170,10 @@ class Platform extends base_1.Base {
                         this.accessoryList.push(new bulb_1.Bulb(logger, this.homebridge, unit));
                         break;
                     case protocol_1.UnitType.kSwitchingMotor:
-                        this.accessoryList.push(new garagedoor_1.GarageDoor(logger, this.homebridge, unit));
+                        this.accessoryList.push(new windowcovering_1.WindowCovering(logger, this.homebridge, unit));
                         break;
                     case protocol_1.UnitType.kGarageDoor:
-                        this.accessoryList.push(new windowcovering_1.WindowCovering(logger, this.homebridge, unit));
+                        this.accessoryList.push(new garagedoor_1.GarageDoor(logger, this.homebridge, unit));
                         break;
                     case protocol_1.UnitType.kMood:
                     case protocol_1.UnitType.kCondition:

@@ -396,7 +396,7 @@ export class SmartApp extends SocApp {
   async doServices(context: Context): Promise<HttpResponse> {
     let units = this.system.allActiveUnits();
     for (let u of units) {
-      await u.node.master.requestUnitStatus(u)
+      await u.node.master.requestUnitStatus(u);
     }
     return this.ejs("serviceList", context, { units });
   }
