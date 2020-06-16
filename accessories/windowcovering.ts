@@ -10,6 +10,42 @@ import { Unit, UnitState, UnitMotorCmd } from "../duotecno/protocol";
 // - duotecno.value: kOpen = 2, kClosed = 1, kClosing = 3, kOpening = 4
 //
 // Example: https://github.com/dxdc/homebridge-blinds/blob/master/index.js
+//
+/*
+0|homebridge  | homebridge - set Characteristic.TargetPosition was called with value = 0
+0|homebridge  | homebridge - setUpDown, value =0 -> cmd=5
+0|homebridge  | sending: SetMotor - [182,5,3,28]
+0|homebridge  | received motor = 0
+0|homebridge  | homebridge - received updateState up/down, status = 0, value = 0
+0|homebridge  | homebridge - passing to homekit accessory
+0|homebridge  | homebridge - Received updateState from Master -> WindowCovering for SB 1 - up/down -> 0 / 0 -> passing: 50
+0|homebridge  | received motor = 3
+0|homebridge  | homebridge - received updateState up/down, status = 3, value = 3
+0|homebridge  | homebridge - passing to homekit accessory
+0|homebridge  | homebridge - Received updateState from Master -> WindowCovering for SB 1 - up/down -> 3 / 3 -> passing: 50
+0|homebridge  | received motor = 1
+0|homebridge  | homebridge - received updateState up/down, status = 1, value = 1
+0|homebridge  | homebridge - passing to homekit accessory
+0|homebridge  | homebridge - Received updateState from Master -> WindowCovering for SB 1 - up/down -> 1 / 1 -> passing: 0
+
+
+0|homebridge  | homebridge - set Characteristic.TargetPosition was called with value = 100
+0|homebridge  | homebridge - setUpDown, value =100 -> cmd=4
+0|homebridge  | sending: SetMotor - [182,4,3,28]
+0|homebridge  | received motor = 0
+0|homebridge  | homebridge - received updateState up/down, status = 0, value = 0
+0|homebridge  | homebridge - passing to homekit accessory
+0|homebridge  | homebridge - Received updateState from Master -> WindowCovering for SB 1 - up/down -> 0 / 0 -> passing: 50
+0|homebridge  | received motor = 4
+0|homebridge  | homebridge - received updateState up/down, status = 4, value = 4
+0|homebridge  | homebridge - passing to homekit accessory
+0|homebridge  | homebridge - Received updateState from Master -> WindowCovering for SB 1 - up/down -> 4 / 4 -> passing: 50
+0|homebridge  | received motor = 2
+0|homebridge  | homebridge - received updateState up/down, status = 2, value = 2
+0|homebridge  | homebridge - passing to homekit accessory
+0|homebridge  | homebridge - Received updateState from Master -> WindowCovering for SB 1 - up/down -> 2 / 2 -> passing: 100
+
+*/
 
 
 export class WindowCovering extends Accessory {

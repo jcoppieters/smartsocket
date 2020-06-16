@@ -2,6 +2,10 @@ import { Accessory } from "./accessory";
 import { LogFunction } from "../duotecno/types";
 import { Unit, UnitState, UnitMotorCmd } from "../duotecno/protocol";
 
+////////////////
+// DEPRECATED //  -> it's either a (garage) door or a window covering -- Johan Jun 2020
+////////////////
+
 // Johan Coppieters Jan 2019
 //
 // UpDown

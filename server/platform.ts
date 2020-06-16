@@ -179,11 +179,11 @@ export class Platform extends Base {
           break;
 
         case UnitType.kSwitchingMotor:
-          this.accessoryList.push( new WindowCovering(logger, this.homebridge, unit) );
+          this.accessoryList.push( new GarageDoor(logger, this.homebridge, unit) );
           break;
 
         case UnitType.kGarageDoor:
-          this.accessoryList.push( new GarageDoor(logger, this.homebridge, unit) );
+          this.accessoryList.push( new WindowCovering(logger, this.homebridge, unit) );
           break;
 
         case UnitType.kMood:

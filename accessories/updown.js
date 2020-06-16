@@ -2,6 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const accessory_1 = require("./accessory");
 const protocol_1 = require("../duotecno/protocol");
+////////////////
+// DEPRECATED //  -> it's either a (garage) door or a window covering -- Johan Jun 2020
+////////////////
 // Johan Coppieters Jan 2019
 //
 // UpDown
