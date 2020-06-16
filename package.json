@@ -8,7 +8,7 @@
   "license": "ISC",
   "private": true,
   "scripts": {
-    "start": "DEBUG=* homebridge -D -P '/Users/johan/Library/Mobile Documents/com~apple~CloudDocs/Projects/Duotecno/ssoc'",
+    "start": "DEBUG=* homebridge -D -P '/Users/johan/Library/Mobile Documents/com~apple~CloudDocs/Projects/Duotecno/ssoc'"
   },
   "engines": {
     "node": ">=8.0.0",
