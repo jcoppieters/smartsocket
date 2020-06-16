@@ -771,7 +771,7 @@ ConfigPage = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     <config-masters *ngIf="what === 'masters'"></config-masters>
 
     <p class="version">
-      <span>v2.0.0b1 © Johan Coppieters &amp; Duotecno</span>
+      <span>v2.0.0b2 © Johan Coppieters &amp; Duotecno</span>
       <span class="manual">Download the <a href="https://www.duotecno.be/wp-content/uploads/2020/05/Duotecno-smartbox-app-1.pdf">manual</a></span>
     </p>
   </ion-content>
@@ -865,8 +865,8 @@ EditMasterComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 
   <ion-footer class="ion-padding">
     <ion-buttons>
-      <ion-button (click)="save()" fill="solid" color="primary">{{"General.Save" |_ }}</ion-button>
-      <ion-button (click)="cancel()" fill="outline" color="primary">{{"General.Cancel" |_ }}</ion-button>
+      <ion-button (click)="save()" color="secondary">{{"General.Save" |_ }}</ion-button>
+      <ion-button (click)="cancel()" color="primary">{{"General.Cancel" |_ }}</ion-button>
     </ion-buttons>
   </ion-footer>
   `
@@ -962,7 +962,7 @@ EditNode = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 
     <ion-footer class="ion-padding">
       <ion-buttons>
-        <ion-button (click)="done()" expand="block">{{ "General.Done" |_ }}</ion-button>
+        <ion-button (click)="done()" color="secondary">{{ "General.Done" |_ }}</ion-button>
       </ion-buttons>
     </ion-footer>
   `,

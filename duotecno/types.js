@@ -60,7 +60,7 @@ exports.kEmptyRule = {
     actions: [Object.assign(Object.assign({}, exports.kEmptyUnit), { value: false }), Object.assign(Object.assign({}, exports.kEmptyUnit), { value: 50 }), Object.assign(Object.assign({}, exports.kEmptyUnit), { value: true })]
 };
 ;
-exports.kEmptySwitch = Object.assign(Object.assign({}, exports.kEmptyUnit), { plug: 0, type: SwitchType.kNoType });
+exports.kEmptySwitch = Object.assign(Object.assign({}, exports.kEmptyUnit), { plug: 0, type: SwitchType.kNoType, unitName: "", name: "" });
 ;
 ;
 ;
@@ -139,6 +139,7 @@ exports.Sanitizers = {
             config = {};
         config.port = config.port || 5002;
         config.switches = config.switches || [];
+        config.switches.forEach(sw => this.switchConfig(sw));
         config.debug = config.debug || false;
         return config;
     },
@@ -146,19 +147,28 @@ exports.Sanitizers = {
         if (!config)
             config = {};
         config.rules = config.rules || [];
+        config.rules.forEach(sw => this.ruleConfig(sw));
         config.address = config.address || "";
         config.uid = config.uid || "--none--";
         config.debug = config.debug || false;
         return config;
     },
     switchConfig: function (aSwitch) {
-        aSwitch.id = makeInt(aSwitch.id);
-        aSwitch.logicalAddress = makeInt(aSwitch.logicalAddress);
-        aSwitch.logicalNodeAddress = makeInt(aSwitch.logicalNodeAddress);
-        if (typeof aSwitch.name != "string")
-            aSwitch.name = "";
+        this.unitDef(aSwitch);
+        aSwitch.name = aSwitch.name || "--";
+        aSwitch.unitName = aSwitch.unitName || "";
         aSwitch.value = aSwitch.value || 0;
+        aSwitch.type = aSwitch.type || SwitchType.kNoType;
+        // don't destroy 0 plug
+        if (typeof aSwitch.plug === "string")
+            aSwitch.plug = aSwitch.plug || "";
         return aSwitch;
+    },
+    makeSwitchConfig: function (aSwitch) {
+        return this.switchConfig({ name: aSwitch.name, unitName: aSwitch.unitName,
+            masterAddress: aSwitch.masterAddress, masterPort: aSwitch.masterPort,
+            logicalAddress: aSwitch.logicalAddress, logicalNodeAddress: aSwitch.logicalNodeAddress,
+            type: aSwitch.type, plug: aSwitch.plug });
     },
     ruleConfig(rule) {
         rule.channel = makeInt(rule.channel);

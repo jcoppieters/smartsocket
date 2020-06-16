@@ -115,7 +115,7 @@ export class Platform extends Base {
     if (accessory) accessory.updateState();
   }
 
-  async addMasters(nr: number) {
+  addMasters(nr: number) {
     this.log("received update -> addMasters: " + nr);
     this.ready = true;
   }

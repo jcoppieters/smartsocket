@@ -1417,22 +1417,21 @@ __webpack_require__.r(__webpack_exports__);
 
 let DimmerControl = class DimmerControl {
     constructor() {
-        this.force = false;
-    }
-    visible() {
-        return this.force; // || this.service.status;
+        this.showSlider = false;
     }
     arrow() {
-        return (this.visible()) ? 'chevron-up' : 'chevron-down';
+        return (this.showSlider) ? 'chevron-up' : 'chevron-down';
     }
     labelClick() {
-        this.force = !this.force;
+        this.showSlider = !this.showSlider;
     }
     change() {
+        console.log("change: " + this.service.status);
         if (this.service.status == 2) {
+            // don't do anything on timed PIR status
         }
         else {
-            this.service.setState(!!this.service.status);
+            this.service.setState(!!this.service.status); // make boolean
         }
     }
     changeValue(delta) {
@@ -1454,9 +1453,9 @@ DimmerControl = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         <ion-icon class="state" *ngIf="service.status == 2" name="time"></ion-icon>
       </ion-label>
 
-      <ion-toggle [(ngModel)]="service.status" (ionBlur)="change()"></ion-toggle>
+      <ion-toggle [(ngModel)]="service.status" (ionChange)="change()"></ion-toggle>
     </ion-item>
-    <ion-item lines="none" class="dimmer__slider" *ngIf="visible()">
+    <ion-item lines="none" class="dimmer__slider" *ngIf="showSlider">
       <ion-range min="1" max="100" debounce="400" [(ngModel)]="service.value" (ionChange)="changeValue()">
         <ion-icon slot="start" name="remove" name="remove" (click)="changeValue(-5)"></ion-icon>
         <ion-icon slot="end" name="add" name="add" (click)="changeValue(5)"></ion-icon>
@@ -1579,11 +1578,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let SwitchControl = class SwitchControl {
-    change(unit) {
+    change() {
+        console.log("change: " + this.service.status);
         if (this.service.status == 2) {
+            // don't do anything on timed PIR status
         }
         else {
-            unit.setState(unit.status);
+            this.service.setState(!!this.service.status); // make boolean
         }
     }
     toggle(unit) {
@@ -1602,7 +1603,7 @@ SwitchControl = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
       </ion-label>
 
       <ion-toggle [(ngModel)]="service.status" 
-                  (ionBlur)="change(service)"></ion-toggle>
+                  (ionChange)="change()"></ion-toggle>
     </ion-item>
   `,
         styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./switch.scss */ "./src/app/rendering/switch.scss")).default]
@@ -2314,8 +2315,8 @@ class Master extends _logger__WEBPACK_IMPORTED_MODULE_3__["Logger"] {
     login() {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
             return new Promise((resolve, reject) => {
-                const message = _protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildLogin(this.config.password);
                 try {
+                    const message = _protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildLogin(this.config.password);
                     _protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].write(this.socket, message);
                     // to be called when logged in
                     this.resolveLogin = resolve;
@@ -3229,7 +3230,7 @@ const Protocol = {
         return nextRec;
     },
     buildLogin: function (password) {
-        password = password || this.config.password;
+        password = password || "";
         return [Cmd.Login, reqConnect, password.length,
             ...password.split('').map(c => c.charCodeAt(0))];
     },
@@ -3462,7 +3463,7 @@ let System = class System extends _logger__WEBPACK_IMPORTED_MODULE_5__["Logger"]
         // don"t wait for the real open of the sockets
         // some errors: the socket to the proxy opens, but the socket to the hardware fails
         for (let inx = 0; inx < this.config.cmasters.length; inx++) {
-            this.openMaster(this.config.cmasters[inx], inx);
+            this.openMaster(this.config.cmasters[inx]);
         }
     }
     closeMasters() {
@@ -3472,11 +3473,12 @@ let System = class System extends _logger__WEBPACK_IMPORTED_MODULE_5__["Logger"]
             }
         });
     }
-    openMaster(config, inx) {
+    openMaster(config) {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
             const master = new _master__WEBPACK_IMPORTED_MODULE_2__["Master"](this, config, this.toastCtrl);
-            this.masters[inx] = master;
-            if (!master.config.active)
+            this.masters.push(master);
+            // check for old configs that don't contain the active flag
+            if ((typeof master.config.active === "boolean") && (!master.config.active))
                 return;
             this.log("opening master: " + master.getAddress());
             if (yield master.open()) {
@@ -3498,19 +3500,21 @@ let System = class System extends _logger__WEBPACK_IMPORTED_MODULE_5__["Logger"]
     closeMaster(master) {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
             // non-existing master -> do nothing... strange...
-            if ((!master) || (!master.isOpen))
+            if (!master)
                 return;
             // find its index (we need it to delete it from the list)
             let inx = this.findMasterInx(master);
-            // close
-            try {
-                yield master.close();
-            }
-            catch (e) {
-                this.err("failed to close master on " + master.getAddress() + ":" + master.getConfig().port);
+            // close if open
+            if (master.isOpen) {
+                try {
+                    yield master.close();
+                }
+                catch (e) {
+                    this.err("failed to close master on " + master.getAddress() + ":" + master.getPort());
+                }
             }
             // remove from list
-            if (inx > -1) {
+            if (inx >= 0) {
                 this.masters.splice(inx, 1);
             }
         });
@@ -3523,23 +3527,25 @@ let System = class System extends _logger__WEBPACK_IMPORTED_MODULE_5__["Logger"]
     //////////////////
     addMaster(cmaster) {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
-            if (!cmaster.address) {
+            if (!cmaster.address)
                 return;
-            }
             // see if this master already exists
             let inx = this.findCMasterInx(cmaster.address, cmaster.port);
             // store in config if not yet known
             if (inx < 0) {
                 this.config.cmasters.push(cmaster);
-                inx = this.masters.length;
+                inx = this.masters.length - 1;
             }
             else {
-                // close to re-open
-                yield this.closeMaster(this.masters[inx]);
+                // close to re-open (master is deleted from the master array)
+                const master = this.findMaster(cmaster.address, cmaster.port);
+                yield this.closeMaster(master);
+                // update the config
                 this.config.cmasters[inx] = cmaster;
             }
             this.writeConfig();
-            return yield this.openMaster(cmaster, inx);
+            // master is openened and added to the master array
+            return yield this.openMaster(cmaster);
         });
     }
     deleteMaster(master) {
@@ -3548,11 +3554,16 @@ let System = class System extends _logger__WEBPACK_IMPORTED_MODULE_5__["Logger"]
             const masterPort = master.getPort();
             let inx = this.findCMasterInx(masterAddress, masterPort);
             if (inx >= 0) {
+                // remove from the active masters
                 yield this.closeMaster(master);
-                // remove the master, it's nodes and their units from the config
+                // remove the master from the config list
                 this.config.cmasters.splice(inx, 1);
+                // remove it's units from the config
                 this.config.cunits = this.config.cunits.filter(unit => (unit.masterPort != masterPort) || (unit.masterAddress != masterAddress));
                 this.writeConfig();
+            }
+            else {
+                this.err("didn't find the master " + master.getAddress() + ":" + master.getConfig().port + " in the config");
             }
         });
     }

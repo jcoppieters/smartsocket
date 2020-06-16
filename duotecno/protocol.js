@@ -523,7 +523,7 @@ exports.Protocol = {
         return nextRec;
     },
     buildLogin: function (password) {
-        password = password || this.config.password;
+        password = password || "";
         return [Cmd.Login, reqConnect, password.length,
             ...password.split('').map(c => c.charCodeAt(0))];
     },

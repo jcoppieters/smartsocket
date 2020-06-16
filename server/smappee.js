@@ -49,10 +49,7 @@ class Smappee extends base_1.Base {
         this.client = this.subscribe(this.config.address, this.config.uid);
     }
     copyAndSanitizeRules(rules) {
-        this.rules = rules || [];
-        this.rules.forEach(rule => {
-            types_1.Sanitizers.ruleConfig(rule);
-        });
+        this.rules = (rules || []).map(rule => types_1.Sanitizers.ruleConfig(Object.assign({}, rule)));
     }
     subscribe(address, uid) {
         let client = mqtt.connect('mqtt:' + address);

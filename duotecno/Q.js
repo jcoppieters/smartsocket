@@ -10,7 +10,7 @@ class Q {
         const len = this.queue.length;
         this.queue.push(fn);
         // start timer to execute this functon if nobody else calls "do"
-        this.logger("*Q* exec, we've put stuff in the queue, start " + (len ? "long timer" : "short timer"));
+        // this.logger("*Q* exec, we've put stuff in the queue, start " + (len ? "long timer" : "short timer"));
         this.startWaiter(len ? 500 : 0);
     }
     endWaiter() {
@@ -28,7 +28,7 @@ class Q {
         }, mSecs);
     }
     do() {
-        this.logger("*Q* Do, qlen=" + this.queue.length);
+        // this.logger("*Q* Do, qlen="+ this.queue.length);
         // Get the oldest function and execute
         if (this.queue.length > 0) {
             const fn = this.queue[0];

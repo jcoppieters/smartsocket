@@ -54,15 +54,16 @@ export class SmartApp extends SocApp {
     this.system.emitter.on('update', this.informChange.bind(this));
 
     // get some configurated params
-    this.readConfig();
     this.port = this.config.port || this.port || 80;
     this.debug = !! this.config.debug;
     
     this.system = system;
-    // if (system) system.smartapp = this;
     this.smappee = smappee;
     this.platform = platform;
-    
+
+    // when all masters are loaded -> attach units to the switches
+    this.system.emitter.on('ready', this.initSwitchUnits.bind(this));
+
     this.addFile("masterList", "./server/views/master-list.ejs", "text/html");
     this.addFile("masterDetail", "./server/views/master-detail.ejs", "text/html");
     this.addFile("nodeDetail", "./server/views/node-details.ejs", "text/html");
@@ -75,9 +76,19 @@ export class SmartApp extends SocApp {
     this.addFile("materializeCSS", "./server/views/assets/materialize.min.css", "text/css");
     this.addFile("materializeJS", "./server/views/assets/materialize.min.js", "text/javascript");
     this.addFile("favicon", "./server/views/assets/favicon.ico", "image/x-icon");
+  }
 
-    this.copyAndSanitizeSwitches(this.config.switches);
+  writeConfig() {
+    // copy switches into config, eliminate the runtime stuff (like unit)
+    this.config.switches = this.switches.map(s => Sanitizers.makeSwitchConfig(s));
+    super.writeConfig();
+  }
 
+  readConfig() {
+    super.readConfig();
+
+    // copy switches from config
+    this.switches = this.config.switches.map(s => Sanitizers.switchConfig(s));
   }
 
   //////////////////////////////
@@ -117,12 +128,6 @@ export class SmartApp extends SocApp {
     }
   }
 
-  copyAndSanitizeSwitches(switches: Array<Switch>) {
-    this.switches = switches || [];
-    this.switches.forEach( aSwitch => {
-      Sanitizers.switchConfig(aSwitch);
-    });
-  }
 
   scrapeUnit(context: Context, boundary: string): Action {
     context.getMaster("action");
@@ -249,11 +254,16 @@ export class SmartApp extends SocApp {
   // Switches //
   //////////////
   initSwitchUnits() {
+    this.log("Init " + this.switches.length + " Switches -> add units");
+
     this.switches.forEach(swtch => {
       swtch.unit = swtch.unit || this.system.findUnit(this.system.findMaster(swtch.masterAddress, swtch.masterPort), swtch.logicalNodeAddress, swtch.logicalAddress);
       if ((this.smappee) && (swtch.type === SwitchType.kSmappee)) {
-        for(let key in this.smappee.plugs) {
-          if (parseInt(key) === swtch.plug) 
+        for (let key in this.smappee.plugs) {
+          // convert to numbers, better be safe then missing one...
+          const p = (typeof swtch.plug === "string") ? parseInt(swtch.plug) : swtch.plug;
+          const k = (typeof key === "string") ? parseInt(key) : key;
+          if (k === p) 
             swtch.value = this.smappee.plugs[key];
         };
       }
@@ -262,9 +272,6 @@ export class SmartApp extends SocApp {
 
   async doSwitches(context: Context): Promise<HttpResponse> {
     let inx: number = parseInt(context.id);
-
-    // new IP Nodes, hence Units could be online
-    this.initSwitchUnits();
 
     let message: string;
     try {
@@ -287,6 +294,10 @@ export class SmartApp extends SocApp {
       } else if (context.action === "set") {
         const state = context.getParam({name: "state", type: "string", default: "N"})
         this.setSwitch( inx, (state === "Y") );
+
+      } else {
+        // possible new IP Nodes, hence Units could be online
+        this.initSwitchUnits();
       }
 
     } catch(e) {
@@ -302,24 +313,14 @@ export class SmartApp extends SocApp {
         this.setSwitch(swtch, !!u.status);
       }
     });
-    /* old stuff
-    this.switches.forEach(swtch => {
-      const master = this.system.findMaster(swtch.masterAddress, swtch.masterPort);
-      if (master) {
-        const unit = this.system.findUnit(master, swtch.logicalNodeAddress, swtch.logicalAddress)
-        if (unit) {
-          this.setSwitch(swtch, !!u.status);
-        }
-      }
-    });
-    */
   }
 
   scrapeSwitch(context: Context): Switch {
-    const { name, masterAddress, masterPort, logicalAddress, logicalNodeAddress } = this.scrapeUnit(context, '');
+    const { name: unitName, masterAddress, masterPort, logicalAddress, logicalNodeAddress } = this.scrapeUnit(context, '');
     const plug = context.getParam({name: "plug", type: "string", default: "0" });
     const stype = context.getParam({name: "type", type: "string", default: SwitchType.kNoType });
-    return { name, masterAddress, masterPort, logicalAddress, logicalNodeAddress, type: stype, plug  };
+    const name = context.getParam({name: "name", type: "string", default: "--" });
+    return { name, unitName, masterAddress, masterPort, logicalAddress, logicalNodeAddress, type: stype, plug  };
   }
 
   updateSwitch(inx: number, swtch: Switch) {
@@ -346,7 +347,7 @@ export class SmartApp extends SocApp {
         swtch = this.switches[inx];
       }
     } else {
-      // a Swtich was passed as first param
+      // a Switch was passed as first param
       swtch = inx;
     }
 

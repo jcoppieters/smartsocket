@@ -373,7 +373,9 @@ export class System extends Base {
     this.stores = this.controls.filter(s => s.isUpDown());
 
     let complete = true;
-    //this.allMasters(m => m.allNodes(n => {if (n.nrUnits != n.units.length) complete = false; }))
+    // should be of all active masters, nodes and units !!
+    // this.allMasters(m => m.allNodes(n => {if (n.nrUnits != n.units.length) complete = false; }))
+    
     if (complete) {
       this.log("emitting READY");
       this.emitter.emit('ready', this.masters.length);

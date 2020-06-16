@@ -46,7 +46,7 @@ class System extends base_1.Base {
             for (let inx = 0; inx < this.config.cmasters.length; inx++) {
                 try {
                     if (this.config.cmasters[inx].active)
-                        yield this.openMaster(this.config.cmasters[inx], inx, readDB);
+                        yield this.openMaster(this.config.cmasters[inx], readDB);
                 }
                 catch (err) {
                     this.log(err);
@@ -61,14 +61,14 @@ class System extends base_1.Base {
             }
         });
     }
-    openMaster(config, inx, readDB = false) {
+    openMaster(config, readDB = false) {
         return __awaiter(this, void 0, void 0, function* () {
             const master = new master_1.Master(this, config);
             this.masters.push(master);
+            // check for old configs that don't contain the active flag
+            if ((typeof master.config.active === "boolean") && (!master.config.active))
+                return;
             try {
-                // check for old configs that don't contain the active flag
-                if ((typeof master.config.active === "boolean") && (!master.config.active))
-                    return;
                 this.log("opening master: " + master.getAddress());
                 yield master.open();
                 if (!(yield master.login()))
@@ -87,20 +87,22 @@ class System extends base_1.Base {
     }
     closeMaster(master) {
         return __awaiter(this, void 0, void 0, function* () {
-            // non-existing master or not open -> do nothing
-            if ((!master) || (!master.isOpen))
+            // non-existing master -> do nothing
+            if (!master)
                 return;
             // find its index (we need it to delete it from the master list)
             let inx = this.findMasterInx(master);
-            // close
-            try {
-                yield master.close();
-            }
-            catch (e) {
-                this.err("failed to close master on " + master.getAddress() + ":" + master.getConfig().port);
+            // close if open
+            if (master.isOpen) {
+                try {
+                    yield master.close();
+                }
+                catch (e) {
+                    this.err("failed to close master on " + master.getAddress() + ":" + master.getPort());
+                }
             }
             // remove from list
-            if (inx > -1)
+            if (inx >= 0)
                 this.masters.splice(inx, 1);
         });
     }
@@ -119,15 +121,18 @@ class System extends base_1.Base {
             // store in config if not yet known
             if (inx < 0) {
                 this.config.cmasters.push(cmaster);
-                inx = this.masters.length;
+                inx = this.masters.length - 1;
             }
             else {
-                // close to re-open
-                yield this.closeMaster(this.masters[inx]);
+                // close to re-open (master is deleted from the master array)
+                const master = this.findMaster(cmaster.address, cmaster.port);
+                yield this.closeMaster(master);
+                // update the config
                 this.config.cmasters[inx] = cmaster;
             }
             this.writeConfig();
-            return yield this.openMaster(cmaster, inx);
+            // master is openened and added to the master array
+            return yield this.openMaster(cmaster);
         });
     }
     deleteMaster(master) {
@@ -137,7 +142,9 @@ class System extends base_1.Base {
             // remove from the config
             let inx = this.findCMasterInx(masterAddress, masterPort);
             if (inx >= 0) {
-                // remove the master (from the master list and the config list), 
+                // remove from the active masters
+                yield this.closeMaster(master);
+                // remove the master from the config list
                 this.config.cmasters.splice(inx, 1);
                 // remove it's units from the config
                 this.config.cunits = this.config.cunits.filter(unit => (unit.masterPort != masterPort) || (unit.masterAddress != masterAddress));
@@ -145,22 +152,6 @@ class System extends base_1.Base {
             }
             else {
                 this.err("didn't find the master " + master.getAddress() + ":" + master.getConfig().port + " in the config");
-            }
-            // remove from the active masters
-            inx = this.findMasterInx(master);
-            if (inx >= 0) {
-                this.masters.splice(inx, 1);
-                try {
-                    if (master.isOpen) {
-                        yield master.close();
-                    }
-                }
-                catch (e) {
-                    this.err("failed to close master on " + master.getAddress() + ":" + master.getConfig().port);
-                }
-            }
-            else {
-                this.err("didn't find the master " + master.getAddress() + ":" + master.getConfig().port + " in the active master list");
             }
         });
     }
@@ -354,7 +345,8 @@ class System extends base_1.Base {
         this.moods = services.filter(s => (s.isMood() || s.isInput())).sort(compareN);
         this.stores = this.controls.filter(s => s.isUpDown());
         let complete = true;
-        //this.allMasters(m => m.allNodes(n => {if (n.nrUnits != n.units.length) complete = false; }))
+        // should be of all active masters, nodes and units !!
+        // this.allMasters(m => m.allNodes(n => {if (n.nrUnits != n.units.length) complete = false; }))
         if (complete) {
             this.log("emitting READY");
             this.emitter.emit('ready', this.masters.length);

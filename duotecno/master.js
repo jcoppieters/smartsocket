@@ -151,8 +151,8 @@ class Master extends base_1.Base {
     login() {
         return __awaiter(this, void 0, void 0, function* () {
             return new Promise((resolve, reject) => {
-                const message = protocol_1.Protocol.buildLogin(this.config.password);
                 try {
+                    const message = protocol_1.Protocol.buildLogin(this.config.password);
                     protocol_1.Protocol.write(this.socket, message);
                     // to be called when logged in
                     this.resolveLogin = resolve;

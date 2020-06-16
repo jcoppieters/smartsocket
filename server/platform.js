@@ -111,10 +111,8 @@ class Platform extends base_1.Base {
             accessory.updateState();
     }
     addMasters(nr) {
-        return __awaiter(this, void 0, void 0, function* () {
-            this.log("received update -> addMasters: " + nr);
-            this.ready = true;
-        });
+        this.log("received update -> addMasters: " + nr);
+        this.ready = true;
     }
     accessories(callback) {
         // waiting until the database is complete

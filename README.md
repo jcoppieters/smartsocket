@@ -35,6 +35,10 @@ inherited versions of smartApp
 - sort on logical unit address
 - added: #, *, ! type modifiers
 
+## v5.0.6, .7, .8
+- (6,7) Fixed small reported issues
+- (8) Bug fixes for saving switches
+- (8) added new app
 
 ## Hardware 
 A Raspberry Pi that connects to a Duotecno IP Node 

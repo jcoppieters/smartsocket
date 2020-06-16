@@ -167,11 +167,13 @@ export const kEmptyRule: Rule = {
 };
 
 export interface Switch extends UnitDef {
+  name: string,
+  unitName: string,
   type: SwitchType,
   plug: number | string,
   value?: number | boolean | string
 };
-export const kEmptySwitch: Switch = { ...kEmptyUnit, plug: 0, type: SwitchType.kNoType};
+export const kEmptySwitch: Switch = { ...kEmptyUnit, plug: 0, type: SwitchType.kNoType, unitName: "", name: ""};
 
 
 export interface SmartAppConfig extends BaseConfig {
@@ -300,6 +302,7 @@ export const Sanitizers = {
     if (!config) config = <SmartAppConfig>{};
     config.port = config.port || 5002;
     config.switches = config.switches || [];
+    config.switches.forEach(sw => this.switchConfig(sw));
     config.debug = config.debug || false;
     return config;
   },
@@ -307,6 +310,8 @@ export const Sanitizers = {
   smappee: function(config: SmappeeConfig): SmappeeConfig {
     if (!config) config = <SmappeeConfig>{};
     config.rules = config.rules || [];
+    config.rules.forEach(sw => this.ruleConfig(sw));
+
     config.address = config.address || "";
     config.uid = config.uid || "--none--";
     config.debug = config.debug || false;
@@ -314,13 +319,23 @@ export const Sanitizers = {
   },
 
   switchConfig: function(aSwitch): Switch {
-    aSwitch.id = makeInt(aSwitch.id);
-    aSwitch.logicalAddress = makeInt(aSwitch.logicalAddress);
-    aSwitch.logicalNodeAddress = makeInt(aSwitch.logicalNodeAddress);
-    if (typeof aSwitch.name != "string") aSwitch.name = "";
+    this.unitDef(aSwitch);
+    aSwitch.name = aSwitch.name || "--";
+    aSwitch.unitName = aSwitch.unitName || "";
     aSwitch.value = aSwitch.value || 0;
+    aSwitch.type = aSwitch.type || SwitchType.kNoType;
+    // don't destroy 0 plug
+    if (typeof aSwitch.plug === "string")
+      aSwitch.plug = aSwitch.plug || "";
 
     return aSwitch;
+  },
+
+  makeSwitchConfig: function(aSwitch): Switch {
+    return this.switchConfig({ name: aSwitch.name, unitName: aSwitch.unitName,
+      masterAddress: aSwitch.masterAddress, masterPort: aSwitch.masterPort, 
+      logicalAddress: aSwitch.logicalAddress, logicalNodeAddress: aSwitch.logicalNodeAddress, 
+      type: aSwitch.type, plug: aSwitch.plug });
   },
 
   ruleConfig(rule): Rule {

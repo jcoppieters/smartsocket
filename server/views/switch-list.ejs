@@ -24,15 +24,15 @@
         <table>
           <thead>
             <tr>
-              <th>Plug</th><th>Name</th><th>Addr</th><th>State</th>
+              <th>Name</th><th>Plug/Http</th><th>Addr</th><th>State</th>
             </tr>
           </thead>
     
           <tbody>
             <% for (let inx in switches) { let swtch = switches[inx]; %>
               <tr>
-                <td><a href="/switches/edit/<%= inx %>"><%= swtch.plug %></a></td>
                 <td><a href="/switches/edit/<%= inx %>"><%= swtch.name %></a></td>
+                <td><a href="/switches/edit/<%= inx %>"><%= swtch.plug %></a></td>
                 <td><a href="/switches/edit/<%= inx %>"><%= hex(swtch.logicalNodeAddress) %>/<%= hex(swtch.logicalAddress) %></a></td>
                 <td>
                   <div class="switch">

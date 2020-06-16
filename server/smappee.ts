@@ -50,17 +50,13 @@ export class Smappee extends Base {
     this.system = system;
 
     this.plugs = {};  // will grow when we encounter one in the mqtt stream.
-
     this.copyAndSanitizeRules(this.config.rules);
-
+    
     this.client = this.subscribe(this.config.address, this.config.uid);
   }
 
   copyAndSanitizeRules(rules: Array<Rule>) {
-    this.rules = rules || [];
-    this.rules.forEach( rule => {
-      Sanitizers.ruleConfig(rule);
-    });
+    this.rules = (rules || []).map(rule => Sanitizers.ruleConfig({...rule}));
   }
   
   subscribe(address: string, uid: string) {

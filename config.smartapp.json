@@ -3,24 +3,36 @@
   "switches": [
     {
       "name": "Dimmer 2",
+      "unitName": "",
       "masterAddress": "192.168.0.98",
       "masterPort": 5001,
       "logicalAddress": 31,
       "logicalNodeAddress": 3,
       "type": "http",
-      "plug": "http://192.168.0.101/relay/0?turn=|off|on"
+      "plug": "http://192.168.0.101/relay/0?turn=|off|on",
+      "value": 0
     },
     {
-      "name": "--",
+      "name": "Ikke",
+      "unitName": "Input 4",
       "masterAddress": "192.168.0.98",
       "masterPort": 5001,
       "logicalAddress": 16,
-      "logicalNodeAddress": 23,
+      "logicalNodeAddress": 3,
       "type": "http",
       "plug": "hahahah",
-      "id": 0,
-      "value": 0,
-      "unit": null
+      "value": 0
+    },
+    {
+      "name": "--",
+      "unitName": "Input 3",
+      "masterAddress": "192.168.0.98",
+      "masterPort": 5001,
+      "logicalAddress": 15,
+      "logicalNodeAddress": 3,
+      "type": "http",
+      "plug": "kill me",
+      "value": 0
     }
   ],
   "debug": true

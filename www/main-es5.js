@@ -1837,29 +1837,27 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       function DimmerControl() {
         _classCallCheck(this, DimmerControl);
 
-        this.force = false;
+        this.showSlider = false;
       }
 
       _createClass(DimmerControl, [{
-        key: "visible",
-        value: function visible() {
-          return this.force; // || this.service.status;
-        }
-      }, {
         key: "arrow",
         value: function arrow() {
-          return this.visible() ? 'chevron-up' : 'chevron-down';
+          return this.showSlider ? 'chevron-up' : 'chevron-down';
         }
       }, {
         key: "labelClick",
         value: function labelClick() {
-          this.force = !this.force;
+          this.showSlider = !this.showSlider;
         }
       }, {
         key: "change",
         value: function change() {
-          if (this.service.status == 2) {} else {
-            this.service.setState(!!this.service.status);
+          console.log("change: " + this.service.status);
+
+          if (this.service.status == 2) {// don't do anything on timed PIR status
+          } else {
+            this.service.setState(!!this.service.status); // make boolean
           }
         }
       }, {
@@ -1879,7 +1877,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     DimmerControl = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
       selector: 'dimmer',
       inputs: ['service'],
-      template: "\n    <ion-item lines=\"none\" class=\"dimmer\">\n      <ion-label tappable (click)=\"labelClick()\">{{service.getName()}}\n        <ion-icon [name]=\"arrow()\" class=\"dimmer__chevron\"></ion-icon>\n        <span class=\"dimmer__value\">{{service.value}}%</span>\n        <ion-icon class=\"state\" *ngIf=\"service.status == 2\" name=\"time\"></ion-icon>\n      </ion-label>\n\n      <ion-toggle [(ngModel)]=\"service.status\" (ionBlur)=\"change()\"></ion-toggle>\n    </ion-item>\n    <ion-item lines=\"none\" class=\"dimmer__slider\" *ngIf=\"visible()\">\n      <ion-range min=\"1\" max=\"100\" debounce=\"400\" [(ngModel)]=\"service.value\" (ionChange)=\"changeValue()\">\n        <ion-icon slot=\"start\" name=\"remove\" name=\"remove\" (click)=\"changeValue(-5)\"></ion-icon>\n        <ion-icon slot=\"end\" name=\"add\" name=\"add\" (click)=\"changeValue(5)\"></ion-icon>\n      </ion-range>\n    </ion-item>\n  ",
+      template: "\n    <ion-item lines=\"none\" class=\"dimmer\">\n      <ion-label tappable (click)=\"labelClick()\">{{service.getName()}}\n        <ion-icon [name]=\"arrow()\" class=\"dimmer__chevron\"></ion-icon>\n        <span class=\"dimmer__value\">{{service.value}}%</span>\n        <ion-icon class=\"state\" *ngIf=\"service.status == 2\" name=\"time\"></ion-icon>\n      </ion-label>\n\n      <ion-toggle [(ngModel)]=\"service.status\" (ionChange)=\"change()\"></ion-toggle>\n    </ion-item>\n    <ion-item lines=\"none\" class=\"dimmer__slider\" *ngIf=\"showSlider\">\n      <ion-range min=\"1\" max=\"100\" debounce=\"400\" [(ngModel)]=\"service.value\" (ionChange)=\"changeValue()\">\n        <ion-icon slot=\"start\" name=\"remove\" name=\"remove\" (click)=\"changeValue(-5)\"></ion-icon>\n        <ion-icon slot=\"end\" name=\"add\" name=\"add\" (click)=\"changeValue(5)\"></ion-icon>\n      </ion-range>\n    </ion-item>\n  ",
       styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(
       /*! ./dimmer.scss */
       "./src/app/rendering/dimmer.scss")).default]
@@ -2082,9 +2080,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
       _createClass(SwitchControl, [{
         key: "change",
-        value: function change(unit) {
-          if (this.service.status == 2) {} else {
-            unit.setState(unit.status);
+        value: function change() {
+          console.log("change: " + this.service.status);
+
+          if (this.service.status == 2) {// don't do anything on timed PIR status
+          } else {
+            this.service.setState(!!this.service.status); // make boolean
           }
         }
       }, {
@@ -2100,7 +2101,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     SwitchControl = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
       selector: 'switch',
       inputs: ['service'],
-      template: "\n    <ion-item lines=\"none\">\n      <ion-label tappable (click)=\"toggle(service)\">\n        {{service.getName()}}\n        <ion-icon class=\"state\" *ngIf=\"service.status === 2\" name=\"time\" color=\"primary\"></ion-icon>\n      </ion-label>\n\n      <ion-toggle [(ngModel)]=\"service.status\" \n                  (ionBlur)=\"change(service)\"></ion-toggle>\n    </ion-item>\n  ",
+      template: "\n    <ion-item lines=\"none\">\n      <ion-label tappable (click)=\"toggle(service)\">\n        {{service.getName()}}\n        <ion-icon class=\"state\" *ngIf=\"service.status === 2\" name=\"time\" color=\"primary\"></ion-icon>\n      </ion-label>\n\n      <ion-toggle [(ngModel)]=\"service.status\" \n                  (ionChange)=\"change()\"></ion-toggle>\n    </ion-item>\n  ",
       styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(
       /*! ./switch.scss */
       "./src/app/rendering/switch.scss")).default]
@@ -3027,9 +3028,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 switch (_context7.prev = _context7.next) {
                   case 0:
                     return _context7.abrupt("return", new Promise(function (resolve, reject) {
-                      var message = _protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildLogin(_this6.config.password);
-
                       try {
+                        var message = _protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildLogin(_this6.config.password);
+
                         _protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].write(_this6.socket, message); // to be called when logged in
 
 
@@ -4712,7 +4713,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         return nextRec;
       },
       buildLogin: function buildLogin(password) {
-        password = password || this.config.password;
+        password = password || "";
         return [Cmd.Login, reqConnect, password.length].concat(_toConsumableArray(password.split('').map(function (c) {
           return c.charCodeAt(0);
         })));
@@ -5067,7 +5068,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           // don"t wait for the real open of the sockets
           // some errors: the socket to the proxy opens, but the socket to the hardware fails
           for (var inx = 0; inx < this.config.cmasters.length; inx++) {
-            this.openMaster(this.config.cmasters[inx], inx);
+            this.openMaster(this.config.cmasters[inx]);
           }
         }
       }, {
@@ -5107,7 +5108,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }
       }, {
         key: "openMaster",
-        value: function openMaster(config, inx) {
+        value: function openMaster(config) {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
           regeneratorRuntime.mark(function _callee30() {
@@ -5117,9 +5118,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 switch (_context30.prev = _context30.next) {
                   case 0:
                     master = new _master__WEBPACK_IMPORTED_MODULE_2__["Master"](this, config, this.toastCtrl);
-                    this.masters[inx] = master;
+                    this.masters.push(master); // check for old configs that don't contain the active flag
 
-                    if (master.config.active) {
+                    if (!(typeof master.config.active === "boolean" && !master.config.active)) {
                       _context30.next = 4;
                       break;
                     }
@@ -5187,7 +5188,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
               while (1) {
                 switch (_context31.prev = _context31.next) {
                   case 0:
-                    if (!(!master || !master.isOpen)) {
+                    if (master) {
                       _context31.next = 2;
                       break;
                     }
@@ -5196,33 +5197,38 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
                   case 2:
                     // find its index (we need it to delete it from the list)
-                    inx = this.findMasterInx(master); // close
+                    inx = this.findMasterInx(master); // close if open
 
-                    _context31.prev = 3;
-                    _context31.next = 6;
+                    if (!master.isOpen) {
+                      _context31.next = 12;
+                      break;
+                    }
+
+                    _context31.prev = 4;
+                    _context31.next = 7;
                     return master.close();
 
-                  case 6:
-                    _context31.next = 11;
+                  case 7:
+                    _context31.next = 12;
                     break;
 
-                  case 8:
-                    _context31.prev = 8;
-                    _context31.t0 = _context31["catch"](3);
-                    this.err("failed to close master on " + master.getAddress() + ":" + master.getConfig().port);
+                  case 9:
+                    _context31.prev = 9;
+                    _context31.t0 = _context31["catch"](4);
+                    this.err("failed to close master on " + master.getAddress() + ":" + master.getPort());
 
-                  case 11:
+                  case 12:
                     // remove from list
-                    if (inx > -1) {
+                    if (inx >= 0) {
                       this.masters.splice(inx, 1);
                     }
 
-                  case 12:
+                  case 13:
                   case "end":
                     return _context31.stop();
                 }
               }
-            }, _callee31, this, [[3, 8]]);
+            }, _callee31, this, [[4, 9]]);
           }));
         }
       }, {
@@ -5241,7 +5247,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
           regeneratorRuntime.mark(function _callee32() {
-            var inx;
+            var inx, master;
             return regeneratorRuntime.wrap(function _callee32$(_context32) {
               while (1) {
                 switch (_context32.prev = _context32.next) {
@@ -5263,26 +5269,30 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     }
 
                     this.config.cmasters.push(cmaster);
-                    inx = this.masters.length;
-                    _context32.next = 11;
+                    inx = this.masters.length - 1;
+                    _context32.next = 12;
                     break;
 
                   case 8:
-                    _context32.next = 10;
-                    return this.closeMaster(this.masters[inx]);
-
-                  case 10:
-                    this.config.cmasters[inx] = cmaster;
+                    // close to re-open (master is deleted from the master array)
+                    master = this.findMaster(cmaster.address, cmaster.port);
+                    _context32.next = 11;
+                    return this.closeMaster(master);
 
                   case 11:
-                    this.writeConfig();
-                    _context32.next = 14;
-                    return this.openMaster(cmaster, inx);
+                    // update the config
+                    this.config.cmasters[inx] = cmaster;
 
-                  case 14:
-                    return _context32.abrupt("return", _context32.sent);
+                  case 12:
+                    this.writeConfig(); // master is openened and added to the master array
+
+                    _context32.next = 15;
+                    return this.openMaster(cmaster);
 
                   case 15:
+                    return _context32.abrupt("return", _context32.sent);
+
+                  case 16:
                   case "end":
                     return _context32.stop();
                 }
@@ -5306,7 +5316,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     inx = this.findCMasterInx(masterAddress, masterPort);
 
                     if (!(inx >= 0)) {
-                      _context33.next = 9;
+                      _context33.next = 11;
                       break;
                     }
 
@@ -5314,14 +5324,20 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     return this.closeMaster(master);
 
                   case 6:
-                    // remove the master, it's nodes and their units from the config
-                    this.config.cmasters.splice(inx, 1);
+                    // remove the master from the config list
+                    this.config.cmasters.splice(inx, 1); // remove it's units from the config
+
                     this.config.cunits = this.config.cunits.filter(function (unit) {
                       return unit.masterPort != masterPort || unit.masterAddress != masterAddress;
                     });
                     this.writeConfig();
+                    _context33.next = 12;
+                    break;
 
-                  case 9:
+                  case 11:
+                    this.err("didn't find the master " + master.getAddress() + ":" + master.getConfig().port + " in the config");
+
+                  case 12:
                   case "end":
                     return _context33.stop();
                 }
