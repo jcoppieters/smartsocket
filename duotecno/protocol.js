@@ -643,32 +643,32 @@ exports.Protocol = {
             unit.hsun = next.message[13] * 256 + next.message[14]; // 10x temperature
             unit.moon = next.message[15] * 256 + next.message[16]; // 10x temperature
             unit.hmoon = next.message[17] * 256 + next.message[18]; // 10x temperature
-            this.logger("received temperature = " + unit.value / 10.0);
+            //this.logger("received temperature = " + <number>unit.value / 10.0);
         }
         else if (next.cmd === Rec.Switch) {
             // switch -> boolean
             unit.status = next.message[6];
             unit.value = (next.message[6] > 0);
-            this.logger("received switch = " + unit.value);
+            //this.logger("received switch = " + unit.value);
         }
         else if (next.cmd === Rec.Dimmer) {
             // dimmer -> 0 .. 99
             unit.status = next.message[6];
             unit.value = next.message[7];
-            this.logger("received dimmer -> value=" + unit.value + " / status=" + unit.status);
+            //this.logger("received dimmer -> value=" + unit.value + " / status=" + unit.status);
         }
         else if (next.cmd === Rec.Mood) {
             // control -> boolean
             unit.status = next.message[6];
             unit.value = (next.message[6] != 0);
-            this.logger("received mood = " + unit.value);
+            //this.logger("received mood = " + unit.value);
         }
         else if (next.cmd === Rec.Motor) {
             // motor -> boolean/status
             // 0 = stopped, 1 stopped/down, 2 = stopped/up, busy/down, busy/up
             unit.status = next.message[6];
             unit.value = next.message[6];
-            this.logger("received motor = " + unit.value);
+            //this.logger("received motor = " + unit.value);
         }
         else if (next.cmd = Rec.Macro) {
             // = EV_UNITMACROCOMMANDO
@@ -676,13 +676,13 @@ exports.Protocol = {
             //          Off:    [69,0,NodeAddress,UnitAddress,6,0,0]
             unit.status = next.message[5];
             unit.value = next.message[6];
-            this.logger("received macro -> value=" + unit.value + " / status=" + unit.status);
+            //this.logger("received macro -> value=" + unit.value + " / status=" + unit.status);
         }
         // clear the timer to turn the mood off again.
-        if (unit.resetTimer) {
-            clearInterval(unit.resetTimer);
-            unit.resetTimer = null;
-        }
+        //if (unit.resetTimer) {
+        //  clearInterval(unit.resetTimer);
+        //  unit.resetTimer = null;
+        //}
         this.alertSubscriber(unit);
         this.emitter.emit('update', unit);
     },
