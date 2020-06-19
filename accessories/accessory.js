@@ -16,7 +16,7 @@ class Accessory {
     }
     makeService(service) {
         this.log("accessory - Making service: " + this.unit.getName() + ", serial: " + this.unit.getSerialNr());
-        this.me = new service(this.unit.getDisplayName(), "unit" + this.unit.logicalAddress);
+        this.me = new service(this.unit.getName(), "unit" + this.unit.logicalAddress);
         return this.me;
     }
     getInformationService() {

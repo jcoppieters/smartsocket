@@ -119,8 +119,8 @@ export class Platform extends Base {
 
   systemReady() {
     const activeUnits = this.system.allActiveUnits().length
-    this.log("***** received update -> addMasters: " + activeUnits + " of " + this.system.config.cunits.length);
-    this.ready = (activeUnits === this.system.config.cunits.length)
+    this.log("***** SYSTEM READY received update -> addMasters: " + activeUnits + " of " + this.system.config.cunits.length);
+    this.ready = (activeUnits === this.system.config.cunits.length);
 
     // trigger status request of all active units in 2 seconds.
     setTimeout( async() => {
@@ -138,8 +138,9 @@ export class Platform extends Base {
       this.log(">>>>> done >>>>>>>")
       this.doAccessories(callback);
     } else {
-      this.log(">>>>> waiting >>>>>>>")
-      setTimeout( () => { this.accessories(callback) }, 1000)
+      this.log(">>>>> waiting >>>>>>>" + this.system.allActiveUnits().length + " of " + this.system.config.cunits.length);
+
+      setTimeout( () => { this.accessories(callback) }, 2000)
     }
   }
   doAccessories(callback) {
@@ -201,7 +202,8 @@ export class Platform extends Base {
 
         case UnitType.kMood:
         case UnitType.kCondition:
-          this.accessoryList.push( new Mood(logger, this.homebridge, unit) );
+        case UnitType.kInput:
+              this.accessoryList.push( new Mood(logger, this.homebridge, unit) );
           break;
 
         case UnitType.kTemperature:

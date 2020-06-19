@@ -281,7 +281,7 @@ class Master extends base_1.Base {
         if (!unit) {
             const node = this.findNode(unitInfo.logicalNodeAddress);
             if (node) {
-                unit = new protocol_1.Unit(node, unitInfo);
+                unit = new protocol_1.Unit(node, unitInfo, this.system.config.mood);
                 node.units.push(unit);
             }
             else {

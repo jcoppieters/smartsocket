@@ -96,7 +96,7 @@ export class Context {
     const parts = path.split("/");  
 
     // get action and id from the params or if not specified from the url when available
-    this.action = single(this.params.action) || ((parts.length > 1) ? parts[1] : "");
+    this.action = single(this.params.action) || ((parts.length > 1) ? parts[1] : "") || single(this.params.daction);
     this.id = single(this.params.id) || ((parts.length > 2) ? parts[2] : "");
 
     // some easy to use stuff

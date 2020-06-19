@@ -19,6 +19,7 @@ export type YN =  "Y" | "N";
 export interface SystemConfig {
   socketserver: string;
   socketport: number;
+  mood: string;
   language: string;
   stores: boolean;
   multiple: boolean;
@@ -369,6 +370,7 @@ export const Sanitizers = {
 
   system: function(config?: SystemConfig): SystemConfig {
     if (!config) config = <SystemConfig>{};
+    config.mood = config.mood || "sfeer";
     config.language = config.language || "EN";
     config.stores = config.stores || false;
     config.multiple = config.multiple || false;

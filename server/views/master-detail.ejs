@@ -15,6 +15,7 @@
     <body>
       <%- include('/views/nav'); -%>
       <form method="POST" action="/masters">
+      <input type="hidden" name="daction" value="save">
         <h1>
           Master
           <button class="right btn waves-effect waves-light" type="submit" name="action" value="list">Back</button>

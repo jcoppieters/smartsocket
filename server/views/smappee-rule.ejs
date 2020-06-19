@@ -15,6 +15,7 @@
       <%- include('/views/nav'); -%>
 
       <form method="POST" action="/smappee">
+        <input type="hidden" name="daction" value="save">
         <input type="hidden" name="id" value="<%= id %>">
         <h1>
           Smappee rule #<%= id %>

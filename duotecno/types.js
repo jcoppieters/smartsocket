@@ -205,6 +205,7 @@ exports.Sanitizers = {
     system: function (config) {
         if (!config)
             config = {};
+        config.mood = config.mood || "sfeer";
         config.language = config.language || "EN";
         config.stores = config.stores || false;
         config.multiple = config.multiple || false;

@@ -318,7 +318,7 @@ export class Master extends Base {
     if (!unit) {
       const node = this.findNode(unitInfo.logicalNodeAddress);
       if (node) {
-        unit = new Unit(node, unitInfo);
+        unit = new Unit(node, unitInfo, this.system.config.mood);
         node.units.push(unit);
       } else {
         this.err("Node not found: " + unitInfo.logicalNodeAddress);

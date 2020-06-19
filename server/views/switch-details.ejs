@@ -15,6 +15,7 @@
       <%- include('/views/nav', this); -%>
 
       <form method="POST" action="/switches">
+        <input type="hidden" name="daction" value="save">
         <input type="hidden" name="id" value="<%= id %>">
         <h1>
           Switch #<%= id %>

@@ -14,13 +14,13 @@
     },
     {
       "name": "Ikke",
-      "unitName": "Input 4",
-      "masterAddress": "192.168.0.98",
-      "masterPort": 5001,
-      "logicalAddress": 16,
-      "logicalNodeAddress": 3,
-      "type": "http",
-      "plug": "hahahah",
+      "unitName": "plug1 regenpomp",
+      "masterAddress": "81.83.0.10",
+      "masterPort": 5003,
+      "logicalAddress": 54,
+      "logicalNodeAddress": 63,
+      "type": "smappee",
+      "plug": "3",
       "value": 0
     },
     {

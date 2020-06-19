@@ -200,14 +200,17 @@ export class Unit {
   temp: number;
 
 
-  constructor(node, params: UnitInfo) {
+  constructor(node, params: UnitInfo, moodName: string = "mood") {
     this.node = node;
     Sanitizers.unitInfo(params, this);
 
     // make a name for homekit, without the | but add § is 'specials' to add "sfeer", etc...
     // if the display name is empty make a N[nodeAdr]-U[unitAdr] name.
-    this.name = this.name.replace("|", this.hasSpecials() ? " § " : " ");
+    this.name = this.name.replace("|", this.hasSpecials() ? (" "+moodName+" ") : " ");
     this.displayName = this.name || this.getSerialNr();
+
+    if (this.name.indexOf("|") >= 0)
+      console.log("|||||| " + this.name + " ||||||");
   }
 
   hasSpecials(): boolean {
@@ -302,19 +305,19 @@ export class Unit {
     // Extension on Duotecno's types
     //  updown =>
     //      if name contains !   => "garagedoor"
-    //      if name contains #   => "door"
+    //      if name contains $   => "door"
     //      else                 => "window-covering"
     //  mood =>
     //      if name contains *   => "condition" (2 state, don't reset after "on")
     //      else                 => "mood" (turns of 1.2 seconds after being turned on)
     //  switch =>
-    //      if name contains #   => "switch"     (used to be stk)
+    //      if name contains $   => "switch"     (used to be stk)
     //      else                 => "lightbulb" 
     //
     // as default we consider a switch as a light unless it has "stk" in the name
     if ((this.type === UnitType.kSwitch) &&
         (this.name.indexOf("STK") < 0) && (this.name.indexOf("stk") < 0) && 
-        (this.name.indexOf("Stk") < 0) && (this.name.indexOf("#") < 0))
+        (this.name.indexOf("Stk") < 0) && (this.name.indexOf("$") < 0))
       return UnitType.kLightbulb;
 
     // as default we consider a switch-motor as a window covering unless it has "!" in the name
@@ -323,7 +326,7 @@ export class Unit {
       return UnitType.kGarageDoor;
 
     if ((this.type === UnitType.kSwitchingMotor) &&
-        (this.name.indexOf("#") >= 0))
+        (this.name.indexOf("$") >= 0))
     return UnitType.kDoor;
 
 

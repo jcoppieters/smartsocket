@@ -15,6 +15,7 @@
       <%- include('/views/nav'); -%>
 
       <form method="POST" action="/homekit">
+        <input type="hidden" name="daction" value="save">
         <h1>
           Homekit
           <button class="right btn waves-effect waves-light" type="submit" name="action" value="save">Save</button>

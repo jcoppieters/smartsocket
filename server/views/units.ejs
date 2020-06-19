@@ -21,17 +21,12 @@
         </label></td>
       <% } %>
       <td>
-        <span><%= (edit) ? unit.displayName : unit.getDisplayName() %></span>
+        <span><%= unit.name %></span>
         <br><span class="grey-text"><small><%= unit.typeName() %>
-          (<%= hex(unit.node.logicalAddress) %>;<%= hex(unit.logicalAddress) %>)
+          (<%= hex(unit.node.logicalAddress) %>;<%= hex(unit.logicalAddress) %> on <%= unit.node.getName() %>)
         </small></span>
         <input type="hidden" name="units" value="<%= unit.getName() %>">
       </td>
-      <% if (! edit) { %>
-        <td>
-          <%= unit.name %>
-        </td>
-      <% } %>
       <td>
         <% if ((unit.type == 1) || (unit.type == 2) || (unit.type == 101)) { %>
           <div class="switch">
