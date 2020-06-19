@@ -2,7 +2,7 @@ import * as mqtt from "mqtt";
 import { MqttClient } from "mqtt";
 
 import { System } from "../duotecno/system";
-import { LogFunction, SmappeeConfig, Rule, Sanitizers, Boundaries, Action } from "../duotecno/types";
+import { LogFunction, SmappeeConfig, Rule, Sanitizers, Boundaries, Action, SwitchType } from "../duotecno/types";
 import { Base } from "./base";
 
 // Smappee MQTT implementation
@@ -41,13 +41,15 @@ export class Smappee extends Base {
   rules: Array<Rule>;
   client: MqttClient;
   plugs: { [key: number]: boolean };
+  alertSwitch;
 
 
-  constructor(system: System, debug: boolean, log: LogFunction) {
+  constructor(system: System, debug: boolean, log: LogFunction, alertSwitch?: (type: SwitchType, plugNr: number) => void) {
     super("smappee", debug, log);
     this.readConfig();
     
     this.system = system;
+    this.alertSwitch = alertSwitch;
 
     this.plugs = {};  // will grow when we encounter one in the mqtt stream.
     this.copyAndSanitizeRules(this.config.rules);
@@ -127,7 +129,11 @@ export class Smappee extends Base {
   processPlug(plugNr, message) {
     if (this.debug) this.log("processPlug, plugNr = " + plugNr + " = " + message.value);
     this.plugs[plugNr] = (message.value == "ON");
+
+    // send status change to system
+    this.system.emitter.emit('switch', SwitchType.kSmappee, plugNr, (message.value == "ON"));
   }
+
   setPlug(plugNr, state: boolean) {
     const currState = this.plugs[plugNr];
     if (typeof currState === "boolean") {
@@ -199,6 +205,7 @@ export class Smappee extends Base {
   updateRule(inx: number, rule: Rule) {
     if (inx < this.rules.length) {
       this.rules[inx] = rule;
+      this.config.rules[inx] = Sanitizers.ruleConfig(rule);
       this.writeConfig();
     }
   }

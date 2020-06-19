@@ -121,12 +121,14 @@ var UnitType;
     UnitType[UnitType["kVideo"] = 14] = "kVideo";
     UnitType[UnitType["kLightbulb"] = 101] = "kLightbulb";
     UnitType[UnitType["kGarageDoor"] = 102] = "kGarageDoor";
+    UnitType[UnitType["kDoor"] = 104] = "kDoor";
     UnitType[UnitType["kCondition"] = 103] = "kCondition";
     UnitType[UnitType["kNoType"] = 0] = "kNoType";
 })(UnitType = exports.UnitType || (exports.UnitType = {}));
 ;
 // kLightbulb  == kSwitch with no "#" in the name
-// kGarageDoor == kSwitchingMotor with "!" in the name
+// kDoor == kSwitchingMotor with "!" in the name
+// kGarageDoor == kSwitchingMotor with "#" in the name
 // kCondition  == kMood with "*" in the name
 /////////////////////////
 // Node in the network //
@@ -178,15 +180,23 @@ exports.Node = Node;
 class Unit {
     constructor(node, params) {
         this.group = 0;
+        this.resetTimer = null;
         this.node = node;
         types_1.Sanitizers.unitInfo(params, this);
-        // make a display name for homekit, without the |
+        // make a name for homekit, without the | but add § is 'specials' to add "sfeer", etc...
         // if the display name is empty make a N[nodeAdr]-U[unitAdr] name.
-        let separ = this.name.indexOf("|");
-        this.name = (separ < 0) ? this.name : this.name.substring(0, separ) + " " + (this.name.substring(separ + 1));
-        this.displayName = (separ < 0) ? this.name : (this.name.substring(separ + 1) + " " + this.name.substring(0, separ));
-        if (!this.displayName)
-            this.displayName = this.getSerialNr();
+        this.name = this.name.replace("|", this.hasSpecials() ? " § " : " ");
+        this.displayName = this.name || this.getSerialNr();
+    }
+    hasSpecials() {
+        let special = this.name.indexOf("|20");
+        if (special < 0)
+            special = this.name.indexOf("|50");
+        if (special < 0)
+            special = this.name.indexOf("|90");
+        if (special < 0)
+            special = this.name.indexOf("|OFF");
+        return special >= 0;
     }
     isUnit(master, port, nodeLogicalAddress, unitLogicalAddress) {
         if (master instanceof Unit) {
@@ -202,7 +212,7 @@ class Unit {
         }
     }
     sameValue(value) {
-        if ((this.type === UnitType.kSwitchingMotor) || (this.type === UnitType.kGarageDoor))
+        if ((this.type === UnitType.kSwitchingMotor) || (this.type === UnitType.kGarageDoor) || (this.type === UnitType.kDoor))
             return (((this.value == UnitState.kOpening) && (value == 4)) ||
                 ((this.value == UnitState.kClosing) && (value == 5)) ||
                 ((this.value <= UnitState.kOpen) && (value == 3)));
@@ -221,6 +231,7 @@ class Unit {
             case UnitType.kCondition: return 'Condidtion';
             case UnitType.kSwitchingMotor: return 'Switch motor';
             case UnitType.kGarageDoor: return 'Garagedoor';
+            case UnitType.kDoor: return 'Door';
             case UnitType.kAudio: return 'Basic audio';
             case UnitType.kAV: return 'AV Matrix';
             case UnitType.kIRTX: return 'IRTX';
@@ -246,6 +257,7 @@ class Unit {
             case UnitType.kTemperature: return "01|" + name;
             case UnitType.kSwitchingMotor: return "02|" + name;
             case UnitType.kGarageDoor: return "02|" + name;
+            case UnitType.kDoor: return "02|" + name;
             case UnitType.kDimmer: return "03|" + name;
             case UnitType.kLightbulb: return "04|" + name;
             case UnitType.kSwitch: return "04|" + name;
@@ -263,7 +275,8 @@ class Unit {
     getType() {
         // Extension on Duotecno's types
         //  updown =>
-        //      if name contains !   => "door""
+        //      if name contains !   => "garagedoor"
+        //      if name contains #   => "door"
         //      else                 => "window-covering"
         //  mood =>
         //      if name contains *   => "condition" (2 state, don't reset after "on")
@@ -274,12 +287,19 @@ class Unit {
         //
         // as default we consider a switch as a light unless it has "stk" in the name
         if ((this.type === UnitType.kSwitch) &&
-            (this.name.indexOf("STK") < 0) && (this.name.indexOf("stk") < 0) && (this.name.indexOf("Stk") < 0))
+            (this.name.indexOf("STK") < 0) && (this.name.indexOf("stk") < 0) &&
+            (this.name.indexOf("Stk") < 0) && (this.name.indexOf("#") < 0))
             return UnitType.kLightbulb;
         // as default we consider a switch-motor as a window covering unless it has "!" in the name
         if ((this.type === UnitType.kSwitchingMotor) &&
             (this.name.indexOf("!") >= 0))
             return UnitType.kGarageDoor;
+        if ((this.type === UnitType.kSwitchingMotor) &&
+            (this.name.indexOf("#") >= 0))
+            return UnitType.kDoor;
+        if ((this.type === UnitType.kMood) &&
+            (this.name.indexOf("*")))
+            return UnitType.kCondition;
         return this.type;
     }
     getSerialNr() {
@@ -655,6 +675,11 @@ exports.Protocol = {
             unit.status = next.message[5];
             unit.value = next.message[6];
             this.logger("received macro -> value=" + unit.value + " / status=" + unit.status);
+        }
+        // clear the timer to turn the mood off again.
+        if (unit.resetTimer) {
+            clearInterval(unit.resetTimer);
+            unit.resetTimer = null;
         }
         this.alertSubscriber(unit);
         this.emitter.emit('update', unit);

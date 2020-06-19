@@ -3,11 +3,12 @@
     <tr>
       <%- (edit) ? "<th>Active</th>" : "" %>
       <th>Name</th>
-      <th>State</th>
+      <th <%- (!edit) ? "colspan=2" : "" %>>State</th>
     </tr>
   </thead>
 
   <tbody>
+  
   <% for (let unit of units) { %>
     <tr>
       <% if (edit) { %>
@@ -26,6 +27,11 @@
         </small></span>
         <input type="hidden" name="units" value="<%= unit.getName() %>">
       </td>
+      <% if (! edit) { %>
+        <td>
+          <%= unit.name %>
+        </td>
+      <% } %>
       <td>
         <% if ((unit.type == 1) || (unit.type == 2) || (unit.type == 101)) { %>
           <div class="switch">

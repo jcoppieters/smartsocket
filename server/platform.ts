@@ -13,6 +13,7 @@ import { Temperature } from "../accessories/temperature";
 import { Base } from "./base";
 import { Accessory } from "../accessories/accessory";
 import { SocApp } from "./socapp";
+import { Door } from "../accessories/door";
 
 
 export class Platform extends Base {
@@ -42,8 +43,7 @@ export class Platform extends Base {
         this.system = new System(this.config.debug, log);
         this.system.openMasters(true);
 
-        this.system.emitter.on('ready', this.addMasters.bind(this));
-        this.system.emitter.on('ready', () => console.log("------ received update ------"));
+        this.system.emitter.on('ready', this.systemReady.bind(this));
 
         Protocol.setEmitter(this.system.emitter);
         this.system.emitter.on('update', this.updateState.bind(this));
@@ -117,9 +117,10 @@ export class Platform extends Base {
     }
   }
 
-  addMasters(nr: number) {
-    this.log("received update -> addMasters: " + nr);
-    this.ready = true;
+  systemReady() {
+    const activeUnits = this.system.allActiveUnits().length
+    this.log("***** received update -> addMasters: " + activeUnits + " of " + this.system.config.cunits.length);
+    this.ready = (activeUnits === this.system.config.cunits.length)
 
     // trigger status request of all active units in 2 seconds.
     setTimeout( async() => {
@@ -192,6 +193,10 @@ export class Platform extends Base {
 
         case UnitType.kGarageDoor:
           this.accessoryList.push( new GarageDoor(logger, this.homebridge, unit) );
+          break;
+
+        case UnitType.kDoor:
+          this.accessoryList.push( new Door(logger, this.homebridge, unit) );
           break;
 
         case UnitType.kMood:

@@ -321,9 +321,9 @@ export class System extends Base {
   }
 
   triggerRebuild(immediate: boolean = false) {
-    this.log("triggerRebuild requested")
+    //this.log("triggerRebuild requested")
     if (this.trigger) {
-      this.log("killing pending rebuild")
+      //this.log("killing pending rebuild")
       clearTimeout(this.trigger);
       this.trigger = null;
     }
@@ -334,7 +334,7 @@ export class System extends Base {
       this.trigger = setTimeout(() => {
         this.trigger = null;
         this.rebuildServices();
-      }, 1000);
+      }, 2000);
     }
   }
 

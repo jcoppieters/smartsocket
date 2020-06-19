@@ -47,6 +47,7 @@ class SmartApp extends socapp_1.SocApp {
         super(system, "smartapp", log);
         // get status change updates
         this.system.emitter.on('update', this.informChange.bind(this));
+        this.system.emitter.on('switch', this.alertSwitch.bind(this));
         // get some configurated params
         this.port = this.config.port || this.port || 80;
         this.debug = !!this.config.debug;
@@ -248,6 +249,15 @@ class SmartApp extends socapp_1.SocApp {
                 ;
             }
         });
+    }
+    alertSwitch(type, plugNr, value) {
+        this.log("Received switch status change: " + plugNr + " -> " + value);
+        if ((this.smappee) && (type === types_1.SwitchType.kSmappee)) {
+            this.switches.forEach(swtch => {
+                if ((swtch.plug === plugNr) && swtch.unit)
+                    swtch.unit.setState(value);
+            });
+        }
     }
     doSwitches(context) {
         return __awaiter(this, void 0, void 0, function* () {

@@ -52,6 +52,7 @@ export class SmartApp extends SocApp {
 
     // get status change updates
     this.system.emitter.on('update', this.informChange.bind(this));
+    this.system.emitter.on('switch', this.alertSwitch.bind(this));
 
     // get some configurated params
     this.port = this.config.port || this.port || 80;
@@ -249,7 +250,7 @@ export class SmartApp extends SocApp {
     return rule;
   }
 
-
+  
   //////////////
   // Switches //
   //////////////
@@ -268,6 +269,16 @@ export class SmartApp extends SocApp {
         };
       }
     });
+  }
+
+  alertSwitch(type: SwitchType, plugNr: number, value: number | boolean) {
+    this.log("Received switch status change: " + plugNr + " -> " + value);
+    if ((this.smappee) && (type === SwitchType.kSmappee)) {
+      this.switches.forEach(swtch => {
+        if ((swtch.plug === plugNr) && swtch.unit)
+          swtch.unit.setState(value);
+      });
+    }
   }
 
   async doSwitches(context: Context): Promise<HttpResponse> {

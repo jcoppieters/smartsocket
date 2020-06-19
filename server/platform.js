@@ -22,6 +22,7 @@ const mood_1 = require("../accessories/mood");
 const temperature_1 = require("../accessories/temperature");
 const base_1 = require("./base");
 const socapp_1 = require("./socapp");
+const door_1 = require("../accessories/door");
 class Platform extends base_1.Base {
     constructor(log, config, homebridge) {
         // set debug to true for new config files
@@ -38,8 +39,7 @@ class Platform extends base_1.Base {
             try {
                 this.system = new system_1.System(this.config.debug, log);
                 this.system.openMasters(true);
-                this.system.emitter.on('ready', this.addMasters.bind(this));
-                this.system.emitter.on('ready', () => console.log("------ received update ------"));
+                this.system.emitter.on('ready', this.systemReady.bind(this));
                 protocol_1.Protocol.setEmitter(this.system.emitter);
                 this.system.emitter.on('update', this.updateState.bind(this));
             }
@@ -111,9 +111,10 @@ class Platform extends base_1.Base {
             accessory.updateState();
         }
     }
-    addMasters(nr) {
-        this.log("received update -> addMasters: " + nr);
-        this.ready = true;
+    systemReady() {
+        const activeUnits = this.system.allActiveUnits().length;
+        this.log("***** received update -> addMasters: " + activeUnits + " of " + this.system.config.cunits.length);
+        this.ready = (activeUnits === this.system.config.cunits.length);
         // trigger status request of all active units in 2 seconds.
         setTimeout(() => __awaiter(this, void 0, void 0, function* () {
             let units = this.system.allActiveUnits();
@@ -174,6 +175,9 @@ class Platform extends base_1.Base {
                         break;
                     case protocol_1.UnitType.kGarageDoor:
                         this.accessoryList.push(new garagedoor_1.GarageDoor(logger, this.homebridge, unit));
+                        break;
+                    case protocol_1.UnitType.kDoor:
+                        this.accessoryList.push(new door_1.Door(logger, this.homebridge, unit));
                         break;
                     case protocol_1.UnitType.kMood:
                     case protocol_1.UnitType.kCondition:

@@ -40,7 +40,7 @@ export class Mood extends Accessory {
         .then(() => { 
           if (this.unit.getType() === UnitType.kMood) {
             // always set to "off" after sending the request.
-            setTimeout(() => {
+            this.unit.resetTimer = setTimeout(() => {
               this.unit.value = false;
               // try to update homekit's value to "off" again.
               this.updateState();

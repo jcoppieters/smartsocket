@@ -16,7 +16,7 @@
 
       <form method="POST" action="/units/save">
         <h1>
-          Services
+          <%= units.length %> active services
         </h1>
         <%- include('/views/units', {edit: false, units: units, hex: hex }); -%> 
 

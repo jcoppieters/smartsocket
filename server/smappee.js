@@ -40,10 +40,11 @@ const base_1 = require("./base");
      { voltage: 0, phaseId: 2 } ] }
 */
 class Smappee extends base_1.Base {
-    constructor(system, debug, log) {
+    constructor(system, debug, log, alertSwitch) {
         super("smappee", debug, log);
         this.readConfig();
         this.system = system;
+        this.alertSwitch = alertSwitch;
         this.plugs = {}; // will grow when we encounter one in the mqtt stream.
         this.copyAndSanitizeRules(this.config.rules);
         this.client = this.subscribe(this.config.address, this.config.uid);
@@ -117,6 +118,8 @@ class Smappee extends base_1.Base {
         if (this.debug)
             this.log("processPlug, plugNr = " + plugNr + " = " + message.value);
         this.plugs[plugNr] = (message.value == "ON");
+        // send status change to system
+        this.system.emitter.emit('switch', types_1.SwitchType.kSmappee, plugNr, (message.value == "ON"));
     }
     setPlug(plugNr, state) {
         const currState = this.plugs[plugNr];
@@ -187,6 +190,7 @@ class Smappee extends base_1.Base {
     updateRule(inx, rule) {
         if (inx < this.rules.length) {
             this.rules[inx] = rule;
+            this.config.rules[inx] = types_1.Sanitizers.ruleConfig(rule);
             this.writeConfig();
         }
     }

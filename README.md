@@ -40,6 +40,16 @@ inherited versions of smartApp
 - (8) Bug fixes for saving switches
 - (8) added new app
 
+## v5.1.0b1
+- add nr-devices in webpage of services
+- change display name (sfeer)
+- feedback of plugs
+- try not to start homekite too quickly (check length of cunit to active units)
+- save power rules (copy to config)
+- Added type of Door
+- Homekit moods with # don't receive "off after 1,2 sec" -- or others if we receive a status update
+
+
 ## Hardware 
 A Raspberry Pi that connects to a Duotecno IP Node 
 and (if configured) to a Smappee Infinity.

@@ -9,7 +9,7 @@
         {
           "name": "--",
           "value": false,
-          "masterAddress": "192.168.0.98",
+          "masterAddress": "178.118.70.181",
           "masterPort": 5001,
           "logicalAddress": 24,
           "logicalNodeAddress": 23
@@ -17,18 +17,18 @@
         {
           "name": "--",
           "value": 50,
-          "masterAddress": "192.168.0.98",
+          "masterAddress": "178.118.70.181",
           "masterPort": 5001,
-          "logicalAddress": 0,
-          "logicalNodeAddress": 0
+          "logicalAddress": 1,
+          "logicalNodeAddress": 1
         },
         {
           "name": "--",
           "value": true,
-          "masterAddress": "192.168.0.98",
+          "masterAddress": "178.118.70.181",
           "masterPort": 5001,
-          "logicalAddress": 0,
-          "logicalNodeAddress": 0
+          "logicalAddress": 2,
+          "logicalNodeAddress": 2
         }
       ]
     },
