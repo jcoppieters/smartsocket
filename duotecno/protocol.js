@@ -300,7 +300,7 @@ class Unit {
             (this.name.indexOf("$") >= 0))
             return UnitType.kDoor;
         if ((this.type === UnitType.kMood) &&
-            (this.name.indexOf("*")))
+            (this.name.indexOf("*") >= 0))
             return UnitType.kCondition;
         return this.type;
     }
