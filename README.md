@@ -55,6 +55,8 @@ inherited versions of smartApp
 - remove "don't turn moods off" when receiving status update
 - user "display name" from units as "name" keeps on getting the "|" back ???!!!
 
+### v5.1.0b8
+- cosmetics / logging
 
 ## Hardware 
 A Raspberry Pi that connects to a Duotecno IP Node 

@@ -272,11 +272,13 @@ export class SmartApp extends SocApp {
   }
 
   alertSwitch(type: SwitchType, plugNr: number, value: number | boolean) {
-    this.log("Received switch status change: " + plugNr + " -> " + value);
+    this.log("Received " + type + " switch status change: " + plugNr + " -> " + value);
     if ((this.smappee) && (type === SwitchType.kSmappee)) {
       this.switches.forEach(swtch => {
-        if ((swtch.plug === plugNr) && swtch.unit)
+        if ((swtch.plug == plugNr) && swtch.unit) {
+          this.log(" -> Switch was attached to unit = " + swtch.unit.getDisplayName() + " -> setting state to " + value);
           swtch.unit.setState(value);
+        }
       });
     }
   }

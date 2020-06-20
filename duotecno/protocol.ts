@@ -206,8 +206,7 @@ export class Unit {
 
     // make a name for homekit, without the | but add § is 'specials' to add "sfeer", etc...
     // if the display name is empty make a N[nodeAdr]-U[unitAdr] name.
-    //this.name = this.name.replace(/\|/g, this.hasSpecials() ? (" "+moodName+" ") : " ");
-    this.name = this.name.split("|").join(this.hasSpecials() ? (" "+moodName+" ") : " ");
+    this.name = this.name.replace(/\|/g, this.hasSpecials() ? (" "+moodName+" ") : " ");
 
     // delete all type modifiers ( $, * and ! )
     this.displayName = this.name.replace(/\$|\*|\!/g, '') || this.getSerialNr();
@@ -255,7 +254,7 @@ export class Unit {
       case UnitType.kTemperature: return 'Temperature sensor';
       case UnitType.kExtendedAudio: return 'Extended audio';
       case UnitType.kMood: return 'Virtual mood';
-      case UnitType.kCondition: return 'Condidtion';
+      case UnitType.kCondition: return 'Condition';
       case UnitType.kSwitchingMotor: return 'Switch motor';
       case UnitType.kGarageDoor: return 'Garagedoor';
       case UnitType.kDoor: return 'Door';
@@ -267,12 +266,9 @@ export class Unit {
     }
   }
   getName(): string {
-    return this.name;
-  }
-  getDisplayName(): string {
     return this.displayName;
   }
-  getFullName(): string {
+  getDisplayName(): string {
     if (this.inMultiNode)
       return this.displayName + " on " + this.node.getName();
     else

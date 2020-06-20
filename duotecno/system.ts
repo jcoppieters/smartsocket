@@ -397,7 +397,7 @@ export class System extends Base {
         scene.units.forEach(u => {
           const unit = this.findUnit(u.masterAddress, u.masterPort, u.logicalNodeAddress, u.logicalAddress);
           if (unit) {
-            this.log(" - unit found " + unit.getDisplayName() + " -> " + u.value);
+            this.log(" - attached unit found -> " + unit.getDisplayName() + " -> " + u.value);
             unit.setState(u.value);
           }
         });
