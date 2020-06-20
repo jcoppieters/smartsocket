@@ -21,15 +21,15 @@ export class Accessory {
     this.homebridge = api.hap;
     this.log = log;         // : function(message)
     this.unit = unit;       // : Unit
-    this.name = unit.getName();   // unit.getDisplayName();
+    this.name = unit.getDisplayName();
     this.uuid_base = unit.getSerialNr();
     this.services = this.getAccessoryServices();
     this.services.push(this.getInformationService());
   }
 
   makeService(service: Service): any {
-    this.log("accessory - Making service: " + this.unit.getName() + ", serial: " + this.unit.getSerialNr());
-    this.me = new service(this.unit.getName(), "unit"+this.unit.logicalAddress);
+    this.log("accessory - Making service: " + this.name + ", serial: " + this.uuid_base);
+    this.me = new service(this.name);
     return this.me;
   }
 

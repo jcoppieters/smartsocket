@@ -30,7 +30,7 @@ export class Q {
 
     // this.logger("*Q* Waiter: starting timer for " + mSecs + " mSec");
     this.timer = setTimeout(() => {
-      this.logger("*Q* Waiter: timer finished, calling 'do' because nobody else did");
+      // this.logger("*Q* Waiter: timer finished, calling 'do' because nobody else did");
       this.do();
     }, mSecs);
   }

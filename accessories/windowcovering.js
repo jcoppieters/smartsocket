@@ -125,7 +125,7 @@ class WindowCovering extends accessory_1.Accessory {
     // called in response to Duotecno status update
     updateState() {
         const value = this.DT2HB(this.unit.status);
-        this.log("Received updateState from Master -> WindowCovering for " + this.unit.node.getName() + " - " + this.unit.getName() + " -> " + this.unit.status + " / " + this.unit.value + " -> passing: " + value);
+        this.log("Received updateState -> Homekit WindowCovering for " + this.unit.node.getName() + " - " + this.unit.getName() + " -> " + this.unit.status + " / " + this.unit.value + " -> passing: " + value);
         this.me.getCharacteristic(this.homebridge.Characteristic.CurrentPosition).updateValue(value);
     }
 }

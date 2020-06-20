@@ -29,6 +29,7 @@ class Platform extends base_1.Base {
         super("homebridge", (config && ("debug" in config)) ? config.debug : true, log);
         this.accessoryList = [];
         this.ready = false;
+        this.startWaiting = 0;
         this.config = Object.assign({}, config);
         this.config.debug = (config && ("debug" in config)) ? config.debug : true;
         console.log("**** config:", config);
@@ -40,8 +41,8 @@ class Platform extends base_1.Base {
                 this.system = new system_1.System(this.config.debug, log);
                 this.system.openMasters(true);
                 this.system.emitter.on('ready', this.systemReady.bind(this));
-                protocol_1.Protocol.setEmitter(this.system.emitter);
                 this.system.emitter.on('update', this.updateState.bind(this));
+                protocol_1.Protocol.setEmitter(this.system.emitter);
             }
             catch (err) {
                 this.log(err);
@@ -105,7 +106,6 @@ class Platform extends base_1.Base {
         }
     }
     updateState(unit) {
-        this.log("received updateState " + unit.getName() + ", status = " + unit.status + ", value = " + unit.value);
         const accessory = this.accessoryList.find((acc) => unit.isUnit(acc.unit));
         if (accessory) {
             accessory.updateState();
@@ -113,8 +113,8 @@ class Platform extends base_1.Base {
     }
     systemReady() {
         const activeUnits = this.system.allActiveUnits().length;
-        this.log("***** SYSTEM READY received update -> addMasters: " + activeUnits + " of " + this.system.config.cunits.length);
-        this.ready = (activeUnits === this.system.config.cunits.length);
+        this.log("***** SYSTEM READY received update -> addMasters: " + activeUnits + " of " + this.system.config.cunits.length + " *****");
+        this.ready = (activeUnits == this.system.config.cunits.length);
         // trigger status request of all active units in 2 seconds.
         setTimeout(() => __awaiter(this, void 0, void 0, function* () {
             let units = this.system.allActiveUnits();
@@ -124,18 +124,19 @@ class Platform extends base_1.Base {
         }), 2000);
     }
     accessories(callback) {
-        // waiting until the database is complete
-        if (this.ready) {
-            this.log(">>>>> done >>>>>>>");
+        // waiting until the database is complete or give up after 3 minutes
+        if (this.ready || (this.startWaiting > 3 * 60)) {
             this.doAccessories(callback);
         }
         else {
-            this.log(">>>>> waiting >>>>>>>" + this.system.allActiveUnits().length + " of " + this.system.config.cunits.length);
-            setTimeout(() => { this.accessories(callback); }, 2000);
+            // wait another 5 seconds.
+            this.log("***** waiting >> " + this.system.allActiveUnits().length + " of " + this.system.config.cunits.length + " *****");
+            this.startWaiting += 5;
+            setTimeout(() => { this.accessories(callback); }, 5000);
         }
     }
     doAccessories(callback) {
-        this.log("platform - accessories() called by Homebridge");
+        this.log("platform - accessories() called by Homebridge - System is ready");
         this.addAccessories()
             .then(list => {
             this.log("platform - addAccessories returned: " + list.length + " accessories.");
@@ -153,7 +154,6 @@ class Platform extends base_1.Base {
                 this.accessoryList = [];
                 return;
             }
-            this.log("platform - addAccessories for " + this.system.masters.length + " masters");
             // clear our list
             this.accessoryList = [];
             // make a log function

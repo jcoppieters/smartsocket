@@ -149,7 +149,7 @@ export class Door extends Accessory {
   // in response to Duotecno status messages
   updateState() {
     const value = this.DT2HB(this.unit.status);
-    this.log("Received updateState from Master -> Door for " + this.unit.node.getName() + " - " + this.unit.getName() + " -> " + this.unit.status + " / " + this.unit.value + " -> passing to HB: " + value);
+    this.log("Received updateState -> Homekit Door for " + this.unit.node.getName() + " - " + this.unit.getName() + " -> " + this.unit.status + " / " + this.unit.value + " -> passing to HB: " + value);
     this.me.getCharacteristic(this.homebridge.Characteristic.CurrentDoorState).updateValue(value);
   }
 

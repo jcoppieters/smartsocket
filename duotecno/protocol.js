@@ -185,10 +185,10 @@ class Unit {
         types_1.Sanitizers.unitInfo(params, this);
         // make a name for homekit, without the | but add § is 'specials' to add "sfeer", etc...
         // if the display name is empty make a N[nodeAdr]-U[unitAdr] name.
-        this.name = this.name.replace("|", this.hasSpecials() ? (" " + moodName + " ") : " ");
-        this.displayName = this.name || this.getSerialNr();
-        if (this.name.indexOf("|") >= 0)
-            console.log("|||||| " + this.name + " ||||||");
+        //this.name = this.name.replace(/\|/g, this.hasSpecials() ? (" "+moodName+" ") : " ");
+        this.name = this.name.split("|").join(this.hasSpecials() ? (" " + moodName + " ") : " ");
+        // delete all type modifiers ( $, * and ! )
+        this.displayName = this.name.replace(/\$|\*|\!/g, '') || this.getSerialNr();
     }
     hasSpecials() {
         let special = this.name.indexOf("|20");
@@ -245,6 +245,9 @@ class Unit {
         return this.name;
     }
     getDisplayName() {
+        return this.displayName;
+    }
+    getFullName() {
         if (this.inMultiNode)
             return this.displayName + " on " + this.node.getName();
         else
@@ -329,7 +332,7 @@ class Unit {
         return (this.type === UnitType.kDimmer);
     }
     isUpDown() {
-        return (this.type === UnitType.kGarageDoor) || (this.type === UnitType.kSwitchingMotor);
+        return (this.type === UnitType.kGarageDoor) || (this.type === UnitType.kSwitchingMotor) || (this.type === UnitType.kDoor);
     }
     setPreset(preset, temp) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -381,6 +384,7 @@ class Unit {
             case UnitType.kMood:
                 return (this.status) ? 'on' : 'off';
             case UnitType.kGarageDoor:
+            case UnitType.kDoor:
             case UnitType.kSwitchingMotor:
                 if (this.status === UnitState.kOpening) {
                     return 'opening';

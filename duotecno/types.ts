@@ -195,7 +195,7 @@ export interface SmappeeConfig extends BaseConfig {
 // coming from Homebridge or from unit tests
 export type LogFunction = (message: any, ...optionalParams: any[]) => void;
 // needed as return objects to Homebridge
-export type Service = new (nodeName: string, unitName: string) => any;
+export type Service = new (nodeName: string) => any;
 
 
 export interface Bridge {

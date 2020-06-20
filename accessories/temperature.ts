@@ -41,7 +41,7 @@ export class Temperature extends Accessory {
 
   updateState() {
     this.me.getCharacteristic(this.homebridge.Characteristic.CurrentTemperature).updateValue((<number>this.unit.value) / 10.0);
-    this.log("Received status change -> update temperature -> " + this.unit.getName() + " -> temp = " +(<number>this.unit.value) / 10.0);
+    this.log("Received updateState -> Homekit Temperature -> " + this.unit.getName() + " -> temp = " +(<number>this.unit.value) / 10.0);
   }
 
 }

@@ -1,12 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const platform_1 = require("./server/platform");
+const protocol_1 = require("./duotecno/protocol");
+const types_1 = require("./duotecno/types");
+const master_1 = require("./duotecno/master");
 console.log("running in directory: " + process.cwd());
 function adder(plugin, platform, list) {
     console.log("************* plugin: " + plugin + ", platform: " + platform, list);
 }
 const platform = new platform_1.Platform(console.log, { debug: true, smappee: true, smartapp: true, socapp: false, system: true,
     manufacturer: "Duotecno", platform: "ssoc" }, { registerPlatformAccessories: adder });
+// testing
+let m = new master_1.Master(platform.system, types_1.Sanitizers.masterConfig({ name: "master1", address: "12", port: 21, password: "x", active: true }));
+let n = new protocol_1.Node(m, types_1.Sanitizers.nodeInfo({ name: "node1" }));
+let u = new protocol_1.Unit(n, types_1.Sanitizers.unitInfo({ name: "unit|123 $" }));
+console.log("name = " + u.name + ", getName = " + u.getName() + ", displayname = " + u.displayName + ", getDisplayname = " + u.getDisplayName());
 //if (platform) { 
 //  platform.accessories((list) => {
 //    console.log("Added accessories: ", list);

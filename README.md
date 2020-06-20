@@ -49,6 +49,12 @@ inherited versions of smartApp
 - Added type of Door
 - Homekit moods with # don't receive "off after 1,2 sec" -- or others if we receive a status update
 
+### v5.1.0b2,..., b7
+- small polishing, removing logging, etc...
+- added 3 minute max timeout for create homekit accessories
+- remove "don't turn moods off" when receiving status update
+- user "display name" from units as "name" keeps on getting the "|" back ???!!!
+
 
 ## Hardware 
 A Raspberry Pi that connects to a Duotecno IP Node 

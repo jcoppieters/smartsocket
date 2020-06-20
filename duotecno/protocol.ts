@@ -206,11 +206,11 @@ export class Unit {
 
     // make a name for homekit, without the | but add § is 'specials' to add "sfeer", etc...
     // if the display name is empty make a N[nodeAdr]-U[unitAdr] name.
-    this.name = this.name.replace("|", this.hasSpecials() ? (" "+moodName+" ") : " ");
-    this.displayName = this.name || this.getSerialNr();
+    //this.name = this.name.replace(/\|/g, this.hasSpecials() ? (" "+moodName+" ") : " ");
+    this.name = this.name.split("|").join(this.hasSpecials() ? (" "+moodName+" ") : " ");
 
-    if (this.name.indexOf("|") >= 0)
-      console.log("|||||| " + this.name + " ||||||");
+    // delete all type modifiers ( $, * and ! )
+    this.displayName = this.name.replace(/\$|\*|\!/g, '') || this.getSerialNr();
   }
 
   hasSpecials(): boolean {
@@ -270,6 +270,9 @@ export class Unit {
     return this.name;
   }
   getDisplayName(): string {
+    return this.displayName;
+  }
+  getFullName(): string {
     if (this.inMultiNode)
       return this.displayName + " on " + this.node.getName();
     else
@@ -327,7 +330,7 @@ export class Unit {
 
     if ((this.type === UnitType.kSwitchingMotor) &&
         (this.name.indexOf("$") >= 0))
-    return UnitType.kDoor;
+      return UnitType.kDoor;
 
 
     if ((this.type === UnitType.kMood) && 
@@ -363,7 +366,7 @@ export class Unit {
     return (this.type === UnitType.kDimmer);
   }
   isUpDown(): boolean {
-    return (this.type === UnitType.kGarageDoor) || (this.type === UnitType.kSwitchingMotor);
+    return (this.type === UnitType.kGarageDoor) || (this.type === UnitType.kSwitchingMotor) || (this.type === UnitType.kDoor);
   }
 
   async setPreset(preset: number, temp: number) {
@@ -412,6 +415,7 @@ export class Unit {
         return (this.status) ? 'on' : 'off';
 
       case UnitType.kGarageDoor:
+      case UnitType.kDoor:
       case UnitType.kSwitchingMotor:
         if (this.status === UnitState.kOpening) { return 'opening'; }
         if (this.status === UnitState.kClosing) { return 'closing'; }
