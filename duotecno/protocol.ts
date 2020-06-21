@@ -341,6 +341,9 @@ export class Unit {
     else
       return "N" + this.logicalNodeAddress + "-U" + this.logicalAddress;
   }
+  getModelName(): string {
+    return this.typeName() + " " + hex(this.node.logicalAddress)+ ";" + hex(this.logicalAddress);
+  }
 
 
   isCtrl(): boolean {

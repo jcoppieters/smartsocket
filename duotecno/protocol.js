@@ -309,6 +309,9 @@ class Unit {
         else
             return "N" + this.logicalNodeAddress + "-U" + this.logicalAddress;
     }
+    getModelName() {
+        return this.typeName() + " " + types_1.hex(this.node.logicalAddress) + ";" + types_1.hex(this.logicalAddress);
+    }
     isCtrl() {
         return this.isSwitch() || this.isDimmer() || this.isUpDown();
     }

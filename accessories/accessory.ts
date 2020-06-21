@@ -37,7 +37,7 @@ export class Accessory {
     var informationService = new this.homebridge.Service.AccessoryInformation()
     informationService
       .setCharacteristic(this.homebridge.Characteristic.Manufacturer, "Duotecno-Coppieters")
-      .setCharacteristic(this.homebridge.Characteristic.Model, this.getModelName())
+      .setCharacteristic(this.homebridge.Characteristic.Model, this.unit.getModelName())
       .setCharacteristic(this.homebridge.Characteristic.SerialNumber, this.getSerialNumber())
     return informationService
   }
