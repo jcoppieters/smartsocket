@@ -445,7 +445,7 @@ export class SmartApp extends SocApp {
         const master = await this.system.addMaster({ address: context.getParam(kAddress), port: context.getParam(kPort), 
                                                      password: context.getParam(kPassword), name: context.getParam(kName),
                                                      active: context.getParam(kActive) != "N" });
-        this.updateNodes(master, context.params.nodes, context.params);
+        this.updateNodes(master, context.params.nodes || "", context.params);
         this.system.writeConfig();
       }
     } catch(e) {

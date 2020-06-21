@@ -135,6 +135,7 @@ export class Platform extends Base {
   accessories(callback) {
     // waiting until the database is complete or give up after 3 minutes
     if (this.ready || (this.startWaiting > 3 * 60)) {
+      this.log("***** running after timeout of " + this.startWaiting + "secs --> " +  this.system.allActiveUnits().length + " == " + this.system.config.cunits.length + " <- " +  (this.system.allActiveUnits().length == this.system.config.cunits.length) + " *****");
       this.doAccessories(callback);
       
     } else {
