@@ -21,7 +21,7 @@
         </label></td>
       <% } %>
       <td>
-        <span><%= unit.name %></span>
+        <span><%= unit.getName() %></span>
         <br><span class="grey-text"><small><%= unit.typeName() %>
           (<%= hex(unit.node.logicalAddress) %>;<%= hex(unit.logicalAddress) %>) on <%= unit.node.getName() %>
         </small></span>
