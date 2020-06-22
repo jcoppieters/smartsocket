@@ -1,8 +1,6 @@
 # SmartSocket Server v1.0
 
 ## v1, dec 2019, Johan Coppieters
-
-Use:
 - start the server on a specific port (and IP address)
 - connect from a web app with a WebSocket
 - add to the ws url /[url]:[port] of the target TCP Socket
@@ -10,9 +8,8 @@ Use:
 
 
 ## v2, feb 2020, Johan Coppieters
-- includes the smartapp.
+- includes the Duotecno smartapp.
 - added install instructions
-
 
 ## v5, march 2020, Johan Coppieters -- merge with smartApp, align versions.
 inherited versions of smartApp 
@@ -49,18 +46,23 @@ inherited versions of smartApp
 - Added type of Door
 - Homekit moods with # don't receive "off after 1,2 sec" -- or others if we receive a status update
 
-### v5.1.0b2,..., b7
-- small polishing, removing logging, etc...
-- added 3 minute max timeout for create homekit accessories
-- remove "don't turn moods off" when receiving status update
-- user "display name" from units as "name" keeps on getting the "|" back ???!!!
+### v5.1.0b2,...,b9
+- (b2-b6) small polishing, removing logging, etc... 
+- (b7) added 3 minute max timeout for create homekit accessories
+- (b7) remove "don't turn moods off" when receiving status update
+- (b7) user "display name" from units as "name" keeps on getting the "|" back ???!!!
+- (b8) cosmetics / logging
+- (b9) smaller QR code
 
-### v5.1.0b8
-- cosmetics / logging
+### v5.2 - todo/upcoming
+- backup's with masterip+name on AkiWorks
+- setup openstack server
+
 
 ## Hardware 
 A Raspberry Pi that connects to a Duotecno IP Node 
-and (if configured) to a Smappee Infinity.
+and (if configured) to a Smappee Infinity (power and plugs) 
+and to http switches (bi-directional)
 
 
 ## Desired functions
