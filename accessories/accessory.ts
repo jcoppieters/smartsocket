@@ -47,10 +47,11 @@ export class Accessory {
   }
 
   getModelName(): string {
-    if (this.unit)
-      return this.unit.getName();
+    return this.name;
+    //if (this.unit)
+    //  return this.unit.getName();
     
-    throw new Error('The getModelName method must be overridden if no unit is provide.')
+    //throw new Error('The getModelName method must be overridden if no unit is provide.')
   }
   getName(): string {
     return this.getModelName();

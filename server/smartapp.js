@@ -40,7 +40,12 @@ const kAccessoryPins = {
     "577-03-002": "CC:22:3D:E3:A1:02",
     "577-03-003": "CC:22:3D:E3:A1:03",
     "577-03-004": "CC:22:3D:E3:A1:04",
-    "577-03-005": "CC:22:3D:E3:A1:05"
+    "577-03-005": "CC:22:3D:E3:A1:05",
+    "577-03-006": "CC:22:3D:E3:A1:06",
+    "577-03-007": "CC:22:3D:E3:A1:07",
+    "577-03-008": "CC:22:3D:E3:A1:08",
+    "577-03-009": "CC:22:3D:E3:A1:09",
+    "577-03-010": "CC:22:3D:E3:A1:0A"
 };
 class SmartApp extends socapp_1.SocApp {
     constructor(system, smappee, platform, log) {

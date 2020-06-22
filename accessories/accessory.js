@@ -31,9 +31,10 @@ class Accessory {
         throw new Error('The getSystemServices method must be overridden.');
     }
     getModelName() {
-        if (this.unit)
-            return this.unit.getName();
-        throw new Error('The getModelName method must be overridden if no unit is provide.');
+        return this.name;
+        //if (this.unit)
+        //  return this.unit.getName();
+        //throw new Error('The getModelName method must be overridden if no unit is provide.')
     }
     getName() {
         return this.getModelName();
