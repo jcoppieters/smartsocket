@@ -32,6 +32,8 @@ class Lock extends accessory_1.Accessory {
         this.log("HB setting target state of lock: to " + value + " of " + this.unit.getDescription());
         this.unit.setState(!!value)
             .then(() => {
+            //bypass ip node update mechanism of Duotecno
+            this.unit.status = value;
             this.updateState();
             if (this.unit.getType() === protocol_1.UnitType.kUnlocker) {
                 // always set to "locked" after sending the request.

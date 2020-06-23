@@ -44,6 +44,8 @@ export class Lock extends Accessory {
 
     this.unit.setState(!!value)
       .then(() => {
+        //bypass ip node update mechanism of Duotecno
+        this.unit.status = value;
         this.updateState();
 
         if (this.unit.getType() === UnitType.kUnlocker) {
