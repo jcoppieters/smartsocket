@@ -33,6 +33,8 @@ import { throws } from "assert";
    [ { voltage: 229, phaseId: 0 },
      { voltage: 0, phaseId: 1 },
      { voltage: 0, phaseId: 2 } ] }
+
+
 */
 
 
@@ -128,11 +130,14 @@ export class Smappee extends Base {
     }
   }
   processPlug(plugNr, message) {
-    if (this.debug) this.log("processPlug, plugNr = " + plugNr + " = " + message.value);
-    this.plugs[plugNr] = (message.value == "ON");
-
-    // send status change to system
-    this.system.emitter.emit('switch', SwitchType.kSmappee, plugNr, (message.value == "ON"));
+    const newState = (message.value == "ON");
+    if (this.debug) this.log("processPlug, plugNr = " + plugNr + " = " + message.value + ", current = " + this.plugs[plugNr]);
+    
+    if (this.plugs[plugNr] != newState) {
+      this.plugs[plugNr] = newState;
+      // send status change to system
+      this.system.emitter.emit('switch', SwitchType.kSmappee, plugNr, (message.value == "ON"));
+    }
   }
 
   setPlug(plugNr, state: boolean) {
