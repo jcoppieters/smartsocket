@@ -39,14 +39,16 @@ export class Lock extends Accessory {
 
   setTarget(value, next) {
     this.targetState = value;
-    this.log("HB setting target state of lock: to " + value + " of " + this.unit.getDispayState());
+    this.log("HB setting target state of lock: to " + value + " of " + this.unit.getDescription());
 
-    this.unit.setState(value)
+    this.unit.setState(!!value)
       .then(() => {
+        this.updateState();
+
         if (this.unit.getType() === UnitType.kUnlocker) {
           // always set to "locked" after sending the request.
           this.unit.resetTimer = setTimeout(() => {
-            this.log("Autolock for an unlocker after 1.2 secs of " + this.unit.getDispayState())
+            this.log("Autolock for an unlocker after 1.2 secs of " + this.unit.getDescription())
             this.unit.value = true;
             // try to update homekit's value to "locked" again.
             this.updateState();
@@ -64,7 +66,7 @@ export class Lock extends Accessory {
 
   getCurrent(next) {
     this.unit.reqState(unit => {
-      this.log("HB getting current state of lock = " + this.unit.status + " of " + this.unit.getDispayState());
+      this.log("HB getting current state of lock = " + this.unit.status + " of " + this.unit.getDescription());
       next(null, this.unit.status);
     });
   }
