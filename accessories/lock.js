@@ -13,6 +13,9 @@ class Lock extends accessory_1.Accessory {
     constructor(log, homebridge, unit) {
         super(log, homebridge, unit);
         this.log("created Lock -> " + unit.getDescription());
+        // set default for Unlocked to Locked
+        if (this.unit.getType() === protocol_1.UnitType.kUnlocker)
+            unit.setState(1);
     }
     getAccessoryServices() {
         // Lock needs authentication
@@ -38,11 +41,12 @@ class Lock extends accessory_1.Accessory {
             if (this.unit.getType() === protocol_1.UnitType.kUnlocker) {
                 // always set to "locked" after sending the request.
                 this.unit.resetTimer = setTimeout(() => {
-                    this.log("Autolock for an unlocker after 1.2 secs of " + this.unit.getDescription());
-                    this.unit.value = true;
-                    // try to update homekit's value to "locked" again.
-                    this.updateState();
-                }, 1200);
+                    this.log("Autolock for an unlocker after 2 secs of " + this.unit.getDescription());
+                    this.targetState = 1;
+                    this.me.getCharacteristic(this.homebridge.Characteristic.LockTargetState).updateValue(1);
+                    this.unit.status = 1;
+                    this.me.getCharacteristic(this.homebridge.Characteristic.LockCurrentState).updateValue(1);
+                }, 2000);
             }
             next();
         })
