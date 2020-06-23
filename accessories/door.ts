@@ -56,7 +56,7 @@ export class Door extends Accessory {
 
   getAccessoryServices() {
     // DoorOpener needs authentication
-    const door = this.makeService(this.homebridge.Service.DoorOpener);
+    const door = this.makeService(this.homebridge.Service.Door);
     this.attachServices(door)
 
     return [door];

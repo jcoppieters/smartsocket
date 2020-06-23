@@ -46,13 +46,14 @@ inherited versions of smartApp
 - Added type of Door
 - Homekit moods with # don't receive "off after 1,2 sec" -- or others if we receive a status update
 
-### v5.1.0b2,...,b9
+### v5.1.0b2,...,b11
 - (b2-b6) small polishing, removing logging, etc... 
 - (b7) added 3 minute max timeout for create homekit accessories
 - (b7) remove "don't turn moods off" when receiving status update
 - (b7) user "display name" from units as "name" keeps on getting the "|" back ???!!!
 - (b8) cosmetics / logging
 - (b9) smaller QR code
+- (b11) Change service DoorOpener -> Door
 
 ### v5.2 - todo/upcoming
 - backup's with masterip+name on AkiWorks
