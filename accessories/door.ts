@@ -81,7 +81,7 @@ export class Door extends WindowCovering {
   updateState() {
     const value = this.DT2HB(this.unit.status);
     this.log("Received updateState -> Homekit Door for " + this.unit.node.getName() + " - " + this.unit.getName() + " -> " + this.unit.status + " / " + this.unit.value + " -> passing to HB: " + value);
-    this.me.getCharacteristic(this.homebridge.Characteristic.CurrentDoorState).updateValue(value);
+    this.me.getCharacteristic(this.homebridge.Characteristic.CurrentPosition).updateValue(value);
   }
 
 }
