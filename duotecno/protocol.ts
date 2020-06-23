@@ -310,7 +310,7 @@ export class Unit {
     //      if name contains *   => "condition" (2 state, don't reset after "on")
     //      else                 => "mood" (turns of 1.2 seconds after being turned on)
     //  switch =>
-    //      if name contains $   => "switch"     (used to be stk)
+    //      if name contains $   => "switch"     (also still works with "stk", "STK" and "Stk")
     //      else                 => "lightbulb" 
     //
     // as default we consider a switch as a light unless it has "stk" in the name

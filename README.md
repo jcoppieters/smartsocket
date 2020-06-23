@@ -55,7 +55,16 @@ inherited versions of smartApp
 - (b9) smaller QR code
 - (b11) Change service DoorOpener -> Door
 
-### v5.2 - todo/upcoming
+### v5.1.0 - release
+- better names
+- correct services (GarageDoor=!, Door=$ and WindowCoverings)
+
+### v5.1.1 - todo - new type
+Denken jullie maar na hoe we die koppelen... Misschien:
+- mood met * (is on/off) + $ = Lock met on/off
+- mood zonder * (is on-1sec-off) + $ = Lock met off-1sec-on (let op de omkering)
+
+### v5.2 - todo -> upcoming
 - backup's with masterip+name on AkiWorks
 - setup openstack server
 
