@@ -75,7 +75,6 @@ export class WindowCovering extends Accessory {
 
     covering.getCharacteristic(this.homebridge.Characteristic.PositionState)
       .on('get', this.getPositionState.bind(this));
-       
   }
 
 

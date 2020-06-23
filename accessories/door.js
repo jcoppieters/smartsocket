@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const accessory_1 = require("./accessory");
-const protocol_1 = require("../duotecno/protocol");
+const windowcovering_1 = require("./windowcovering");
 // Johan Coppieters Jun 2020
 //
 // Garagedoor
@@ -45,7 +44,7 @@ const protocol_1 = require("../duotecno/protocol");
 0|homebridge  | homebridge - Received updateState from Master -> GarageDoor for SB 1 - up/down -> 2 / 2 -> passing to HB: 0
 
 */
-class Door extends accessory_1.Accessory {
+class Door extends windowcovering_1.WindowCovering {
     constructor(log, homebridge, unit) {
         super(log, homebridge, unit);
     }
@@ -56,67 +55,13 @@ class Door extends accessory_1.Accessory {
         return [door];
     }
     attachServices(door) {
-        door.getCharacteristic(this.homebridge.Characteristic.TargetDoorState)
-            .on('get', this.getTargetDoorState.bind(this))
-            .on('set', this.setDoorState.bind(this));
-        door.getCharacteristic(this.homebridge.Characteristic.CurrentDoorState)
-            .on('get', this.getDoorState.bind(this));
-    }
-    DT2HB(status) {
-        if (status == protocol_1.UnitState.kOpen)
-            return this.homebridge.Characteristic.CurrentDoorState.OPEN;
-        else if (status == protocol_1.UnitState.kClosing)
-            return this.homebridge.Characteristic.CurrentDoorState.CLOSING;
-        else if (status == protocol_1.UnitState.kClosed)
-            return this.homebridge.Characteristic.CurrentDoorState.CLOSED;
-        else if (status == protocol_1.UnitState.kOpening)
-            return this.homebridge.Characteristic.CurrentDoorState.OPENING;
-        else if (status == protocol_1.UnitState.kStopped)
-            return this.homebridge.Characteristic.CurrentDoorState.STOPPED;
-        else
-            return this.homebridge.Characteristic.CurrentDoorState.STOPPED; // ????
-    }
-    HB2DT(state) {
-        if (state == this.homebridge.Characteristic.CurrentDoorState.OPEN)
-            return protocol_1.UnitMotorCmd.kOpen;
-        else if (state == this.homebridge.Characteristic.CurrentDoorState.CLOSED)
-            return protocol_1.UnitMotorCmd.kClose;
-        else if (state == this.homebridge.Characteristic.CurrentDoorState.STOPPED)
-            return protocol_1.UnitMotorCmd.kStop;
-        else
-            return 0;
-    }
-    getDoorState(next) {
-        try {
-            this.unit.reqState(unit => {
-                const hb = this.DT2HB(unit.status);
-                this.log("Get TargetDoorState of " + this.name + " = " + unit.status + " -> " + hb);
-                next(null, hb);
-            });
-        }
-        catch (err) {
-            next(err);
-        }
-    }
-    setDoorState(value, next) {
-        // homekit is giving OPEN, .STOPPED, .CLOSED
-        // for the smartbox -> 5=down, 4=up, 3=stop
-        this.targetState = value;
-        let cmd = this.HB2DT(value);
-        if (cmd) {
-            this.log("Set TargetDoorState of " + this.name + ", value =" + value + " -> cmd=" + cmd);
-            this.unit.setState(cmd)
-                .then(() => next())
-                .catch(err => next(err));
-        }
-        else {
-            this.log("Set TargetDoorState of " + this.name + " -> failed for : " + value);
-            next(new Error("TargetDoorState of " + this.name + " -> failed"));
-        }
-    }
-    getTargetDoorState(next) {
-        this.log("Characteristic.TargetDoorState.get was called of " + this.name + " = " + this.targetState);
-        next(null, this.targetState);
+        door.getCharacteristic(this.homebridge.Characteristic.TargetPosition)
+            .on('get', this.getTargetPosition.bind(this))
+            .on('set', this.setTargetPosition.bind(this));
+        door.getCharacteristic(this.homebridge.Characteristic.CurrentPosition)
+            .on('get', this.getCurrentPosition.bind(this));
+        door.getCharacteristic(this.homebridge.Characteristic.PositionState)
+            .on('get', this.getPositionState.bind(this));
     }
     // in response to Duotecno status messages
     updateState() {
