@@ -310,11 +310,11 @@ class Unit {
             (this.name.indexOf("$") >= 0))
             return UnitType.kDoor;
         if ((this.type === UnitType.kMood) &&
-            (this.name.indexOf("I-") >= 0) &&
-            (this.name.indexOf("2") >= 0))
+            (this.name.indexOf("$") >= 0) &&
+            (this.name.indexOf("*") >= 0))
             return UnitType.kLock;
         if ((this.type === UnitType.kMood) &&
-            (this.name.indexOf("I-") >= 0))
+            (this.name.indexOf("$") >= 0))
             return UnitType.kUnlocker;
         if ((this.type === UnitType.kMood) &&
             (this.name.indexOf("*") >= 0))
