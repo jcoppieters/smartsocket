@@ -16,6 +16,7 @@ export class Lock extends Accessory {
 
   constructor(log, homebridge, unit) {
     super(log, homebridge, unit);
+    this.log("created Lock -> " + unit.getDescription());
   }
 
   getAccessoryServices() {
@@ -61,6 +62,7 @@ export class Lock extends Accessory {
   }
 
   getTarget(next) {
+    this.log("HB getting target state of lock = " + this.unit.status + " of " + this.unit.getDescription());
     next(null, this.targetState);
   }
 

@@ -12,6 +12,7 @@ const protocol_1 = require("../duotecno/protocol");
 class Lock extends accessory_1.Accessory {
     constructor(log, homebridge, unit) {
         super(log, homebridge, unit);
+        this.log("created Lock -> " + unit.getDescription());
     }
     getAccessoryServices() {
         // Lock needs authentication
@@ -46,6 +47,7 @@ class Lock extends accessory_1.Accessory {
             .catch(err => next(err));
     }
     getTarget(next) {
+        this.log("HB getting target state of lock = " + this.unit.status + " of " + this.unit.getDescription());
         next(null, this.targetState);
     }
     getCurrent(next) {

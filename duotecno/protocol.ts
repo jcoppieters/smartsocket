@@ -248,7 +248,7 @@ export class Unit {
   }
 
   typeName(): string {
-    switch (this.type) {
+    switch (this.getType()) {
       case UnitType.kDimmer: return 'Dimmer';
       case UnitType.kSwitch: return 'Switch/Relay';
       case UnitType.kLightbulb: return 'Lightbulb';
