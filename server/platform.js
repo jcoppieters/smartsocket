@@ -23,6 +23,7 @@ const temperature_1 = require("../accessories/temperature");
 const base_1 = require("./base");
 const socapp_1 = require("./socapp");
 const door_1 = require("../accessories/door");
+const lock_1 = require("../accessories/lock");
 class Platform extends base_1.Base {
     constructor(log, config, homebridge) {
         // set debug to true for new config files
@@ -179,6 +180,9 @@ class Platform extends base_1.Base {
                         break;
                     case protocol_1.UnitType.kDoor:
                         this.accessoryList.push(new door_1.Door(logger, this.homebridge, unit));
+                        break;
+                    case protocol_1.UnitType.kLock:
+                        this.accessoryList.push(new lock_1.Lock(logger, this.homebridge, unit));
                         break;
                     case protocol_1.UnitType.kMood:
                     case protocol_1.UnitType.kCondition:

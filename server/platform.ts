@@ -14,6 +14,7 @@ import { Base } from "./base";
 import { Accessory } from "../accessories/accessory";
 import { SocApp } from "./socapp";
 import { Door } from "../accessories/door";
+import { Lock } from "../accessories/lock";
 
 
 export class Platform extends Base {
@@ -200,6 +201,10 @@ export class Platform extends Base {
           this.accessoryList.push( new Door(logger, this.homebridge, unit) );
           break;
 
+        case UnitType.kLock:
+          this.accessoryList.push( new Lock(logger, this.homebridge, unit) );
+          break;
+  
         case UnitType.kMood:
         case UnitType.kCondition:
         case UnitType.kInput:

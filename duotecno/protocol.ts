@@ -100,13 +100,15 @@ export enum UnitMotorCmd { kClose = 5, kOpen = 4, kStop = 3};
 export enum UnitType { kNoUnit = 0, kDimmer = 1, kSwitch = 2, kInput = 3, 
                        kTemperature = 4, kExtendedAudio = 5, kMood = 7, kSwitchingMotor = 8, 
                        kAudio = 10, kAV = 11, kIRTX = 12, kVideo = 14, 
-                       kLightbulb = 101, kGarageDoor = 102, kDoor = 104, kCondition = 103, 
+                       kLightbulb = 101, kCondition = 102, 
+                       kGarageDoor = 201, kDoor = 202, kLock = 203, kUnlocker = 204,
                        kNoType = 0 };
 // kLightbulb  == kSwitch with no "#" in the name
 // kDoor == kSwitchingMotor with "!" in the name
 // kGarageDoor == kSwitchingMotor with "#" in the name
 // kCondition  == kMood with "*" in the name
-
+// kLock == kMood with $ and *
+// kUnlocker = kMood with $
 
 /////////////////////////
 // Node in the network //
@@ -258,6 +260,8 @@ export class Unit {
       case UnitType.kSwitchingMotor: return 'Switch motor';
       case UnitType.kGarageDoor: return 'Garagedoor';
       case UnitType.kDoor: return 'Door';
+      case UnitType.kLock: return 'Lock';
+      case UnitType.kUnlocker: return 'Unlocker';
       case UnitType.kAudio: return 'Basic audio';
       case UnitType.kAV: return 'AV Matrix';
       case UnitType.kIRTX: return 'IRTX';
@@ -285,6 +289,8 @@ export class Unit {
       case UnitType.kSwitchingMotor: return "02|" + name;
       case UnitType.kGarageDoor: return "02|" + name;
       case UnitType.kDoor: return "02|" + name;
+      case UnitType.kLock: return "02|" + name;
+      case UnitType.kUnlocker: return "02|" + name;
       case UnitType.kDimmer: return "03|" + name;
       case UnitType.kLightbulb: return "04|" + name;
       case UnitType.kSwitch: return "04|" + name;
@@ -307,7 +313,10 @@ export class Unit {
     //      if name contains $   => "door"
     //      else                 => "window-covering"
     //  mood =>
-    //      if name contains *   => "condition" (2 state, don't reset after "on")
+    //      if name contains $   => "lock"  
+    //                if name contains * = permanent locked=on/unlocked=off
+    //                else short press -> unlock, locked again after 1.2 sec
+    //      else if name contains *   => "condition" (2 states)
     //      else                 => "mood" (turns of 1.2 seconds after being turned on)
     //  switch =>
     //      if name contains $   => "switch"     (also still works with "stk", "STK" and "Stk")
@@ -328,6 +337,14 @@ export class Unit {
         (this.name.indexOf("$") >= 0))
       return UnitType.kDoor;
 
+    if ((this.type === UnitType.kMood) && 
+        (this.name.indexOf("I-") >= 0) &&
+        (this.name.indexOf("2") >= 0))
+      return UnitType.kLock;
+
+    if ((this.type === UnitType.kMood) && 
+        (this.name.indexOf("I-") >= 0))
+      return UnitType.kUnlocker;
 
     if ((this.type === UnitType.kMood) && 
         (this.name.indexOf("*") >= 0))
@@ -356,7 +373,7 @@ export class Unit {
     return (this.type === UnitType.kMood);
   }
   isInput(): boolean {
-    return (this.type === UnitType.kInput);
+    return (this.type === UnitType.kInput) || (this.type === UnitType.kLock) || (this.type === UnitType.kUnlocker);
   }
   isTemperature(): boolean {
     return (this.type === UnitType.kTemperature);
@@ -413,6 +430,12 @@ export class Unit {
       case UnitType.kMood: 
         return (this.status) ? 'on' : 'off';
 
+      case UnitType.kLock:
+        return (this.status) ? 'locked' : 'unlocked';
+
+      case UnitType.kUnlocker:
+        return (this.status) ? 'unlocked' : 'locked';
+
       case UnitType.kGarageDoor:
       case UnitType.kDoor:
       case UnitType.kSwitchingMotor:
@@ -427,7 +450,7 @@ export class Unit {
 
 
   getDescription() {
-    return this.getDisplayName() + ", active: " + this.active + ", type: " + this.typeName() + ", status: " + this.status + ", value: " + this.value;
+    return this.getDisplayName() + ", active: " + this.active + ", type: " + this.typeName() + ", status: " + this.status + ", value: " + this.value + " -> " + this.getDispayState();
   }
 
 }

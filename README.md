@@ -65,7 +65,7 @@ inherited versions of smartApp
 ### v5.1.2 - todo - new type
 Denken jullie maar na hoe we die koppelen... Misschien:
 - mood met * (is on/off) + $ = Lock met on/off
-- mood zonder * (is on-1sec-off) + $ = Lock met off-1sec-on (let op de omkering)
+- mood zonder * (is on-1sec-off) + $ = Unlocker met on-1sec-off
 
 ### v5.2 - todo -> upcoming
 - backup's with masterip+name on AkiWorks

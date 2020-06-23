@@ -131,9 +131,11 @@ export class Smappee extends Base {
   }
   processPlug(plugNr, message) {
     const newState = (message.value == "ON");
-    if (this.debug) this.log("processPlug, plugNr = " + plugNr + " = " + message.value + ", current = " + this.plugs[plugNr]);
     
     if (this.plugs[plugNr] != newState) {
+      if (this.debug)
+        this.log("doPlug, plugNr = " + plugNr + ", received: " + message.value + ", current: " + this.plugs[plugNr]);
+
       this.plugs[plugNr] = newState;
       // send status change to system
       this.system.emitter.emit('switch', SwitchType.kSmappee, plugNr, (message.value == "ON"));
