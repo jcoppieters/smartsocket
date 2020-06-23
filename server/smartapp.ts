@@ -219,7 +219,7 @@ export class SmartApp extends SocApp {
           this.smappee.updateRule( id, this.scrapeRule(context) );
   
         } else if (context.action === "save") {
-        this.smappee.updateConfig( context.getParam(kAddress), context.getParam(kUID) );
+        this.smappee.updateConfig(context.getParam(kAddress), context.getParam(kUID));
 
       }
     } catch(e) {

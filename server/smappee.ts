@@ -4,6 +4,7 @@ import { MqttClient } from "mqtt";
 import { System } from "../duotecno/system";
 import { LogFunction, SmappeeConfig, Rule, Sanitizers, Boundaries, Action, SwitchType } from "../duotecno/types";
 import { Base } from "./base";
+import { throws } from "assert";
 
 // Smappee MQTT implementation
 // Johan Coppieters, Jan 2019.
@@ -202,18 +203,25 @@ export class Smappee extends Base {
       this.log("***** UNIT NOT FOUND " + action.masterAddress + " - " + action.logicalNodeAddress + ";" + action.logicalAddress + " *****");
   }
 
+  updateRules() {
+    // sort on channel.
+    this.rules.sort((a,b) => a.channel-b.channel);
+    // sanitize and copy all rules into the config
+    this.rules.forEach((r, i) => this.config.rules[i] = Sanitizers.ruleConfig(r));
+    this.writeConfig();
+  }
+
   updateRule(inx: number, rule: Rule) {
     if (inx < this.rules.length) {
       this.rules[inx] = rule;
-      this.config.rules[inx] = Sanitizers.ruleConfig(rule);
-      this.writeConfig();
+      this.updateRules();
     }
   }
 
   deleteRule(inx: number) {
     if (inx < this.rules.length) {
       this.rules.splice(inx, 1);
-      this.writeConfig();
+      this.updateRules();
     }
   }
 

@@ -59,7 +59,10 @@ inherited versions of smartApp
 - better names
 - correct services (GarageDoor=!, Door=$ and WindowCoverings)
 
-### v5.1.1 - todo - new type
+### v5.1.1 - smappee rules
+- sorted and written to config file after delete
+
+### v5.1.2 - todo - new type
 Denken jullie maar na hoe we die koppelen... Misschien:
 - mood met * (is on/off) + $ = Lock met on/off
 - mood zonder * (is on-1sec-off) + $ = Lock met off-1sec-on (let op de omkering)

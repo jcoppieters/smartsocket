@@ -187,17 +187,23 @@ class Smappee extends base_1.Base {
                 this.log("***** UNIT NOT FOUND " + action.masterAddress + " - " + action.logicalNodeAddress + ";" + action.logicalAddress + " *****");
         });
     }
+    updateRules() {
+        // sort on channel.
+        this.rules.sort((a, b) => a.channel - b.channel);
+        // sanitize and copy all rules into the config
+        this.rules.forEach((r, i) => this.config.rules[i] = types_1.Sanitizers.ruleConfig(r));
+        this.writeConfig();
+    }
     updateRule(inx, rule) {
         if (inx < this.rules.length) {
             this.rules[inx] = rule;
-            this.config.rules[inx] = types_1.Sanitizers.ruleConfig(rule);
-            this.writeConfig();
+            this.updateRules();
         }
     }
     deleteRule(inx) {
         if (inx < this.rules.length) {
             this.rules.splice(inx, 1);
-            this.writeConfig();
+            this.updateRules();
         }
     }
     updateConfig(address, uid) {
