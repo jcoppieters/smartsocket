@@ -182,6 +182,7 @@ class Platform extends base_1.Base {
                         this.accessoryList.push(new door_1.Door(logger, this.homebridge, unit));
                         break;
                     case protocol_1.UnitType.kLock:
+                    case protocol_1.UnitType.kUnlocker:
                         this.accessoryList.push(new lock_1.Lock(logger, this.homebridge, unit));
                         break;
                     case protocol_1.UnitType.kMood:

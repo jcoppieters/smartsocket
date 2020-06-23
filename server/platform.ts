@@ -202,6 +202,7 @@ export class Platform extends Base {
           break;
 
         case UnitType.kLock:
+        case UnitType.kUnlocker:
           this.accessoryList.push( new Lock(logger, this.homebridge, unit) );
           break;
   

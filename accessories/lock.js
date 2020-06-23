@@ -28,11 +28,13 @@ class Lock extends accessory_1.Accessory {
     }
     setTarget(value, next) {
         this.targetState = value;
+        this.log("HB setting target state of lock: to " + value + " of " + this.unit.getDispayState());
         this.unit.setState(value)
             .then(() => {
             if (this.unit.getType() === protocol_1.UnitType.kUnlocker) {
                 // always set to "locked" after sending the request.
                 this.unit.resetTimer = setTimeout(() => {
+                    this.log("Autolock for an unlocker after 1.2 secs of " + this.unit.getDispayState());
                     this.unit.value = true;
                     // try to update homekit's value to "locked" again.
                     this.updateState();
@@ -46,7 +48,10 @@ class Lock extends accessory_1.Accessory {
         next(null, this.targetState);
     }
     getCurrent(next) {
-        this.unit.reqState(unit => next(null, this.unit.status));
+        this.unit.reqState(unit => {
+            this.log("HB getting current state of lock = " + this.unit.status + " of " + this.unit.getDispayState());
+            next(null, this.unit.status);
+        });
     }
     // in response to Duotecno status messages
     updateState() {
