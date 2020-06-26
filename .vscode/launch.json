@@ -21,6 +21,17 @@
       "skipFiles": [
         "<node_internals>/**"
       ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "smartStep": true,
+      "sourceMaps": true,
+      "name": "Run SmartSocket",
+      "program": "${workspaceFolder}/run.js",
+      "skipFiles": [
+        "<node_internals>/**"
+      ]
     }
   ]
 }

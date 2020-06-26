@@ -226,6 +226,14 @@ export interface HomebridgeConfig {
 };
 
 
+//////////////////
+// SocketServer //
+//////////////////
+export interface ServerConfig extends BaseConfig {
+  port: number;
+}
+
+
 /////////////
 // Smappee //
 /////////////
@@ -298,6 +306,15 @@ export const Sanitizers = {
 
     return config;
   },
+
+  server: function(config: ServerConfig): ServerConfig {
+    if (!config) return {debug: true, port: 9998};
+    config.port = config.port || 9998;
+    if (typeof config.port === "string") config.port = parseInt(config.port);
+    if (typeof config.debug === "undefined") config.debug = true;
+    return config;
+  },
+
 
   smartapp: function(config: SmartAppConfig): SmartAppConfig {
     if (!config) config = <SmartAppConfig>{};

@@ -6,10 +6,9 @@
 //
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs = require("fs");
-const base_1 = require("./base");
-class Support extends base_1.Base {
+class Support {
     constructor(system, type, debug = false, logger) {
-        super(type, debug, logger);
+        this.log = logger || console.log;
         this.system = system;
     }
     fromTransport(str) {
@@ -47,8 +46,13 @@ class Support extends base_1.Base {
         this.doBackup(name, data);
         try {
             // works only for local server installations
-            this.log("setting scenes to: " + this.fromTransport(data));
-            this.system.scenes = JSON.parse(this.fromTransport(data));
+            if (this.system) {
+                this.log("setting scenes to: " + this.fromTransport(data));
+                this.system.scenes = JSON.parse(this.fromTransport(data));
+            }
+            else {
+                this.log("only server side scenes for local server installations !");
+            }
         }
         catch (e) {
             this.log("error: " + e.message);

@@ -134,6 +134,16 @@ exports.Sanitizers = {
         //for (let a in config.accessories) this.accessory(config.accessories[a]);
         return config;
     },
+    server: function (config) {
+        if (!config)
+            return { debug: true, port: 9998 };
+        config.port = config.port || 9998;
+        if (typeof config.port === "string")
+            config.port = parseInt(config.port);
+        if (typeof config.debug === "undefined")
+            config.debug = true;
+        return config;
+    },
     smartapp: function (config) {
         if (!config)
             config = {};

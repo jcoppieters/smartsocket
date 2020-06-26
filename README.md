@@ -70,6 +70,7 @@ inherited versions of smartApp
 ### v5.3.0/1 - 26/06/2020 - backups
 - backup's with masterip+name on AkiWorks
 - corresponding app version in v5.3.1
+- added run.ts for server release
 
 ### Todo
 - setup openstack server

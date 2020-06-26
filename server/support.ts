@@ -7,15 +7,15 @@
 import * as fs from 'fs';
 
 import { LogFunction } from "../duotecno/types";
-import { Base } from "./base";
 import { System } from "../duotecno/system";
 
 
-export class Support extends Base {
+export class Support {
   system: System;
+  log: LogFunction;
 
   constructor(system: System, type: string, debug: boolean = false, logger?: LogFunction) {
-    super(type, debug, logger);
+    this.log = logger || console.log;
     this.system = system;
   }
 
@@ -57,8 +57,12 @@ export class Support extends Base {
     this.doBackup(name, data);
     try {
       // works only for local server installations
-      this.log("setting scenes to: " + this.fromTransport(data));
-      this.system.scenes = JSON.parse(this.fromTransport(data));
+      if (this.system) {
+        this.log("setting scenes to: " + this.fromTransport(data));
+        this.system.scenes = JSON.parse(this.fromTransport(data));
+      } else {
+        this.log("only server side scenes for local server installations !")
+      }
     } catch(e) {
       this.log("error: " + e.message);
     }

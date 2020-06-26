@@ -90,6 +90,9 @@ class SocApp extends webapp_1.WebApp {
         let target;
         const clientAddr = client._socket.remoteAddress;
         const log = (msg) => this.log('Proxy - ' + clientAddr + ': ' + msg);
+        const info = (this.config.debug) ?
+            (msg) => this.log('Proxy - ' + clientAddr + ': ' + msg) :
+            (msg) => null;
         /////////////////////////////////////
         // url parsing to find ip and port //
         /////////////////////////////////////
@@ -112,7 +115,7 @@ class SocApp extends webapp_1.WebApp {
         });
         target.on('data', (data) => {
             const msg = data.toString();
-            log("received from target: " + msg.substr(0, msg.length - 1));
+            info("received from target: " + msg.substr(0, msg.length - 1));
             try {
                 client.send(msg);
                 this.clients[url].lastseen = new Date();
@@ -146,7 +149,7 @@ class SocApp extends webapp_1.WebApp {
                     client.send(result.answer);
             }
             else {
-                log('received from client: ' + msg.substr(0, msg.length - 1));
+                info('received from client: ' + msg.substr(0, msg.length - 1));
                 target.write(msg);
             }
         });
