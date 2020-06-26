@@ -64,12 +64,14 @@ inherited versions of smartApp
 
 
 ### v5.2.0 - 23 june 2020 - new type: Lock (and unlocker)
-Denken jullie maar na hoe we die koppelen... Misschien:
 - mood met * (is on/off) + $ = Lock met on/off
 - mood zonder * (is on-1sec-off) + $ = Unlocker met on-1sec-off
 
-### v5.2 - todo -> upcoming
+### v5.3.0/1 - 26/06/2020 - backups
 - backup's with masterip+name on AkiWorks
+- corresponding app version in v5.3.1
+
+### Todo
 - setup openstack server
 
 
