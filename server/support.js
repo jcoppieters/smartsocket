@@ -7,7 +7,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs = require("fs");
 class Support {
-    constructor(system, type, debug = false, logger) {
+    constructor(system, logger) {
         this.log = logger || console.log;
         this.system = system;
     }

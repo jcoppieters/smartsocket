@@ -24,7 +24,7 @@ export class SocApp extends WebApp {
     this.port = this.config.port || this.port || 80;
 
     this.system = system;
-    this.support = new Support(system, type, true, log);
+    this.support = new Support(system, log);
   }
 
   async doRequest(context: Context): Promise<HttpResponse> {

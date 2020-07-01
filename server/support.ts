@@ -14,7 +14,7 @@ export class Support {
   system: System;
   log: LogFunction;
 
-  constructor(system: System, type: string, debug: boolean = false, logger?: LogFunction) {
+  constructor(system: System, logger?: LogFunction) {
     this.log = logger || console.log;
     this.system = system;
   }

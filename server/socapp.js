@@ -26,7 +26,7 @@ class SocApp extends webapp_1.WebApp {
         this.readConfig();
         this.port = this.config.port || this.port || 80;
         this.system = system;
-        this.support = new support_1.Support(system, type, true, log);
+        this.support = new support_1.Support(system, log);
     }
     doRequest(context) {
         return __awaiter(this, void 0, void 0, function* () {

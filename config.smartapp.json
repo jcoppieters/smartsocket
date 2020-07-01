@@ -1,39 +1,6 @@
 {
   "port": 5002,
   "switches": [
-    {
-      "name": "Dimmer 2",
-      "unitName": "",
-      "masterAddress": "192.168.0.98",
-      "masterPort": 5001,
-      "logicalAddress": 31,
-      "logicalNodeAddress": 3,
-      "type": "http",
-      "plug": "http://192.168.0.101/relay/0?turn=|off|on",
-      "value": 0
-    },
-    {
-      "name": "Ikke",
-      "unitName": "plug1 regenpomp",
-      "masterAddress": "81.83.0.10",
-      "masterPort": 5003,
-      "logicalAddress": 54,
-      "logicalNodeAddress": 63,
-      "type": "smappee",
-      "plug": "3",
-      "value": 0
-    },
-    {
-      "name": "--",
-      "unitName": "Input 3",
-      "masterAddress": "192.168.0.98",
-      "masterPort": 5001,
-      "logicalAddress": 15,
-      "logicalNodeAddress": 3,
-      "type": "http",
-      "plug": "kill me",
-      "value": 0
-    }
   ],
   "debug": true
 }

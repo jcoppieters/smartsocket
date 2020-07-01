@@ -1,6 +1,6 @@
 [
   {
-    "name": "Scene",
+    "name": "Test Scene",
     "trigger": {
       "masterAddress": "0.0.0.0",
       "masterPort": 5001,

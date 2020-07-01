@@ -1,0 +1,208 @@
+{
+  "language": "EN",
+  "stores": false,
+  "multiple": false,
+  "socketserver": "akiworks.be",
+  "socketport": 9999,
+  "mood": "sfeer",
+  "cmasters": [
+    {
+      "address": "178.118.70.181",
+      "port": 5001,
+      "password": "duotecno",
+      "name": "Smartbox Intern",
+      "active": true,
+      "debug": false
+    },
+    {
+      "address": "81.83.0.10",
+      "port": 5003,
+      "password": "peter1710",
+      "name": "Peter",
+      "active": true,
+      "debug": false
+    }
+  ],
+  "cunits": [
+    {
+      "active": "Y",
+      "group": 0,
+      "name": "buiten sfeer OFF",
+      "masterAddress": "81.83.0.10",
+      "masterPort": 5003,
+      "logicalNodeAddress": 252,
+      "logicalAddress": 30
+    },
+    {
+      "active": "Y",
+      "group": 0,
+      "name": "donker buiten",
+      "masterAddress": "81.83.0.10",
+      "masterPort": 5003,
+      "logicalNodeAddress": 252,
+      "logicalAddress": 3
+    },
+    {
+      "active": "Y",
+      "group": 0,
+      "name": "holdiay  sfeer 20 uur",
+      "masterAddress": "81.83.0.10",
+      "masterPort": 5003,
+      "logicalNodeAddress": 252,
+      "logicalAddress": 67
+    },
+    {
+      "active": "Y",
+      "group": 0,
+      "name": "hulp",
+      "masterAddress": "81.83.0.10",
+      "masterPort": 5003,
+      "logicalNodeAddress": 252,
+      "logicalAddress": 0
+    },
+    {
+      "active": "Y",
+      "group": 0,
+      "name": "na 22 uur",
+      "masterAddress": "81.83.0.10",
+      "masterPort": 5003,
+      "logicalNodeAddress": 252,
+      "logicalAddress": 4
+    },
+    {
+      "active": "Y",
+      "group": 0,
+      "name": "peter thuis",
+      "masterAddress": "81.83.0.10",
+      "masterPort": 5003,
+      "logicalNodeAddress": 252,
+      "logicalAddress": 1
+    },
+    {
+      "active": "Y",
+      "group": 0,
+      "name": "slapend",
+      "masterAddress": "81.83.0.10",
+      "masterPort": 5003,
+      "logicalNodeAddress": 252,
+      "logicalAddress": 2
+    },
+    {
+      "active": "Y",
+      "group": 0,
+      "name": "plug1 regenpomp",
+      "masterAddress": "81.83.0.10",
+      "masterPort": 5003,
+      "logicalNodeAddress": 63,
+      "logicalAddress": 54
+    },
+    {
+      "active": "Y",
+      "group": 0,
+      "name": "plug2",
+      "masterAddress": "81.83.0.10",
+      "masterPort": 5003,
+      "logicalNodeAddress": 63,
+      "logicalAddress": 55
+    },
+    {
+      "active": "Y",
+      "group": 0,
+      "name": "plug3",
+      "masterAddress": "81.83.0.10",
+      "masterPort": 5003,
+      "logicalNodeAddress": 63,
+      "logicalAddress": 56
+    },
+    {
+      "active": "Y",
+      "group": 0,
+      "name": "plug4",
+      "masterAddress": "81.83.0.10",
+      "masterPort": 5003,
+      "logicalNodeAddress": 63,
+      "logicalAddress": 57
+    },
+    {
+      "active": "Y",
+      "group": 0,
+      "name": "plug5",
+      "masterAddress": "81.83.0.10",
+      "masterPort": 5003,
+      "logicalNodeAddress": 63,
+      "logicalAddress": 58
+    },
+    {
+      "active": "Y",
+      "group": 0,
+      "name": "T0|Sens",
+      "masterAddress": "178.118.70.181",
+      "masterPort": 5001,
+      "logicalNodeAddress": 3,
+      "logicalAddress": 0
+    },
+    {
+      "active": "Y",
+      "group": 0,
+      "name": "T1|Sens",
+      "masterAddress": "178.118.70.181",
+      "masterPort": 5001,
+      "logicalNodeAddress": 3,
+      "logicalAddress": 1
+    },
+    {
+      "active": "Y",
+      "group": 0,
+      "name": "I-Mood 1",
+      "masterAddress": "178.118.70.181",
+      "masterPort": 5001,
+      "logicalNodeAddress": 3,
+      "logicalAddress": 2
+    },
+    {
+      "active": "Y",
+      "group": 0,
+      "name": "I-Mood 2",
+      "masterAddress": "178.118.70.181",
+      "masterPort": 5001,
+      "logicalNodeAddress": 3,
+      "logicalAddress": 3
+    },
+    {
+      "active": "Y",
+      "group": 0,
+      "name": "Mood 3",
+      "masterAddress": "178.118.70.181",
+      "masterPort": 5001,
+      "logicalNodeAddress": 3,
+      "logicalAddress": 4
+    },
+    {
+      "active": "Y",
+      "group": 0,
+      "name": "6|Input",
+      "masterAddress": "178.118.70.181",
+      "masterPort": 5001,
+      "logicalNodeAddress": 3,
+      "logicalAddress": 18
+    },
+    {
+      "active": "Y",
+      "group": 0,
+      "name": "7|Input",
+      "masterAddress": "178.118.70.181",
+      "masterPort": 5001,
+      "logicalNodeAddress": 3,
+      "logicalAddress": 19
+    },
+    {
+      "active": "Y",
+      "group": 0,
+      "name": "I-State 0",
+      "masterAddress": "178.118.70.181",
+      "masterPort": 5001,
+      "logicalNodeAddress": 3,
+      "logicalAddress": 12
+    }
+  ]
+}
