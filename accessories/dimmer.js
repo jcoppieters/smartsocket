@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Dimmer = void 0;
 const accessory_1 = require("./accessory");
 // Johan Coppieters Jan 2019
 //

@@ -72,6 +72,25 @@ inherited versions of smartApp
 - corresponding app version in v5.3.1
 - added run.ts for server release
 
+### v5.4.0 - 27/07/2020 - modified types
+- Extension on Duotecno's types
+```
+updown =>
+    if name contains $   => "garagedoor"
+    if name contains *   => "door"
+    else                 => "window-covering"
+mood =>
+    if name contains $   => "lock", locks again after 1.2 sec
+    if name contains *   => permanent locked=on/unlocked=off
+    else                 => "mood" (turns of 1.2 seconds after being turned on)
+switch =>
+    if name contains $   => "door"
+    if name contains *   => "switch" (also still works with "stk", "STK" and "Stk")
+    else                 => "lightbulb"
+```
+
+
+
 ### Todo
 - setup openstack server
 

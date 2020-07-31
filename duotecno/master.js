@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Master = void 0;
 const protocol_1 = require("./protocol");
 const types_1 = require("./types");
 const base_1 = require("../server/base");

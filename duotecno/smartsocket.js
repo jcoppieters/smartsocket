@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getSocket = void 0;
 const net = require("net");
 const kWebSocket = false;
 function getSocket(address, port, data, end, log, err) {

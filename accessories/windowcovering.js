@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.WindowCovering = void 0;
 const accessory_1 = require("./accessory");
 const protocol_1 = require("../duotecno/protocol");
 // Johan Coppieters v1: Jan 2019, v2: Jun 2020

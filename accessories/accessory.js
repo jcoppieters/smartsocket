@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Accessory = void 0;
 // Johan Coppieters Jan 2019
 //
 // base class for all kind of accessories on our platform

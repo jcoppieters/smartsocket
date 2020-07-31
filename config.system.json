@@ -6,7 +6,105 @@
   "socketport": 9999,
   "mood": "sfeer",
   "cmasters": [
+    {
+      "address": "192.168.0.98",
+      "port": 5001,
+      "password": "duotecno",
+      "name": "Smartbox",
+      "active": true,
+      "debug": false
+    }
   ],
   "cunits": [
+    {
+      "active": "Y",
+      "group": 0,
+      "name": "Buro",
+      "masterAddress": "192.168.0.98",
+      "masterPort": 5001,
+      "logicalNodeAddress": 3,
+      "logicalAddress": 0
+    },
+    {
+      "active": "Y",
+      "group": 0,
+      "name": "Raspberry",
+      "masterAddress": "192.168.0.98",
+      "masterPort": 5001,
+      "logicalNodeAddress": 3,
+      "logicalAddress": 1
+    },
+    {
+      "active": "Y",
+      "group": 0,
+      "name": "Garage $",
+      "masterAddress": "192.168.0.98",
+      "masterPort": 5001,
+      "logicalNodeAddress": 3,
+      "logicalAddress": 28
+    },
+    {
+      "active": "Y",
+      "group": 0,
+      "name": "Bulb",
+      "masterAddress": "192.168.0.98",
+      "masterPort": 5001,
+      "logicalNodeAddress": 3,
+      "logicalAddress": 35
+    },
+    {
+      "active": "Y",
+      "group": 0,
+      "name": "Door $",
+      "masterAddress": "192.168.0.98",
+      "masterPort": 5001,
+      "logicalNodeAddress": 3,
+      "logicalAddress": 33
+    },
+    {
+      "active": "Y",
+      "group": 0,
+      "name": "Switch *",
+      "masterAddress": "192.168.0.98",
+      "masterPort": 5001,
+      "logicalNodeAddress": 3,
+      "logicalAddress": 34
+    },
+    {
+      "active": "Y",
+      "group": 0,
+      "name": "Alles uit",
+      "masterAddress": "192.168.0.98",
+      "masterPort": 5001,
+      "logicalNodeAddress": 3,
+      "logicalAddress": 4
+    },
+    {
+      "active": "Y",
+      "group": 0,
+      "name": "Lock $",
+      "masterAddress": "192.168.0.98",
+      "masterPort": 5001,
+      "logicalNodeAddress": 3,
+      "logicalAddress": 6
+    },
+    {
+      "active": "Y",
+      "group": 0,
+      "name": "Mood",
+      "masterAddress": "192.168.0.98",
+      "masterPort": 5001,
+      "logicalNodeAddress": 3,
+      "logicalAddress": 8
+    },
+    {
+      "active": "Y",
+      "group": 0,
+      "name": "Toggle *",
+      "masterAddress": "192.168.0.98",
+      "masterPort": 5001,
+      "logicalNodeAddress": 3,
+      "logicalAddress": 7
+    }
   ]
 }

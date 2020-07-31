@@ -5,6 +5,7 @@
 // v1, 11/05/2020
 //
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Support = void 0;
 const fs = require("fs");
 class Support {
     constructor(system, logger) {

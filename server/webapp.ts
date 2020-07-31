@@ -241,7 +241,7 @@ try {
 */
 
 export class WebApp extends Base {
-  files: {[key: string]: WebAppFile};       // hashmap for serving files, including ejs files for rendering
+  files: {[filename: string]: WebAppFile};       // hashmap for serving files, including ejs files for rendering
   server: http.Server;
   port: number;
 

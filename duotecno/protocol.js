@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Protocol = exports.Unit = exports.Node = exports.UnitType = exports.UnitMotorCmd = exports.UnitState = exports.NodeType = exports.recName = exports.Rec = exports.cmdName = void 0;
 const types_1 = require("./types");
 // Duotecno master IP protocol implementation
 // Johan Coppieters
@@ -282,43 +283,71 @@ class Unit {
         }
     }
     getType() {
+        // General idea:
+        //
+        // $,! -> kind of lock -> needs authentication
+        // *   -> toggle
+        //
         // Extension on Duotecno's types
         //  updown =>
-        //      if name contains !   => "garagedoor"
-        //      if name contains $   => "door"
+        //      if name contains $   => "garagedoor"
+        //      if name contains *   => "door"
         //      else                 => "window-covering"
         //  mood =>
-        //      if name contains $   => "lock"  
-        //                if name contains * = permanent locked=on/unlocked=off
-        //                else short press -> unlock, locked again after 1.2 sec
-        //      else if name contains *   => "condition" (2 states)
+        //      if name contains $   => "lock", locks again after 1.2 sec
+        //      if name contains *   => permanent locked=on/unlocked=off
         //      else                 => "mood" (turns of 1.2 seconds after being turned on)
         //  switch =>
-        //      if name contains $   => "switch"     (also still works with "stk", "STK" and "Stk")
+        //      if name contains $   => "door"
+        //      if name contains *   => "switch" (also still works with "stk", "STK" and "Stk")
         //      else                 => "lightbulb" 
         //
-        // as default we consider a switch as a light unless it has "stk" in the name
+        ////////////
+        // Switch //
+        ////////////
+        // Switch -> with * or STK -> Switch
         if ((this.type === UnitType.kSwitch) &&
-            (this.name.indexOf("STK") < 0) && (this.name.indexOf("stk") < 0) &&
-            (this.name.indexOf("Stk") < 0) && (this.name.indexOf("$") < 0))
-            return UnitType.kLightbulb;
-        // as default we consider a switch-motor as a window covering unless it has "!" in the name
-        if ((this.type === UnitType.kSwitchingMotor) &&
-            (this.name.indexOf("!") >= 0))
-            return UnitType.kGarageDoor;
-        if ((this.type === UnitType.kSwitchingMotor) &&
+            ((this.name.indexOf("STK") >= 0) || (this.name.indexOf("stk") >= 0) ||
+                (this.name.indexOf("Stk") >= 0) || (this.name.indexOf("*") >= 0)))
+            return UnitType.kSwitch;
+        // Switch -> with $ -> Door
+        if ((this.type === UnitType.kSwitch) &&
             (this.name.indexOf("$") >= 0))
             return UnitType.kDoor;
-        if ((this.type === UnitType.kMood) &&
-            (this.name.indexOf("$") >= 0) &&
+        // Switch -> default -> LightBulb
+        if (this.type === UnitType.kSwitch)
+            return UnitType.kLightbulb;
+        /////////////
+        // Up/Down //
+        /////////////
+        // UpDown -> with $ -> GarageDoor
+        if ((this.type === UnitType.kSwitchingMotor) &&
+            (this.name.indexOf("$") >= 0))
+            return UnitType.kGarageDoor;
+        // UpDown with * -> Door
+        if ((this.type === UnitType.kSwitchingMotor) &&
             (this.name.indexOf("*") >= 0))
-            return UnitType.kLock;
+            return UnitType.kDoor;
+        // UpDown -> default -> WindowCovering
+        if (this.type === UnitType.kSwitchingMotor)
+            return UnitType.kSwitchingMotor;
+        ///////////
+        // Moods //
+        ///////////
+        // Mood -> with $ -> Lock (re-closes after 1.2 secs)
         if ((this.type === UnitType.kMood) &&
             (this.name.indexOf("$") >= 0))
             return UnitType.kUnlocker;
+        // Mood -> with * -> Mood with state
         if ((this.type === UnitType.kMood) &&
             (this.name.indexOf("*") >= 0))
             return UnitType.kCondition;
+        // Mood -> default -> Mood (turn off after 1.2 secs)
+        if (this.type === UnitType.kMood)
+            return UnitType.kMood;
+        ///////////////////////
+        // All other default //
+        ///////////////////////
         return this.type;
     }
     getSerialNr() {

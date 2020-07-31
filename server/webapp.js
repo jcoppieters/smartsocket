@@ -12,6 +12,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.WebApp = exports.Context = exports.single = exports.now = exports.two = exports.char = exports.ascii = void 0;
 const ejs = require("ejs");
 const http = require("http");
 const fs = require("fs");

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Mood = void 0;
 const accessory_1 = require("./accessory");
 const protocol_1 = require("../duotecno/protocol");
 // Johan Coppieters Jan 2019

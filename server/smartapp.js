@@ -18,6 +18,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.SmartApp = void 0;
 const os_1 = require("os");
 const types_1 = require("../duotecno/types");
 const protocol_1 = require("../duotecno/protocol");

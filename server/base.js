@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Base = void 0;
 const fs = require("fs");
 const protocol_1 = require("../duotecno/protocol");
 const types_1 = require("../duotecno/types");

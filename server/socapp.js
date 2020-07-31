@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.SocApp = void 0;
 const net = require("net");
 const ws_1 = require("ws");
 const fs = require("fs");
@@ -134,7 +135,8 @@ class SocApp extends webapp_1.WebApp {
             log('target error' + err);
             target.end();
             client.close();
-            this.clients[url].connected = false;
+            if (this.clients[url])
+                this.clients[url].connected = false;
         });
         ///////////////////////////////////
         // websocket connection handling //

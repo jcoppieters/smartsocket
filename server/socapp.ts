@@ -139,7 +139,7 @@ export class SocApp extends WebApp {
       log('target error' + err);
       target.end();
       client.close();
-      this.clients[url].connected = false;
+      if (this.clients[url]) this.clients[url].connected = false;
     });
 
     ///////////////////////////////////

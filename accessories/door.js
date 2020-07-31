@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Door = void 0;
 const windowcovering_1 = require("./windowcovering");
 // Johan Coppieters Jun 2020
 //
