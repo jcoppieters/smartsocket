@@ -133,17 +133,17 @@ let ConfigGeneral = class ConfigGeneral {
     }
     doRequestBackup() {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
-            this.system.doRequestBackup();
+            this.system.doRequestBackup(this.system.config.backupname);
         });
     }
     doBackup() {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
-            this.system.doBackup();
+            this.system.doBackup(this.system.config.backupname);
         });
     }
     sendScenes() {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
-            this.system.sendScenes();
+            this.system.sendScenes(this.system.config.backupname);
         });
     }
 };
@@ -211,6 +211,10 @@ ConfigGeneral = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
             {{ "Config.Backup" |_ }}
           </ion-label>
         </ion-item-divider>
+        <ion-item lines="none">
+          <ion-label position="stacked">{{ "Config.Backup.name" |_ }}</ion-label>
+          <ion-input name="backupname" type="text" [(ngModel)]="system.config.backupname" (ionBlur)="saveConfig()"></ion-input>
+        </ion-item>
         <ion-item lines="none">
           <ion-label>{{ "Config.Backup.config" |_ }}</ion-label>
           <ion-buttons><ion-button (click)="doBackup()"><ion-icon name="settings-outline" slot="end"></ion-icon>{{ "Config.Backup.send" |_ }}</ion-button></ion-buttons>
@@ -771,7 +775,7 @@ ConfigPage = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     <config-masters *ngIf="what === 'masters'"></config-masters>
 
     <p class="version">
-      <span>v2.0.0b2 © Johan Coppieters &amp; Duotecno</span>
+      <span>v2.1.0b2 © Duotecno by Johan Coppieters</span>
       <span class="manual">Download the <a href="https://www.duotecno.be/wp-content/uploads/2020/05/Duotecno-smartbox-app-1.pdf">manual</a></span>
     </p>
   </ion-content>

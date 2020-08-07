@@ -1179,6 +1179,7 @@ const translations = {
         'Config.Backup.send': 'Verstuur',
         'Config.Backup.fetch': 'Haal op',
         'Config.Backup.replace': 'Vervang',
+        'Config.Backup.name': 'Naam',
         'Node.of': 'Units van',
         'General.Done': 'Klaar',
         'General.Save': 'Bewaar',
@@ -1228,6 +1229,7 @@ const translations = {
         'Config.Backup.send': 'Envoyer',
         'Config.Backup.fetch': 'Recevoir',
         'Config.Backup.replace': 'Remplacer',
+        'Config.Backup.name': 'Nom',
         'Node.of': 'Unités de',
         'General.Done': 'OK',
         'General.Save': 'Sauver',
@@ -1277,6 +1279,7 @@ const translations = {
         'Config.Backup.send': 'Send',
         'Config.Backup.fetch': 'Fetch',
         'Config.Backup.replace': 'Replace',
+        'Config.Backup.name': 'Name',
         'Node.of': 'Units of',
         'General.Done': 'Done',
         'General.Save': 'Save',
@@ -2704,7 +2707,7 @@ class Master extends _logger__WEBPACK_IMPORTED_MODULE_3__["Logger"] {
 /*!************************************!*\
   !*** ./src/app/system/protocol.ts ***!
   \************************************/
-/*! exports provided: cmdName, Rec, recName, NodeType, UnitState, UnitMotorCmd, UnitType, Node, Unit, Protocol */
+/*! exports provided: cmdName, Rec, recName, NodeType, UnitState, UnitMotorCmd, UnitType, UnitExtendedType, Node, Unit, Protocol */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2716,6 +2719,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UnitState", function() { return UnitState; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UnitMotorCmd", function() { return UnitMotorCmd; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UnitType", function() { return UnitType; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UnitExtendedType", function() { return UnitExtendedType; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Node", function() { return Node; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Unit", function() { return Unit; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Protocol", function() { return Protocol; });
@@ -2818,7 +2822,7 @@ var UnitMotorCmd;
 ;
 var UnitType;
 (function (UnitType) {
-    UnitType[UnitType["kNoUnit"] = 0] = "kNoUnit";
+    UnitType[UnitType["kNoType"] = 0] = "kNoType";
     UnitType[UnitType["kDimmer"] = 1] = "kDimmer";
     UnitType[UnitType["kSwitch"] = 2] = "kSwitch";
     UnitType[UnitType["kInput"] = 3] = "kInput";
@@ -2830,15 +2834,36 @@ var UnitType;
     UnitType[UnitType["kAV"] = 11] = "kAV";
     UnitType[UnitType["kIRTX"] = 12] = "kIRTX";
     UnitType[UnitType["kVideo"] = 14] = "kVideo";
-    UnitType[UnitType["kLightbulb"] = 101] = "kLightbulb";
-    UnitType[UnitType["kGarageDoor"] = 102] = "kGarageDoor";
-    UnitType[UnitType["kCondition"] = 103] = "kCondition";
-    UnitType[UnitType["kNoType"] = 0] = "kNoType";
 })(UnitType || (UnitType = {}));
 ;
-// kLightbulb  == kSwitch with no "#" in the name
-// kGarageDoor == kSwitchingMotor with "!" in the name
+var UnitExtendedType;
+(function (UnitExtendedType) {
+    UnitExtendedType[UnitExtendedType["kNoType"] = 0] = "kNoType";
+    UnitExtendedType[UnitExtendedType["kDimmer"] = 1] = "kDimmer";
+    UnitExtendedType[UnitExtendedType["kSwitch"] = 2] = "kSwitch";
+    UnitExtendedType[UnitExtendedType["kInput"] = 3] = "kInput";
+    UnitExtendedType[UnitExtendedType["kTemperature"] = 4] = "kTemperature";
+    UnitExtendedType[UnitExtendedType["kExtendedAudio"] = 5] = "kExtendedAudio";
+    UnitExtendedType[UnitExtendedType["kMood"] = 7] = "kMood";
+    UnitExtendedType[UnitExtendedType["kSwitchingMotor"] = 8] = "kSwitchingMotor";
+    UnitExtendedType[UnitExtendedType["kAudio"] = 10] = "kAudio";
+    UnitExtendedType[UnitExtendedType["kAV"] = 11] = "kAV";
+    UnitExtendedType[UnitExtendedType["kIRTX"] = 12] = "kIRTX";
+    UnitExtendedType[UnitExtendedType["kVideo"] = 14] = "kVideo";
+    UnitExtendedType[UnitExtendedType["kLightbulb"] = 101] = "kLightbulb";
+    UnitExtendedType[UnitExtendedType["kCondition"] = 102] = "kCondition";
+    UnitExtendedType[UnitExtendedType["kGarageDoor"] = 201] = "kGarageDoor";
+    UnitExtendedType[UnitExtendedType["kDoor"] = 202] = "kDoor";
+    UnitExtendedType[UnitExtendedType["kLock"] = 203] = "kLock";
+    UnitExtendedType[UnitExtendedType["kUnlocker"] = 204] = "kUnlocker";
+})(UnitExtendedType || (UnitExtendedType = {}));
+;
+// kLightbulb  == kSwitch with no "*" or "$" in the name
+// kDoor == kSwitchingMotor with "*" in the name
+// kGarageDoor == kSwitchingMotor with "$" in the name
 // kCondition  == kMood with "*" in the name
+// kLock == kMood with $ in the name
+// kUnlocker = kMood with $ in the name
 /////////////////////////
 // Node in the network //
 /////////////////////////
@@ -2890,14 +2915,22 @@ class Unit {
         this.group = 0;
         this.node = node;
         _types__WEBPACK_IMPORTED_MODULE_1__["Sanitizers"].unitInfo(params, this);
-        // make a display name for homekit, without the |
+        this.extendedType = this.calcExtendedType();
+        // make a name for homekit, without the | but add § is 'specials' to add "sfeer", etc...
         // if the display name is empty make a N[nodeAdr]-U[unitAdr] name.
-        let separ = this.name.indexOf('|');
-        this.name = (separ < 0) ? this.name : this.name.substring(0, separ) + ' ' + (this.name.substring(separ + 1));
-        this.displayName = (separ < 0) ? this.name : (this.name.substring(separ + 1) + ' ' + this.name.substring(0, separ));
-        if (!this.displayName) {
-            this.displayName = this.getSerialNr();
-        }
+        this.name = this.name.replace(/\|/g, " ");
+        // delete all type modifiers ( $, * and ! )
+        this.displayName = this.name.replace(/\$|\*|\!/g, '') || this.getSerialNr();
+    }
+    hasSpecials() {
+        let special = this.name.indexOf("|20");
+        if (special < 0)
+            special = this.name.indexOf("|50");
+        if (special < 0)
+            special = this.name.indexOf("|90");
+        if (special < 0)
+            special = this.name.indexOf("|OFF");
+        return special >= 0;
     }
     isUnit(master, port, nodeLogicalAddress, unitLogicalAddress) {
         if (master instanceof Unit) {
@@ -2913,7 +2946,7 @@ class Unit {
         }
     }
     sameValue(value) {
-        if ((this.type === UnitType.kSwitchingMotor) || (this.type === UnitType.kGarageDoor)) {
+        if (this.type === UnitType.kSwitchingMotor) {
             return (((this.value == UnitState.kOpening) && (value == 4)) ||
                 ((this.value == UnitState.kClosing) && (value == 5)) ||
                 ((this.value <= UnitState.kOpen) && (value == 3)));
@@ -2923,26 +2956,29 @@ class Unit {
         }
     }
     typeName() {
-        switch (this.type) {
-            case UnitType.kDimmer: return 'Dimmer';
-            case UnitType.kSwitch: return 'Switch/Relay';
-            case UnitType.kLightbulb: return 'Lightbulb';
-            case UnitType.kInput: return 'Control input';
-            case UnitType.kTemperature: return 'Temperature sensor';
-            case UnitType.kExtendedAudio: return 'Extended audio';
-            case UnitType.kMood: return 'Virtual mood';
-            case UnitType.kCondition: return 'Condidtion';
-            case UnitType.kSwitchingMotor: return 'Switch motor';
-            case UnitType.kGarageDoor: return 'Garagedoor';
-            case UnitType.kAudio: return 'Basic audio';
-            case UnitType.kAV: return 'AV Matrix';
-            case UnitType.kIRTX: return 'IRTX';
-            case UnitType.kVideo: return 'Video multiplexer';
+        switch (this.getType()) {
+            case UnitExtendedType.kDimmer: return 'Dimmer';
+            case UnitExtendedType.kSwitch: return 'Switch/Relay';
+            case UnitExtendedType.kLightbulb: return 'Lightbulb';
+            case UnitExtendedType.kInput: return 'Control input';
+            case UnitExtendedType.kTemperature: return 'Temperature sensor';
+            case UnitExtendedType.kExtendedAudio: return 'Extended audio';
+            case UnitExtendedType.kMood: return 'Virtual mood';
+            case UnitExtendedType.kCondition: return 'Condition';
+            case UnitExtendedType.kSwitchingMotor: return 'Switch motor';
+            case UnitExtendedType.kGarageDoor: return 'Garagedoor';
+            case UnitExtendedType.kDoor: return 'Door';
+            case UnitExtendedType.kLock: return 'Lock';
+            case UnitExtendedType.kUnlocker: return 'Unlocker';
+            case UnitExtendedType.kAudio: return 'Basic audio';
+            case UnitExtendedType.kAV: return 'AV Matrix';
+            case UnitExtendedType.kIRTX: return 'IRTX';
+            case UnitExtendedType.kVideo: return 'Video multiplexer';
             default: return 'Unknown unit type (' + this.type + ')';
         }
     }
     getName() {
-        return this.name;
+        return this.displayName;
     }
     getDisplayName() {
         if (this.inMultiNode) {
@@ -2960,14 +2996,11 @@ class Unit {
         switch (this.type) {
             case UnitType.kTemperature: return "01|" + name;
             case UnitType.kSwitchingMotor: return "02|" + name;
-            case UnitType.kGarageDoor: return "02|" + name;
             case UnitType.kDimmer: return "03|" + name;
-            case UnitType.kLightbulb: return "04|" + name;
             case UnitType.kSwitch: return "04|" + name;
+            case UnitType.kMood: return "09|" + name;
             case UnitType.kInput: return "11|" + name;
             case UnitType.kExtendedAudio: "12|" + name;
-            case UnitType.kMood: return "09|" + name;
-            case UnitType.kCondition: return "10|" + name;
             case UnitType.kAudio: return "12|" + name;
             case UnitType.kAV: return "13|" + name;
             case UnitType.kIRTX: return "19|" + name;
@@ -2976,27 +3009,74 @@ class Unit {
         }
     }
     getType() {
+        return this.extendedType;
+    }
+    calcExtendedType() {
+        // General idea extention on DuoTecno's types
+        //
+        // $,! -> kind of lock -> needs authentication
+        // *   -> toggle
+        //
         // Extension on Duotecno's types
         //  updown =>
-        //      if name contains !   => "door""
+        //      if name contains $   => "garagedoor"
+        //      if name contains *   => "door"
         //      else                 => "window-covering"
         //  mood =>
-        //      if name contains *   => "condition" (2 state, don't reset after "on")
+        //      if name contains $   => "unlock", locks again after 1.2 sec
+        //      if name contains *   => permanent locked=on/unlocked=off
         //      else                 => "mood" (turns of 1.2 seconds after being turned on)
         //  switch =>
-        //      if name contains #   => "switch"     (used to be stk)
+        //      if name contains $   => "lock"
+        //      if name contains *   => "switch" (also still works with "stk", "STK" and "Stk")
         //      else                 => "lightbulb" 
         //
-        // exceptions
-        if ((this.type === UnitType.kSwitch) && (this.name.indexOf('#') < 0)) {
-            return UnitType.kLightbulb;
-        }
-        if ((this.type === UnitType.kSwitchingMotor) && (this.name.indexOf('!') >= 0)) {
-            return UnitType.kGarageDoor;
-        }
-        if ((this.type === UnitType.kMood) && (this.name.indexOf('*') >= 0)) {
-            return UnitType.kCondition;
-        }
+        ////////////
+        // Switch //
+        ////////////
+        // Switch -> with * or STK -> Switch
+        if ((this.type === UnitType.kSwitch) &&
+            ((this.name.indexOf("STK") >= 0) || (this.name.indexOf("stk") >= 0) ||
+                (this.name.indexOf("Stk") >= 0) || (this.name.indexOf("*") >= 0)))
+            return UnitExtendedType.kSwitch;
+        // Switch -> with $ -> Door
+        if ((this.type === UnitType.kSwitch) &&
+            (this.name.indexOf("$") >= 0))
+            return UnitExtendedType.kLock;
+        // Switch -> default -> LightBulb
+        if (this.type === UnitType.kSwitch)
+            return UnitExtendedType.kLightbulb;
+        /////////////
+        // Up/Down //
+        /////////////
+        // UpDown -> with $ -> GarageDoor
+        if ((this.type === UnitType.kSwitchingMotor) &&
+            (this.name.indexOf("$") >= 0))
+            return UnitExtendedType.kGarageDoor;
+        // UpDown with * -> Door
+        if ((this.type === UnitType.kSwitchingMotor) &&
+            (this.name.indexOf("*") >= 0))
+            return UnitExtendedType.kDoor;
+        // UpDown -> default -> WindowCovering
+        if (this.type === UnitType.kSwitchingMotor)
+            return UnitExtendedType.kSwitchingMotor;
+        ///////////
+        // Moods //
+        ///////////
+        // Mood -> with $ -> Lock (re-closes after 1.2 secs)
+        if ((this.type === UnitType.kMood) &&
+            (this.name.indexOf("$") >= 0))
+            return UnitExtendedType.kUnlocker;
+        // Mood -> with * -> Mood with state
+        if ((this.type === UnitType.kMood) &&
+            (this.name.indexOf("*") >= 0))
+            return UnitExtendedType.kCondition;
+        // Mood -> default -> Mood (turn off after 1.2 secs)
+        if (this.type === UnitType.kMood)
+            return UnitExtendedType.kMood;
+        ///////////////////////
+        // All other default //
+        ///////////////////////
         return this.type;
     }
     getSerialNr() {
@@ -3007,14 +3087,17 @@ class Unit {
             return 'N' + this.logicalNodeAddress + '-U' + this.logicalAddress;
         }
     }
+    getModelName() {
+        return this.typeName() + " " + Object(_types__WEBPACK_IMPORTED_MODULE_1__["hex"])(this.node.logicalAddress) + ";" + Object(_types__WEBPACK_IMPORTED_MODULE_1__["hex"])(this.logicalAddress);
+    }
     isCtrl() {
         return this.isSwitch() || this.isDimmer() || this.isUpDown();
     }
     isSwitch() {
-        return (this.type === UnitType.kSwitch) || (this.type === UnitType.kLightbulb);
+        return (this.type === UnitType.kSwitch);
     }
     isMood() {
-        return (this.type === UnitType.kMood) || (this.type === UnitType.kCondition);
+        return (this.type === UnitType.kMood);
     }
     isInput() {
         return (this.type === UnitType.kInput);
@@ -3026,7 +3109,7 @@ class Unit {
         return (this.type === UnitType.kDimmer);
     }
     isUpDown() {
-        return (this.type === UnitType.kGarageDoor) || (this.type === UnitType.kSwitchingMotor);
+        return (this.type === UnitType.kSwitchingMotor);
     }
     setPreset(preset, temp) {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
@@ -3062,21 +3145,26 @@ class Unit {
         });
     }
     getDispayState() {
-        switch (this.type) {
-            case UnitType.kDimmer:
+        switch (this.getType()) {
+            case UnitExtendedType.kDimmer:
                 return ((this.status) ? 'on' : 'off') + ' (' + this.value + '%)';
-            case UnitType.kSwitch:
-            case UnitType.kLightbulb:
+            case UnitExtendedType.kSwitch:
+            case UnitExtendedType.kLightbulb:
                 return (this.status) ? 'on' : 'off';
-            case UnitType.kInput:
+            case UnitExtendedType.kInput:
                 return (this.status) ? 'on' : 'off';
-            case UnitType.kTemperature:
+            case UnitExtendedType.kTemperature:
                 return isNaN(this.value) ? "-" : ((this.value / 10.0) + 'C');
-            case UnitType.kCondition:
-            case UnitType.kMood:
+            case UnitExtendedType.kCondition:
+            case UnitExtendedType.kMood:
                 return (this.status) ? 'on' : 'off';
-            case UnitType.kGarageDoor:
-            case UnitType.kSwitchingMotor:
+            case UnitExtendedType.kLock:
+                return (this.status) ? 'locked' : 'unlocked';
+            case UnitExtendedType.kUnlocker:
+                return (this.status) ? 'unlocking' : 'locked';
+            case UnitExtendedType.kGarageDoor:
+            case UnitExtendedType.kDoor:
+            case UnitExtendedType.kSwitchingMotor:
                 if (this.status === UnitState.kOpening) {
                     return 'opening';
                 }
@@ -3258,26 +3346,20 @@ const Protocol = {
     getCmdAndMethod: function (unit, value) {
         switch (unit.type) {
             case UnitType.kDimmer:
-                if (typeof value === 'boolean') {
+                if (typeof value === "boolean")
                     return { cmd: Cmd.SetDimmer, method: (value) ? reqOn : reqOff };
-                }
-                else if (value <= 0) {
+                else if (value <= 0)
                     return { cmd: Cmd.SetDimmer, method: reqOff };
-                }
-                else {
+                else
                     return { cmd: Cmd.SetDimmer, method: reqDim, value: Math.max(Math.min(value, 99), 1) };
-                }
             case UnitType.kSwitch:
                 return { cmd: Cmd.SetSwitch, method: (value) ? 3 : 2 };
             case UnitType.kInput:
             case UnitType.kMood:
-            case UnitType.kCondition:
-                if (value < 0) {
-                    return { cmd: Cmd.SetControl, method: 2 };
-                } // short pulse
-                else {
-                    return { cmd: Cmd.SetControl, method: 3, value: (value) ? 1 : 0 };
-                } // long event + 0/1
+                if (value < 0)
+                    return { cmd: Cmd.SetControl, method: 2 }; // short pulse
+                else
+                    return { cmd: Cmd.SetControl, method: 3, value: (value) ? 1 : 0 }; // long event + 0/1
             case UnitType.kSwitchingMotor:
                 return { cmd: Cmd.SetMotor, method: value }; // 5 close, 4 open, 3 is stop
             case UnitType.kTemperature:
@@ -3807,29 +3889,31 @@ let System = class System extends _logger__WEBPACK_IMPORTED_MODULE_5__["Logger"]
     findOpenMaster() {
         return this.masters.find(m => m.isOpen);
     }
-    doBackup() {
+    doBackup(name) {
+        // prepend ip address of first open master to the name
         const master = this.findOpenMaster();
         if (master) {
-            _protocol__WEBPACK_IMPORTED_MODULE_4__["Protocol"].write(master.getSocket(), '[9,B-' + master.getAddress() + '-system:' +
+            _protocol__WEBPACK_IMPORTED_MODULE_4__["Protocol"].write(master.getSocket(), '[9,B-' + master.getAddress() + '-' + name + '-system:' +
                 this.toTransport({ groups: this.groups, scenes: this.scenes, config: this.config }) + ']');
         }
     }
-    sendScenes() {
+    sendScenes(name) {
+        // scenes are 
         const master = this.findOpenMaster();
         if (master) {
-            _protocol__WEBPACK_IMPORTED_MODULE_4__["Protocol"].write(master.getSocket(), '[9,S-' + master.getAddress() + '-scenes:' + this.toTransport(this.scenes) + ']');
+            _protocol__WEBPACK_IMPORTED_MODULE_4__["Protocol"].write(master.getSocket(), '[9,S-' + master.getAddress() + '-' + name + '-scenes:' + this.toTransport(this.scenes) + ']');
         }
     }
-    doRequestBackup() {
+    doRequestBackup(name) {
         // request restore (will come in async)
+        // prepend ip address of first open master to the name
         const master = this.findOpenMaster();
         if (master) {
             this.log("requesting backup from " + master.getAddress());
-            _protocol__WEBPACK_IMPORTED_MODULE_4__["Protocol"].write(master.getSocket(), '[9,R-' + master.getAddress() + '-system:]');
+            _protocol__WEBPACK_IMPORTED_MODULE_4__["Protocol"].write(master.getSocket(), '[9,R-' + master.getAddress() + '-' + name + '-system:]');
         }
     }
     doReceiveBackup(type, data) {
-        console.log(data);
         this.backup = this.fromTransport(data);
         this.log("received backup: groups = " + this.backup.groups.length +
             ", scenes: " + this.backup.scenes.length +
@@ -4017,6 +4101,7 @@ const Sanitizers = {
             config = {};
         }
         config.language = config.language || 'EN';
+        config.backupname = config.backupname || 'default';
         config.stores = config.stores || false;
         config.multiple = config.multiple || false;
         config.remotescenes = config.remotescenes || false;
