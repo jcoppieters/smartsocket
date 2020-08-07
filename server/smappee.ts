@@ -138,13 +138,13 @@ export class Smappee extends Base {
 
       this.plugs[plugNr] = newState;
       // send status change to system
-      this.system.emitter.emit('switch', SwitchType.kSmappee, plugNr, (message.value == "ON"));
+      this.system.emitter.emit('switch', SwitchType.kSmappee, plugNr, newState);
     }
   }
 
   setPlug(plugNr, state: boolean) {
     const currState = this.plugs[plugNr];
-    if (typeof currState === "boolean") {
+    if ((typeof currState === "boolean") && (state != currState)) {
       const topic = 'servicelocation/' + this.config.uid + '/plug/' + plugNr + '/setstate';
       const payload = '{"value": "' + ((state) ? "ON" : "OFF") + '", "since": "' + (new Date().getTime()) + '"}';
       this.client.publish(topic, payload);

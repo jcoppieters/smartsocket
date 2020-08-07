@@ -2016,7 +2016,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     MoodControl = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
       selector: 'mood',
       inputs: ['service'],
-      template: "\n    <ion-item lines=\"none\">\n      <ion-label>{{service.name}}</ion-label>\n      <ion-button slot=\"end\" shape=\"round\" [color]=\"moodColor()\"\n              (mousedown)=\"down($event)\" (mouseup)=\"up($event)\"\n              (touchstart)=\"down($event)\" (touchend)=\"up($event)\"></ion-button>\n    </ion-item>\n  ",
+      template: "\n    <ion-item lines=\"none\">\n      <ion-label>{{service.getName()}}</ion-label>\n      <ion-button slot=\"end\" shape=\"round\" [color]=\"moodColor()\"\n              (mousedown)=\"down($event)\" (mouseup)=\"up($event)\"\n              (touchstart)=\"down($event)\" (touchend)=\"up($event)\"></ion-button>\n    </ion-item>\n  ",
       styles: ["ion-button { width: 25px; height: 25px }"]
     }), tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_ionic_angular__WEBPACK_IMPORTED_MODULE_2__["ToastController"]])], MoodControl);
     /***/

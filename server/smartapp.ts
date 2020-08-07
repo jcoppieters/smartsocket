@@ -375,9 +375,11 @@ export class SmartApp extends SocApp {
     } else {
       if ((swtch.type === SwitchType.kSmappee) && (this.smappee)) {
         this.smappee.setPlug(parseInt(swtch.plug), state);
+
       } else if (swtch.type === SwitchType.kHTTP) {
-        this.httpSwitch(swtch.plug, state)
+        this.httpSwitch(swtch.plug, state);
       } else {
+        
         this.err("Don't know how to set a switch of type " + swtch.type);
       }
     }

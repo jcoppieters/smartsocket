@@ -1538,7 +1538,7 @@ MoodControl = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         inputs: ['service'],
         template: `
     <ion-item lines="none">
-      <ion-label>{{service.name}}</ion-label>
+      <ion-label>{{service.getName()}}</ion-label>
       <ion-button slot="end" shape="round" [color]="moodColor()"
               (mousedown)="down($event)" (mouseup)="up($event)"
               (touchstart)="down($event)" (touchend)="up($event)"></ion-button>
