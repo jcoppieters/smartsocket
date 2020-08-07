@@ -89,6 +89,8 @@ switch =>
     else                 => "lightbulb"
 ```
 
+### v5.4.1 - 07/08/2020 - bug fixing
+- sending -1 to moods not 0/1 (we don't do long on/off in homebridge)
 
 
 ### Todo
