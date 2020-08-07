@@ -33,6 +33,7 @@ class Lock extends accessory_1.Accessory {
     }
     setTarget(value, next) {
         this.targetState = value;
+        // unlocker is a mood, a lock is a switch
         const dtVal = (this.unit.getType() === protocol_1.UnitExtendedType.kUnlocker) ? -1 : value;
         this.log("HB setting target state of lock: to " + value + " of " + this.unit.getDescription() + " (duotecno: " + dtVal + ")");
         this.unit.setState(dtVal)

@@ -311,7 +311,7 @@ class Unit {
         //      if name contains *   => permanent locked=on/unlocked=off
         //      else                 => "mood" (turns of 1.2 seconds after being turned on)
         //  switch =>
-        //      if name contains $   => "door"
+        //      if name contains $   => "lock"
         //      if name contains *   => "switch" (also still works with "stk", "STK" and "Stk")
         //      else                 => "lightbulb" 
         //
@@ -326,7 +326,7 @@ class Unit {
         // Switch -> with $ -> Door
         if ((this.type === UnitType.kSwitch) &&
             (this.name.indexOf("$") >= 0))
-            return UnitExtendedType.kDoor;
+            return UnitExtendedType.kLock;
         // Switch -> default -> LightBulb
         if (this.type === UnitType.kSwitch)
             return UnitExtendedType.kLightbulb;

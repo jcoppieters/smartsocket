@@ -80,11 +80,11 @@ updown =>
     if name contains *   => "door"
     else                 => "window-covering"
 mood =>
-    if name contains $   => "lock", locks again after 1.2 sec
+    if name contains $   => "unlocker", locks again after 1.2 sec
     if name contains *   => permanent locked=on/unlocked=off
     else                 => "mood" (turns of 1.2 seconds after being turned on)
 switch =>
-    if name contains $   => "door"
+    if name contains $   => "lock"
     if name contains *   => "switch" (also still works with "stk", "STK" and "Stk")
     else                 => "lightbulb"
 ```
