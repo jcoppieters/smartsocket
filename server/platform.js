@@ -164,34 +164,34 @@ class Platform extends base_1.Base {
             this.system.allActiveUnits().forEach(unit => {
                 this.log("adding accessory: " + unit.getDescription());
                 switch (unit.getType()) {
-                    case protocol_1.UnitType.kDimmer:
+                    case protocol_1.UnitExtendedType.kDimmer:
                         this.accessoryList.push(new dimmer_1.Dimmer(logger, this.homebridge, unit));
                         break;
-                    case protocol_1.UnitType.kSwitch:
+                    case protocol_1.UnitExtendedType.kSwitch:
                         this.accessoryList.push(new switch_1.Switch(logger, this.homebridge, unit));
                         break;
-                    case protocol_1.UnitType.kLightbulb:
+                    case protocol_1.UnitExtendedType.kLightbulb:
                         this.accessoryList.push(new bulb_1.Bulb(logger, this.homebridge, unit));
                         break;
-                    case protocol_1.UnitType.kSwitchingMotor:
+                    case protocol_1.UnitExtendedType.kSwitchingMotor:
                         this.accessoryList.push(new windowcovering_1.WindowCovering(logger, this.homebridge, unit));
                         break;
-                    case protocol_1.UnitType.kGarageDoor:
+                    case protocol_1.UnitExtendedType.kGarageDoor:
                         this.accessoryList.push(new garagedoor_1.GarageDoor(logger, this.homebridge, unit));
                         break;
-                    case protocol_1.UnitType.kDoor:
+                    case protocol_1.UnitExtendedType.kDoor:
                         this.accessoryList.push(new door_1.Door(logger, this.homebridge, unit));
                         break;
-                    case protocol_1.UnitType.kLock:
-                    case protocol_1.UnitType.kUnlocker:
+                    case protocol_1.UnitExtendedType.kLock:
+                    case protocol_1.UnitExtendedType.kUnlocker:
                         this.accessoryList.push(new lock_1.Lock(logger, this.homebridge, unit));
                         break;
-                    case protocol_1.UnitType.kMood:
-                    case protocol_1.UnitType.kCondition:
-                    case protocol_1.UnitType.kInput:
+                    case protocol_1.UnitExtendedType.kMood:
+                    case protocol_1.UnitExtendedType.kCondition:
+                    case protocol_1.UnitExtendedType.kInput:
                         this.accessoryList.push(new mood_1.Mood(logger, this.homebridge, unit));
                         break;
-                    case protocol_1.UnitType.kTemperature:
+                    case protocol_1.UnitExtendedType.kTemperature:
                         this.accessoryList.push(new temperature_1.Temperature(logger, this.homebridge, unit));
                         break;
                     default:

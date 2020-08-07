@@ -1,9 +1,9 @@
-import { LogFunction, HomebridgeConfig, PlatformConfig } from "../duotecno/types";
+import { LogFunction, PlatformConfig } from "../duotecno/types";
 import { System } from "../duotecno/system";
 import { Smappee } from "./smappee";
 import { SmartApp } from "./smartapp";
 import { Dimmer } from "../accessories/dimmer";
-import { UnitType, Unit, Protocol } from "../duotecno/protocol";
+import { Unit, Protocol, UnitExtendedType } from "../duotecno/protocol";
 import { Switch } from "../accessories/switch";
 import { Bulb } from "../accessories/bulb";
 import { WindowCovering } from "../accessories/windowcovering";
@@ -177,42 +177,42 @@ export class Platform extends Base {
     this.system.allActiveUnits().forEach(unit => {
       this.log("adding accessory: " + unit.getDescription());
       switch (unit.getType()) {
-        case UnitType.kDimmer:
+        case UnitExtendedType.kDimmer:
           this.accessoryList.push( new Dimmer(logger, this.homebridge, unit) );
           break;
 
-        case UnitType.kSwitch:
+        case UnitExtendedType.kSwitch:
           this.accessoryList.push( new Switch(logger, this.homebridge, unit) );
           break;
 
-        case UnitType.kLightbulb:
+        case UnitExtendedType.kLightbulb:
           this.accessoryList.push( new Bulb(logger, this.homebridge, unit) );
           break;
 
-        case UnitType.kSwitchingMotor:
+        case UnitExtendedType.kSwitchingMotor:
           this.accessoryList.push( new WindowCovering(logger, this.homebridge, unit) );
           break;
 
-        case UnitType.kGarageDoor:
+        case UnitExtendedType.kGarageDoor:
           this.accessoryList.push( new GarageDoor(logger, this.homebridge, unit) );
           break;
 
-        case UnitType.kDoor:
+        case UnitExtendedType.kDoor:
           this.accessoryList.push( new Door(logger, this.homebridge, unit) );
           break;
 
-        case UnitType.kLock:
-        case UnitType.kUnlocker:
+        case UnitExtendedType.kLock:
+        case UnitExtendedType.kUnlocker:
           this.accessoryList.push( new Lock(logger, this.homebridge, unit) );
           break;
   
-        case UnitType.kMood:
-        case UnitType.kCondition:
-        case UnitType.kInput:
+        case UnitExtendedType.kMood:
+        case UnitExtendedType.kCondition:
+        case UnitExtendedType.kInput:
               this.accessoryList.push( new Mood(logger, this.homebridge, unit) );
           break;
 
-        case UnitType.kTemperature:
+        case UnitExtendedType.kTemperature:
           this.accessoryList.push( new Temperature(logger, this.homebridge, unit) );
           break;
 

@@ -15,7 +15,7 @@ class Lock extends accessory_1.Accessory {
         super(log, homebridge, unit);
         this.log("created Lock -> " + unit.getDescription());
         // set default for Unlocked to Locked
-        if (this.unit.getType() === protocol_1.UnitType.kUnlocker)
+        if (this.unit.getType() === protocol_1.UnitExtendedType.kUnlocker)
             unit.setState(1);
     }
     getAccessoryServices() {
@@ -33,13 +33,14 @@ class Lock extends accessory_1.Accessory {
     }
     setTarget(value, next) {
         this.targetState = value;
-        this.log("HB setting target state of lock: to " + value + " of " + this.unit.getDescription());
-        this.unit.setState(!!value)
+        const dtVal = (this.unit.getType() === protocol_1.UnitExtendedType.kUnlocker) ? -1 : value;
+        this.log("HB setting target state of lock: to " + value + " of " + this.unit.getDescription() + " (duotecno: " + dtVal + ")");
+        this.unit.setState(dtVal)
             .then(() => {
             //bypass ip node update mechanism of Duotecno
             this.unit.status = value;
             this.updateState();
-            if (this.unit.getType() === protocol_1.UnitType.kUnlocker) {
+            if (this.unit.getType() === protocol_1.UnitExtendedType.kUnlocker) {
                 // always set to "locked" after sending the request.
                 this.unit.resetTimer = setTimeout(() => {
                     this.log("Autolock for an unlocker after 2 secs of " + this.unit.getDescription());
@@ -60,7 +61,7 @@ class Lock extends accessory_1.Accessory {
     getCurrent(next) {
         this.unit.reqState(unit => {
             this.log("HB getting current state of lock = " + this.unit.status + " of " + this.unit.getDescription());
-            next(null, this.unit.status);
+            next(null, !!this.unit.status);
         });
     }
     // in response to Duotecno status messages

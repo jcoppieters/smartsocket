@@ -97,18 +97,27 @@ export enum NodeType { kNoNode = 0, kStandardNode = 1, kGatewayNode = 4, kModemN
 export enum UnitState { kOpening = 4, kClosing = 3, kOpen = 2, kClosed = 1, kStopped = 0 };
 export enum UnitMotorCmd { kClose = 5, kOpen = 4, kStop = 3};
 
-export enum UnitType { kNoUnit = 0, kDimmer = 1, kSwitch = 2, kInput = 3, 
-                       kTemperature = 4, kExtendedAudio = 5, kMood = 7, kSwitchingMotor = 8, 
-                       kAudio = 10, kAV = 11, kIRTX = 12, kVideo = 14, 
-                       kLightbulb = 101, kCondition = 102, 
-                       kGarageDoor = 201, kDoor = 202, kLock = 203, kUnlocker = 204,
-                       kNoType = 0 };
-// kLightbulb  == kSwitch with no "#" in the name
-// kDoor == kSwitchingMotor with "!" in the name
-// kGarageDoor == kSwitchingMotor with "#" in the name
+export enum UnitType { 
+  kNoType = 0, kDimmer = 1, kSwitch = 2, kInput = 3, 
+  kTemperature = 4, kExtendedAudio = 5, kMood = 7, kSwitchingMotor = 8, 
+  kAudio = 10, kAV = 11, kIRTX = 12, kVideo = 14
+};
+export enum UnitExtendedType /* extends UnitType */ { 
+  kNoType = 0, kDimmer = 1, kSwitch = 2, kInput = 3, 
+  kTemperature = 4, kExtendedAudio = 5, kMood = 7, kSwitchingMotor = 8, 
+  kAudio = 10, kAV = 11, kIRTX = 12, kVideo = 14,
+
+  kLightbulb = 101, kCondition = 102, 
+  kGarageDoor = 201, kDoor = 202, kLock = 203, kUnlocker = 204
+};
+
+
+// kLightbulb  == kSwitch with no "*" or "$" in the name
+// kDoor == kSwitchingMotor with "*" in the name
+// kGarageDoor == kSwitchingMotor with "$" in the name
 // kCondition  == kMood with "*" in the name
-// kLock == kMood with $ and *
-// kUnlocker = kMood with $
+// kLock == kMood with $ in the name
+// kUnlocker = kMood with $ in the name
 
 /////////////////////////
 // Node in the network //
@@ -187,6 +196,7 @@ export class Unit {
   logicalNodeAddress: number;
   logicalAddress: number;
   type: UnitType;
+  extendedType: UnitExtendedType;
   flags: number;
   displayName: string;
   value: number | boolean;
@@ -205,6 +215,7 @@ export class Unit {
   constructor(node, params: UnitInfo, moodName: string = "mood") {
     this.node = node;
     Sanitizers.unitInfo(params, this);
+    this.extendedType = this.calcExtendedType();
 
     // make a name for homekit, without the | but add § is 'specials' to add "sfeer", etc...
     // if the display name is empty make a N[nodeAdr]-U[unitAdr] name.
@@ -239,7 +250,7 @@ export class Unit {
   }
 
   sameValue(value): boolean {
-    if ((this.type === UnitType.kSwitchingMotor) || (this.type === UnitType.kGarageDoor) || (this.type === UnitType.kDoor))
+    if (this.type === UnitType.kSwitchingMotor)
       return (((this.value == UnitState.kOpening) && (value == 4)) ||
               ((this.value == UnitState.kClosing) && (value == 5)) ||
               ((this.value <= UnitState.kOpen) && (value == 3)));
@@ -249,23 +260,23 @@ export class Unit {
 
   typeName(): string {
     switch (this.getType()) {
-      case UnitType.kDimmer: return 'Dimmer';
-      case UnitType.kSwitch: return 'Switch/Relay';
-      case UnitType.kLightbulb: return 'Lightbulb';
-      case UnitType.kInput: return 'Control input';
-      case UnitType.kTemperature: return 'Temperature sensor';
-      case UnitType.kExtendedAudio: return 'Extended audio';
-      case UnitType.kMood: return 'Virtual mood';
-      case UnitType.kCondition: return 'Condition';
-      case UnitType.kSwitchingMotor: return 'Switch motor';
-      case UnitType.kGarageDoor: return 'Garagedoor';
-      case UnitType.kDoor: return 'Door';
-      case UnitType.kLock: return 'Lock';
-      case UnitType.kUnlocker: return 'Unlocker';
-      case UnitType.kAudio: return 'Basic audio';
-      case UnitType.kAV: return 'AV Matrix';
-      case UnitType.kIRTX: return 'IRTX';
-      case UnitType.kVideo: return 'Video multiplexer';
+      case UnitExtendedType.kDimmer: return 'Dimmer';
+      case UnitExtendedType.kSwitch: return 'Switch/Relay';
+      case UnitExtendedType.kLightbulb: return 'Lightbulb';
+      case UnitExtendedType.kInput: return 'Control input';
+      case UnitExtendedType.kTemperature: return 'Temperature sensor';
+      case UnitExtendedType.kExtendedAudio: return 'Extended audio';
+      case UnitExtendedType.kMood: return 'Virtual mood';
+      case UnitExtendedType.kCondition: return 'Condition';
+      case UnitExtendedType.kSwitchingMotor: return 'Switch motor';
+      case UnitExtendedType.kGarageDoor: return 'Garagedoor';
+      case UnitExtendedType.kDoor: return 'Door';
+      case UnitExtendedType.kLock: return 'Lock';
+      case UnitExtendedType.kUnlocker: return 'Unlocker';
+      case UnitExtendedType.kAudio: return 'Basic audio';
+      case UnitExtendedType.kAV: return 'AV Matrix';
+      case UnitExtendedType.kIRTX: return 'IRTX';
+      case UnitExtendedType.kVideo: return 'Video multiplexer';
       default: return 'Unknown unit type (' + this.type + ')';
     }
   }
@@ -287,17 +298,11 @@ export class Unit {
     switch(this.type) {
       case UnitType.kTemperature: return "01|" + name;
       case UnitType.kSwitchingMotor: return "02|" + name;
-      case UnitType.kGarageDoor: return "02|" + name;
-      case UnitType.kDoor: return "02|" + name;
-      case UnitType.kLock: return "02|" + name;
-      case UnitType.kUnlocker: return "02|" + name;
       case UnitType.kDimmer: return "03|" + name;
-      case UnitType.kLightbulb: return "04|" + name;
       case UnitType.kSwitch: return "04|" + name;
       case UnitType.kInput: return "11|" + name;
       case UnitType.kExtendedAudio: "12|" + name;
       case UnitType.kMood: return "09|" + name;
-      case UnitType.kCondition: return "10|" + name;
       case UnitType.kAudio: return "12|" + name;
       case UnitType.kAV: return "13|" + name;
       case UnitType.kIRTX: return "19|" + name;
@@ -306,7 +311,11 @@ export class Unit {
     } 
   }
 
-  getType(): UnitType {
+  getType(): UnitExtendedType {
+    return this.extendedType;
+  }
+
+  calcExtendedType(): UnitExtendedType {
     // General idea:
     //
     // $,! -> kind of lock -> needs authentication
@@ -318,7 +327,7 @@ export class Unit {
     //      if name contains *   => "door"
     //      else                 => "window-covering"
     //  mood =>
-    //      if name contains $   => "lock", locks again after 1.2 sec
+    //      if name contains $   => "unlock", locks again after 1.2 sec
     //      if name contains *   => permanent locked=on/unlocked=off
     //      else                 => "mood" (turns of 1.2 seconds after being turned on)
     //  switch =>
@@ -334,16 +343,16 @@ export class Unit {
     if ((this.type === UnitType.kSwitch) &&
         ((this.name.indexOf("STK") >= 0) || (this.name.indexOf("stk") >= 0) || 
          (this.name.indexOf("Stk") >= 0) || (this.name.indexOf("*") >= 0)))
-      return UnitType.kSwitch;
+      return UnitExtendedType.kSwitch;
 
     // Switch -> with $ -> Door
     if ((this.type === UnitType.kSwitch) &&
         (this.name.indexOf("$") >= 0))
-      return UnitType.kDoor;
+      return UnitExtendedType.kDoor;
 
     // Switch -> default -> LightBulb
     if (this.type === UnitType.kSwitch) 
-      return UnitType.kLightbulb;
+      return UnitExtendedType.kLightbulb;
 
 
     /////////////
@@ -352,16 +361,16 @@ export class Unit {
     // UpDown -> with $ -> GarageDoor
     if ((this.type === UnitType.kSwitchingMotor) &&
         (this.name.indexOf("$") >= 0))
-      return UnitType.kGarageDoor;
+      return UnitExtendedType.kGarageDoor;
 
     // UpDown with * -> Door
     if ((this.type === UnitType.kSwitchingMotor) &&
         (this.name.indexOf("*") >= 0))
-      return UnitType.kDoor;
+      return UnitExtendedType.kDoor;
 
     // UpDown -> default -> WindowCovering
     if (this.type === UnitType.kSwitchingMotor) 
-      return UnitType.kSwitchingMotor;
+      return UnitExtendedType.kSwitchingMotor;
 
     ///////////
     // Moods //
@@ -369,21 +378,21 @@ export class Unit {
     // Mood -> with $ -> Lock (re-closes after 1.2 secs)
     if ((this.type === UnitType.kMood) && 
         (this.name.indexOf("$") >= 0))
-      return UnitType.kUnlocker;
+      return UnitExtendedType.kUnlocker;
 
     // Mood -> with * -> Mood with state
     if ((this.type === UnitType.kMood) && 
         (this.name.indexOf("*") >= 0))
-      return UnitType.kCondition;
+      return UnitExtendedType.kCondition;
 
     // Mood -> default -> Mood (turn off after 1.2 secs)
     if (this.type === UnitType.kMood)
-      return UnitType.kMood;
+      return UnitExtendedType.kMood;
 
     ///////////////////////
     // All other default //
     ///////////////////////
-    return this.type;
+    return <UnitExtendedType><unknown>this.type;
   }
 
   getSerialNr(): string {
@@ -401,13 +410,13 @@ export class Unit {
     return this.isSwitch() || this.isDimmer() || this.isUpDown();
   }
   isSwitch(): boolean {
-    return (this.type === UnitType.kSwitch) || (this.type === UnitType.kLightbulb);
+    return (this.type === UnitType.kSwitch);
   }
   isMood(): boolean {
     return (this.type === UnitType.kMood);
   }
   isInput(): boolean {
-    return (this.type === UnitType.kInput) || (this.type === UnitType.kLock) || (this.type === UnitType.kUnlocker);
+    return (this.type === UnitType.kInput);
   }
   isTemperature(): boolean {
     return (this.type === UnitType.kTemperature);
@@ -416,7 +425,7 @@ export class Unit {
     return (this.type === UnitType.kDimmer);
   }
   isUpDown(): boolean {
-    return (this.type === UnitType.kGarageDoor) || (this.type === UnitType.kSwitchingMotor) || (this.type === UnitType.kDoor);
+    return (this.type === UnitType.kSwitchingMotor);
   }
 
   async setPreset(preset: number, temp: number) {
@@ -446,33 +455,33 @@ export class Unit {
 
 
   getDispayState(): string {
-    switch(this.type) {
-      case UnitType.kDimmer: 
+    switch(this.getType()) {
+      case UnitExtendedType.kDimmer: 
         return ((this.status) ? 'on' : 'off') + ' (' + this.value + '%)';
 
-      case UnitType.kSwitch:
-      case UnitType.kLightbulb: 
+      case UnitExtendedType.kSwitch:
+      case UnitExtendedType.kLightbulb: 
         return (this.status) ? 'on' : 'off';
 
-      case UnitType.kInput: 
+      case UnitExtendedType.kInput: 
         return (this.status) ? 'on' : 'off';
 
-      case UnitType.kTemperature: 
+      case UnitExtendedType.kTemperature: 
         return isNaN(<number>this.value) ? "-" : ((<number>this.value / 10.0) + 'C');
 
-      case UnitType.kCondition: 
-      case UnitType.kMood: 
+      case UnitExtendedType.kCondition: 
+      case UnitExtendedType.kMood: 
         return (this.status) ? 'on' : 'off';
 
-      case UnitType.kLock:
+      case UnitExtendedType.kLock:
         return (this.status) ? 'locked' : 'unlocked';
 
-      case UnitType.kUnlocker:
+      case UnitExtendedType.kUnlocker:
         return (this.status) ? 'unlocked' : 'locked';
 
-      case UnitType.kGarageDoor:
-      case UnitType.kDoor:
-      case UnitType.kSwitchingMotor:
+      case UnitExtendedType.kGarageDoor:
+      case UnitExtendedType.kDoor:
+      case UnitExtendedType.kSwitchingMotor:
         if (this.status === UnitState.kOpening) { return 'opening'; }
         if (this.status === UnitState.kClosing) { return 'closing'; }
         if (this.status === UnitState.kOpen) { return 'open'; }

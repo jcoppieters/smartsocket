@@ -1,6 +1,6 @@
 import { Accessory } from "./accessory";
 import { LogFunction } from "../duotecno/types";
-import { Unit, UnitType } from "../duotecno/protocol";
+import { Unit, UnitExtendedType } from "../duotecno/protocol";
 
 // Johan Coppieters Jan 2019
 //
@@ -32,13 +32,17 @@ export class Mood extends Accessory {
   getMood(next) {
     this.log("getMood was called for " + this.unit.node.getName() + " - " + this.unit.getName() + " -> false");
 
-    next(null, false);
+    next(null, !!this.unit.value);
   }
   setMood(value, next) {
     if (this.unit) {
-      this.unit.setState(value)
+      this.unit.setState(-1)
         .then(() => { 
-          if (this.unit.getType() === UnitType.kMood) {
+          //bypass ip node update mechanism of Duotecno
+          this.unit.status = value;
+          this.updateState();
+
+          if (this.unit.getType() === UnitExtendedType.kMood) {
             // always set to "off" after sending the request.
             this.unit.resetTimer = setTimeout(() => {
               this.unit.value = false;
@@ -53,6 +57,10 @@ export class Mood extends Accessory {
     } else {
       next( new Error("accessory -> setState needs to be overridden if no unit is provided.") );
     }
+  }
+  updateState() {
+    this.me.getCharacteristic(this.homebridge.Characteristic.On).updateValue(!!this.unit.value);
+    this.log("Received status change -> update accessory -> " + this.unit.getName() + " -> On = " + !!this.unit.value);
   }
 
 }
