@@ -300,13 +300,13 @@ export class Unit {
       case UnitType.kSwitchingMotor: return "02|" + name;
       case UnitType.kDimmer: return "03|" + name;
       case UnitType.kSwitch: return "04|" + name;
+      case UnitType.kMood: return "09|" + name;
       case UnitType.kInput: return "11|" + name;
       case UnitType.kExtendedAudio: "12|" + name;
-      case UnitType.kMood: return "09|" + name;
       case UnitType.kAudio: return "12|" + name;
       case UnitType.kAV: return "13|" + name;
-      case UnitType.kIRTX: return "19|" + name;
       case UnitType.kVideo: return "14|" + name;
+      case UnitType.kIRTX: return "19|" + name;
       default: return "99|" + name;
     } 
   }
@@ -316,7 +316,7 @@ export class Unit {
   }
 
   calcExtendedType(): UnitExtendedType {
-    // General idea:
+    // General idea extention on DuoTecno's types
     //
     // $,! -> kind of lock -> needs authentication
     // *   -> toggle
@@ -477,7 +477,7 @@ export class Unit {
         return (this.status) ? 'locked' : 'unlocked';
 
       case UnitExtendedType.kUnlocker:
-        return (this.status) ? 'unlocked' : 'locked';
+        return (this.status) ? 'unlocking' : 'locked';
 
       case UnitExtendedType.kGarageDoor:
       case UnitExtendedType.kDoor:
