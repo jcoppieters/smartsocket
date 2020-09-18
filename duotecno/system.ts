@@ -76,6 +76,7 @@ export class System extends Base {
       await master.open();
       if (! await master.login()) throw(new Error("Failed to log in"));
       await master.getDatabase(readDB);
+
       this.log("master: " + master.getAddress() + " opened with " + master.nodes.length + " nodes.");
       this.triggerRebuild();
       return master;

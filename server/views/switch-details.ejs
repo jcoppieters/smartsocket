@@ -55,8 +55,9 @@
           <div class="input-field col s8">
             <select name="type" id="type">
               <option value="" <%= (swtch.type == '') ? 'selected' : '' %>>Select Type</option>
-              <option value="smappee" <%= (swtch.type == 'smappee') ? 'selected' : '' %>>Smappee</option>
-              <option value="http" <%= (swtch.type == 'http') ? 'selected' : '' %>>HTTP</option>
+              <option value="smappee" <%= (swtch.type == 'smappee') ? 'selected' : '' %>>Smappee Switch</option>
+              <option value="http" <%= (swtch.type == 'http') ? 'selected' : '' %>>HTTP Switch</option>
+              <option value="httpdim" <%= (swtch.type == 'httpdim') ? 'selected' : '' %>>HTTP Dimmer</option>
               <option value="RF" <%= (swtch.type == 'RF') ? 'selected' : '' %>>RF</option>
             </select>
             <label for="type">Type</label>

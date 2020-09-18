@@ -328,7 +328,7 @@ export class SmartApp extends SocApp {
   informChange(u: Unit) {
     this.switches.forEach(swtch => {
       if (u.isUnit(swtch.masterAddress, swtch.masterPort, swtch.logicalNodeAddress, swtch.logicalAddress)) {
-        this.setSwitch(swtch, !!u.status);
+        this.setSwitch(swtch, !!u.status, +u.value);
       }
     });
   }
@@ -355,9 +355,9 @@ export class SmartApp extends SocApp {
     }
   }
 
-  setSwitch(inx: number, state: boolean);
-  setSwitch(swtch: Switch, state: boolean);
-  setSwitch(inx: number | Switch, state: boolean) {
+  setSwitch(inx: number, state: boolean, value?: number);
+  setSwitch(swtch: Switch, state: boolean, value?: number);
+  setSwitch(inx: number | Switch, state: boolean, value?: number) {
     // find the switch
     let swtch = null;
     if (typeof inx === "number") {
@@ -376,10 +376,13 @@ export class SmartApp extends SocApp {
       if ((swtch.type === SwitchType.kSmappee) && (this.smappee)) {
         this.smappee.setPlug(parseInt(swtch.plug), state);
 
-      } else if (swtch.type === SwitchType.kHTTP) {
+      } else if (swtch.type === SwitchType.kHTTPSwitch) {
         this.httpSwitch(swtch.plug, state);
+
+      } else if (swtch.type === SwitchType.kHTTPDimmer) {
+        this.httpDimmer(swtch.plug, state, value);
+
       } else {
-        
         this.err("Don't know how to set a switch of type " + swtch.type);
       }
     }
@@ -389,15 +392,24 @@ export class SmartApp extends SocApp {
   // http driven switches //
   //////////////////////////
 
-  httpSwitch(url, value) {
+  httpSwitch(url, state: boolean) {
     const parts = url.split("|");
     let base = parts[0];
-    const inx = value + 1;
-    if (parts.length > (inx))
-      base += parts[inx];
 
-    this.log("Switch: " + value + " -> " + base);
+    if (parts.length > 2) {
+      base += parts[state ? 2 : 1];
+    }
+
+    this.log("Switch: " + state + " -> " + base);
     this.wget(base);
+  }
+
+  httpDimmer(url, state: boolean, value: number) {
+    if (!state) value = 0;
+    url = url.replace("$", value);
+    
+    this.log("Dimmer: " + state + " -> " + url);
+    this.wget(url);
   }
 
   wget(url: string) {

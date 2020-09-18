@@ -373,16 +373,21 @@ export class Master extends Base {
 
     await this.fetchDbInfo();
 
-    if (readDB)
-      setTimeout(async () => {
-        this.system.allMasters(m => {
-          this.log("reading node db of " + m.getAddress() + ":" + m.getPort());
-          m.allNodes(async n => {
-            this.log("reading unit db of " + n.getName());
-            await m.fetchAllUnits(n);
-          });
-        });
-      }, 1000);
+    // I think this is never needed:
+    //   fetchDbInfo triggers receiveDBInfo
+    //   which does a fetchNode that triggers receiveNodeInfo
+    //   which does a fetchAllUnits that triggers a receiveUnitInfo for all units
+    
+    // if (readDB)
+    //   setTimeout(async () => {
+    //     this.system.allMasters(m => {
+    //       this.log("reading node db of " + m.getAddress() + ":" + m.getPort());
+    //       m.allNodes(async n => {
+    //         this.log("reading unit db of " + n.getName());
+    //         await m.fetchAllUnits(n);
+    //       });
+    //     });
+    //   }, 1000);
   }
 
   allNodes(doToNode:(n: Node) => void) {
