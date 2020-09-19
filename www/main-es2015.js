@@ -893,6 +893,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _rendering_switch__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../rendering/switch */ "./src/app/rendering/switch.ts");
 /* harmony import */ var _rendering_mood__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../rendering/mood */ "./src/app/rendering/mood.ts");
 /* harmony import */ var _rendering_temperature__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../rendering/temperature */ "./src/app/rendering/temperature.ts");
+/* harmony import */ var _rendering_scene__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../rendering/scene */ "./src/app/rendering/scene.ts");
+
 
 
 
@@ -913,13 +915,80 @@ CoreModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         imports: [_angular_common__WEBPACK_IMPORTED_MODULE_2__["CommonModule"], _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormsModule"], _ionic_angular__WEBPACK_IMPORTED_MODULE_4__["IonicModule"]],
         providers: [_translate_pipe__WEBPACK_IMPORTED_MODULE_6__["TranslatePipe"], _temp_pipe__WEBPACK_IMPORTED_MODULE_7__["TemperaturPipe"]],
         declarations: [_stdpage__WEBPACK_IMPORTED_MODULE_5__["StdPage"], _translate_pipe__WEBPACK_IMPORTED_MODULE_6__["TranslatePipe"], _temp_pipe__WEBPACK_IMPORTED_MODULE_7__["TemperaturPipe"],
-            _rendering_dimmer__WEBPACK_IMPORTED_MODULE_8__["DimmerControl"], _rendering_updown__WEBPACK_IMPORTED_MODULE_9__["UpDownControl"], _rendering_switch__WEBPACK_IMPORTED_MODULE_10__["SwitchControl"], _rendering_temperature__WEBPACK_IMPORTED_MODULE_12__["TemperatureControl"], _rendering_mood__WEBPACK_IMPORTED_MODULE_11__["MoodControl"]],
+            _rendering_dimmer__WEBPACK_IMPORTED_MODULE_8__["DimmerControl"], _rendering_updown__WEBPACK_IMPORTED_MODULE_9__["UpDownControl"], _rendering_switch__WEBPACK_IMPORTED_MODULE_10__["SwitchControl"], _rendering_temperature__WEBPACK_IMPORTED_MODULE_12__["TemperatureControl"], _rendering_mood__WEBPACK_IMPORTED_MODULE_11__["MoodControl"], _rendering_scene__WEBPACK_IMPORTED_MODULE_13__["SceneControl"]],
         exports: [_stdpage__WEBPACK_IMPORTED_MODULE_5__["StdPage"], _translate_pipe__WEBPACK_IMPORTED_MODULE_6__["TranslatePipe"], _temp_pipe__WEBPACK_IMPORTED_MODULE_7__["TemperaturPipe"],
-            _rendering_dimmer__WEBPACK_IMPORTED_MODULE_8__["DimmerControl"], _rendering_updown__WEBPACK_IMPORTED_MODULE_9__["UpDownControl"], _rendering_switch__WEBPACK_IMPORTED_MODULE_10__["SwitchControl"], _rendering_temperature__WEBPACK_IMPORTED_MODULE_12__["TemperatureControl"], _rendering_mood__WEBPACK_IMPORTED_MODULE_11__["MoodControl"]],
+            _rendering_dimmer__WEBPACK_IMPORTED_MODULE_8__["DimmerControl"], _rendering_updown__WEBPACK_IMPORTED_MODULE_9__["UpDownControl"], _rendering_switch__WEBPACK_IMPORTED_MODULE_10__["SwitchControl"], _rendering_temperature__WEBPACK_IMPORTED_MODULE_12__["TemperatureControl"], _rendering_mood__WEBPACK_IMPORTED_MODULE_11__["MoodControl"], _rendering_scene__WEBPACK_IMPORTED_MODULE_13__["SceneControl"]],
         schemas: [_angular_core__WEBPACK_IMPORTED_MODULE_1__["CUSTOM_ELEMENTS_SCHEMA"]]
     })
 ], CoreModule);
 
+
+
+/***/ }),
+
+/***/ "./src/app/core/stdUX.ts":
+/*!*******************************!*\
+  !*** ./src/app/core/stdUX.ts ***!
+  \*******************************/
+/*! exports provided: doAlert, doAsk, doModal, doToast */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "doAlert", function() { return doAlert; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "doAsk", function() { return doAsk; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "doModal", function() { return doModal; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "doToast", function() { return doToast; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+
+function doAlert(alertCtrl, options) {
+    return new Promise((resolve, reject) => tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
+        const buttons = options.buttons.map(b => {
+            return { text: b.text,
+                handler: () => resolve(b.id) };
+        });
+        const alert = yield alertCtrl.create({
+            header: 'Duotecno',
+            subHeader: options.title,
+            message: options.message,
+            buttons
+        });
+        yield alert.present();
+    }));
+}
+function doAsk(alertCtrl, options) {
+    return new Promise((resolve, reject) => tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
+        const buttons = options.buttons.map(b => {
+            return { text: b.text,
+                handler: (data) => { b.handler && b.handler(data); resolve(data); } };
+        });
+        const alert = yield alertCtrl.create({
+            header: 'Duotecno',
+            subHeader: options.title,
+            message: options.message,
+            buttons: buttons,
+            inputs: options.inputs
+        });
+        yield alert.present();
+    }));
+}
+function doModal(modalCtl, modalComponent, options) {
+    return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
+        const modal = yield modalCtl.create({ component: modalComponent,
+            componentProps: options });
+        yield modal.present();
+        const { data } = yield modal.onDidDismiss();
+        return data || {};
+    });
+}
+function doToast(toastCtl, message, duration = 800) {
+    return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
+        const toast = yield toastCtl.create({
+            message, duration, position: 'top'
+        });
+        toast.present();
+    });
+}
 
 
 /***/ }),
@@ -952,11 +1021,14 @@ let StdPage = class StdPage {
     refreshServices(event) {
         const services = this.system[this.services];
         console.log('stdPage.refreshServices: ' + this.services + " = " + services.length + ' services');
+        console.log('stdPage.refreshServices: #scenes = ' + this.system.scenes.length);
         // request the status of all (real) units used on this page
         if (this.services != "scenes")
             services.forEach((u) => u.reqState());
-        // see if a group is used
-        this.system.groups.forEach((g) => g.used = services.some((u) => u.group == g.id));
+        // see if a group is used, either in a service or in a custom-scene when on the moods page
+        this.system.groups.forEach((g) => g.used =
+            services.some(u => u.group == g.id) ||
+                ((this.services == "mood") && this.system.scenes.some(s => s.group == g.id)));
     }
     moreGroups(group) {
         return !!this.system && !!this.system.groups && (this.system.groups.length > 1) &&
@@ -975,6 +1047,7 @@ StdPage.ctorParameters = () => [
 StdPage = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["Component"])({
         selector: 'std-page',
+        // services= "moods", "stores", "controls", ...
         inputs: ['services', 'showUpDowns'],
         template: `
     <ion-list *ngIf="system.masters.length > 0">
@@ -984,16 +1057,22 @@ StdPage = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
           <ion-icon *ngIf="! system.isSplitted" [ngClass]="arrow(group)" (click)="toggle(group)" name="chevron-forward-outline"></ion-icon>
         </ion-list-header>
         <ng-container *ngIf="group.used && group.visible">
+          <ng-container *ngIf="services == 'moods'">
+            <ng-container *ngFor="let scene of system.scenes">
+              <scene [scene]="scene" *ngIf="((scene.group == group.id) || (scene.group == -1))"></scene>
+            </ng-container>
+            <ion-item-divider></ion-item-divider>
+          </ng-container>
           <ng-container *ngFor="let service of system[services]">
             <dimmer      [service]="service" *ngIf="(service.group == group.id) 
                                                     && service.isDimmer()"></dimmer>
-            <updown      [service]="service" *ngIf="(service.group == group.id) 
+            <updown      [service]="service" *ngIf="((service.group == group.id) || (service.group == -1))
                                                     && showUpDowns && service.isUpDown()"></updown>
-            <switch      [service]="service" *ngIf="(service.group == group.id) 
+            <switch      [service]="service" *ngIf="((service.group == group.id) || (service.group == -1)) 
                                                     && service.isSwitch()"></switch>
-            <mood        [service]="service" *ngIf="(service.group == group.id) 
+            <mood        [service]="service" *ngIf="((service.group == group.id) || (service.group == -1)) 
                                                     && (service.isMood() || service.isInput())"></mood>
-            <temperature [service]="service" *ngIf="(service.group == group.id) 
+            <temperature [service]="service" *ngIf="((service.group == group.id) || (service.group == -1)) 
                                                     && service.isTemperature()"></temperature>
           </ng-container>
         </ng-container>
@@ -1151,6 +1230,7 @@ const translations = {
         'Config.NoScheduleSelected': 'Geen plan geselecteerd',
         'Config.Scenes': 'Scenes',
         'Config.Scenes.scene': 'Scene',
+        'Config.Scenes.group': 'Groep',
         'Config.Scenes.for': 'Instellingen van',
         'Config.Scenes.triggeredBy': 'Opgeroepen door',
         'Config.Scenes.trigger': 'Trigger',
@@ -1202,6 +1282,7 @@ const translations = {
         'Config.Scenes': 'Scènes',
         'Config.Scenes.scene': 'Scènes',
         'Config.Scenes.for': 'Configuration pour',
+        'Config.Scenes.group': 'Group',
         'Config.Scenes.triggeredBy': 'Appellé par',
         'Config.Scenes.trigger': 'Trigger',
         'Config.Scenes.selectTriggerFor': 'Trigger for',
@@ -1254,6 +1335,7 @@ const translations = {
         'Config.Scenes': 'Scenes',
         'Config.Scenes.scene': 'Scene',
         'Config.Scenes.for': 'Settings for',
+        'Config.Scenes.group': 'Group',
         'Config.Scenes.triggeredBy': 'Called by',
         'Config.Scenes.trigger': 'Trigger',
         'Config.Scenes.selectTriggerFor': 'Trigger for',
@@ -1486,6 +1568,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
 /* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/fesm2015/ionic-angular.js");
+/* harmony import */ var _core_stdUX__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../core/stdUX */ "./src/app/core/stdUX.ts");
+
 
 
 
@@ -1494,14 +1578,6 @@ let MoodControl = class MoodControl {
         this.toastCtrl = toastCtrl;
         this.pressed = 0;
     }
-    toast(message) {
-        return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
-            const toast = yield this.toastCtrl.create({
-                message, duration: 1000, position: 'top'
-            });
-            toast.present();
-        });
-    }
     moodColor() {
         return this.service.status ? 'primary' : (this.service.isInput() ? 'warning' : 'medium');
     }
@@ -1509,7 +1585,7 @@ let MoodControl = class MoodControl {
         ev.preventDefault();
         // send long event after 1Sec
         this.pressed = setTimeout(() => {
-            this.toast(this.service.name + ' - long on');
+            Object(_core_stdUX__WEBPACK_IMPORTED_MODULE_3__["doToast"])(this.toastCtrl, this.service.name + ' - long on');
             this.service.setState(1);
             this.pressed = -1;
         }, 1000);
@@ -1518,13 +1594,13 @@ let MoodControl = class MoodControl {
         ev.preventDefault();
         if (this.pressed === -1) {
             // we've already send a long "on"
-            this.toast(this.service.name + ' - long off');
+            Object(_core_stdUX__WEBPACK_IMPORTED_MODULE_3__["doToast"])(this.toastCtrl, this.service.name + ' - long off');
             this.service.setState(0);
         }
         else if (this.pressed) {
             // stop timer for long and send short
             clearTimeout(this.pressed);
-            this.toast(this.service.name + ' - short');
+            Object(_core_stdUX__WEBPACK_IMPORTED_MODULE_3__["doToast"])(this.toastCtrl, this.service.name + ' - short');
             this.service.setState(-1); // short event
         }
     }
@@ -1548,6 +1624,67 @@ MoodControl = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     }),
     tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_ionic_angular__WEBPACK_IMPORTED_MODULE_2__["ToastController"]])
 ], MoodControl);
+
+
+
+/***/ }),
+
+/***/ "./src/app/rendering/scene.ts":
+/*!************************************!*\
+  !*** ./src/app/rendering/scene.ts ***!
+  \************************************/
+/*! exports provided: SceneControl */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SceneControl", function() { return SceneControl; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/fesm2015/ionic-angular.js");
+/* harmony import */ var _core_stdUX__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../core/stdUX */ "./src/app/core/stdUX.ts");
+/* harmony import */ var _system_system__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../system/system */ "./src/app/system/system.ts");
+
+
+
+
+
+let SceneControl = class SceneControl {
+    constructor(toastCtrl, system) {
+        this.toastCtrl = toastCtrl;
+        this.system = system;
+        this.pressed = 0;
+    }
+    // we could add a long/short click, where the long click would mean: edit the scene
+    click() {
+        Object(_core_stdUX__WEBPACK_IMPORTED_MODULE_3__["doToast"])(this.toastCtrl, this.scene.name + ": " + this.scene.units.map(u => u.name).join(", "));
+        this.scene.units.forEach((unitDef) => {
+            const unit = this.system.findUnit(unitDef.masterAddress, unitDef.masterPort, unitDef.logicalNodeAddress, unitDef.logicalAddress);
+            //console.log(" -> calling " + unitDef.name + " (" + ((unit) ? "found" : "not-found") + ") <- " + unitDef.value);
+            if (unit)
+                unit.setState(unitDef.value);
+        });
+    }
+};
+SceneControl.ctorParameters = () => [
+    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["ToastController"] },
+    { type: _system_system__WEBPACK_IMPORTED_MODULE_4__["System"] }
+];
+SceneControl = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+        selector: 'scene',
+        inputs: ['scene'],
+        template: `
+    <ion-item lines="none">
+      <ion-label>{{scene.name}}</ion-label>
+      <ion-button slot="end" shape="round" [color]="warning"
+                  (click)="click()"></ion-button>
+    </ion-item>
+  `,
+        styles: ["ion-button { width: 25px; height: 25px }"]
+    }),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_ionic_angular__WEBPACK_IMPORTED_MODULE_2__["ToastController"], _system_system__WEBPACK_IMPORTED_MODULE_4__["System"]])
+], SceneControl);
 
 
 
@@ -2517,10 +2654,39 @@ class Master extends _logger__WEBPACK_IMPORTED_MODULE_3__["Logger"] {
             }
         });
     }
-    getDatabase(readUnits = true) {
+    getDatabase(readDB = false) {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
             this.nodes = [];
-            yield this.fetchDbInfo();
+            if (readDB) {
+                yield this.fetchDbInfo();
+                // upon reception of the DB info, 
+                //   getNode info will be called, 
+                //   which in it's turn will trigger getUnitInfo through fetchAllUnits
+            }
+            else {
+                // loop over all nodes/units in the config with a matching ip address
+                //  fill: this.nrNodes
+                //  call: kind of receive-Node/Unit-Info
+                this.log("building db from config file");
+                this.system.config.cunits
+                    .filter(u => this.same(u.masterAddress, u.masterPort))
+                    .forEach(u => {
+                    let node = this.findNode(u.logicalNodeAddress);
+                    if (!node) {
+                        node = new _protocol__WEBPACK_IMPORTED_MODULE_1__["Node"](this, { logicalAddress: u.logicalNodeAddress, name: "Node-" + u.logicalNodeAddress });
+                        this.nodes.push(node);
+                        this.system.setActiveState(node);
+                        this.log("new node: " + node.getName());
+                    }
+                    let unit = this.findUnit(u.logicalNodeAddress, u.logicalAddress);
+                    if (!unit) {
+                        unit = new _protocol__WEBPACK_IMPORTED_MODULE_1__["Unit"](node, u);
+                        node.units.push(unit);
+                        this.log("new unit: " + unit.getName() + " -> " + u.logicalAddress);
+                    }
+                    this.system.setActiveState(unit);
+                });
+            }
         });
     }
     allNodes(callback) {
@@ -2916,10 +3082,10 @@ class Unit {
         this.node = node;
         _types__WEBPACK_IMPORTED_MODULE_1__["Sanitizers"].unitInfo(params, this);
         this.extendedType = this.calcExtendedType();
-        // make a name for homekit, without the | but add § is 'specials' to add "sfeer", etc...
-        // if the display name is empty make a N[nodeAdr]-U[unitAdr] name.
+        // remove the |
         this.name = this.name.replace(/\|/g, " ");
         // delete all type modifiers ( $, * and ! )
+        // if the display name is empty make a N[nodeAdr]-U[unitAdr] name.
         this.displayName = this.name.replace(/\$|\*|\!/g, '') || this.getSerialNr();
     }
     hasSpecials() {
@@ -3545,7 +3711,7 @@ let System = class System extends _logger__WEBPACK_IMPORTED_MODULE_5__["Logger"]
         // don"t wait for the real open of the sockets
         // some errors: the socket to the proxy opens, but the socket to the hardware fails
         for (let inx = 0; inx < this.config.cmasters.length; inx++) {
-            this.openMaster(this.config.cmasters[inx]);
+            this.openMaster(this.config.cmasters[inx], false);
         }
     }
     closeMasters() {
@@ -3555,7 +3721,7 @@ let System = class System extends _logger__WEBPACK_IMPORTED_MODULE_5__["Logger"]
             }
         });
     }
-    openMaster(config) {
+    openMaster(config, readDB = false) {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
             const master = new _master__WEBPACK_IMPORTED_MODULE_2__["Master"](this, config, this.toastCtrl);
             this.masters.push(master);
@@ -3565,7 +3731,7 @@ let System = class System extends _logger__WEBPACK_IMPORTED_MODULE_5__["Logger"]
             this.log("opening master: " + master.getAddress());
             if (yield master.open()) {
                 if (yield master.login()) {
-                    yield master.getDatabase();
+                    yield master.getDatabase(readDB);
                     this.log("master: " + master.getAddress() + " opened with " + master.nodes.length + " nodes.");
                     this.triggerRebuild();
                 }
@@ -3627,7 +3793,7 @@ let System = class System extends _logger__WEBPACK_IMPORTED_MODULE_5__["Logger"]
             }
             this.writeConfig();
             // master is openened and added to the master array
-            return yield this.openMaster(cmaster);
+            return yield this.openMaster(cmaster, true);
         });
     }
     deleteMaster(master) {
@@ -3780,7 +3946,7 @@ let System = class System extends _logger__WEBPACK_IMPORTED_MODULE_5__["Logger"]
     updateSystem(dontTrigger = false) {
         this.config.cunits = this.allActiveUnits()
             .map((u) => {
-            return { active: "Y", group: u.group,
+            return { active: "Y", group: u.group, name: u.name, type: u.type,
                 masterAddress: u.node.master.getAddress(), masterPort: u.node.master.getPort(),
                 logicalNodeAddress: u.node.logicalAddress, logicalAddress: u.logicalAddress };
         });
@@ -4054,13 +4220,13 @@ __webpack_require__.r(__webpack_exports__);
 ;
 ;
 ;
-const kEmptyUnit = { masterAddress: "0.0.0.0", masterPort: 5001, name: "unit", logicalAddress: 0, logicalNodeAddress: 0 };
+const kEmptyUnit = { masterAddress: "0.0.0.0", masterPort: 5001, name: "unit", logicalAddress: 0, logicalNodeAddress: 0, type: 0 };
 ;
 ;
 ;
 const kEmptyUnitScene = Object.assign({}, kEmptyUnit, { value: true });
 ;
-const kEmptyScene = { name: 'Scene', trigger: kEmptyUnitScene, order: 0, units: [] };
+const kEmptyScene = { name: 'Scene', trigger: kEmptyUnitScene, order: 0, group: 0, units: [] };
 ;
 const kEmptyGroup = { name: 'Home', id: 0, order: 0, visible: true };
 ;
@@ -4110,7 +4276,7 @@ const Sanitizers = {
         config.cmasters = config.cmasters || [];
         delete config["cnodes"];
         config.cunits = config.cunits || [];
-        config.cunits.forEach((u) => this.unitConfig(u));
+        config.cunits.forEach((u) => this.unitDef(u));
         // support old style groups, pre v1.1
         if (typeof config.cgroups != 'undefined') {
             config.cgroups = config.cgroups || ['Home'];
@@ -4165,7 +4331,7 @@ const Sanitizers = {
         if (typeof config.group === 'string') {
             config.group = parseInt(config.group);
         }
-        config.group = config.group || 0;
+        config.group = config.group || -1;
         return config;
     },
     unitScene: function (config) {
@@ -4182,7 +4348,9 @@ const Sanitizers = {
             logicalAddress: config.logicalAddress,
             masterAddress: config.masterAddress,
             masterPort: config.masterPort,
-            value: config.value };
+            value: config.value,
+            name: config.name,
+            type: config.type };
     },
     unitInfo: function (info, into) {
         info.name = info.name || '';
@@ -4210,6 +4378,10 @@ const Sanitizers = {
             newConfig.order = parseInt(config.order);
         }
         newConfig.order = config.order || kEmptyScene.order;
+        if (typeof config.group === 'string') {
+            config.group = parseInt(config.group);
+        }
+        newConfig.group = config.group || -1;
         newConfig.trigger = this.unitScene(config.trigger);
         config.units = config.units || kEmptyScene.units;
         newConfig.units = config.units.map(u => this.unitScene(u));
@@ -4237,11 +4409,13 @@ const Sanitizers = {
         }
         return info;
     },
-    unitDef: function (info, into) {
+    unitDef: function (info) {
+        info.name = info.name || '';
         info.logicalNodeAddress = info.logicalNodeAddress || 0;
         info.logicalAddress = info.logicalAddress || 0;
         info.masterAddress = info.masterAddress || '';
         info.masterPort = info.masterPort || 5001;
+        info.type = info.type || _protocol__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kNoType;
         return info;
     }
 };

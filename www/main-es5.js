@@ -1204,6 +1204,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     var _rendering_temperature__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(
     /*! ../rendering/temperature */
     "./src/app/rendering/temperature.ts");
+    /* harmony import */
+
+
+    var _rendering_scene__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(
+    /*! ../rendering/scene */
+    "./src/app/rendering/scene.ts");
 
     var CoreModule = function CoreModule() {
       _classCallCheck(this, CoreModule);
@@ -1212,11 +1218,215 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     CoreModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
       imports: [_angular_common__WEBPACK_IMPORTED_MODULE_2__["CommonModule"], _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormsModule"], _ionic_angular__WEBPACK_IMPORTED_MODULE_4__["IonicModule"]],
       providers: [_translate_pipe__WEBPACK_IMPORTED_MODULE_6__["TranslatePipe"], _temp_pipe__WEBPACK_IMPORTED_MODULE_7__["TemperaturPipe"]],
-      declarations: [_stdpage__WEBPACK_IMPORTED_MODULE_5__["StdPage"], _translate_pipe__WEBPACK_IMPORTED_MODULE_6__["TranslatePipe"], _temp_pipe__WEBPACK_IMPORTED_MODULE_7__["TemperaturPipe"], _rendering_dimmer__WEBPACK_IMPORTED_MODULE_8__["DimmerControl"], _rendering_updown__WEBPACK_IMPORTED_MODULE_9__["UpDownControl"], _rendering_switch__WEBPACK_IMPORTED_MODULE_10__["SwitchControl"], _rendering_temperature__WEBPACK_IMPORTED_MODULE_12__["TemperatureControl"], _rendering_mood__WEBPACK_IMPORTED_MODULE_11__["MoodControl"]],
-      exports: [_stdpage__WEBPACK_IMPORTED_MODULE_5__["StdPage"], _translate_pipe__WEBPACK_IMPORTED_MODULE_6__["TranslatePipe"], _temp_pipe__WEBPACK_IMPORTED_MODULE_7__["TemperaturPipe"], _rendering_dimmer__WEBPACK_IMPORTED_MODULE_8__["DimmerControl"], _rendering_updown__WEBPACK_IMPORTED_MODULE_9__["UpDownControl"], _rendering_switch__WEBPACK_IMPORTED_MODULE_10__["SwitchControl"], _rendering_temperature__WEBPACK_IMPORTED_MODULE_12__["TemperatureControl"], _rendering_mood__WEBPACK_IMPORTED_MODULE_11__["MoodControl"]],
+      declarations: [_stdpage__WEBPACK_IMPORTED_MODULE_5__["StdPage"], _translate_pipe__WEBPACK_IMPORTED_MODULE_6__["TranslatePipe"], _temp_pipe__WEBPACK_IMPORTED_MODULE_7__["TemperaturPipe"], _rendering_dimmer__WEBPACK_IMPORTED_MODULE_8__["DimmerControl"], _rendering_updown__WEBPACK_IMPORTED_MODULE_9__["UpDownControl"], _rendering_switch__WEBPACK_IMPORTED_MODULE_10__["SwitchControl"], _rendering_temperature__WEBPACK_IMPORTED_MODULE_12__["TemperatureControl"], _rendering_mood__WEBPACK_IMPORTED_MODULE_11__["MoodControl"], _rendering_scene__WEBPACK_IMPORTED_MODULE_13__["SceneControl"]],
+      exports: [_stdpage__WEBPACK_IMPORTED_MODULE_5__["StdPage"], _translate_pipe__WEBPACK_IMPORTED_MODULE_6__["TranslatePipe"], _temp_pipe__WEBPACK_IMPORTED_MODULE_7__["TemperaturPipe"], _rendering_dimmer__WEBPACK_IMPORTED_MODULE_8__["DimmerControl"], _rendering_updown__WEBPACK_IMPORTED_MODULE_9__["UpDownControl"], _rendering_switch__WEBPACK_IMPORTED_MODULE_10__["SwitchControl"], _rendering_temperature__WEBPACK_IMPORTED_MODULE_12__["TemperatureControl"], _rendering_mood__WEBPACK_IMPORTED_MODULE_11__["MoodControl"], _rendering_scene__WEBPACK_IMPORTED_MODULE_13__["SceneControl"]],
       schemas: [_angular_core__WEBPACK_IMPORTED_MODULE_1__["CUSTOM_ELEMENTS_SCHEMA"]]
     })], CoreModule);
     /***/
+  },
+
+  /***/
+  "./src/app/core/stdUX.ts":
+  /*!*******************************!*\
+    !*** ./src/app/core/stdUX.ts ***!
+    \*******************************/
+
+  /*! exports provided: doAlert, doAsk, doModal, doToast */
+
+  /***/
+  function srcAppCoreStdUXTs(module, __webpack_exports__, __webpack_require__) {
+    "use strict";
+
+    __webpack_require__.r(__webpack_exports__);
+    /* harmony export (binding) */
+
+
+    __webpack_require__.d(__webpack_exports__, "doAlert", function () {
+      return doAlert;
+    });
+    /* harmony export (binding) */
+
+
+    __webpack_require__.d(__webpack_exports__, "doAsk", function () {
+      return doAsk;
+    });
+    /* harmony export (binding) */
+
+
+    __webpack_require__.d(__webpack_exports__, "doModal", function () {
+      return doModal;
+    });
+    /* harmony export (binding) */
+
+
+    __webpack_require__.d(__webpack_exports__, "doToast", function () {
+      return doToast;
+    });
+    /* harmony import */
+
+
+    var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+    /*! tslib */
+    "./node_modules/tslib/tslib.es6.js");
+
+    function doAlert(alertCtrl, options) {
+      var _this2 = this;
+
+      return new Promise(function (resolve, reject) {
+        return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this2, void 0, void 0,
+        /*#__PURE__*/
+        regeneratorRuntime.mark(function _callee() {
+          var buttons, alert;
+          return regeneratorRuntime.wrap(function _callee$(_context) {
+            while (1) {
+              switch (_context.prev = _context.next) {
+                case 0:
+                  buttons = options.buttons.map(function (b) {
+                    return {
+                      text: b.text,
+                      handler: function handler() {
+                        return resolve(b.id);
+                      }
+                    };
+                  });
+                  _context.next = 3;
+                  return alertCtrl.create({
+                    header: 'Duotecno',
+                    subHeader: options.title,
+                    message: options.message,
+                    buttons: buttons
+                  });
+
+                case 3:
+                  alert = _context.sent;
+                  _context.next = 6;
+                  return alert.present();
+
+                case 6:
+                case "end":
+                  return _context.stop();
+              }
+            }
+          }, _callee);
+        }));
+      });
+    }
+
+    function doAsk(alertCtrl, options) {
+      var _this3 = this;
+
+      return new Promise(function (resolve, reject) {
+        return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this3, void 0, void 0,
+        /*#__PURE__*/
+        regeneratorRuntime.mark(function _callee2() {
+          var buttons, alert;
+          return regeneratorRuntime.wrap(function _callee2$(_context2) {
+            while (1) {
+              switch (_context2.prev = _context2.next) {
+                case 0:
+                  buttons = options.buttons.map(function (b) {
+                    return {
+                      text: b.text,
+                      handler: function handler(data) {
+                        b.handler && b.handler(data);
+                        resolve(data);
+                      }
+                    };
+                  });
+                  _context2.next = 3;
+                  return alertCtrl.create({
+                    header: 'Duotecno',
+                    subHeader: options.title,
+                    message: options.message,
+                    buttons: buttons,
+                    inputs: options.inputs
+                  });
+
+                case 3:
+                  alert = _context2.sent;
+                  _context2.next = 6;
+                  return alert.present();
+
+                case 6:
+                case "end":
+                  return _context2.stop();
+              }
+            }
+          }, _callee2);
+        }));
+      });
+    }
+
+    function doModal(modalCtl, modalComponent, options) {
+      return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee3() {
+        var modal, _ref, data;
+
+        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.next = 2;
+                return modalCtl.create({
+                  component: modalComponent,
+                  componentProps: options
+                });
+
+              case 2:
+                modal = _context3.sent;
+                _context3.next = 5;
+                return modal.present();
+
+              case 5:
+                _context3.next = 7;
+                return modal.onDidDismiss();
+
+              case 7:
+                _ref = _context3.sent;
+                data = _ref.data;
+                return _context3.abrupt("return", data || {});
+
+              case 10:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
+      }));
+    }
+
+    function doToast(toastCtl, message) {
+      var duration = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 800;
+      return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee4() {
+        var toast;
+        return regeneratorRuntime.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _context4.next = 2;
+                return toastCtl.create({
+                  message: message,
+                  duration: duration,
+                  position: 'top'
+                });
+
+              case 2:
+                toast = _context4.sent;
+                toast.present();
+
+              case 4:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4);
+      }));
+    }
+    /***/
+
   },
 
   /***/
@@ -1276,16 +1486,21 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "refreshServices",
         value: function refreshServices(event) {
+          var _this4 = this;
+
           var services = this.system[this.services];
-          console.log('stdPage.refreshServices: ' + this.services + " = " + services.length + ' services'); // request the status of all (real) units used on this page
+          console.log('stdPage.refreshServices: ' + this.services + " = " + services.length + ' services');
+          console.log('stdPage.refreshServices: #scenes = ' + this.system.scenes.length); // request the status of all (real) units used on this page
 
           if (this.services != "scenes") services.forEach(function (u) {
             return u.reqState();
-          }); // see if a group is used
+          }); // see if a group is used, either in a service or in a custom-scene when on the moods page
 
           this.system.groups.forEach(function (g) {
             return g.used = services.some(function (u) {
               return u.group == g.id;
+            }) || _this4.services == "mood" && _this4.system.scenes.some(function (s) {
+              return s.group == g.id;
             });
           });
         }
@@ -1317,8 +1532,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
     StdPage = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["Component"])({
       selector: 'std-page',
+      // services= "moods", "stores", "controls", ...
       inputs: ['services', 'showUpDowns'],
-      template: "\n    <ion-list *ngIf=\"system.masters.length > 0\">\n      <ion-item-group *ngFor=\"let group of system.groups\">\n        <ion-list-header *ngIf=\"group.used && moreGroups(group)\">\n          <ion-label>{{group.name}}</ion-label>\n          <ion-icon *ngIf=\"! system.isSplitted\" [ngClass]=\"arrow(group)\" (click)=\"toggle(group)\" name=\"chevron-forward-outline\"></ion-icon>\n        </ion-list-header>\n        <ng-container *ngIf=\"group.used && group.visible\">\n          <ng-container *ngFor=\"let service of system[services]\">\n            <dimmer      [service]=\"service\" *ngIf=\"(service.group == group.id) \n                                                    && service.isDimmer()\"></dimmer>\n            <updown      [service]=\"service\" *ngIf=\"(service.group == group.id) \n                                                    && showUpDowns && service.isUpDown()\"></updown>\n            <switch      [service]=\"service\" *ngIf=\"(service.group == group.id) \n                                                    && service.isSwitch()\"></switch>\n            <mood        [service]=\"service\" *ngIf=\"(service.group == group.id) \n                                                    && (service.isMood() || service.isInput())\"></mood>\n            <temperature [service]=\"service\" *ngIf=\"(service.group == group.id) \n                                                    && service.isTemperature()\"></temperature>\n          </ng-container>\n        </ng-container>\n      </ion-item-group>\n    </ion-list>\n\n    <div *ngIf=\"system.masters.length <= 0\" class=\"noMaster\">\n      <h1>No masters yet?</h1>\n      <p>Go to the tab \"Configure\" -> \"Masters\"<br>\n        Add a master by clicking on the \"+ Master\"<br>\n        Fill out the parameters.<br>\n        <br>\n        Once your first Node or Smartbox is visible<br>\n        Click on it and select the units you want to use.<br>\n        <br>\n        Later you can split the units (switches, temperature, dimmers, scenes, ...) in multiple sections by first adding more groups.<br>\n        <br>\n        Download the <a href=\"https://www.duotecno.be/wp-content/uploads/2020/05/Duotecno-smartbox-app-1.pdf\">manual</a>.\n      </p>\n    </div>\n"
+      template: "\n    <ion-list *ngIf=\"system.masters.length > 0\">\n      <ion-item-group *ngFor=\"let group of system.groups\">\n        <ion-list-header *ngIf=\"group.used && moreGroups(group)\">\n          <ion-label>{{group.name}}</ion-label>\n          <ion-icon *ngIf=\"! system.isSplitted\" [ngClass]=\"arrow(group)\" (click)=\"toggle(group)\" name=\"chevron-forward-outline\"></ion-icon>\n        </ion-list-header>\n        <ng-container *ngIf=\"group.used && group.visible\">\n          <ng-container *ngIf=\"services == 'moods'\">\n            <ng-container *ngFor=\"let scene of system.scenes\">\n              <scene [scene]=\"scene\" *ngIf=\"((scene.group == group.id) || (scene.group == -1))\"></scene>\n            </ng-container>\n            <ion-item-divider></ion-item-divider>\n          </ng-container>\n          <ng-container *ngFor=\"let service of system[services]\">\n            <dimmer      [service]=\"service\" *ngIf=\"(service.group == group.id) \n                                                    && service.isDimmer()\"></dimmer>\n            <updown      [service]=\"service\" *ngIf=\"((service.group == group.id) || (service.group == -1))\n                                                    && showUpDowns && service.isUpDown()\"></updown>\n            <switch      [service]=\"service\" *ngIf=\"((service.group == group.id) || (service.group == -1)) \n                                                    && service.isSwitch()\"></switch>\n            <mood        [service]=\"service\" *ngIf=\"((service.group == group.id) || (service.group == -1)) \n                                                    && (service.isMood() || service.isInput())\"></mood>\n            <temperature [service]=\"service\" *ngIf=\"((service.group == group.id) || (service.group == -1)) \n                                                    && service.isTemperature()\"></temperature>\n          </ng-container>\n        </ng-container>\n      </ion-item-group>\n    </ion-list>\n\n    <div *ngIf=\"system.masters.length <= 0\" class=\"noMaster\">\n      <h1>No masters yet?</h1>\n      <p>Go to the tab \"Configure\" -> \"Masters\"<br>\n        Add a master by clicking on the \"+ Master\"<br>\n        Fill out the parameters.<br>\n        <br>\n        Once your first Node or Smartbox is visible<br>\n        Click on it and select the units you want to use.<br>\n        <br>\n        Later you can split the units (switches, temperature, dimmers, scenes, ...) in multiple sections by first adding more groups.<br>\n        <br>\n        Download the <a href=\"https://www.duotecno.be/wp-content/uploads/2020/05/Duotecno-smartbox-app-1.pdf\">manual</a>.\n      </p>\n    </div>\n"
     }), tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_system_system__WEBPACK_IMPORTED_MODULE_1__["System"]])], StdPage);
     /***/
   },
@@ -1542,6 +1758,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         'Config.NoScheduleSelected': 'Geen plan geselecteerd',
         'Config.Scenes': 'Scenes',
         'Config.Scenes.scene': 'Scene',
+        'Config.Scenes.group': 'Groep',
         'Config.Scenes.for': 'Instellingen van',
         'Config.Scenes.triggeredBy': 'Opgeroepen door',
         'Config.Scenes.trigger': 'Trigger',
@@ -1593,6 +1810,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         'Config.Scenes': 'Scènes',
         'Config.Scenes.scene': 'Scènes',
         'Config.Scenes.for': 'Configuration pour',
+        'Config.Scenes.group': 'Group',
         'Config.Scenes.triggeredBy': 'Appellé par',
         'Config.Scenes.trigger': 'Trigger',
         'Config.Scenes.selectTriggerFor': 'Trigger for',
@@ -1645,6 +1863,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         'Config.Scenes': 'Scenes',
         'Config.Scenes.scene': 'Scene',
         'Config.Scenes.for': 'Settings for',
+        'Config.Scenes.group': 'Group',
         'Config.Scenes.triggeredBy': 'Called by',
         'Config.Scenes.trigger': 'Trigger',
         'Config.Scenes.selectTriggerFor': 'Trigger for',
@@ -1925,6 +2144,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     var _ionic_angular__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
     /*! @ionic/angular */
     "./node_modules/@ionic/angular/fesm2015/ionic-angular.js");
+    /* harmony import */
+
+
+    var _core_stdUX__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
+    /*! ../core/stdUX */
+    "./src/app/core/stdUX.ts");
 
     var MoodControl =
     /*#__PURE__*/
@@ -1937,36 +2162,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }
 
       _createClass(MoodControl, [{
-        key: "toast",
-        value: function toast(message) {
-          return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
-          /*#__PURE__*/
-          regeneratorRuntime.mark(function _callee() {
-            var toast;
-            return regeneratorRuntime.wrap(function _callee$(_context) {
-              while (1) {
-                switch (_context.prev = _context.next) {
-                  case 0:
-                    _context.next = 2;
-                    return this.toastCtrl.create({
-                      message: message,
-                      duration: 1000,
-                      position: 'top'
-                    });
-
-                  case 2:
-                    toast = _context.sent;
-                    toast.present();
-
-                  case 4:
-                  case "end":
-                    return _context.stop();
-                }
-              }
-            }, _callee, this);
-          }));
-        }
-      }, {
         key: "moodColor",
         value: function moodColor() {
           return this.service.status ? 'primary' : this.service.isInput() ? 'warning' : 'medium';
@@ -1974,16 +2169,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "down",
         value: function down(ev) {
-          var _this2 = this;
+          var _this5 = this;
 
           ev.preventDefault(); // send long event after 1Sec
 
           this.pressed = setTimeout(function () {
-            _this2.toast(_this2.service.name + ' - long on');
+            Object(_core_stdUX__WEBPACK_IMPORTED_MODULE_3__["doToast"])(_this5.toastCtrl, _this5.service.name + ' - long on');
 
-            _this2.service.setState(1);
+            _this5.service.setState(1);
 
-            _this2.pressed = -1;
+            _this5.pressed = -1;
           }, 1000);
         }
       }, {
@@ -1993,12 +2188,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
           if (this.pressed === -1) {
             // we've already send a long "on"
-            this.toast(this.service.name + ' - long off');
+            Object(_core_stdUX__WEBPACK_IMPORTED_MODULE_3__["doToast"])(this.toastCtrl, this.service.name + ' - long off');
             this.service.setState(0);
           } else if (this.pressed) {
             // stop timer for long and send short
             clearTimeout(this.pressed);
-            this.toast(this.service.name + ' - short');
+            Object(_core_stdUX__WEBPACK_IMPORTED_MODULE_3__["doToast"])(this.toastCtrl, this.service.name + ' - short');
             this.service.setState(-1); // short event
           }
         }
@@ -2019,6 +2214,105 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       template: "\n    <ion-item lines=\"none\">\n      <ion-label>{{service.getName()}}</ion-label>\n      <ion-button slot=\"end\" shape=\"round\" [color]=\"moodColor()\"\n              (mousedown)=\"down($event)\" (mouseup)=\"up($event)\"\n              (touchstart)=\"down($event)\" (touchend)=\"up($event)\"></ion-button>\n    </ion-item>\n  ",
       styles: ["ion-button { width: 25px; height: 25px }"]
     }), tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_ionic_angular__WEBPACK_IMPORTED_MODULE_2__["ToastController"]])], MoodControl);
+    /***/
+  },
+
+  /***/
+  "./src/app/rendering/scene.ts":
+  /*!************************************!*\
+    !*** ./src/app/rendering/scene.ts ***!
+    \************************************/
+
+  /*! exports provided: SceneControl */
+
+  /***/
+  function srcAppRenderingSceneTs(module, __webpack_exports__, __webpack_require__) {
+    "use strict";
+
+    __webpack_require__.r(__webpack_exports__);
+    /* harmony export (binding) */
+
+
+    __webpack_require__.d(__webpack_exports__, "SceneControl", function () {
+      return SceneControl;
+    });
+    /* harmony import */
+
+
+    var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+    /*! tslib */
+    "./node_modules/tslib/tslib.es6.js");
+    /* harmony import */
+
+
+    var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+    /*! @angular/core */
+    "./node_modules/@angular/core/fesm2015/core.js");
+    /* harmony import */
+
+
+    var _ionic_angular__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+    /*! @ionic/angular */
+    "./node_modules/@ionic/angular/fesm2015/ionic-angular.js");
+    /* harmony import */
+
+
+    var _core_stdUX__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
+    /*! ../core/stdUX */
+    "./src/app/core/stdUX.ts");
+    /* harmony import */
+
+
+    var _system_system__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
+    /*! ../system/system */
+    "./src/app/system/system.ts");
+
+    var SceneControl =
+    /*#__PURE__*/
+    function () {
+      function SceneControl(toastCtrl, system) {
+        _classCallCheck(this, SceneControl);
+
+        this.toastCtrl = toastCtrl;
+        this.system = system;
+        this.pressed = 0;
+      } // we could add a long/short click, where the long click would mean: edit the scene
+
+
+      _createClass(SceneControl, [{
+        key: "click",
+        value: function click() {
+          var _this6 = this;
+
+          Object(_core_stdUX__WEBPACK_IMPORTED_MODULE_3__["doToast"])(this.toastCtrl, this.scene.name + ": " + this.scene.units.map(function (u) {
+            return u.name;
+          }).join(", "));
+          this.scene.units.forEach(function (unitDef) {
+            var unit = _this6.system.findUnit(unitDef.masterAddress, unitDef.masterPort, unitDef.logicalNodeAddress, unitDef.logicalAddress); //console.log(" -> calling " + unitDef.name + " (" + ((unit) ? "found" : "not-found") + ") <- " + unitDef.value);
+
+
+            if (unit) unit.setState(unitDef.value);
+          });
+        }
+      }]);
+
+      return SceneControl;
+    }();
+
+    SceneControl.ctorParameters = function () {
+      return [{
+        type: _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["ToastController"]
+      }, {
+        type: _system_system__WEBPACK_IMPORTED_MODULE_4__["System"]
+      }];
+    };
+
+    SceneControl = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+      selector: 'scene',
+      inputs: ['scene'],
+      template: "\n    <ion-item lines=\"none\">\n      <ion-label>{{scene.name}}</ion-label>\n      <ion-button slot=\"end\" shape=\"round\" [color]=\"warning\"\n                  (click)=\"click()\"></ion-button>\n    </ion-item>\n  ",
+      styles: ["ion-button { width: 25px; height: 25px }"]
+    }), tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_ionic_angular__WEBPACK_IMPORTED_MODULE_2__["ToastController"], _system_system__WEBPACK_IMPORTED_MODULE_4__["System"]])], SceneControl);
     /***/
   },
 
@@ -2466,15 +2760,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "startWaiter",
         value: function startWaiter() {
-          var _this3 = this;
+          var _this7 = this;
 
           var mSecs = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1000;
           this.endWaiter(); // this.logger("*Q* Waiter: starting timer for " + mSecs + " mSec");
 
           this.timer = setTimeout(function () {
-            _this3.logger('*Q* Waiter: timer finished, calling \'do\' because nobody else did');
+            _this7.logger('*Q* Waiter: timer finished, calling \'do\' because nobody else did');
 
-            _this3.do();
+            _this7.do();
           }, mSecs);
         }
       }, {
@@ -2728,30 +3022,30 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
        }
       */
       function Master(system, config, toastCtrl) {
-        var _this4;
+        var _this8;
 
         _classCallCheck(this, Master);
 
-        _this4 = _possibleConstructorReturn(this, _getPrototypeOf(Master).call(this, "master", system.debug));
-        _this4.toastCtrl = toastCtrl;
-        _this4.resolveLogin = null;
-        _this4.Q = new _Q__WEBPACK_IMPORTED_MODULE_4__["Q"](system.logger); // save my eco system
+        _this8 = _possibleConstructorReturn(this, _getPrototypeOf(Master).call(this, "master", system.debug));
+        _this8.toastCtrl = toastCtrl;
+        _this8.resolveLogin = null;
+        _this8.Q = new _Q__WEBPACK_IMPORTED_MODULE_4__["Q"](system.logger); // save my eco system
 
-        _this4.system = system; // save this masters config settings
+        _this8.system = system; // save this masters config settings
 
-        _this4.config = _types__WEBPACK_IMPORTED_MODULE_2__["Sanitizers"].masterConfig(config); // all nodes in this master
+        _this8.config = _types__WEBPACK_IMPORTED_MODULE_2__["Sanitizers"].masterConfig(config); // all nodes in this master
 
-        _this4.nodes = [];
-        _this4.nrNodes = 0;
-        _this4.schedule = 0; // connection to an IP node / smartbox
+        _this8.nodes = [];
+        _this8.nrNodes = 0;
+        _this8.schedule = 0; // connection to an IP node / smartbox
 
-        _this4.socket = null;
-        _this4.isOpen = false;
-        _this4.isLoggedIn = false;
-        _this4.closeRequested = false; // incoming data
+        _this8.socket = null;
+        _this8.isOpen = false;
+        _this8.isLoggedIn = false;
+        _this8.closeRequested = false; // incoming data
 
-        _this4.buffer = "";
-        return _this4;
+        _this8.buffer = "";
+        return _this8;
       }
 
       _createClass(Master, [{
@@ -2759,13 +3053,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         value: function toast(message) {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
-          regeneratorRuntime.mark(function _callee2() {
+          regeneratorRuntime.mark(function _callee5() {
             var toast;
-            return regeneratorRuntime.wrap(function _callee2$(_context2) {
+            return regeneratorRuntime.wrap(function _callee5$(_context5) {
               while (1) {
-                switch (_context2.prev = _context2.next) {
+                switch (_context5.prev = _context5.next) {
                   case 0:
-                    _context2.next = 2;
+                    _context5.next = 2;
                     return this.toastCtrl.create({
                       message: message,
                       duration: 1000,
@@ -2773,15 +3067,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     });
 
                   case 2:
-                    toast = _context2.sent;
+                    toast = _context5.sent;
                     toast.present();
 
                   case 4:
                   case "end":
-                    return _context2.stop();
+                    return _context5.stop();
                 }
               }
-            }, _callee2, this);
+            }, _callee5, this);
           }));
         }
       }, {
@@ -2866,19 +3160,19 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         value: function open() {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
-          regeneratorRuntime.mark(function _callee3() {
-            return regeneratorRuntime.wrap(function _callee3$(_context3) {
+          regeneratorRuntime.mark(function _callee6() {
+            return regeneratorRuntime.wrap(function _callee6$(_context6) {
               while (1) {
-                switch (_context3.prev = _context3.next) {
+                switch (_context6.prev = _context6.next) {
                   case 0:
-                    return _context3.abrupt("return", this.openWeb());
+                    return _context6.abrupt("return", this.openWeb());
 
                   case 1:
                   case "end":
-                    return _context3.stop();
+                    return _context6.stop();
                 }
               }
-            }, _callee3, this);
+            }, _callee6, this);
           }));
         }
       }, {
@@ -2886,19 +3180,19 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         value: function openTCP() {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
-          regeneratorRuntime.mark(function _callee4() {
-            return regeneratorRuntime.wrap(function _callee4$(_context4) {
+          regeneratorRuntime.mark(function _callee7() {
+            return regeneratorRuntime.wrap(function _callee7$(_context7) {
               while (1) {
-                switch (_context4.prev = _context4.next) {
+                switch (_context7.prev = _context7.next) {
                   case 0:
-                    return _context4.abrupt("return", this.openWeb());
+                    return _context7.abrupt("return", this.openWeb());
 
                   case 1:
                   case "end":
-                    return _context4.stop();
+                    return _context7.stop();
                 }
               }
-            }, _callee4, this);
+            }, _callee7, this);
           }));
         }
       }, {
@@ -2906,66 +3200,66 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         value: function openWeb() {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
-          regeneratorRuntime.mark(function _callee5() {
-            var _this5 = this;
+          regeneratorRuntime.mark(function _callee8() {
+            var _this9 = this;
 
-            return regeneratorRuntime.wrap(function _callee5$(_context5) {
+            return regeneratorRuntime.wrap(function _callee8$(_context8) {
               while (1) {
-                switch (_context5.prev = _context5.next) {
+                switch (_context8.prev = _context8.next) {
                   case 0:
-                    return _context5.abrupt("return", new Promise(function (resolve, reject) {
+                    return _context8.abrupt("return", new Promise(function (resolve, reject) {
                       try {
                         ////////////////////////////////
                         // try to open the connection //
-                        _this5.log("opening connection to the SmartSocket Server");
+                        _this9.log("opening connection to the SmartSocket Server");
 
-                        var wsserver = _this5.system.config.socketserver + ":" + _this5.system.config.socketport;
-                        var tcpserver = _this5.config.address + ":" + _this5.config.port;
-                        _this5.socket = new WebSocket("ws://" + wsserver + "/" + tcpserver);
+                        var wsserver = _this9.system.config.socketserver + ":" + _this9.system.config.socketport;
+                        var tcpserver = _this9.config.address + ":" + _this9.config.port;
+                        _this9.socket = new WebSocket("ws://" + wsserver + "/" + tcpserver);
 
-                        if (!_this5.socket) {
-                          _this5.err("could create new web socket to " + wsserver + "/" + tcpserver);
+                        if (!_this9.socket) {
+                          _this9.err("could create new web socket to " + wsserver + "/" + tcpserver);
 
                           resolve(false);
                         } ///////////////////////
                         // set data listener //
 
 
-                        _this5.socket.onmessage = function (message) {
+                        _this9.socket.onmessage = function (message) {
                           // messages need to be buffered until "]" is received
-                          _this5.handleData(message.data);
+                          _this9.handleData(message.data);
                         }; ///////////////////////////
                         // set an error listener //
 
 
-                        _this5.socket.onerror = function (err) {
-                          _this5.err("Socket: " + err + " on " + wsserver + "/" + tcpserver);
+                        _this9.socket.onerror = function (err) {
+                          _this9.err("Socket: " + err + " on " + wsserver + "/" + tcpserver);
                         }; ///////////////////////////////////////////
                         // set end: the server closed the socket //
 
 
-                        _this5.socket.onclose = function () {
-                          _this5.isOpen = false;
-                          _this5.isLoggedIn = false;
+                        _this9.socket.onclose = function () {
+                          _this9.isOpen = false;
+                          _this9.isLoggedIn = false;
 
-                          _this5.log("end -> socket got disconnected");
+                          _this9.log("end -> socket got disconnected");
 
-                          if (!_this5.closeRequested) {
+                          if (!_this9.closeRequested) {
                             // unexpected close
-                            _this5.err("Socket: closed unexpectedly");
+                            _this9.err("Socket: closed unexpectedly");
                           }
                         };
 
-                        _this5.socket.onopen = function () {
-                          _this5.isOpen = true; // request a connection to the real socket
+                        _this9.socket.onopen = function () {
+                          _this9.isOpen = true; // request a connection to the real socket
 
-                          _this5.log("connection open on " + wsserver + "/" + tcpserver); // resolve our promise with the opened socket
+                          _this9.log("connection open on " + wsserver + "/" + tcpserver); // resolve our promise with the opened socket
 
 
                           resolve(true);
                         };
                       } catch (e) {
-                        _this5.err("Failed to open a connection on port " + _this5.getPort());
+                        _this9.err("Failed to open a connection on port " + _this9.getPort());
 
                         resolve(false);
                       }
@@ -2973,10 +3267,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
                   case 1:
                   case "end":
-                    return _context5.stop();
+                    return _context8.stop();
                 }
               }
-            }, _callee5);
+            }, _callee8);
           }));
         }
       }, {
@@ -2984,38 +3278,38 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         value: function close() {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
-          regeneratorRuntime.mark(function _callee6() {
+          regeneratorRuntime.mark(function _callee9() {
             var message;
-            return regeneratorRuntime.wrap(function _callee6$(_context6) {
+            return regeneratorRuntime.wrap(function _callee9$(_context9) {
               while (1) {
-                switch (_context6.prev = _context6.next) {
+                switch (_context9.prev = _context9.next) {
                   case 0:
                     if (!this.isOpen) {
-                      _context6.next = 11;
+                      _context9.next = 11;
                       break;
                     }
 
                     message = _protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildDisconnect();
-                    _context6.prev = 2;
+                    _context9.prev = 2;
                     this.closeRequested = true;
-                    _context6.next = 6;
+                    _context9.next = 6;
                     return this.send(message);
 
                   case 6:
-                    _context6.next = 11;
+                    _context9.next = 11;
                     break;
 
                   case 8:
-                    _context6.prev = 8;
-                    _context6.t0 = _context6["catch"](2);
-                    this.err("Disconnect failure: " + _context6.t0);
+                    _context9.prev = 8;
+                    _context9.t0 = _context9["catch"](2);
+                    this.err("Disconnect failure: " + _context9.t0);
 
                   case 11:
                   case "end":
-                    return _context6.stop();
+                    return _context9.stop();
                 }
               }
-            }, _callee6, this, [[2, 8]]);
+            }, _callee9, this, [[2, 8]]);
           }));
         }
       }, {
@@ -3023,25 +3317,25 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         value: function login() {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
-          regeneratorRuntime.mark(function _callee7() {
-            var _this6 = this;
+          regeneratorRuntime.mark(function _callee10() {
+            var _this10 = this;
 
-            return regeneratorRuntime.wrap(function _callee7$(_context7) {
+            return regeneratorRuntime.wrap(function _callee10$(_context10) {
               while (1) {
-                switch (_context7.prev = _context7.next) {
+                switch (_context10.prev = _context10.next) {
                   case 0:
-                    return _context7.abrupt("return", new Promise(function (resolve, reject) {
+                    return _context10.abrupt("return", new Promise(function (resolve, reject) {
                       try {
-                        var message = _protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildLogin(_this6.config.password);
+                        var message = _protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildLogin(_this10.config.password);
 
-                        _protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].write(_this6.socket, message); // to be called when logged in
+                        _protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].write(_this10.socket, message); // to be called when logged in
 
 
-                        _this6.resolveLogin = resolve;
+                        _this10.resolveLogin = resolve;
                       } catch (err) {
-                        _this6.resolveLogin = null;
+                        _this10.resolveLogin = null;
 
-                        _this6.err("Login call failed: " + err);
+                        _this10.err("Login call failed: " + err);
 
                         reject(false);
                       }
@@ -3049,10 +3343,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
                   case 1:
                   case "end":
-                    return _context7.stop();
+                    return _context10.stop();
                 }
               }
-            }, _callee7);
+            }, _callee10);
           }));
         }
       }, {
@@ -3065,59 +3359,59 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         value: function send(message) {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
-          regeneratorRuntime.mark(function _callee9() {
-            var _this7 = this;
+          regeneratorRuntime.mark(function _callee12() {
+            var _this11 = this;
 
-            return regeneratorRuntime.wrap(function _callee9$(_context9) {
+            return regeneratorRuntime.wrap(function _callee12$(_context12) {
               while (1) {
-                switch (_context9.prev = _context9.next) {
+                switch (_context12.prev = _context12.next) {
                   case 0:
-                    return _context9.abrupt("return", this.Q.exec(function () {
-                      return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this7, void 0, void 0,
+                    return _context12.abrupt("return", this.Q.exec(function () {
+                      return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this11, void 0, void 0,
                       /*#__PURE__*/
-                      regeneratorRuntime.mark(function _callee8() {
-                        return regeneratorRuntime.wrap(function _callee8$(_context8) {
+                      regeneratorRuntime.mark(function _callee11() {
+                        return regeneratorRuntime.wrap(function _callee11$(_context11) {
                           while (1) {
-                            switch (_context8.prev = _context8.next) {
+                            switch (_context11.prev = _context11.next) {
                               case 0:
                                 if (this.isOpen) {
-                                  _context8.next = 7;
+                                  _context11.next = 7;
                                   break;
                                 }
 
-                                _context8.next = 3;
+                                _context11.next = 3;
                                 return this.open();
 
                               case 3:
-                                _context8.next = 5;
+                                _context11.next = 5;
                                 return this.login();
 
                               case 5:
-                                if (_context8.sent) {
-                                  _context8.next = 7;
+                                if (_context11.sent) {
+                                  _context11.next = 7;
                                   break;
                                 }
 
-                                return _context8.abrupt("return", _types__WEBPACK_IMPORTED_MODULE_2__["WriteError"].writeFatal);
+                                return _context11.abrupt("return", _types__WEBPACK_IMPORTED_MODULE_2__["WriteError"].writeFatal);
 
                               case 7:
-                                return _context8.abrupt("return", _protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].write(this.socket, message));
+                                return _context11.abrupt("return", _protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].write(this.socket, message));
 
                               case 8:
                               case "end":
-                                return _context8.stop();
+                                return _context11.stop();
                             }
                           }
-                        }, _callee8, this);
+                        }, _callee11, this);
                       }));
                     }));
 
                   case 1:
                   case "end":
-                    return _context9.stop();
+                    return _context12.stop();
                 }
               }
-            }, _callee9, this);
+            }, _callee12, this);
           }));
         }
       }, {
@@ -3281,34 +3575,34 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         value: function fetchDbInfo() {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
-          regeneratorRuntime.mark(function _callee10() {
-            return regeneratorRuntime.wrap(function _callee10$(_context10) {
+          regeneratorRuntime.mark(function _callee13() {
+            return regeneratorRuntime.wrap(function _callee13$(_context13) {
               while (1) {
-                switch (_context10.prev = _context10.next) {
+                switch (_context13.prev = _context13.next) {
                   case 0:
-                    _context10.prev = 0;
-                    _context10.next = 3;
+                    _context13.prev = 0;
+                    _context13.next = 3;
                     return this.send(_protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildDBInfo());
 
                   case 3:
-                    _context10.next = 5;
+                    _context13.next = 5;
                     return this.send(_protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildRequestSchedule());
 
                   case 5:
-                    _context10.next = 10;
+                    _context13.next = 10;
                     break;
 
                   case 7:
-                    _context10.prev = 7;
-                    _context10.t0 = _context10["catch"](0);
-                    this.err("dbInfo call failed -> " + _context10.t0);
+                    _context13.prev = 7;
+                    _context13.t0 = _context13["catch"](0);
+                    this.err("dbInfo call failed -> " + _context13.t0);
 
                   case 10:
                   case "end":
-                    return _context10.stop();
+                    return _context13.stop();
                 }
               }
-            }, _callee10, this, [[0, 7]]);
+            }, _callee13, this, [[0, 7]]);
           }));
         }
       }, {
@@ -3316,32 +3610,32 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         value: function fetchNode(nodeInx) {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
-          regeneratorRuntime.mark(function _callee11() {
+          regeneratorRuntime.mark(function _callee14() {
             var message;
-            return regeneratorRuntime.wrap(function _callee11$(_context11) {
+            return regeneratorRuntime.wrap(function _callee14$(_context14) {
               while (1) {
-                switch (_context11.prev = _context11.next) {
+                switch (_context14.prev = _context14.next) {
                   case 0:
                     message = _protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildNodeInfo(nodeInx);
-                    _context11.prev = 1;
-                    _context11.next = 4;
+                    _context14.prev = 1;
+                    _context14.next = 4;
                     return this.send(message);
 
                   case 4:
-                    _context11.next = 9;
+                    _context14.next = 9;
                     break;
 
                   case 6:
-                    _context11.prev = 6;
-                    _context11.t0 = _context11["catch"](1);
-                    this.err("nodeInfo call failed -> " + _context11.t0);
+                    _context14.prev = 6;
+                    _context14.t0 = _context14["catch"](1);
+                    this.err("nodeInfo call failed -> " + _context14.t0);
 
                   case 9:
                   case "end":
-                    return _context11.stop();
+                    return _context14.stop();
                 }
               }
-            }, _callee11, this, [[1, 6]]);
+            }, _callee14, this, [[1, 6]]);
           }));
         }
       }, {
@@ -3349,55 +3643,102 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         value: function fetchUnit(node, unitInx) {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
-          regeneratorRuntime.mark(function _callee12() {
+          regeneratorRuntime.mark(function _callee15() {
             var message;
-            return regeneratorRuntime.wrap(function _callee12$(_context12) {
+            return regeneratorRuntime.wrap(function _callee15$(_context15) {
               while (1) {
-                switch (_context12.prev = _context12.next) {
+                switch (_context15.prev = _context15.next) {
                   case 0:
                     message = _protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildUnitInfo(node, unitInx);
-                    _context12.prev = 1;
-                    _context12.next = 4;
+                    _context15.prev = 1;
+                    _context15.next = 4;
                     return this.send(message);
 
                   case 4:
-                    _context12.next = 9;
+                    _context15.next = 9;
                     break;
 
                   case 6:
-                    _context12.prev = 6;
-                    _context12.t0 = _context12["catch"](1);
-                    this.err("unitInfo call failed -> " + _context12.t0);
+                    _context15.prev = 6;
+                    _context15.t0 = _context15["catch"](1);
+                    this.err("unitInfo call failed -> " + _context15.t0);
 
                   case 9:
                   case "end":
-                    return _context12.stop();
+                    return _context15.stop();
                 }
               }
-            }, _callee12, this, [[1, 6]]);
+            }, _callee15, this, [[1, 6]]);
           }));
         }
       }, {
         key: "getDatabase",
         value: function getDatabase() {
-          var readUnits = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+          var readDB = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
-          regeneratorRuntime.mark(function _callee13() {
-            return regeneratorRuntime.wrap(function _callee13$(_context13) {
+          regeneratorRuntime.mark(function _callee16() {
+            var _this12 = this;
+
+            return regeneratorRuntime.wrap(function _callee16$(_context16) {
               while (1) {
-                switch (_context13.prev = _context13.next) {
+                switch (_context16.prev = _context16.next) {
                   case 0:
                     this.nodes = [];
-                    _context13.next = 3;
+
+                    if (!readDB) {
+                      _context16.next = 6;
+                      break;
+                    }
+
+                    _context16.next = 4;
                     return this.fetchDbInfo();
 
-                  case 3:
+                  case 4:
+                    _context16.next = 8;
+                    break;
+
+                  case 6:
+                    // loop over all nodes/units in the config with a matching ip address
+                    //  fill: this.nrNodes
+                    //  call: kind of receive-Node/Unit-Info
+                    this.log("building db from config file");
+                    this.system.config.cunits.filter(function (u) {
+                      return _this12.same(u.masterAddress, u.masterPort);
+                    }).forEach(function (u) {
+                      var node = _this12.findNode(u.logicalNodeAddress);
+
+                      if (!node) {
+                        node = new _protocol__WEBPACK_IMPORTED_MODULE_1__["Node"](_this12, {
+                          logicalAddress: u.logicalNodeAddress,
+                          name: "Node-" + u.logicalNodeAddress
+                        });
+
+                        _this12.nodes.push(node);
+
+                        _this12.system.setActiveState(node);
+
+                        _this12.log("new node: " + node.getName());
+                      }
+
+                      var unit = _this12.findUnit(u.logicalNodeAddress, u.logicalAddress);
+
+                      if (!unit) {
+                        unit = new _protocol__WEBPACK_IMPORTED_MODULE_1__["Unit"](node, u);
+                        node.units.push(unit);
+
+                        _this12.log("new unit: " + unit.getName() + " -> " + u.logicalAddress);
+                      }
+
+                      _this12.system.setActiveState(unit);
+                    });
+
+                  case 8:
                   case "end":
-                    return _context13.stop();
+                    return _context16.stop();
                 }
               }
-            }, _callee13, this);
+            }, _callee16, this);
           }));
         }
       }, {
@@ -3419,22 +3760,22 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "displayDatabase",
         value: function displayDatabase() {
-          var _this8 = this;
+          var _this13 = this;
 
           var onlyNodes = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
           this.log("Showing " + this.nodes.length + " nodes");
           this.nodes.forEach(function (node, nodeInx) {
             if (onlyNodes) {
-              _this8.log("===================================================================================");
+              _this13.log("===================================================================================");
             }
 
-            _this8.log(nodeInx + ". " + node.name + ", type = " + node.typeName() + ", nrUnits = " + node.nrUnits + ", logical address = " + node.logicalAddress);
+            _this13.log(nodeInx + ". " + node.name + ", type = " + node.typeName() + ", nrUnits = " + node.nrUnits + ", logical address = " + node.logicalAddress);
 
             if (onlyNodes) {
-              _this8.log("-----------------------------------------------------------------------------------");
+              _this13.log("-----------------------------------------------------------------------------------");
 
               node.units.forEach(function (unit, unitInx) {
-                _this8.log("> " + unitInx + ". '" + unit.name + "' => '" + unit.getName() + "', type = " + unit.typeName() + ", logical address: " + unit.logicalAddress + ", value: " + unit.value + (unit.status ? ", status = " + unit.status : ""));
+                _this13.log("> " + unitInx + ". '" + unit.name + "' => '" + unit.getName() + "', type = " + unit.typeName() + ", logical address: " + unit.logicalAddress + ", value: " + unit.value + (unit.status ? ", status = " + unit.status : ""));
               });
             }
           });
@@ -3549,24 +3890,24 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         value: function requestStatus() {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
-          regeneratorRuntime.mark(function _callee14() {
+          regeneratorRuntime.mark(function _callee17() {
             var nodeInx, node, unitInx;
-            return regeneratorRuntime.wrap(function _callee14$(_context14) {
+            return regeneratorRuntime.wrap(function _callee17$(_context17) {
               while (1) {
-                switch (_context14.prev = _context14.next) {
+                switch (_context17.prev = _context17.next) {
                   case 0:
                     nodeInx = 0;
 
                   case 1:
                     if (!(nodeInx < this.nodes.length)) {
-                      _context14.next = 14;
+                      _context17.next = 14;
                       break;
                     }
 
                     node = this.nodes[nodeInx];
 
                     if (!node.active) {
-                      _context14.next = 11;
+                      _context17.next = 11;
                       break;
                     }
 
@@ -3574,124 +3915,24 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
                   case 5:
                     if (!(unitInx < node.units.length)) {
-                      _context14.next = 11;
+                      _context17.next = 11;
                       break;
                     }
 
-                    _context14.next = 8;
+                    _context17.next = 8;
                     return this.requestUnitStatus(node.units[unitInx]);
 
                   case 8:
                     unitInx++;
-                    _context14.next = 5;
+                    _context17.next = 5;
                     break;
 
                   case 11:
                     nodeInx++;
-                    _context14.next = 1;
+                    _context17.next = 1;
                     break;
 
                   case 14:
-                  case "end":
-                    return _context14.stop();
-                }
-              }
-            }, _callee14, this);
-          }));
-        }
-      }, {
-        key: "requestNodeStatus",
-        value: function requestNodeStatus(node) {
-          return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
-          /*#__PURE__*/
-          regeneratorRuntime.mark(function _callee15() {
-            var unitInx;
-            return regeneratorRuntime.wrap(function _callee15$(_context15) {
-              while (1) {
-                switch (_context15.prev = _context15.next) {
-                  case 0:
-                    unitInx = 0;
-
-                  case 1:
-                    if (!(unitInx < node.units.length)) {
-                      _context15.next = 8;
-                      break;
-                    }
-
-                    if (!node.units[unitInx].active) {
-                      _context15.next = 5;
-                      break;
-                    }
-
-                    _context15.next = 5;
-                    return this.requestUnitStatus(node.units[unitInx]);
-
-                  case 5:
-                    unitInx++;
-                    _context15.next = 1;
-                    break;
-
-                  case 8:
-                  case "end":
-                    return _context15.stop();
-                }
-              }
-            }, _callee15, this);
-          }));
-        }
-      }, {
-        key: "requestUnitStatus",
-        value: function requestUnitStatus(unit) {
-          return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
-          /*#__PURE__*/
-          regeneratorRuntime.mark(function _callee16() {
-            var message, res;
-            return regeneratorRuntime.wrap(function _callee16$(_context16) {
-              while (1) {
-                switch (_context16.prev = _context16.next) {
-                  case 0:
-                    message = _protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildRequestUnitStatus(unit.node, unit);
-                    _context16.next = 3;
-                    return this.send(message);
-
-                  case 3:
-                    res = _context16.sent;
-                    // results will be set by the data event listener
-                    this.info("get value of " + unit.node.getName() + "-" + unit.getName());
-
-                  case 5:
-                  case "end":
-                    return _context16.stop();
-                }
-              }
-            }, _callee16, this);
-          }));
-        }
-      }, {
-        key: "setUnitStatus",
-        value: function setUnitStatus(unit, value) {
-          return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
-          /*#__PURE__*/
-          regeneratorRuntime.mark(function _callee17() {
-            var params;
-            return regeneratorRuntime.wrap(function _callee17$(_context17) {
-              while (1) {
-                switch (_context17.prev = _context17.next) {
-                  case 0:
-                    params = _protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildSetCmd(unit.node, unit, value);
-
-                    if (!params.cmd) {
-                      _context17.next = 4;
-                      break;
-                    }
-
-                    _context17.next = 4;
-                    return this.send(params.message);
-
-                  case 4:
-                    this.system.checkScenes(unit);
-
-                  case 5:
                   case "end":
                     return _context17.stop();
                 }
@@ -3700,22 +3941,38 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           }));
         }
       }, {
-        key: "setPreset",
-        value: function setPreset(unit, preset, temp) {
+        key: "requestNodeStatus",
+        value: function requestNodeStatus(node) {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
           regeneratorRuntime.mark(function _callee18() {
+            var unitInx;
             return regeneratorRuntime.wrap(function _callee18$(_context18) {
               while (1) {
                 switch (_context18.prev = _context18.next) {
                   case 0:
-                    _context18.next = 2;
-                    return this.send(_protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildSetPreset(unit.node, unit, preset, temp));
+                    unitInx = 0;
 
-                  case 2:
-                    this.info("set temp preset: " + preset + " of " + unit.node.getName() + "-" + unit.getName() + " to temp " + temp);
+                  case 1:
+                    if (!(unitInx < node.units.length)) {
+                      _context18.next = 8;
+                      break;
+                    }
 
-                  case 3:
+                    if (!node.units[unitInx].active) {
+                      _context18.next = 5;
+                      break;
+                    }
+
+                    _context18.next = 5;
+                    return this.requestUnitStatus(node.units[unitInx]);
+
+                  case 5:
+                    unitInx++;
+                    _context18.next = 1;
+                    break;
+
+                  case 8:
                   case "end":
                     return _context18.stop();
                 }
@@ -3724,22 +3981,26 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           }));
         }
       }, {
-        key: "selectPreset",
-        value: function selectPreset(unit, preset) {
+        key: "requestUnitStatus",
+        value: function requestUnitStatus(unit) {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
           regeneratorRuntime.mark(function _callee19() {
+            var message, res;
             return regeneratorRuntime.wrap(function _callee19$(_context19) {
               while (1) {
                 switch (_context19.prev = _context19.next) {
                   case 0:
-                    _context19.next = 2;
-                    return this.send(_protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildSelectPreset(unit.node, unit, preset));
-
-                  case 2:
-                    this.info("set temp preset of " + unit.node.getName() + "-" + unit.getName() + " to: " + preset);
+                    message = _protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildRequestUnitStatus(unit.node, unit);
+                    _context19.next = 3;
+                    return this.send(message);
 
                   case 3:
+                    res = _context19.sent;
+                    // results will be set by the data event listener
+                    this.info("get value of " + unit.node.getName() + "-" + unit.getName());
+
+                  case 5:
                   case "end":
                     return _context19.stop();
                 }
@@ -3748,22 +4009,30 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           }));
         }
       }, {
-        key: "setSchedule",
-        value: function setSchedule() {
+        key: "setUnitStatus",
+        value: function setUnitStatus(unit, value) {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
           regeneratorRuntime.mark(function _callee20() {
+            var params;
             return regeneratorRuntime.wrap(function _callee20$(_context20) {
               while (1) {
                 switch (_context20.prev = _context20.next) {
                   case 0:
-                    _context20.next = 2;
-                    return this.send(_protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildSendSchedule(this.schedule));
+                    params = _protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildSetCmd(unit.node, unit, value);
 
-                  case 2:
-                    this.info("set schedule to week nr: " + this.schedule);
+                    if (!params.cmd) {
+                      _context20.next = 4;
+                      break;
+                    }
 
-                  case 3:
+                    _context20.next = 4;
+                    return this.send(params.message);
+
+                  case 4:
+                    this.system.checkScenes(unit);
+
+                  case 5:
                   case "end":
                     return _context20.stop();
                 }
@@ -3772,8 +4041,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           }));
         }
       }, {
-        key: "setTempOnOff",
-        value: function setTempOnOff(unit, on) {
+        key: "setPreset",
+        value: function setPreset(unit, preset, temp) {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
           regeneratorRuntime.mark(function _callee21() {
@@ -3782,10 +4051,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 switch (_context21.prev = _context21.next) {
                   case 0:
                     _context21.next = 2;
-                    return this.send(_protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildSensorOnOff(unit.node, unit, on));
+                    return this.send(_protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildSetPreset(unit.node, unit, preset, temp));
 
                   case 2:
-                    this.info("turn temp sensor of " + unit.node.getName() + "-" + unit.getName() + ": " + (on ? "on" : "off"));
+                    this.info("set temp preset: " + preset + " of " + unit.node.getName() + "-" + unit.getName() + " to temp " + temp);
 
                   case 3:
                   case "end":
@@ -3796,8 +4065,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           }));
         }
       }, {
-        key: "doIncDecPreset",
-        value: function doIncDecPreset(unit, inc) {
+        key: "selectPreset",
+        value: function selectPreset(unit, preset) {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
           regeneratorRuntime.mark(function _callee22() {
@@ -3806,10 +4075,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 switch (_context22.prev = _context22.next) {
                   case 0:
                     _context22.next = 2;
-                    return this.send(_protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildIncDecPreset(unit.node, unit, inc));
+                    return this.send(_protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildSelectPreset(unit.node, unit, preset));
 
                   case 2:
-                    this.info("set temp preset of " + unit.node.getName() + "-" + unit.getName() + ": " + (inc ? "up" : "down"));
+                    this.info("set temp preset of " + unit.node.getName() + "-" + unit.getName() + " to: " + preset);
 
                   case 3:
                   case "end":
@@ -3817,6 +4086,78 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 }
               }
             }, _callee22, this);
+          }));
+        }
+      }, {
+        key: "setSchedule",
+        value: function setSchedule() {
+          return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
+          /*#__PURE__*/
+          regeneratorRuntime.mark(function _callee23() {
+            return regeneratorRuntime.wrap(function _callee23$(_context23) {
+              while (1) {
+                switch (_context23.prev = _context23.next) {
+                  case 0:
+                    _context23.next = 2;
+                    return this.send(_protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildSendSchedule(this.schedule));
+
+                  case 2:
+                    this.info("set schedule to week nr: " + this.schedule);
+
+                  case 3:
+                  case "end":
+                    return _context23.stop();
+                }
+              }
+            }, _callee23, this);
+          }));
+        }
+      }, {
+        key: "setTempOnOff",
+        value: function setTempOnOff(unit, on) {
+          return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
+          /*#__PURE__*/
+          regeneratorRuntime.mark(function _callee24() {
+            return regeneratorRuntime.wrap(function _callee24$(_context24) {
+              while (1) {
+                switch (_context24.prev = _context24.next) {
+                  case 0:
+                    _context24.next = 2;
+                    return this.send(_protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildSensorOnOff(unit.node, unit, on));
+
+                  case 2:
+                    this.info("turn temp sensor of " + unit.node.getName() + "-" + unit.getName() + ": " + (on ? "on" : "off"));
+
+                  case 3:
+                  case "end":
+                    return _context24.stop();
+                }
+              }
+            }, _callee24, this);
+          }));
+        }
+      }, {
+        key: "doIncDecPreset",
+        value: function doIncDecPreset(unit, inc) {
+          return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
+          /*#__PURE__*/
+          regeneratorRuntime.mark(function _callee25() {
+            return regeneratorRuntime.wrap(function _callee25$(_context25) {
+              while (1) {
+                switch (_context25.prev = _context25.next) {
+                  case 0:
+                    _context25.next = 2;
+                    return this.send(_protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildIncDecPreset(unit.node, unit, inc));
+
+                  case 2:
+                    this.info("set temp preset of " + unit.node.getName() + "-" + unit.getName() + ": " + (inc ? "up" : "down"));
+
+                  case 3:
+                  case "end":
+                    return _context25.stop();
+                }
+              }
+            }, _callee25, this);
           }));
         }
       }]);
@@ -4170,10 +4511,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
         _types__WEBPACK_IMPORTED_MODULE_1__["Sanitizers"].unitInfo(params, this);
 
-        this.extendedType = this.calcExtendedType(); // make a name for homekit, without the | but add § is 'specials' to add "sfeer", etc...
-        // if the display name is empty make a N[nodeAdr]-U[unitAdr] name.
+        this.extendedType = this.calcExtendedType(); // remove the |
 
         this.name = this.name.replace(/\|/g, " "); // delete all type modifiers ( $, * and ! )
+        // if the display name is empty make a N[nodeAdr]-U[unitAdr] name.
 
         this.displayName = this.name.replace(/\$|\*|\!/g, '') || this.getSerialNr();
       }
@@ -4441,76 +4782,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         value: function setPreset(preset, temp) {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
-          regeneratorRuntime.mark(function _callee23() {
-            return regeneratorRuntime.wrap(function _callee23$(_context23) {
-              while (1) {
-                switch (_context23.prev = _context23.next) {
-                  case 0:
-                    _context23.next = 2;
-                    return this.node.master.setPreset(this, preset, temp);
-
-                  case 2:
-                  case "end":
-                    return _context23.stop();
-                }
-              }
-            }, _callee23, this);
-          }));
-        }
-      }, {
-        key: "selectPreset",
-        value: function selectPreset(preset) {
-          return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
-          /*#__PURE__*/
-          regeneratorRuntime.mark(function _callee24() {
-            return regeneratorRuntime.wrap(function _callee24$(_context24) {
-              while (1) {
-                switch (_context24.prev = _context24.next) {
-                  case 0:
-                    _context24.next = 2;
-                    return this.node.master.selectPreset(this, preset);
-
-                  case 2:
-                  case "end":
-                    return _context24.stop();
-                }
-              }
-            }, _callee24, this);
-          }));
-        }
-      }, {
-        key: "sensorOnOff",
-        value: function sensorOnOff(on) {
-          return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
-          /*#__PURE__*/
-          regeneratorRuntime.mark(function _callee25() {
-            return regeneratorRuntime.wrap(function _callee25$(_context25) {
-              while (1) {
-                switch (_context25.prev = _context25.next) {
-                  case 0:
-                    _context25.next = 2;
-                    return this.node.master.setTempOnOff(this, on);
-
-                  case 2:
-                  case "end":
-                    return _context25.stop();
-                }
-              }
-            }, _callee25, this);
-          }));
-        }
-      }, {
-        key: "doIncDecPreset",
-        value: function doIncDecPreset(inc) {
-          return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
-          /*#__PURE__*/
           regeneratorRuntime.mark(function _callee26() {
             return regeneratorRuntime.wrap(function _callee26$(_context26) {
               while (1) {
                 switch (_context26.prev = _context26.next) {
                   case 0:
                     _context26.next = 2;
-                    return this.node.master.doIncDecPreset(this, inc);
+                    return this.node.master.setPreset(this, preset, temp);
 
                   case 2:
                   case "end":
@@ -4518,6 +4796,69 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 }
               }
             }, _callee26, this);
+          }));
+        }
+      }, {
+        key: "selectPreset",
+        value: function selectPreset(preset) {
+          return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
+          /*#__PURE__*/
+          regeneratorRuntime.mark(function _callee27() {
+            return regeneratorRuntime.wrap(function _callee27$(_context27) {
+              while (1) {
+                switch (_context27.prev = _context27.next) {
+                  case 0:
+                    _context27.next = 2;
+                    return this.node.master.selectPreset(this, preset);
+
+                  case 2:
+                  case "end":
+                    return _context27.stop();
+                }
+              }
+            }, _callee27, this);
+          }));
+        }
+      }, {
+        key: "sensorOnOff",
+        value: function sensorOnOff(on) {
+          return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
+          /*#__PURE__*/
+          regeneratorRuntime.mark(function _callee28() {
+            return regeneratorRuntime.wrap(function _callee28$(_context28) {
+              while (1) {
+                switch (_context28.prev = _context28.next) {
+                  case 0:
+                    _context28.next = 2;
+                    return this.node.master.setTempOnOff(this, on);
+
+                  case 2:
+                  case "end":
+                    return _context28.stop();
+                }
+              }
+            }, _callee28, this);
+          }));
+        }
+      }, {
+        key: "doIncDecPreset",
+        value: function doIncDecPreset(inc) {
+          return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
+          /*#__PURE__*/
+          regeneratorRuntime.mark(function _callee29() {
+            return regeneratorRuntime.wrap(function _callee29$(_context29) {
+              while (1) {
+                switch (_context29.prev = _context29.next) {
+                  case 0:
+                    _context29.next = 2;
+                    return this.node.master.doIncDecPreset(this, inc);
+
+                  case 2:
+                  case "end":
+                    return _context29.stop();
+                }
+              }
+            }, _callee29, this);
           }));
         }
       }, {
@@ -4530,20 +4871,20 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         value: function reqState() {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
-          regeneratorRuntime.mark(function _callee27() {
-            return regeneratorRuntime.wrap(function _callee27$(_context27) {
+          regeneratorRuntime.mark(function _callee30() {
+            return regeneratorRuntime.wrap(function _callee30$(_context30) {
               while (1) {
-                switch (_context27.prev = _context27.next) {
+                switch (_context30.prev = _context30.next) {
                   case 0:
-                    _context27.next = 2;
+                    _context30.next = 2;
                     return this.node.master.requestUnitStatus(this);
 
                   case 2:
                   case "end":
-                    return _context27.stop();
+                    return _context30.stop();
                 }
               }
-            }, _callee27, this);
+            }, _callee30, this);
           }));
         }
       }, {
@@ -4551,20 +4892,20 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         value: function setState(value) {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
-          regeneratorRuntime.mark(function _callee28() {
-            return regeneratorRuntime.wrap(function _callee28$(_context28) {
+          regeneratorRuntime.mark(function _callee31() {
+            return regeneratorRuntime.wrap(function _callee31$(_context31) {
               while (1) {
-                switch (_context28.prev = _context28.next) {
+                switch (_context31.prev = _context31.next) {
                   case 0:
-                    _context28.next = 2;
+                    _context31.next = 2;
                     return this.node.master.setUnitStatus(this, value);
 
                   case 2:
                   case "end":
-                    return _context28.stop();
+                    return _context31.stop();
                 }
               }
-            }, _callee28, this);
+            }, _callee31, this);
           }));
         }
       }, {
@@ -5083,39 +5424,39 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       _inherits(System, _logger__WEBPACK_IMPO2);
 
       function System(toastCtrl) {
-        var _this9;
+        var _this14;
 
         _classCallCheck(this, System);
 
-        _this9 = _possibleConstructorReturn(this, _getPrototypeOf(System).call(this, "system", true));
-        _this9.toastCtrl = toastCtrl;
-        _this9.backup = null;
-        _this9.isBrowser = true;
-        _this9.isSplitted = false; // rebuild active services (units) and spread unit updates
+        _this14 = _possibleConstructorReturn(this, _getPrototypeOf(System).call(this, "system", true));
+        _this14.toastCtrl = toastCtrl;
+        _this14.backup = null;
+        _this14.isBrowser = true;
+        _this14.isSplitted = false; // rebuild active services (units) and spread unit updates
 
-        _this9.trigger = null;
-        _this9.moods = [];
-        _this9.controls = [];
-        _this9.temperatures = [];
-        _this9.stores = [];
-        _this9.trigger = null;
-        _this9.emitter = new events__WEBPACK_IMPORTED_MODULE_7__["EventEmitter"]();
+        _this14.trigger = null;
+        _this14.moods = [];
+        _this14.controls = [];
+        _this14.temperatures = [];
+        _this14.stores = [];
+        _this14.trigger = null;
+        _this14.emitter = new events__WEBPACK_IMPORTED_MODULE_7__["EventEmitter"]();
 
-        _protocol__WEBPACK_IMPORTED_MODULE_4__["Protocol"].setEmitter(_this9.emitter); //this.emitter.on('update', this.checkScenes.bind(this));
-
-
-        _this9.readConfig();
-
-        _this9.readGroups();
-
-        _this9.readScenes(); // open all masters listed in the config
+        _protocol__WEBPACK_IMPORTED_MODULE_4__["Protocol"].setEmitter(_this14.emitter); //this.emitter.on('update', this.checkScenes.bind(this));
 
 
-        _this9.masters = [];
+        _this14.readConfig();
 
-        _this9.openMasters();
+        _this14.readGroups();
 
-        return _this9;
+        _this14.readScenes(); // open all masters listed in the config
+
+
+        _this14.masters = [];
+
+        _this14.openMasters();
+
+        return _this14;
       }
 
       _createClass(System, [{
@@ -5136,7 +5477,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           // don"t wait for the real open of the sockets
           // some errors: the socket to the proxy opens, but the socket to the hardware fails
           for (var inx = 0; inx < this.config.cmasters.length; inx++) {
-            this.openMaster(this.config.cmasters[inx]);
+            this.openMaster(this.config.cmasters[inx], false);
           }
         }
       }, {
@@ -5144,105 +5485,106 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         value: function closeMasters() {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
-          regeneratorRuntime.mark(function _callee29() {
+          regeneratorRuntime.mark(function _callee32() {
             var inx;
-            return regeneratorRuntime.wrap(function _callee29$(_context29) {
+            return regeneratorRuntime.wrap(function _callee32$(_context32) {
               while (1) {
-                switch (_context29.prev = _context29.next) {
+                switch (_context32.prev = _context32.next) {
                   case 0:
                     inx = 0;
 
                   case 1:
                     if (!(inx < this.masters.length)) {
-                      _context29.next = 7;
+                      _context32.next = 7;
                       break;
                     }
 
-                    _context29.next = 4;
+                    _context32.next = 4;
                     return this.closeMaster(this.masters[inx]);
 
                   case 4:
                     inx++;
-                    _context29.next = 1;
+                    _context32.next = 1;
                     break;
 
                   case 7:
                   case "end":
-                    return _context29.stop();
+                    return _context32.stop();
                 }
               }
-            }, _callee29, this);
+            }, _callee32, this);
           }));
         }
       }, {
         key: "openMaster",
         value: function openMaster(config) {
+          var readDB = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
-          regeneratorRuntime.mark(function _callee30() {
+          regeneratorRuntime.mark(function _callee33() {
             var master;
-            return regeneratorRuntime.wrap(function _callee30$(_context30) {
+            return regeneratorRuntime.wrap(function _callee33$(_context33) {
               while (1) {
-                switch (_context30.prev = _context30.next) {
+                switch (_context33.prev = _context33.next) {
                   case 0:
                     master = new _master__WEBPACK_IMPORTED_MODULE_2__["Master"](this, config, this.toastCtrl);
                     this.masters.push(master); // check for old configs that don't contain the active flag
 
                     if (!(typeof master.config.active === "boolean" && !master.config.active)) {
-                      _context30.next = 4;
+                      _context33.next = 4;
                       break;
                     }
 
-                    return _context30.abrupt("return");
+                    return _context33.abrupt("return");
 
                   case 4:
                     this.log("opening master: " + master.getAddress());
-                    _context30.next = 7;
+                    _context33.next = 7;
                     return master.open();
 
                   case 7:
-                    if (!_context30.sent) {
-                      _context30.next = 20;
+                    if (!_context33.sent) {
+                      _context33.next = 20;
                       break;
                     }
 
-                    _context30.next = 10;
+                    _context33.next = 10;
                     return master.login();
 
                   case 10:
-                    if (!_context30.sent) {
-                      _context30.next = 17;
+                    if (!_context33.sent) {
+                      _context33.next = 17;
                       break;
                     }
 
-                    _context30.next = 13;
-                    return master.getDatabase();
+                    _context33.next = 13;
+                    return master.getDatabase(readDB);
 
                   case 13:
                     this.log("master: " + master.getAddress() + " opened with " + master.nodes.length + " nodes.");
                     this.triggerRebuild();
-                    _context30.next = 18;
+                    _context33.next = 18;
                     break;
 
                   case 17:
                     this.err("failed to log in on " + master.getAddress());
 
                   case 18:
-                    _context30.next = 21;
+                    _context33.next = 21;
                     break;
 
                   case 20:
                     this.err("failed to open connection on " + master.getAddress());
 
                   case 21:
-                    return _context30.abrupt("return", master);
+                    return _context33.abrupt("return", master);
 
                   case 22:
                   case "end":
-                    return _context30.stop();
+                    return _context33.stop();
                 }
               }
-            }, _callee30, this);
+            }, _callee33, this);
           }));
         }
       }, {
@@ -5250,39 +5592,39 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         value: function closeMaster(master) {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
-          regeneratorRuntime.mark(function _callee31() {
+          regeneratorRuntime.mark(function _callee34() {
             var inx;
-            return regeneratorRuntime.wrap(function _callee31$(_context31) {
+            return regeneratorRuntime.wrap(function _callee34$(_context34) {
               while (1) {
-                switch (_context31.prev = _context31.next) {
+                switch (_context34.prev = _context34.next) {
                   case 0:
                     if (master) {
-                      _context31.next = 2;
+                      _context34.next = 2;
                       break;
                     }
 
-                    return _context31.abrupt("return");
+                    return _context34.abrupt("return");
 
                   case 2:
                     // find its index (we need it to delete it from the list)
                     inx = this.findMasterInx(master); // close if open
 
                     if (!master.isOpen) {
-                      _context31.next = 12;
+                      _context34.next = 12;
                       break;
                     }
 
-                    _context31.prev = 4;
-                    _context31.next = 7;
+                    _context34.prev = 4;
+                    _context34.next = 7;
                     return master.close();
 
                   case 7:
-                    _context31.next = 12;
+                    _context34.next = 12;
                     break;
 
                   case 9:
-                    _context31.prev = 9;
-                    _context31.t0 = _context31["catch"](4);
+                    _context34.prev = 9;
+                    _context34.t0 = _context34["catch"](4);
                     this.err("failed to close master on " + master.getAddress() + ":" + master.getPort());
 
                   case 12:
@@ -5293,10 +5635,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
                   case 13:
                   case "end":
-                    return _context31.stop();
+                    return _context34.stop();
                 }
               }
-            }, _callee31, this, [[4, 9]]);
+            }, _callee34, this, [[4, 9]]);
           }));
         }
       }, {
@@ -5314,37 +5656,37 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         value: function addMaster(cmaster) {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
-          regeneratorRuntime.mark(function _callee32() {
+          regeneratorRuntime.mark(function _callee35() {
             var inx, master;
-            return regeneratorRuntime.wrap(function _callee32$(_context32) {
+            return regeneratorRuntime.wrap(function _callee35$(_context35) {
               while (1) {
-                switch (_context32.prev = _context32.next) {
+                switch (_context35.prev = _context35.next) {
                   case 0:
                     if (cmaster.address) {
-                      _context32.next = 2;
+                      _context35.next = 2;
                       break;
                     }
 
-                    return _context32.abrupt("return");
+                    return _context35.abrupt("return");
 
                   case 2:
                     // see if this master already exists
                     inx = this.findCMasterInx(cmaster.address, cmaster.port); // store in config if not yet known
 
                     if (!(inx < 0)) {
-                      _context32.next = 8;
+                      _context35.next = 8;
                       break;
                     }
 
                     this.config.cmasters.push(cmaster);
                     inx = this.masters.length - 1;
-                    _context32.next = 12;
+                    _context35.next = 12;
                     break;
 
                   case 8:
                     // close to re-open (master is deleted from the master array)
                     master = this.findMaster(cmaster.address, cmaster.port);
-                    _context32.next = 11;
+                    _context35.next = 11;
                     return this.closeMaster(master);
 
                   case 11:
@@ -5354,18 +5696,18 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                   case 12:
                     this.writeConfig(); // master is openened and added to the master array
 
-                    _context32.next = 15;
-                    return this.openMaster(cmaster);
+                    _context35.next = 15;
+                    return this.openMaster(cmaster, true);
 
                   case 15:
-                    return _context32.abrupt("return", _context32.sent);
+                    return _context35.abrupt("return", _context35.sent);
 
                   case 16:
                   case "end":
-                    return _context32.stop();
+                    return _context35.stop();
                 }
               }
-            }, _callee32, this);
+            }, _callee35, this);
           }));
         }
       }, {
@@ -5373,22 +5715,22 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         value: function deleteMaster(master) {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
-          regeneratorRuntime.mark(function _callee33() {
+          regeneratorRuntime.mark(function _callee36() {
             var masterAddress, masterPort, inx;
-            return regeneratorRuntime.wrap(function _callee33$(_context33) {
+            return regeneratorRuntime.wrap(function _callee36$(_context36) {
               while (1) {
-                switch (_context33.prev = _context33.next) {
+                switch (_context36.prev = _context36.next) {
                   case 0:
                     masterAddress = master.getAddress();
                     masterPort = master.getPort();
                     inx = this.findCMasterInx(masterAddress, masterPort);
 
                     if (!(inx >= 0)) {
-                      _context33.next = 11;
+                      _context36.next = 11;
                       break;
                     }
 
-                    _context33.next = 6;
+                    _context36.next = 6;
                     return this.closeMaster(master);
 
                   case 6:
@@ -5399,7 +5741,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                       return unit.masterPort != masterPort || unit.masterAddress != masterAddress;
                     });
                     this.writeConfig();
-                    _context33.next = 12;
+                    _context36.next = 12;
                     break;
 
                   case 11:
@@ -5407,10 +5749,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
                   case 12:
                   case "end":
-                    return _context33.stop();
+                    return _context36.stop();
                 }
               }
-            }, _callee33, this);
+            }, _callee36, this);
           }));
         }
       }, {
@@ -5532,12 +5874,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "findUnitByAddress",
         value: function findUnitByAddress(logicalNodeAddress, logicalAddress) {
-          var _this10 = this;
+          var _this15 = this;
 
           var unit = null;
           this.masters.forEach(function (m) {
             if (m) {
-              var node = _this10.findNode(m, logicalNodeAddress);
+              var node = _this15.findNode(m, logicalNodeAddress);
 
               if (node) {
                 unit = node.units.find(function (u) {
@@ -5594,6 +5936,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             return {
               active: "Y",
               group: u.group,
+              name: u.name,
+              type: u.type,
               masterAddress: u.node.master.getAddress(),
               masterPort: u.node.master.getPort(),
               logicalNodeAddress: u.node.logicalAddress,
@@ -5609,7 +5953,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "triggerRebuild",
         value: function triggerRebuild() {
-          var _this11 = this;
+          var _this16 = this;
 
           var immediate = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
           this.log("triggerRebuild requested");
@@ -5624,9 +5968,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             this.rebuildServices();
           } else {
             this.trigger = setTimeout(function () {
-              _this11.trigger = null;
+              _this16.trigger = null;
 
-              _this11.rebuildServices();
+              _this16.rebuildServices();
             }, 1000);
           }
         }
@@ -5681,7 +6025,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "checkScenes",
         value: function checkScenes(unit) {
-          var _this12 = this;
+          var _this17 = this;
 
           // do local scene implementation only if not handle by server
           if (this.config.remotescenes) return; // used when local-scenes = true.
@@ -5695,12 +6039,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             console.log(scene); //if (unit.sameValue(scene.trigger.value)) {
 
             scene.units.forEach(function (u) {
-              _this12.log("Find unit: " + u.masterAddress + ", " + u.masterPort + ", " + u.logicalNodeAddress + ", " + u.logicalAddress);
+              _this17.log("Find unit: " + u.masterAddress + ", " + u.masterPort + ", " + u.logicalNodeAddress + ", " + u.logicalAddress);
 
-              var unit = _this12.findUnit(u.masterAddress, u.masterPort, u.logicalNodeAddress, u.logicalAddress);
+              var unit = _this17.findUnit(u.masterAddress, u.masterPort, u.logicalNodeAddress, u.logicalAddress);
 
               if (unit) {
-                _this12.log(" - unit found " + unit.getDisplayName() + " -> " + u.value);
+                _this17.log(" - unit found " + unit.getDisplayName() + " -> " + u.value);
 
                 unit.setState(u.value);
               }
@@ -6031,7 +6375,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       masterPort: 5001,
       name: "unit",
       logicalAddress: 0,
-      logicalNodeAddress: 0
+      logicalNodeAddress: 0,
+      type: 0
     };
     ;
     ;
@@ -6044,6 +6389,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       name: 'Scene',
       trigger: kEmptyUnitScene,
       order: 0,
+      group: 0,
       units: []
     };
     ;
@@ -6099,7 +6445,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         return config;
       },
       system: function system(config) {
-        var _this13 = this;
+        var _this18 = this;
 
         if (!config) {
           config = {};
@@ -6116,7 +6462,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         delete config["cnodes"];
         config.cunits = config.cunits || [];
         config.cunits.forEach(function (u) {
-          return _this13.unitConfig(u);
+          return _this18.unitDef(u);
         }); // support old style groups, pre v1.1
 
         if (typeof config.cgroups != 'undefined') {
@@ -6149,14 +6495,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         return config;
       },
       groups: function groups(config) {
-        var _this14 = this;
+        var _this19 = this;
 
         if (!config) {
           return [this.group()];
         }
 
         config.forEach(function (g) {
-          return _this14.group(g);
+          return _this19.group(g);
         });
         return config;
       },
@@ -6187,7 +6533,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           config.group = parseInt(config.group);
         }
 
-        config.group = config.group || 0;
+        config.group = config.group || -1;
         return config;
       },
       unitScene: function unitScene(config) {
@@ -6204,7 +6550,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           logicalAddress: config.logicalAddress,
           masterAddress: config.masterAddress,
           masterPort: config.masterPort,
-          value: config.value
+          value: config.value,
+          name: config.name,
+          type: config.type
         };
       },
       unitInfo: function unitInfo(info, into) {
@@ -6227,7 +6575,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       ////////////
       // Scenes //
       sceneConfig: function sceneConfig(config) {
-        var _this15 = this;
+        var _this20 = this;
 
         // don't change -> create new clean record for writing to config files
         if (!config) {
@@ -6242,22 +6590,28 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }
 
         newConfig.order = config.order || kEmptyScene.order;
+
+        if (typeof config.group === 'string') {
+          config.group = parseInt(config.group);
+        }
+
+        newConfig.group = config.group || -1;
         newConfig.trigger = this.unitScene(config.trigger);
         config.units = config.units || kEmptyScene.units;
         newConfig.units = config.units.map(function (u) {
-          return _this15.unitScene(u);
+          return _this20.unitScene(u);
         });
         return newConfig;
       },
       scenes: function scenes(config) {
-        var _this16 = this;
+        var _this21 = this;
 
         if (!config) {
           return [this.sceneConfig()];
         }
 
         config.forEach(function (s) {
-          return _this16.sceneConfig(s);
+          return _this21.sceneConfig(s);
         });
         return config;
       },
@@ -6280,11 +6634,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
         return info;
       },
-      unitDef: function unitDef(info, into) {
+      unitDef: function unitDef(info) {
+        info.name = info.name || '';
         info.logicalNodeAddress = info.logicalNodeAddress || 0;
         info.logicalAddress = info.logicalAddress || 0;
         info.masterAddress = info.masterAddress || '';
         info.masterPort = info.masterPort || 5001;
+        info.type = info.type || _protocol__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kNoType;
         return info;
       }
     }; //////////////////////

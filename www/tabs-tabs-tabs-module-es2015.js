@@ -13,64 +13,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./src/app/core/stdUX.ts":
-/*!*******************************!*\
-  !*** ./src/app/core/stdUX.ts ***!
-  \*******************************/
-/*! exports provided: doAlert, doAsk, doModal */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "doAlert", function() { return doAlert; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "doAsk", function() { return doAsk; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "doModal", function() { return doModal; });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
-
-function doAlert(alertCtrl, options) {
-    return new Promise((resolve, reject) => tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
-        const buttons = options.buttons.map(b => {
-            return { text: b.text,
-                handler: () => resolve(b.id) };
-        });
-        const alert = yield alertCtrl.create({
-            header: 'Duotecno',
-            subHeader: options.title,
-            message: options.message,
-            buttons
-        });
-        yield alert.present();
-    }));
-}
-function doAsk(alertCtrl, options) {
-    return new Promise((resolve, reject) => tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
-        const buttons = options.buttons.map(b => {
-            return { text: b.text,
-                handler: (data) => { b.handler && b.handler(data); resolve(data); } };
-        });
-        const alert = yield alertCtrl.create({
-            header: 'Duotecno',
-            subHeader: options.title,
-            message: options.message,
-            buttons: buttons,
-            inputs: options.inputs
-        });
-        yield alert.present();
-    }));
-}
-function doModal(modalCtl, modalComponent, options) {
-    return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
-        const modal = yield modalCtl.create({ component: modalComponent,
-            componentProps: options });
-        yield modal.present();
-        const { data } = yield modal.onDidDismiss();
-        return data || {};
-    });
-}
-
-
-/***/ }),
-
 /***/ "./src/app/tabs/config/config.general.ts":
 /*!***********************************************!*\
   !*** ./src/app/tabs/config/config.general.ts ***!
@@ -382,6 +324,7 @@ let ConfigMastersComponent = class ConfigMastersComponent {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
             const data = yield Object(src_app_core_stdUX__WEBPACK_IMPORTED_MODULE_4__["doModal"])(this.modalCtl, _edit_master__WEBPACK_IMPORTED_MODULE_6__["EditMasterComponent"], { masterConfig: master.config });
             if (data.masterConfig) {
+                this.system.log("Rebuilding master: " + master.getName());
                 try {
                     this.system.addMaster(data.masterConfig);
                 }
@@ -775,7 +718,7 @@ ConfigPage = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     <config-masters *ngIf="what === 'masters'"></config-masters>
 
     <p class="version">
-      <span>v2.1.0b2 © Duotecno by Johan Coppieters</span>
+      <span>v2.2.0b1 © Duotecno by Johan Coppieters</span>
       <span class="manual">Download the <a href="https://www.duotecno.be/wp-content/uploads/2020/05/Duotecno-smartbox-app-1.pdf">manual</a></span>
     </p>
   </ion-content>
@@ -925,6 +868,11 @@ let EditNode = class EditNode {
         if ((!this.node.active) || (this.node.nrUnits !== this.node.units.length)) {
             this.node.master.fetchAllUnits(this.node);
         }
+        // should the name contains a ',' as a first character, don't show it active
+        this.node.units.forEach((u) => {
+            if ((u.name) && (u.name[0] === ','))
+                u.active = false;
+        });
     }
     sameGroup(a, b) {
         return a * 1 == b * 1;
@@ -958,6 +906,7 @@ EditNode = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
           <ion-checkbox slot="start" [(ngModel)]="unit.active" color="secondary" [disabled]="unit.name[0]==','"></ion-checkbox>
           <ion-select *ngIf="system.groups.length > 1" [(ngModel)]="unit.group" [compareWith]="sameGroup"
                       interface="popover" [interfaceOptions]="{title: unit.getName()}">
+            <ion-select-option value="-1">All groups</ion-select-option>
             <ion-select-option *ngFor="let group of system.groups" value="{{group.id}}">{{group.name}}</ion-select-option>
           </ion-select>
         </ion-item>
@@ -1013,6 +962,9 @@ let EditScene = class EditScene {
         this.alertCtrl = alertCtrl;
         this.system = system;
         this.navParams = navParams;
+    }
+    sameGroup(a, b) {
+        return a * 1 == b * 1;
     }
     ngOnInit() {
         this.scene = src_app_system_types__WEBPACK_IMPORTED_MODULE_4__["Sanitizers"].sceneConfig(this.navParams.get('scene'));
@@ -1071,7 +1023,7 @@ let EditScene = class EditScene {
         this.system.controls.forEach((u, i) => {
             if (this.selection[i]) {
                 this.scene.units.push(src_app_system_types__WEBPACK_IMPORTED_MODULE_4__["Sanitizers"].unitScene({ masterAddress: u.node.master.getAddress(), masterPort: u.node.master.getPort(),
-                    logicalNodeAddress: u.node.logicalAddress, logicalAddress: u.logicalAddress,
+                    logicalNodeAddress: u.node.logicalAddress, logicalAddress: u.logicalAddress, name: u.name, type: u.type,
                     value: this.values[i] }));
             }
         });
@@ -1125,6 +1077,16 @@ EditScene = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
           <ion-label>{{ "Config.Scenes.triggeredBy" |_ }}:</ion-label>
           <ion-label class="triggerName" (click)="selectTrigger(scene)">{{ triggerName }}</ion-label>
           <ion-icon name="create-outline" (click)="selectTrigger(scene)"></ion-icon>
+        </ion-item>
+
+        <ion-item lines="none">
+          <ion-label>{{ "Config.Scenes.group" |_ }}:</ion-label>
+          <ion-select *ngIf="system.groups.length > 1" [(ngModel)]="scene.group" [compareWith]="sameGroup"
+                      interface="popover" [interfaceOptions]="{title: scene.name}">
+            <ion-select-option value="-1">All groups</ion-select-option>
+            <ion-select-option *ngFor="let group of system.groups" value="{{group.id}}">{{group.name}}</ion-select-option>
+            </ion-select>
+
         </ion-item>
 
         <ion-item *ngFor="let unit of system.controls; let inx = index;">
@@ -1208,7 +1170,7 @@ let SelectTrigger = class SelectTrigger {
             logicalAddress: unit.logicalAddress,
             masterAddress: unit.node.master.getAddress(),
             masterPort: unit.node.master.getPort(),
-            value: this.curType
+            value: this.curType, name: unit.name, type: unit.type
         }));
     }
     cancel() {
