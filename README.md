@@ -98,6 +98,7 @@ switch =>
 - no platform if not all masters logged in
 - (b2) read db info on startup
 - (b2) have 10 QR codes on the server
+- (b3) go from services directly to edit node.
 
 ### Todo
 - setup openstack server
