@@ -132,7 +132,7 @@ class Master extends base_1.Base {
                 this.err(err);
             });
             this.isOpen = true;
-            console.log("master opened -> " + this.config.address);
+            this.log("master opened -> " + this.config.address);
         });
     }
     close() {
@@ -197,7 +197,6 @@ class Master extends base_1.Base {
                 ", data=" + ((!next.message) ?
                 "--" : ((next.message instanceof Array) ? next.message.join(",") : next.message)));
             this.Q.do();
-            //this.q.pop();
             if (next.isStatus) {
                 this.receiveStatus(next);
             }
@@ -338,17 +337,37 @@ class Master extends base_1.Base {
     getDatabase(readDB = false) {
         return __awaiter(this, void 0, void 0, function* () {
             this.nodes = [];
-            yield this.fetchDbInfo();
-            if (readDB)
-                setTimeout(() => __awaiter(this, void 0, void 0, function* () {
-                    this.system.allMasters(m => {
-                        this.log("reading node db of " + m.getAddress() + ":" + m.getPort());
-                        m.allNodes((n) => __awaiter(this, void 0, void 0, function* () {
-                            this.log("reading unit db of " + n.getName());
-                            yield m.fetchAllUnits(n);
-                        }));
-                    });
-                }), 1000);
+            const hasNames = this.system.config.cunits.filter(u => this.same(u.masterAddress, u.masterPort)).some(u => u.name);
+            if (readDB || !hasNames) {
+                yield this.fetchDbInfo();
+                // upon reception of the DB info, 
+                //   getNode info will be called, 
+                //   which in it's turn will trigger getUnitInfo through fetchAllUnits
+            }
+            else {
+                // loop over all nodes/units in the config with a matching ip address
+                //  fill: this.nrNodes
+                //  call: kind of receive-Node/Unit-Info
+                this.log("building db from config file");
+                this.system.config.cunits
+                    .filter(u => this.same(u.masterAddress, u.masterPort))
+                    .forEach(u => {
+                    let node = this.findNode(u.logicalNodeAddress);
+                    if (!node) {
+                        node = new protocol_1.Node(this, { logicalAddress: u.logicalNodeAddress, name: "Node-" + u.logicalNodeAddress });
+                        this.nodes.push(node);
+                        this.system.setActiveState(node);
+                        this.log("new node: " + node.getName());
+                    }
+                    let unit = this.findUnit(u.logicalNodeAddress, u.logicalAddress);
+                    if (!unit) {
+                        unit = new protocol_1.Unit(node, u);
+                        node.units.push(unit);
+                        this.log("new unit: " + unit.getName() + " -> " + u.logicalAddress);
+                    }
+                    this.system.setActiveState(unit);
+                });
+            }
         });
     }
     allNodes(doToNode) {

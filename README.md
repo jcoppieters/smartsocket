@@ -92,6 +92,11 @@ switch =>
 ### v5.4.1 - 07/08/2020 - bug fixing
 - sending -1 to moods not 0/1 (we don't do long on/off in homebridge)
 
+### v5.5.0 - 18/09/2020 - Display names
+- store displaynames and types in the config
+- startup from config
+- no platform if not all masters logged in
+
 
 ### Todo
 - setup openstack server

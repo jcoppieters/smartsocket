@@ -306,7 +306,7 @@ class SmartApp extends socapp_1.SocApp {
     informChange(u) {
         this.switches.forEach(swtch => {
             if (u.isUnit(swtch.masterAddress, swtch.masterPort, swtch.logicalNodeAddress, swtch.logicalAddress)) {
-                this.setSwitch(swtch, !!u.status);
+                this.setSwitch(swtch, !!u.status, +u.value);
             }
         });
     }
@@ -329,7 +329,7 @@ class SmartApp extends socapp_1.SocApp {
             this.writeConfig();
         }
     }
-    setSwitch(inx, state) {
+    setSwitch(inx, state, value) {
         // find the switch
         let swtch = null;
         if (typeof inx === "number") {
@@ -348,8 +348,11 @@ class SmartApp extends socapp_1.SocApp {
             if ((swtch.type === types_1.SwitchType.kSmappee) && (this.smappee)) {
                 this.smappee.setPlug(parseInt(swtch.plug), state);
             }
-            else if (swtch.type === types_1.SwitchType.kHTTP) {
+            else if (swtch.type === types_1.SwitchType.kHTTPSwitch) {
                 this.httpSwitch(swtch.plug, state);
+            }
+            else if (swtch.type === types_1.SwitchType.kHTTPDimmer) {
+                this.httpDimmer(swtch.plug, state, value);
             }
             else {
                 this.err("Don't know how to set a switch of type " + swtch.type);
@@ -359,14 +362,21 @@ class SmartApp extends socapp_1.SocApp {
     //////////////////////////
     // http driven switches //
     //////////////////////////
-    httpSwitch(url, value) {
+    httpSwitch(url, state) {
         const parts = url.split("|");
         let base = parts[0];
-        const inx = value + 1;
-        if (parts.length > (inx))
-            base += parts[inx];
-        this.log("Switch: " + value + " -> " + base);
+        if (parts.length > 2) {
+            base += parts[state ? 2 : 1];
+        }
+        this.log("Switch: " + state + " -> " + base);
         this.wget(base);
+    }
+    httpDimmer(url, state, value) {
+        if (!state)
+            value = 0;
+        url = url.replace("$", value);
+        this.log("Dimmer: " + state + " -> " + url);
+        this.wget(url);
     }
     wget(url) {
         try {
@@ -503,6 +513,7 @@ class SmartApp extends socapp_1.SocApp {
         if (node) {
             node.units.forEach(unit => {
                 unit.active = (params["active_" + unit.logicalAddress] === "Y");
+                unit.displayName = (params["name_" + unit.logicalAddress]);
             });
             this.system.updateSystem(true);
         }

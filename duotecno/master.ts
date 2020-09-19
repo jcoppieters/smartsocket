@@ -158,7 +158,7 @@ export class Master extends Base {
       }
     );
     this.isOpen = true;
-    console.log("master opened -> " + this.config.address);
+    this.log("master opened -> " + this.config.address);
   }
 
   async close() {
@@ -224,7 +224,6 @@ export class Master extends Base {
           "--" : ((next.message instanceof Array) ? next.message.join(",") : next.message)));
 
       this.Q.do();
-      //this.q.pop();
 
       if (next.isStatus) {
         this.receiveStatus(next);
@@ -371,24 +370,41 @@ export class Master extends Base {
   async getDatabase(readDB: boolean = false) {
     this.nodes = [];
 
-    await this.fetchDbInfo();
+    const hasNames = this.system.config.cunits.filter(u => this.same(u.masterAddress, u.masterPort)).some(u => u.name);
 
-    // I think this is never needed:
-    //   fetchDbInfo triggers receiveDBInfo
-    //   which does a fetchNode that triggers receiveNodeInfo
-    //   which does a fetchAllUnits that triggers a receiveUnitInfo for all units
-    
-    // if (readDB)
-    //   setTimeout(async () => {
-    //     this.system.allMasters(m => {
-    //       this.log("reading node db of " + m.getAddress() + ":" + m.getPort());
-    //       m.allNodes(async n => {
-    //         this.log("reading unit db of " + n.getName());
-    //         await m.fetchAllUnits(n);
-    //       });
-    //     });
-    //   }, 1000);
+    if (readDB || !hasNames) {
+      await this.fetchDbInfo();
+      // upon reception of the DB info, 
+      //   getNode info will be called, 
+      //   which in it's turn will trigger getUnitInfo through fetchAllUnits
+      
+    } else {
+      // loop over all nodes/units in the config with a matching ip address
+      //  fill: this.nrNodes
+      //  call: kind of receive-Node/Unit-Info
+      this.log("building db from config file");
+      this.system.config.cunits
+      .filter(u => this.same(u.masterAddress, u.masterPort))
+      .forEach(u => {
+        let node = this.findNode(u.logicalNodeAddress);
+        if (!node) {
+          node = new Node(this, {logicalAddress: u.logicalNodeAddress, name: "Node-" + u.logicalNodeAddress});
+          this.nodes.push(node);
+          this.system.setActiveState(node);
+          this.log("new node: " + node.getName())
+        }
+        let unit = this.findUnit(u.logicalNodeAddress, u.logicalAddress);
+        if (!unit) {
+          unit = new Unit(node, u);
+          node.units.push(unit);
+          this.log("new unit: " + unit.getName() + " -> " + u.logicalAddress);
+
+        }
+        this.system.setActiveState(unit);
+      });
+    }
   }
+
 
   allNodes(doToNode:(n: Node) => void) {
     this.nodes.forEach(node => {

@@ -12,7 +12,9 @@
   }, false);
 
   document.addEventListener("keyup", function(e) {
-    console.log(e);
+    if (e.key == "Enter") {
+      e.preventDefault();
+    }
   });
 
   function ajax(url, success) {

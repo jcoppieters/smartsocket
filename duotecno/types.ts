@@ -49,7 +49,8 @@ export interface UnitDef {
   masterPort: number;
   logicalAddress: number,
   logicalNodeAddress: number,
-  unit?: Unit
+  unit?: Unit,
+  displayName?: string;
 };
 export const kEmptyUnit: UnitDef = { masterAddress: "0.0.0.0", masterPort: 5001, 
                                      name: "unit", logicalAddress: 0, logicalNodeAddress: 0 };
@@ -105,6 +106,7 @@ export interface NodeInfo {
 };
 export interface UnitInfo {
   name?: string;
+  displayName?: string;
   logicalReqNodeAddress?: number;
   logicalNodeAddress?: number;
   index?: number;
@@ -512,8 +514,9 @@ export const Sanitizers = {
     return info;
   },
   
-    unitInfo: function(info: UnitInfo, into?: Unit) {
+  unitInfo: function(info: UnitInfo, into?: Unit) {
     info.name = info.name || "";
+    info.displayName = info.displayName || "";
     info.logicalReqNodeAddress = info.logicalReqNodeAddress || 0;
     info.index = info.index || -1;
     info.logicalNodeAddress = info.logicalNodeAddress || 0;
@@ -532,6 +535,10 @@ export const Sanitizers = {
 //////////////////////
 // Helper functions //
 //////////////////////
+export async function wait(sec) {
+  return new Promise(resolve => setTimeout(resolve, sec*1000));
+}
+ 
 export function ascii(char: string): number {
   return char.charCodeAt(0);
 }

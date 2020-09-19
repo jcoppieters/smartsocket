@@ -10,7 +10,7 @@ class Accessory {
         this.homebridge = api.hap;
         this.log = log; // : function(message)
         this.unit = unit; // : Unit
-        this.name = unit.getName();
+        this.name = unit.getDisplayName();
         this.uuid_base = unit.getSerialNr();
         this.services = this.getAccessoryServices();
         this.services.push(this.getInformationService());
@@ -33,12 +33,9 @@ class Accessory {
     }
     getModelName() {
         return this.name;
-        //if (this.unit)
-        //  return this.unit.getName();
-        //throw new Error('The getModelName method must be overridden if no unit is provide.')
     }
     getName() {
-        return this.getModelName();
+        return this.name;
     }
     getSerialNumber() {
         if (this.unit)

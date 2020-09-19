@@ -204,11 +204,11 @@ class Unit {
         this.node = node;
         types_1.Sanitizers.unitInfo(params, this);
         this.extendedType = this.calcExtendedType();
+        this.name = this.name || this.getSerialNr();
         // make a name for homekit, without the | but add § is 'specials' to add "sfeer", etc...
         // if the display name is empty make a N[nodeAdr]-U[unitAdr] name.
-        this.name = this.name.replace(/\|/g, this.hasSpecials() ? (" " + moodName + " ") : " ");
         // delete all type modifiers ( $, * and ! )
-        this.displayName = this.name.replace(/\$|\*|\!/g, '') || this.getSerialNr();
+        this.displayName = this.displayName || this.name.replace(/\|/g, this.hasSpecials() ? (" " + moodName + " ") : " ").replace(/\$|\*|\!/g, '') || this.getSerialNr();
     }
     hasSpecials() {
         let special = this.name.indexOf("|20");
@@ -264,13 +264,10 @@ class Unit {
         }
     }
     getName() {
-        return this.displayName;
+        return this.name;
     }
     getDisplayName() {
-        if (this.inMultiNode)
-            return this.displayName + " on " + this.node.getName();
-        else
-            return this.displayName;
+        return this.displayName;
     }
     getNumber() {
         return this.node.getNumber() + ";" + types_1.hex(this.logicalAddress);
@@ -312,7 +309,7 @@ class Unit {
         //      else                 => "mood" (turns of 1.2 seconds after being turned on)
         //  switch =>
         //      if name contains $   => "lock"
-        //      if name contains *   => "switch" (also still works with "stk", "STK" and "Stk")
+        //      if name contains *   => "switch" (also still works with "stc", "Stc", "STC", stk", "STK" and "Stk")
         //      else                 => "lightbulb" 
         //
         ////////////
@@ -320,8 +317,9 @@ class Unit {
         ////////////
         // Switch -> with * or STK -> Switch
         if ((this.type === UnitType.kSwitch) &&
-            ((this.name.indexOf("STK") >= 0) || (this.name.indexOf("stk") >= 0) ||
-                (this.name.indexOf("Stk") >= 0) || (this.name.indexOf("*") >= 0)))
+            ((this.name.indexOf("STK") >= 0) || (this.name.indexOf("stk") >= 0) || (this.name.indexOf("Stk") >= 0) ||
+                (this.name.indexOf("STC") >= 0) || (this.name.indexOf("stc") >= 0) || (this.name.indexOf("Stc") >= 0) ||
+                (this.name.indexOf("*") >= 0)))
             return UnitExtendedType.kSwitch;
         // Switch -> with $ -> Door
         if ((this.type === UnitType.kSwitch) &&

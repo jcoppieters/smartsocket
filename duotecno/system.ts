@@ -186,9 +186,13 @@ export class System extends Base {
         (cu.logicalNodeAddress === item.logicalNodeAddress) && 
         (cu.masterAddress === masterAddress) && 
         (cu.masterPort == masterPort));
-      item.active = (!! unitConfig) && (unitConfig.active === "Y");
+      ;
       if (unitConfig) {
+        item.active = (unitConfig.active === "Y");
+        item.displayName = unitConfig.displayName || unitConfig.name;
         item.group = unitConfig.group;
+      } else {
+        item.active = false;
       }
     }
   }
@@ -312,7 +316,7 @@ export class System extends Base {
   //////////////////////////////////////////////////
   updateSystem(dontTrigger: boolean = false) {
     this.config.cunits = this.allActiveUnits()
-      .map((u: Unit) => { return { active: <YN>"Y", group: u.group, name: u.name,
+      .map((u: Unit) => { return { active: <YN>"Y", group: u.group, name: u.name, displayName: u.displayName, type: u.type,
                                    masterAddress: u.node.master.getAddress(), masterPort: u.node.master.getPort(), 
                                    logicalNodeAddress: u.node.logicalAddress, logicalAddress: u.logicalAddress}; });
     this.writeConfig();

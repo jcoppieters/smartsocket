@@ -549,6 +549,7 @@ export class SmartApp extends SocApp {
     if (node) {
       node.units.forEach(unit => {
         unit.active = (params["active_"+unit.logicalAddress] === "Y");
+        unit.displayName = (params["name_"+unit.logicalAddress]);
       });
       this.system.updateSystem(true); 
     }

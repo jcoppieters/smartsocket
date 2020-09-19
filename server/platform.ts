@@ -134,14 +134,21 @@ export class Platform extends Base {
   }
 
   accessories(callback) {
-    // waiting until the database is complete or give up after 3 minutes
-    if (this.ready || (this.startWaiting > 3 * 60)) {
-      this.log("***** running after timeout of " + this.startWaiting + "secs --> " +  this.system.allActiveUnits().length + " == " + this.system.config.cunits.length + " <- " +  (this.system.allActiveUnits().length == this.system.config.cunits.length) + " *****");
-      this.doAccessories(callback);
-      
+    // waiting until the database is complete or give up after 5 minutes
+    const kMaxWaiting = 5 * 60;
+
+    if (this.ready) {
+      this.log("***** running after timeout of " + this.startWaiting + " secs --> " +  this.system.allActiveUnits().length + " == " + this.system.config.cunits.length + " units -> " +  (this.system.allActiveUnits().length == this.system.config.cunits.length) + ", will start in 10 seconds *****");
+      setTimeout( () => { this.doAccessories(callback) }, 10 * 1000);
+
+    } else if (this.startWaiting > kMaxWaiting) {
+      // give up, retry connection to the masters, a manager like "forever" or "pm2" will restart us.
+      this.log("**** giving up after " + kMaxWaiting + " secs -> auto restart system *****");
+      process.exit(-1)
+    
     } else {
       // wait another 5 seconds.
-      this.log("***** waiting >> " + this.system.allActiveUnits().length + " of " + this.system.config.cunits.length + " *****");
+      this.log("***** waiting >> found " + this.system.allActiveUnits().length + " units out of " + this.system.config.cunits.length + " selected after " + this.startWaiting + " sec *****");
       this.startWaiting += 5;
       setTimeout( () => { this.accessories(callback) }, 5000);
     }

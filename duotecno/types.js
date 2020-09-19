@@ -4,8 +4,17 @@
 // v2 - app version, Jan 2020
 // v3 - smart server version, Mar 2020
 // v3.1 - added scenes from app version, May 2020
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.single = exports.now = exports.two = exports.hex = exports.char = exports.ascii = exports.Sanitizers = exports.makeInt = exports.actionValueStr = exports.actionValue = exports.kEmptySwitch = exports.kEmptyRule = exports.kEmptyAction = exports.SwitchType = exports.RuleType = exports.Boundaries = exports.kEmptyCommRecord = exports.WriteError = exports.kEmptyGroup = exports.kEmptyScene = exports.kEmptyUnitScene = exports.kEmptyUnit = void 0;
+exports.single = exports.now = exports.two = exports.hex = exports.char = exports.ascii = exports.wait = exports.Sanitizers = exports.makeInt = exports.actionValueStr = exports.actionValue = exports.kEmptySwitch = exports.kEmptyRule = exports.kEmptyAction = exports.SwitchType = exports.RuleType = exports.Boundaries = exports.kEmptyCommRecord = exports.WriteError = exports.kEmptyGroup = exports.kEmptyScene = exports.kEmptyUnitScene = exports.kEmptyUnit = void 0;
 const protocol_1 = require("./protocol");
 ;
 ;
@@ -52,7 +61,8 @@ var SwitchType;
     SwitchType["kNoType"] = "";
     SwitchType["kSmappee"] = "smappee";
     SwitchType["kRF"] = "RF";
-    SwitchType["kHTTP"] = "http";
+    SwitchType["kHTTPSwitch"] = "http";
+    SwitchType["kHTTPDimmer"] = "httpdim";
 })(SwitchType = exports.SwitchType || (exports.SwitchType = {}));
 exports.kEmptyAction = Object.assign(Object.assign({}, exports.kEmptyUnit), { value: false });
 ;
@@ -333,6 +343,7 @@ exports.Sanitizers = {
     },
     unitInfo: function (info, into) {
         info.name = info.name || "";
+        info.displayName = info.displayName || "";
         info.logicalReqNodeAddress = info.logicalReqNodeAddress || 0;
         info.index = info.index || -1;
         info.logicalNodeAddress = info.logicalNodeAddress || 0;
@@ -348,6 +359,12 @@ exports.Sanitizers = {
 //////////////////////
 // Helper functions //
 //////////////////////
+function wait(sec) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return new Promise(resolve => setTimeout(resolve, sec * 1000));
+    });
+}
+exports.wait = wait;
 function ascii(char) {
     return char.charCodeAt(0);
 }

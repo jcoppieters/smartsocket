@@ -3,7 +3,8 @@
     <tr>
       <%- (edit) ? "<th>Active</th>" : "" %>
       <th>Name</th>
-      <th <%- (!edit) ? "colspan=2" : "" %>>State</th>
+      <%- (edit) ? "<th>Display</th>" : "" %>
+      <th>State</th>
     </tr>
   </thead>
 
@@ -21,12 +22,19 @@
         </label></td>
       <% } %>
       <td>
-        <span><%= unit.getName() %></span>
+        <span><%= (edit) ? unit.getName() : unit.getDisplayName() %></span>
         <br><span class="grey-text"><small><%= unit.typeName() %>
           (<%= hex(unit.node.logicalAddress) %>;<%= hex(unit.logicalAddress) %>) on <%= unit.node.getName() %>
         </small></span>
         <input type="hidden" name="units" value="<%= unit.getName() %>">
       </td>
+      <% if (edit) { %>
+        <td><label>
+            <input name="name_<%= unit.logicalAddress %>" type="input" size="28"
+                   id="name_<%= unit.logicalAddress %>" value="<%= unit.getDisplayName() %>"/>
+            <span></span>
+        </label></td>
+      <% } %>
       <td>
         <% if ((unit.type == 1) || (unit.type == 2) || (unit.type == 101)) { %>
           <div class="switch">
