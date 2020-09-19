@@ -371,8 +371,9 @@ export class Master extends Base {
     this.nodes = [];
 
     const hasNames = this.system.config.cunits.filter(u => this.same(u.masterAddress, u.masterPort)).some(u => u.name);
-
+debugger;
     if (readDB || !hasNames) {
+      this.log("Fetching info from master DB for: " + this.getAddress());
       await this.fetchDbInfo();
       // upon reception of the DB info, 
       //   getNode info will be called, 
@@ -382,7 +383,7 @@ export class Master extends Base {
       // loop over all nodes/units in the config with a matching ip address
       //  fill: this.nrNodes
       //  call: kind of receive-Node/Unit-Info
-      this.log("building db from config file");
+      this.log("Building info from config for: " + this.getAddress());
       this.system.config.cunits
       .filter(u => this.same(u.masterAddress, u.masterPort))
       .forEach(u => {

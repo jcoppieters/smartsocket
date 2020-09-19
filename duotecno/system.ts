@@ -75,6 +75,7 @@ export class System extends Base {
       this.log("opening master: " + master.getAddress());
       await master.open();
       if (! await master.login()) throw(new Error("Failed to log in"));
+      this.log("logged in on: " + master.getAddress())
       await master.getDatabase(readDB);
 
       this.log("master: " + master.getAddress() + " opened with " + master.nodes.length + " nodes.");
@@ -139,7 +140,7 @@ export class System extends Base {
     }
     this.writeConfig();
     // master is openened and added to the master array
-    return await this.openMaster(cmaster);
+    return await this.openMaster(cmaster, true);
   }
 
   async deleteMaster(master: Master) {

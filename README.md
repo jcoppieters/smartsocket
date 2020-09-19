@@ -96,7 +96,8 @@ switch =>
 - store displaynames and types in the config
 - startup from config
 - no platform if not all masters logged in
-
+- (b2) read db info on startup
+- (b2) have 10 QR codes on the server
 
 ### Todo
 - setup openstack server

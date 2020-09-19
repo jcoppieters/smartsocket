@@ -50,7 +50,8 @@ class Smappee extends base_1.Base {
         this.alertSwitch = alertSwitch;
         this.plugs = {}; // will grow when we encounter one in the mqtt stream.
         this.copyAndSanitizeRules(this.config.rules);
-        this.client = this.subscribe(this.config.address, this.config.uid);
+        if (this.config.address)
+            this.client = this.subscribe(this.config.address, this.config.uid);
     }
     copyAndSanitizeRules(rules) {
         this.rules = (rules || []).map(rule => types_1.Sanitizers.ruleConfig(Object.assign({}, rule)));

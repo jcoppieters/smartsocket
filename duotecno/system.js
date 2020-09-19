@@ -74,6 +74,7 @@ class System extends base_1.Base {
                 yield master.open();
                 if (!(yield master.login()))
                     throw (new Error("Failed to log in"));
+                this.log("logged in on: " + master.getAddress());
                 yield master.getDatabase(readDB);
                 this.log("master: " + master.getAddress() + " opened with " + master.nodes.length + " nodes.");
                 this.triggerRebuild();
@@ -133,7 +134,7 @@ class System extends base_1.Base {
             }
             this.writeConfig();
             // master is openened and added to the master array
-            return yield this.openMaster(cmaster);
+            return yield this.openMaster(cmaster, true);
         });
     }
     deleteMaster(master) {
