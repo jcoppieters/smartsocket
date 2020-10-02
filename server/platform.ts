@@ -120,7 +120,7 @@ export class Platform extends Base {
 
   systemReady() {
     const activeUnits = this.system.allActiveUnits().length
-    this.log("***** SYSTEM READY received update -> addMasters: " + activeUnits + " of " + this.system.config.cunits.length + " *****");
+    this.log("=== SYSTEM READY received update -> addMasters: " + activeUnits + " of " + this.system.config.cunits.length + " ===");
     this.ready = (activeUnits == this.system.config.cunits.length);
 
     // trigger status request of all active units in 2 seconds.
@@ -138,17 +138,17 @@ export class Platform extends Base {
     const kMaxWaiting = 5 * 60;
 
     if (this.ready) {
-      this.log("***** running after timeout of " + this.startWaiting + " secs --> " +  this.system.allActiveUnits().length + " == " + this.system.config.cunits.length + " units -> " +  (this.system.allActiveUnits().length == this.system.config.cunits.length) + ", will start in 10 seconds *****");
+      this.log("=== running after timeout of " + this.startWaiting + " secs --> " +  this.system.allActiveUnits().length + " == " + this.system.config.cunits.length + " units -> " +  (this.system.allActiveUnits().length == this.system.config.cunits.length) + ", will start in 10 seconds ===");
       setTimeout( () => { this.doAccessories(callback) }, 10 * 1000);
 
     } else if (this.startWaiting > kMaxWaiting) {
       // give up, retry connection to the masters, a manager like "forever" or "pm2" will restart us.
-      this.log("**** giving up after " + kMaxWaiting + " secs -> auto restart system *****");
+      this.log("=== giving up after " + kMaxWaiting + " secs -> auto restart system ===");
       process.exit(-1)
     
     } else {
       // wait another 5 seconds.
-      this.log("***** waiting >> found " + this.system.allActiveUnits().length + " units out of " + this.system.config.cunits.length + " selected after " + this.startWaiting + " sec *****");
+      this.log("=== waiting >> found " + this.system.allActiveUnits().length + " units out of " + this.system.config.cunits.length + " selected after " + this.startWaiting + " sec ===");
       this.startWaiting += 5;
       setTimeout( () => { this.accessories(callback) }, 5000);
     }
