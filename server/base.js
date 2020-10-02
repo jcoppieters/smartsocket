@@ -10,8 +10,11 @@ const types_1 = require("../duotecno/types");
 class Base {
     constructor(type, debug = false, logger) {
         this.debug = debug || false;
-        this.logger = (this.debug) ? console.log : function () { };
-        protocol_1.Protocol.setLogger(this.logger);
+        this.logger = logger || console.log;
+        if (debug)
+            protocol_1.Protocol.setLogger(this.logger, this.logger);
+        else
+            protocol_1.Protocol.setLogger(this.logger);
         this.type = type || "base";
     }
     info(msg) {
@@ -23,7 +26,7 @@ class Base {
         this.logger(this.type + " - " + msg);
     }
     err(msg) {
-        this.logger(this.type + " - *** " + msg + " ***");
+        this.logger(this.type + " - *** " + new Date() + " *** " + msg + " ***");
     }
     //////////////////
     // Config stuff //

@@ -46,7 +46,7 @@ const reqUnitStatus = 3;
 const reqSchedule = 218;
 
 
-export function cmdName(cmd: number) {
+export function cmdName(cmd: number | string) {
   return Cmd[cmd] || "cmd"+cmd;
 }
 
@@ -506,10 +506,12 @@ const subscribers: Array<ValueSubscribtion> = [];
 export const Protocol = {
   // set to a different value if needed.
   logger: console.log,
+  debugger: () => {},
   emitter: null,
 
-  setLogger(logger: LogFunction) {
+  setLogger(logger: LogFunction, debug?: LogFunction) {
     this.logger = logger;
+    this.debugger = debug || ((message: any, ...optionalParams: any[]) => {});
   },
   setEmitter(emitter: EventEmitter) {
     this.emitter = emitter;
@@ -587,7 +589,9 @@ export const Protocol = {
   ////////////////////
 
   write: function(socket: SmartSocket, data: Message | string): WriteError {
-    const cmd = parseInt(<string> data[0]);
+    let cmd: string | number = parseInt(<string> data[0]);
+    if (isNaN(cmd)) cmd = <string> data[0];
+
     if (data instanceof Array) {
       data = data.join(",");
     }
@@ -781,32 +785,32 @@ export const Protocol = {
       unit.hsun   = next.message[13]*256 +  next.message[14];   // 10x temperature
       unit.moon   = next.message[15]*256 +  next.message[16];   // 10x temperature
       unit.hmoon  = next.message[17]*256 +  next.message[18];   // 10x temperature
-      //this.logger("received temperature = " + <number>unit.value / 10.0);
+      this.debugger("received temperature = " + <number>unit.value / 10.0);
   
     } else if (next.cmd === Rec.Switch) { 
       // switch -> boolean
       unit.status = next.message[6];
       unit.value = (next.message[6] > 0);
-      //this.logger("received switch = " + unit.value);
+      this.debugger("received switch = " + unit.value);
   
     } else if (next.cmd === Rec.Dimmer) {
       // dimmer -> 0 .. 99
       unit.status = next.message[6];
       unit.value = next.message[7];
-      //this.logger("received dimmer -> value=" + unit.value + " / status=" + unit.status);
+      this.debugger("received dimmer -> value=" + unit.value + " / status=" + unit.status);
   
     } else if (next.cmd === Rec.Mood) {
       // control -> boolean
       unit.status = next.message[6];
       unit.value = (next.message[6] != 0);
-      //this.logger("received mood = " + unit.value);
+      this.debugger("received mood = " + unit.value);
 
     } else if (next.cmd === Rec.Motor) {
       // motor -> boolean/status
       // 0 = stopped, 1 stopped/down, 2 = stopped/up, busy/down, busy/up
       unit.status = next.message[6];
       unit.value = next.message[6];
-      //this.logger("received motor = " + unit.value);
+      this.debugger("received motor = " + unit.value);
 
     } else if (next.cmd = Rec.Macro) {
       // = EV_UNITMACROCOMMANDO
@@ -814,7 +818,7 @@ export const Protocol = {
       //          Off:    [69,0,NodeAddress,UnitAddress,6,0,0]
       unit.status = next.message[5];
       unit.value = next.message[6];
-      //this.logger("received macro -> value=" + unit.value + " / status=" + unit.status);
+      this.debugger("received macro -> value=" + unit.value + " / status=" + unit.status);
 
     }
 

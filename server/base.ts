@@ -15,8 +15,11 @@ export class Base {
 
   constructor(type: string, debug: boolean = false, logger?: LogFunction) {
     this.debug = debug || false;
-    this.logger = (this.debug) ? console.log : function() {};
-    Protocol.setLogger(this.logger);
+    this.logger = logger || console.log;
+    if (debug)
+      Protocol.setLogger(this.logger, this.logger);
+    else
+      Protocol.setLogger(this.logger);
 
     this.type = type || "base";
   }
@@ -30,7 +33,7 @@ export class Base {
     this.logger(this.type + " - " + msg);
   }
   err(msg: string) {
-    this.logger(this.type + " - *** " + msg + " ***");
+    this.logger(this.type + " - *** " + new Date() + " *** " + msg + " ***");
   }
 
   //////////////////
