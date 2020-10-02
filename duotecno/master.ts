@@ -500,7 +500,7 @@ debugger;
     const nodeLogical = next.message[2];
     const node = this.nodes.find(node => node && (node.logicalAddress == nodeLogical));
     if (! node) {
-      this.err("status message " + next.cmd + " for unknown node = " + nodeLogical);
+ignore       this.info("status message " + next.cmd + " for unknown node = " + nodeLogical);
       return;
     }
 
@@ -508,7 +508,7 @@ debugger;
     const unitLogical = next.message[3];
     const unit = node.units.find(unit => unit && (unit.logicalAddress == unitLogical))
     if (!unit) {
-      this.err("status message " + next.cmd + " for unknown unit = " + unitLogical + 
+      this.info("status message " + next.cmd + " for unknown unit = " + unitLogical + 
                 " in node = " + nodeLogical);
       return;
     }
