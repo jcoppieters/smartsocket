@@ -10,9 +10,10 @@
     {
       "manufacturer": "Duotecno-Coppieters",
       "platform": "DuotecnoPlatform",
-      "smappee": "./config.smappee.json",
-      "smartapp": "./config.smartapp.json",
-      "system": "./config.system.json"
+      "smappee": true,
+      "smartapp": true,
+      "system": true,
+      "socapp": true
     }
   ],
   "accessories": []
