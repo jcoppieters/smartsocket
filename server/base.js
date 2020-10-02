@@ -26,7 +26,7 @@ class Base {
         this.logger(this.type + " - " + msg);
     }
     err(msg) {
-        this.logger(this.type + " - *** " + new Date() + " *** " + msg + " ***");
+        this.logger(this.type + " - *** " + new Date().toTimeString() + " *** " + msg + " ***");
     }
     //////////////////
     // Config stuff //
