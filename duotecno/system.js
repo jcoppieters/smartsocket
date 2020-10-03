@@ -24,6 +24,7 @@ class System extends base_1.Base {
         this.temperatures = [];
         this.stores = [];
         this.scenes = [];
+        protocol_1.Protocol.setLogger(logger, debug ? logger : null);
         this.trigger = null;
         this.emitter = new events_1.EventEmitter();
         protocol_1.Protocol.setEmitter(this.emitter);
@@ -36,11 +37,6 @@ class System extends base_1.Base {
     }
     setBrowser(isB) {
         this.isBrowser = isB;
-    }
-    setLogger(logger) {
-        this.logger = logger;
-        // use my log function
-        protocol_1.Protocol.logger = logger;
     }
     openMasters(readDB = false) {
         return __awaiter(this, void 0, void 0, function* () {

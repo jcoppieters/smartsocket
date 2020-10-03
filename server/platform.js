@@ -34,9 +34,9 @@ class Platform extends base_1.Base {
         this.startWaiting = 0;
         this.config = Object.assign({}, config);
         this.config.debug = (config && ("debug" in config)) ? config.debug : true;
-        console.log("**** config:", config);
-        //console.log("homebridge:", homebridge);
-        this.log("running in directory: " + process.cwd());
+        log("running in directory: " + process.cwd());
+        log("with config:" + JSON.stringify(config, null, 2));
+        // log("homebridge object:", homebridge);
         this.homebridge = homebridge;
         if (this.config.system) {
             try {
@@ -44,10 +44,9 @@ class Platform extends base_1.Base {
                 this.system.openMasters(true);
                 this.system.emitter.on('ready', this.systemReady.bind(this));
                 this.system.emitter.on('update', this.updateState.bind(this));
-                protocol_1.Protocol.setEmitter(this.system.emitter);
             }
             catch (err) {
-                this.log(err);
+                log(err);
                 if (!this.system) {
                     this.log("platform - Can't run without a System.");
                     return;

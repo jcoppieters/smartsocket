@@ -23,8 +23,9 @@ export class System extends Base {
 
   constructor(debug: boolean = false, logger?: LogFunction) {
     super("system", debug, logger);
-    this.trigger = null;
+    Protocol.setLogger(logger, debug ? logger : null);
 
+    this.trigger = null;
     this.emitter = new EventEmitter();
     Protocol.setEmitter(this.emitter);
     this.emitter.on('update', this.checkScenes.bind(this));
@@ -39,13 +40,6 @@ export class System extends Base {
 
   setBrowser(isB: boolean) {
     this.isBrowser = isB;
-  }
-
-  setLogger(logger: LogFunction) {
-    this.logger = logger;
-
-    // use my log function
-    Protocol.logger = logger;
   }
 
   async openMasters(readDB: boolean = false) {
