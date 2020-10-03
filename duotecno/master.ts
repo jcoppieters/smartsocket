@@ -1,5 +1,5 @@
 import { Node, Protocol, Unit, recName, Rec } from "./protocol";
-import { MasterConfig, WriteError, CommRecord, Message, Sanitizers } from "./types";
+import { MasterConfig, WriteError, CommRecord, Message, Sanitizers, LogFunction } from "./types";
 import { System } from "./system";
 import { Base } from "../server/base";
 
@@ -58,7 +58,7 @@ export class Master extends Base {
   */
 
   constructor(system: System, config: MasterConfig) {
-    super("master");
+    super("master", config.debug, system.logger);
     this.Q = new Q(system.logger);
 
     // save my eco system
@@ -90,7 +90,7 @@ export class Master extends Base {
 
   log(msg: string) {
     // overwrite to add IP address
-    super.log(this.type + " " + this.getAddress() + ": " + msg);
+    super.log(this.getAddress() + ": " + msg);
   }
 
   writeConfig(config?: object, fn?: string) {
@@ -371,7 +371,6 @@ export class Master extends Base {
     this.nodes = [];
 
     const hasNames = this.system.config.cunits.filter(u => this.same(u.masterAddress, u.masterPort)).some(u => u.name);
-debugger;
     if (readDB || !hasNames) {
       this.log("Fetching info from master DB for: " + this.getAddress());
       await this.fetchDbInfo();

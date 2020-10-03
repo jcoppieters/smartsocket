@@ -49,7 +49,7 @@ class Master extends base_1.Base {
     }
     */
     constructor(system, config) {
-        super("master");
+        super("master", config.debug, system.logger);
         this.resolveLogin = null;
         this.Q = new Q_1.Q(system.logger);
         // save my eco system
@@ -75,7 +75,7 @@ class Master extends base_1.Base {
     }
     log(msg) {
         // overwrite to add IP address
-        super.log(this.type + " " + this.getAddress() + ": " + msg);
+        super.log(this.getAddress() + ": " + msg);
     }
     writeConfig(config, fn) {
         // overwrite: don't do anything, all is stored in the system-config
@@ -338,7 +338,6 @@ class Master extends base_1.Base {
         return __awaiter(this, void 0, void 0, function* () {
             this.nodes = [];
             const hasNames = this.system.config.cunits.filter(u => this.same(u.masterAddress, u.masterPort)).some(u => u.name);
-            debugger;
             if (readDB || !hasNames) {
                 this.log("Fetching info from master DB for: " + this.getAddress());
                 yield this.fetchDbInfo();
