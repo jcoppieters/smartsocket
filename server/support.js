@@ -60,6 +60,17 @@ class Support {
         }
         return null;
     }
+    doSendAudio(name) {
+        try {
+            const data = fs.readFileSync(this.getFN(name)).toString();
+            this.log("Send Audio - " + name + " -> " + data.substr(0, 40) + "...");
+            return "[9,A-" + name + ":" + this.toTransport(data) + "]";
+        }
+        catch (e) {
+            this.log("error: " + e.message);
+            return null;
+        }
+    }
     // Format:
     //  [9,K-type-address:data]
     // K = B(ackup), R(estore), S(end scenes)
@@ -72,6 +83,8 @@ class Support {
             return 'B';
         else if ((msg[0] == '[') && (msg[1] == '9') && (msg[2] == ',') && (msg[3] == 'R'))
             return 'R';
+        else if ((msg[0] == '[') && (msg[1] == '9') && (msg[2] == ',') && (msg[3] == 'A'))
+            return 'A';
         else if ((msg[0] == '[') && (msg[1] == '9') && (msg[2] == ',') && (msg[3] == 'S'))
             return 'S';
         else
@@ -104,6 +117,10 @@ class Support {
         }
         else if (kind === 'S') {
             return { done: true, answer: this.doScenes(name, msg) };
+            //send audio config
+        }
+        else if (kind === 'A') {
+            return { done: true, answer: this.doSendAudio(name) };
         }
         else {
             // we should not get here...

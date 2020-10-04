@@ -100,6 +100,9 @@ switch =>
 - (b2) have 10 QR codes on the server
 - (b3) go from services directly to edit node.
 
+### v5.5.1 - 04/10/2020 - Audio
+- return audio room config
+
 ### Todo
 - setup openstack server
 
