@@ -538,11 +538,16 @@ class SmartApp extends socapp_1.SocApp {
             let unit = this.system.findUnit(master, nodeLogicalAddress, unitLogicalAddress);
             if (!unit)
                 return { message: "Unit not found " + master.getName() + "/" + nodeLogicalAddress + "/" + unitLogicalAddress };
-            if (val === 1) {
+            if (val === -1) {
                 // mood click
                 yield unit.setState(true);
                 unit.value = false; // simulate push button
                 return { value: true };
+            }
+            else if ((val === 0) || (val === 1)) {
+                // mood/input long clicks
+                yield unit.setState(val);
+                return { value: val };
             }
             else if ((val === 3) || (val === 4) || (val === 5)) {
                 // switching motor

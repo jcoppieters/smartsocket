@@ -102,6 +102,7 @@ switch =>
 
 ### v5.5.1 - 04/10/2020 - Audio
 - return audio room config
+- (b2) try fix for mood pushes
 
 ### Todo
 - setup openstack server
