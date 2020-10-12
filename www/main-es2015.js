@@ -429,19 +429,6 @@ module.exports = webpackAsyncContext;
 
 /***/ }),
 
-/***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/app.component.html":
-/*!**************************************************************************!*\
-  !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/app.component.html ***!
-  \**************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<ion-app>\n  <ion-split-pane (ionSplitPaneVisible)=\"splitter($event)\" contentId=\"main\">\n    <ion-menu contentId=\"main\">\n      <ion-header>\n        <ion-toolbar>\n          <ion-title>{{ \"Config.Groups\" |_ }}</ion-title>\n        </ion-toolbar>\n      </ion-header>\n\n      <ion-content class=\"ion-padding\">\n        <ion-list *ngIf=\"system.config.multiple\">\n          <ion-item *ngFor=\"let group of system.groups\" lines=\"none\">\n            <ion-label>\n              {{group.name}}\n            </ion-label>\n            <ion-checkbox slot=\"start\" [checked]=\"group.visible\" color=\"secondary\" (ionChange)=\"doCheck($event, group)\"></ion-checkbox>\n          </ion-item>\n        </ion-list>\n\n        <ion-radio-group *ngIf=\"! system.config.multiple\" value=\"{{selected()}}\" (ionChange)=\"doRadio($event)\">\n          <ion-item *ngFor=\"let group of system.groups\" lines=\"none\">\n            <ion-label>\n              {{group.name}}\n            </ion-label>\n            <ion-radio slot=\"start\" color=\"secondary\" value=\"{{group.id}}\"></ion-radio>\n          </ion-item>\n        </ion-radio-group>\n        \n        <ion-button *ngIf=\"!system.isSplitted && system.config.multiple\" (click)=\"done()\">{{ \"General.Done\" |_ }}</ion-button>\n      </ion-content>\n    </ion-menu>\n\n    <ion-router-outlet id=\"main\"></ion-router-outlet>\n  </ion-split-pane>\n</ion-app>");
-
-/***/ }),
-
 /***/ "./node_modules/tslib/tslib.es6.js":
 /*!*****************************************!*\
   !*** ./node_modules/tslib/tslib.es6.js ***!
@@ -777,15 +764,16 @@ let AppComponent = class AppComponent {
     doRadio(event) {
         const selected = event.detail.value;
         this.system.groups.forEach(g => { g.visible = (g.id == selected); });
+        console.log("radio: ", event, "groups: ", this.system.groups);
         this.system.writeGroups();
         event.preventDefault();
         // close if the menu controller is open
         this.menuCtrl.close();
     }
     doCheck(event, group) {
-        group.visible = !group.visible;
+        group.visible = event.detail.checked;
+        console.log("check: ", event, "groups: ", this.system.groups);
         this.system.writeGroups();
-        event.preventDefault();
     }
     done() {
         this.menuCtrl.close();
@@ -804,7 +792,43 @@ AppComponent.ctorParameters = () => [
 AppComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
         selector: 'app-root',
-        template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./app.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/app.component.html")).default
+        template: `
+    <ion-app>
+      <ion-split-pane (ionSplitPaneVisible)="splitter($event)" contentId="main">
+        <ion-menu contentId="main">
+          <ion-header>
+            <ion-toolbar>
+              <ion-title>{{ "Config.Groups" |_ }}</ion-title>
+            </ion-toolbar>
+          </ion-header>
+
+          <ion-content class="ion-padding">
+            <ion-list *ngIf="system.config.multiple">
+              <ion-item *ngFor="let group of system.groups" lines="none">
+                <ion-label>
+                  {{group.name}}
+                </ion-label>
+                <ion-checkbox slot="start" (ionChange)="doCheck($event, group)" [checked]="group.visible"></ion-checkbox>
+              </ion-item>
+            </ion-list>
+
+            <ion-radio-group *ngIf="! system.config.multiple" value="{{selected()}}" (ionChange)="doRadio($event)">
+              <ion-item *ngFor="let group of system.groups" lines="none">
+                <ion-label>
+                  {{group.name}}
+                </ion-label>
+                <ion-radio slot="start" color="secondary" value="{{group.id}}"></ion-radio>
+              </ion-item>
+            </ion-radio-group>
+            
+            <ion-button *ngIf="!system.isSplitted && system.config.multiple" (click)="done()">{{ "General.Done" |_ }}</ion-button>
+          </ion-content>
+        </ion-menu>
+
+        <ion-router-outlet id="main"></ion-router-outlet>
+      </ion-split-pane>
+    </ion-app>
+  `
     }),
     tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_ionic_angular__WEBPACK_IMPORTED_MODULE_2__["Platform"],
         _ionic_native_splash_screen_ngx__WEBPACK_IMPORTED_MODULE_3__["SplashScreen"],
@@ -855,7 +879,7 @@ AppModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         declarations: [_app_component__WEBPACK_IMPORTED_MODULE_8__["AppComponent"]],
         entryComponents: [],
-        imports: [_core_core_module__WEBPACK_IMPORTED_MODULE_9__["CoreModule"], _angular_platform_browser__WEBPACK_IMPORTED_MODULE_2__["BrowserModule"], _ionic_angular__WEBPACK_IMPORTED_MODULE_4__["IonicModule"].forRoot(), _app_routing_module__WEBPACK_IMPORTED_MODULE_7__["AppRoutingModule"]],
+        imports: [_core_core_module__WEBPACK_IMPORTED_MODULE_9__["CoreModule"], _angular_platform_browser__WEBPACK_IMPORTED_MODULE_2__["BrowserModule"], _ionic_angular__WEBPACK_IMPORTED_MODULE_4__["IonicModule"].forRoot( /*{mode: 'ios'}*/), _app_routing_module__WEBPACK_IMPORTED_MODULE_7__["AppRoutingModule"]],
         providers: [
             _ionic_native_status_bar_ngx__WEBPACK_IMPORTED_MODULE_6__["StatusBar"], _ionic_native_splash_screen_ngx__WEBPACK_IMPORTED_MODULE_5__["SplashScreen"],
             _system_system__WEBPACK_IMPORTED_MODULE_10__["System"],
@@ -885,7 +909,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm2015/common.js");
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm2015/forms.js");
 /* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/fesm2015/ionic-angular.js");
-/* harmony import */ var _stdpage__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./stdpage */ "./src/app/core/stdpage.ts");
+/* harmony import */ var _ctrllist__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./ctrllist */ "./src/app/core/ctrllist.ts");
 /* harmony import */ var _translate_pipe__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./translate.pipe */ "./src/app/core/translate.pipe.ts");
 /* harmony import */ var _temp_pipe__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./temp.pipe */ "./src/app/core/temp.pipe.ts");
 /* harmony import */ var _rendering_dimmer__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../rendering/dimmer */ "./src/app/rendering/dimmer.ts");
@@ -894,6 +918,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _rendering_mood__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../rendering/mood */ "./src/app/rendering/mood.ts");
 /* harmony import */ var _rendering_temperature__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../rendering/temperature */ "./src/app/rendering/temperature.ts");
 /* harmony import */ var _rendering_scene__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../rendering/scene */ "./src/app/rendering/scene.ts");
+/* harmony import */ var _ctrlheader__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./ctrlheader */ "./src/app/core/ctrlheader.ts");
+/* harmony import */ var _rendering_media__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../rendering/media */ "./src/app/rendering/media.ts");
+
+
 
 
 
@@ -914,13 +942,202 @@ CoreModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         imports: [_angular_common__WEBPACK_IMPORTED_MODULE_2__["CommonModule"], _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormsModule"], _ionic_angular__WEBPACK_IMPORTED_MODULE_4__["IonicModule"]],
         providers: [_translate_pipe__WEBPACK_IMPORTED_MODULE_6__["TranslatePipe"], _temp_pipe__WEBPACK_IMPORTED_MODULE_7__["TemperaturPipe"]],
-        declarations: [_stdpage__WEBPACK_IMPORTED_MODULE_5__["StdPage"], _translate_pipe__WEBPACK_IMPORTED_MODULE_6__["TranslatePipe"], _temp_pipe__WEBPACK_IMPORTED_MODULE_7__["TemperaturPipe"],
-            _rendering_dimmer__WEBPACK_IMPORTED_MODULE_8__["DimmerControl"], _rendering_updown__WEBPACK_IMPORTED_MODULE_9__["UpDownControl"], _rendering_switch__WEBPACK_IMPORTED_MODULE_10__["SwitchControl"], _rendering_temperature__WEBPACK_IMPORTED_MODULE_12__["TemperatureControl"], _rendering_mood__WEBPACK_IMPORTED_MODULE_11__["MoodControl"], _rendering_scene__WEBPACK_IMPORTED_MODULE_13__["SceneControl"]],
-        exports: [_stdpage__WEBPACK_IMPORTED_MODULE_5__["StdPage"], _translate_pipe__WEBPACK_IMPORTED_MODULE_6__["TranslatePipe"], _temp_pipe__WEBPACK_IMPORTED_MODULE_7__["TemperaturPipe"],
-            _rendering_dimmer__WEBPACK_IMPORTED_MODULE_8__["DimmerControl"], _rendering_updown__WEBPACK_IMPORTED_MODULE_9__["UpDownControl"], _rendering_switch__WEBPACK_IMPORTED_MODULE_10__["SwitchControl"], _rendering_temperature__WEBPACK_IMPORTED_MODULE_12__["TemperatureControl"], _rendering_mood__WEBPACK_IMPORTED_MODULE_11__["MoodControl"], _rendering_scene__WEBPACK_IMPORTED_MODULE_13__["SceneControl"]],
+        declarations: [_ctrllist__WEBPACK_IMPORTED_MODULE_5__["CtrlList"], _ctrlheader__WEBPACK_IMPORTED_MODULE_14__["CtrlHeader"], _translate_pipe__WEBPACK_IMPORTED_MODULE_6__["TranslatePipe"], _temp_pipe__WEBPACK_IMPORTED_MODULE_7__["TemperaturPipe"],
+            _rendering_dimmer__WEBPACK_IMPORTED_MODULE_8__["DimmerControl"], _rendering_updown__WEBPACK_IMPORTED_MODULE_9__["UpDownControl"], _rendering_switch__WEBPACK_IMPORTED_MODULE_10__["SwitchControl"], _rendering_temperature__WEBPACK_IMPORTED_MODULE_12__["TemperatureControl"], _rendering_mood__WEBPACK_IMPORTED_MODULE_11__["MoodControl"], _rendering_scene__WEBPACK_IMPORTED_MODULE_13__["SceneControl"], _rendering_media__WEBPACK_IMPORTED_MODULE_15__["MediaControl"]],
+        exports: [_ctrllist__WEBPACK_IMPORTED_MODULE_5__["CtrlList"], _ctrlheader__WEBPACK_IMPORTED_MODULE_14__["CtrlHeader"], _translate_pipe__WEBPACK_IMPORTED_MODULE_6__["TranslatePipe"], _temp_pipe__WEBPACK_IMPORTED_MODULE_7__["TemperaturPipe"],
+            _rendering_dimmer__WEBPACK_IMPORTED_MODULE_8__["DimmerControl"], _rendering_updown__WEBPACK_IMPORTED_MODULE_9__["UpDownControl"], _rendering_switch__WEBPACK_IMPORTED_MODULE_10__["SwitchControl"], _rendering_temperature__WEBPACK_IMPORTED_MODULE_12__["TemperatureControl"], _rendering_mood__WEBPACK_IMPORTED_MODULE_11__["MoodControl"], _rendering_scene__WEBPACK_IMPORTED_MODULE_13__["SceneControl"], _rendering_media__WEBPACK_IMPORTED_MODULE_15__["MediaControl"]],
         schemas: [_angular_core__WEBPACK_IMPORTED_MODULE_1__["CUSTOM_ELEMENTS_SCHEMA"]]
     })
 ], CoreModule);
+
+
+
+/***/ }),
+
+/***/ "./src/app/core/ctrlheader.ts":
+/*!************************************!*\
+  !*** ./src/app/core/ctrlheader.ts ***!
+  \************************************/
+/*! exports provided: CtrlHeader */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CtrlHeader", function() { return CtrlHeader; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var _ctrllist__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ctrllist */ "./src/app/core/ctrllist.ts");
+/* harmony import */ var _system_system__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../system/system */ "./src/app/system/system.ts");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
+
+
+
+
+
+let CtrlHeader = class CtrlHeader {
+    constructor(system, routes) {
+        this.system = system;
+        this.routes = routes;
+    }
+    ionViewWillEnter() {
+        this.stdPage.refreshServices();
+    }
+    goConfig() {
+        this.routes.navigateByUrl("/tabs/config");
+    }
+};
+CtrlHeader.ctorParameters = () => [
+    { type: _system_system__WEBPACK_IMPORTED_MODULE_3__["System"] },
+    { type: _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"] }
+];
+tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])(_ctrllist__WEBPACK_IMPORTED_MODULE_2__["CtrlList"], { static: true }),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", _ctrllist__WEBPACK_IMPORTED_MODULE_2__["CtrlList"])
+], CtrlHeader.prototype, "stdPage", void 0);
+CtrlHeader = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+        selector: 'ctrl-header',
+        inputs: ['title'],
+        template: `
+  <ion-header>
+    <ion-toolbar>
+      <ion-menu-toggle slot="start">
+        <img src="/assets/icon/duotecno.png" />
+        <ion-icon name="{{ system.isSplitted ? '' : 'menu'}}"></ion-icon>
+      </ion-menu-toggle>
+
+      <ion-title>{{ title }}</ion-title>
+
+      <ion-buttons slot="end" class="config-adder">
+        <ion-button (click)="goConfig()">
+          <ion-icon name="settings-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+
+    </ion-toolbar>
+  </ion-header>`
+    }),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_system_system__WEBPACK_IMPORTED_MODULE_3__["System"], _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"]])
+], CtrlHeader);
+
+
+
+/***/ }),
+
+/***/ "./src/app/core/ctrllist.ts":
+/*!**********************************!*\
+  !*** ./src/app/core/ctrllist.ts ***!
+  \**********************************/
+/*! exports provided: CtrlList */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CtrlList", function() { return CtrlList; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _system_system__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../system/system */ "./src/app/system/system.ts");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+
+
+
+let CtrlList = class CtrlList {
+    constructor(system) {
+        this.system = system;
+        this.showUpDowns = true;
+    }
+    ngOnInit() {
+        this.system.emitter.on('refresh', this.refreshServices.bind(this));
+        console.log("ngOnInit - StdPage: " + this.services);
+    }
+    refreshServices(event) {
+        const services = this.system[this.services];
+        console.log('stdPage.refreshServices: ' + this.services + " = " + services.length + ' services');
+        console.log('stdPage.refreshServices: #scenes = ' + this.system.scenes.length);
+        // request the status of all (real) units used on this page
+        if (this.services != "scenes")
+            services.forEach((u) => u.reqState());
+        // see if a group is used, either in a service or in a custom-scene when on the moods page
+        // this.system.groups.forEach((g: GroupConfig) => g.used = 
+        //   services.some(u => u.group == g.id) || 
+        //     ((this.services == "mood") && this.system.scenes.some(s => s.group == g.id))
+        // );
+    }
+    used(group) {
+        return !!this.system[this.services].find(u => ((u.group == group.id) || (u.group == -1))) ||
+            ((this.services == "moods") && !!this.system.scenes.find(s => ((s.group == group.id) || (s.group == -1))));
+    }
+    toggle(event, inx) {
+        this.system.groups[inx].visible = !this.system.groups[inx].visible;
+        if (!this.system.config.multiple) {
+            const now = !this.system.groups[inx].visible;
+            this.system.groups.forEach((g, i) => { if (i != inx)
+                g.visible = now; });
+        }
+        event.preventDefault();
+    }
+};
+CtrlList.ctorParameters = () => [
+    { type: _system_system__WEBPACK_IMPORTED_MODULE_1__["System"] }
+];
+CtrlList = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["Component"])({
+        selector: 'ctrl-list',
+        // services= "moods", "stores", "controls", "media", ...
+        inputs: ['services', 'showUpDowns'],
+        template: `
+    <ion-list *ngIf="system.masters.length > 0">
+      <ion-item-group *ngFor="let group of system.groups; let inx = index">
+        <ion-list-header *ngIf="used(group) && (group.visible || system.config.multiple)">
+          <ion-label (click)="toggle($event, inx)">{{group.name}}</ion-label>
+          <ion-icon *ngIf="(! system.isSplitted) && system.config.multiple" [class.list-open]="group.visible" 
+                    (click)="toggle($event, inx)" name="chevron-forward-outline"></ion-icon>
+        </ion-list-header>
+
+        <ng-container *ngIf="group.visible">
+          <!-- add our own scenes to the app -->
+          <ng-container *ngIf="services == 'moods'">
+            <ng-container *ngFor="let scene of system.scenes">
+              <scene [scene]="scene" *ngIf="((scene.group == group.id) || (scene.group == -1))"></scene>
+            </ng-container>
+          </ng-container>
+
+          <ng-container *ngFor="let service of system[services]">
+            <dimmer      [service]="service" *ngIf="((service.group == group.id) || (service.group == -1)) 
+                                                    && service.isDimmer()"></dimmer>
+            <updown      [service]="service" *ngIf="((service.group == group.id) || (service.group == -1))
+                                                    && showUpDowns && service.isUpDown()"></updown>
+            <switch      [service]="service" *ngIf="((service.group == group.id) || (service.group == -1)) 
+                                                    && service.isSwitch()"></switch>
+            <mood        [service]="service" *ngIf="((service.group == group.id) || (service.group == -1)) 
+                                                    && (service.isMood() || service.isInput())"></mood>
+            <temperature [service]="service" *ngIf="((service.group == group.id) || (service.group == -1)) 
+                                                    && service.isTemperature()"></temperature>
+            <media       [service]="service" *ngIf="((service.group == group.id) || (service.group == -1)) 
+                                                    && service.isMedia()"></media>
+
+          </ng-container>
+        </ng-container>
+      </ion-item-group>
+    </ion-list>
+
+    <div *ngIf="system.masters.length <= 0" class="noMaster">
+      <h1>No masters yet?</h1>
+      <p>Go to "Configure" (top right icon) -> "Masters"<br>
+        Add a master by clicking on the "+ Master"<br>
+        Fill out the parameters.<br>
+        <br>
+        Once your first Node or Smartbox is visible<br>
+        Click on it and select the units you want to use.<br>
+        <br>
+        Later you can split the units (switches, temperature, dimmers, scenes, ...) in multiple sections by first adding more groups.<br>
+        <br>
+        Download the <a href="https://www.duotecno.be/wp-content/uploads/2020/05/Duotecno-smartbox-app-1.pdf">manual</a>.
+      </p>
+    </div>
+`
+    }),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_system_system__WEBPACK_IMPORTED_MODULE_1__["System"]])
+], CtrlList);
 
 
 
@@ -989,115 +1206,6 @@ function doToast(toastCtl, message, duration = 800) {
         toast.present();
     });
 }
-
-
-/***/ }),
-
-/***/ "./src/app/core/stdpage.ts":
-/*!*********************************!*\
-  !*** ./src/app/core/stdpage.ts ***!
-  \*********************************/
-/*! exports provided: StdPage */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StdPage", function() { return StdPage; });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
-/* harmony import */ var _system_system__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../system/system */ "./src/app/system/system.ts");
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
-
-
-
-let StdPage = class StdPage {
-    constructor(system) {
-        this.system = system;
-        this.showUpDowns = true;
-    }
-    ngOnInit() {
-        this.system.emitter.on('refresh', this.refreshServices.bind(this));
-        console.log("ngOnInit - StdPage: " + this.services);
-    }
-    refreshServices(event) {
-        const services = this.system[this.services];
-        console.log('stdPage.refreshServices: ' + this.services + " = " + services.length + ' services');
-        console.log('stdPage.refreshServices: #scenes = ' + this.system.scenes.length);
-        // request the status of all (real) units used on this page
-        if (this.services != "scenes")
-            services.forEach((u) => u.reqState());
-        // see if a group is used, either in a service or in a custom-scene when on the moods page
-        this.system.groups.forEach((g) => g.used =
-            services.some(u => u.group == g.id) ||
-                ((this.services == "mood") && this.system.scenes.some(s => s.group == g.id)));
-    }
-    moreGroups(group) {
-        return !!this.system && !!this.system.groups && (this.system.groups.length > 1) &&
-            (!this.system.isSplitted || group.visible);
-    }
-    arrow(group) {
-        return group.visible ? 'list-open' : '';
-    }
-    toggle(group) {
-        group.visible = !group.visible;
-    }
-};
-StdPage.ctorParameters = () => [
-    { type: _system_system__WEBPACK_IMPORTED_MODULE_1__["System"] }
-];
-StdPage = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-    Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["Component"])({
-        selector: 'std-page',
-        // services= "moods", "stores", "controls", ...
-        inputs: ['services', 'showUpDowns'],
-        template: `
-    <ion-list *ngIf="system.masters.length > 0">
-      <ion-item-group *ngFor="let group of system.groups">
-        <ion-list-header *ngIf="group.used && moreGroups(group)">
-          <ion-label>{{group.name}}</ion-label>
-          <ion-icon *ngIf="! system.isSplitted" [ngClass]="arrow(group)" (click)="toggle(group)" name="chevron-forward-outline"></ion-icon>
-        </ion-list-header>
-        <ng-container *ngIf="group.used && group.visible">
-          <ng-container *ngIf="services == 'moods'">
-            <ng-container *ngFor="let scene of system.scenes">
-              <scene [scene]="scene" *ngIf="((scene.group == group.id) || (scene.group == -1))"></scene>
-            </ng-container>
-            <ion-item-divider></ion-item-divider>
-          </ng-container>
-          <ng-container *ngFor="let service of system[services]">
-            <dimmer      [service]="service" *ngIf="(service.group == group.id) 
-                                                    && service.isDimmer()"></dimmer>
-            <updown      [service]="service" *ngIf="((service.group == group.id) || (service.group == -1))
-                                                    && showUpDowns && service.isUpDown()"></updown>
-            <switch      [service]="service" *ngIf="((service.group == group.id) || (service.group == -1)) 
-                                                    && service.isSwitch()"></switch>
-            <mood        [service]="service" *ngIf="((service.group == group.id) || (service.group == -1)) 
-                                                    && (service.isMood() || service.isInput())"></mood>
-            <temperature [service]="service" *ngIf="((service.group == group.id) || (service.group == -1)) 
-                                                    && service.isTemperature()"></temperature>
-          </ng-container>
-        </ng-container>
-      </ion-item-group>
-    </ion-list>
-
-    <div *ngIf="system.masters.length <= 0" class="noMaster">
-      <h1>No masters yet?</h1>
-      <p>Go to the tab "Configure" -> "Masters"<br>
-        Add a master by clicking on the "+ Master"<br>
-        Fill out the parameters.<br>
-        <br>
-        Once your first Node or Smartbox is visible<br>
-        Click on it and select the units you want to use.<br>
-        <br>
-        Later you can split the units (switches, temperature, dimmers, scenes, ...) in multiple sections by first adding more groups.<br>
-        <br>
-        Download the <a href="https://www.duotecno.be/wp-content/uploads/2020/05/Duotecno-smartbox-app-1.pdf">manual</a>.
-      </p>
-    </div>
-`
-    }),
-    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_system_system__WEBPACK_IMPORTED_MODULE_1__["System"]])
-], StdPage);
-
 
 
 /***/ }),
@@ -1222,12 +1330,15 @@ const translations = {
         'Temperature.Off': 'Uit',
         'Page.Moods': 'Sferen',
         'Page.Stores': 'Rolluiken',
+        'Page.Media': 'Media',
+        'Media.Off': 'Uit',
         'Page.Config': 'Configureer',
         'Config.Masters': 'Masters',
         'Config.Master': 'Master',
         'Config.Week': 'Week',
         'Config.Holiday': 'Vakantie',
         'Config.NoScheduleSelected': 'Geen plan geselecteerd',
+        'Config.GetAudioRooms': 'Lees Audio Rooms',
         'Config.Scenes': 'Scenes',
         'Config.Scenes.scene': 'Scene',
         'Config.Scenes.group': 'Groep',
@@ -1242,6 +1353,7 @@ const translations = {
         'Config.Units': 'Units',
         'Config.Groups': 'Groepen',
         'Config.Group': 'Groep',
+        'Config.GroupsAll': 'Alle groepen',
         'Config.General': 'Algemeen',
         'Config.Settings': 'Instellingen',
         'Config.Language': 'Taal',
@@ -1273,19 +1385,22 @@ const translations = {
         'Temperature.Off': 'Désactivé',
         'Page.Moods': 'Atmosphères',
         'Page.Stores': 'Stores',
+        'Page.Media': 'Media',
+        'Media.Off': 'Off',
         'Page.Config': 'Configurer',
         'Config.Masters': 'Masters',
         'Config.Master': 'Master',
         'Config.Week': 'Semaine',
         'Config.Holiday': 'Vacances',
         'Config.NoScheduleSelected': 'Aucun plan sélectionné',
+        'Config.GetAudioRooms': 'Lire Audio Rooms',
         'Config.Scenes': 'Scènes',
         'Config.Scenes.scene': 'Scènes',
         'Config.Scenes.for': 'Configuration pour',
         'Config.Scenes.group': 'Group',
         'Config.Scenes.triggeredBy': 'Appellé par',
         'Config.Scenes.trigger': 'Trigger',
-        'Config.Scenes.selectTriggerFor': 'Trigger for',
+        'Config.Scenes.selectTriggerFor': 'Trigger pour',
         'Config.Scenes.name': 'Nom Scène',
         'scene.trigger.off': 'Off',
         'scene.trigger.on': 'On',
@@ -1293,6 +1408,7 @@ const translations = {
         'Config.Units': 'Unité',
         'Config.Groups': 'Groups',
         'Config.Group': 'Group',
+        'Config.GroupsAll': 'Tous les groupes',
         'Config.General': 'Général',
         'Config.Settings': 'Paramètres',
         'Config.Language': 'Langue',
@@ -1324,14 +1440,18 @@ const translations = {
         'Temperature.Off': 'Off',
         'Page.Moods': 'Scenes',
         'Page.Stores': 'Blinds',
+        'Page.Media': 'Media',
+        'Media.Off': 'Off',
         'Page.Config': 'Configure',
         'Config.Masters': 'Masters',
         'Config.Master': 'Master',
         'Config.Week': 'Week',
         'Config.Holiday': 'Holiday',
         'Config.NoScheduleSelected': 'No schedule selected',
+        'Config.GetAudioRooms': 'Get Audio Rooms',
         'Config.Groups': 'Groups',
         'Config.Group': 'Group',
+        'Config.GroupsAll': 'All groups',
         'Config.Scenes': 'Scenes',
         'Config.Scenes.scene': 'Scene',
         'Config.Scenes.for': 'Settings for',
@@ -1511,7 +1631,6 @@ let DimmerControl = class DimmerControl {
         this.showSlider = !this.showSlider;
     }
     change() {
-        console.log("change: " + this.service.status);
         if (this.service.status == 2) {
             // don't do anything on timed PIR status
         }
@@ -1537,19 +1656,251 @@ DimmerControl = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         <span class="dimmer__value">{{service.value}}%</span>
         <ion-icon class="state" *ngIf="service.status == 2" name="time"></ion-icon>
       </ion-label>
-
       <ion-toggle [(ngModel)]="service.status" (ionChange)="change()"></ion-toggle>
     </ion-item>
+
     <ion-item lines="none" class="dimmer__slider" *ngIf="showSlider">
       <ion-range min="1" max="100" debounce="400" [(ngModel)]="service.value" (ionChange)="changeValue()">
-        <ion-icon slot="start" name="remove" name="remove" (click)="changeValue(-5)"></ion-icon>
-        <ion-icon slot="end" name="add" name="add" (click)="changeValue(5)"></ion-icon>
+        <ion-icon slot="start" name="remove" (click)="changeValue(-5)"></ion-icon>
+        <ion-icon slot="end" name="add" (click)="changeValue(5)"></ion-icon>
       </ion-range>
     </ion-item>
   `,
         styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./dimmer.scss */ "./src/app/rendering/dimmer.scss")).default]
     })
 ], DimmerControl);
+
+
+
+/***/ }),
+
+/***/ "./src/app/rendering/media.scss":
+/*!**************************************!*\
+  !*** ./src/app/rendering/media.scss ***!
+  \**************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = (".media {\n  position: relative;\n  z-index: 2; }\n  .media ion-label {\n    display: -webkit-box;\n    display: flex;\n    -webkit-box-align: center;\n            align-items: center; }\n  .media__chevron {\n  margin-left: auto;\n  margin-right: 10px; }\n  .volume__value {\n  font-size: 0.8rem; }\n  ion-range {\n  --bar-background: #fff;\n  --knob-size: 24px;\n  --knob-background: #fff; }\n  ion-range ion-icon {\n    color: var(--ion-color-primary-contrast); }\n  .dark {\n  --background: var(--ion-color-dark);\n  background-color: var(--ion-color-dark);\n  --border-radius: 0;\n  position: relative;\n  z-index: 1;\n  margin-top: -22px;\n  border-bottom-left-radius: var(--duotecno-border-radius);\n  border-bottom-right-radius: var(--duotecno-border-radius); }\n  .volume__slider ion-range {\n  margin-top: 10px;\n  padding-left: 0;\n  padding-right: 0; }\n  .choices {\n  -webkit-box-pack: justify;\n          justify-content: space-between;\n  color: white; }\n  .choices ion-select {\n    display: -webkit-inline-box;\n    display: inline-flex;\n    margin: 0 0 0 -10px;\n    max-width: inherit;\n    font-size: 13px; }\n  .choices ion-icon.desticon {\n    margin-left: 0; }\n  .choices ion-icon {\n    color: var(--ion-color-primary-contrast); }\n  .choices .source {\n    max-width: inherit; }\n  .choices .source ion-icon {\n      font-size: 24px;\n      margin-bottom: -5px;\n      margin-left: 0; }\n  .choices .source ion-select {\n      margin-right: 0; }\n  ion-item.first {\n  padding-top: 20px; }\n  .player ion-buttons {\n  padding: 0 3px !important; }\n  .controls ion-buttons {\n  -webkit-box-pack: justify;\n          justify-content: space-between;\n  width: 100%;\n  padding: 0 19px; }\n  .controls ion-buttons ion-icon {\n    font-size: 24px;\n    color: var(--ion-color-primary-contrast); }\n  .controls ion-buttons.keypad {\n  max-width: 320px; }\n  .controls ion-buttons.keypad ion-button {\n    color: white;\n    border: 1px solid white;\n    padding: 0px;\n    width: 70px;\n    border-radius: 8px; }\n  .controls ion-buttons.keypad span {\n    width: 73px; }\n  .controls ion-buttons.noborder {\n  max-width: 320px; }\n  .controls ion-buttons.noborder ion-button {\n    border: none !important; }\n  @media (prefers-color-scheme: dark) {\n  .dark {\n    --background: var(--ion-color-step-150);\n    background-color: var(--ion-color-step-150); } }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9qb2hhbi9MaWJyYXJ5L01vYmlsZSBEb2N1bWVudHMvY29tfmFwcGxlfkNsb3VkRG9jcy9Qcm9qZWN0cy9EdW90ZWNuby9zbWFydHN5c3RlbS9zcmMvYXBwL3JlbmRlcmluZy9tZWRpYS5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0ksa0JBQWtCO0VBQ2xCLFVBQVUsRUFBQTtFQUZkO0lBS1Esb0JBQWE7SUFBYixhQUFhO0lBQ2IseUJBQW1CO1lBQW5CLG1CQUFtQixFQUFBO0VBRzNCO0VBQ0ksaUJBQWlCO0VBQ2pCLGtCQUFrQixFQUFBO0VBRXRCO0VBQ0ksaUJBQWlCLEVBQUE7RUFFckI7RUFDSSxzQkFBaUI7RUFDakIsaUJBQVk7RUFDWix1QkFBa0IsRUFBQTtFQUh0QjtJQU1RLHdDQUF3QyxFQUFBO0VBR2hEO0VBQ0UsbUNBQWE7RUFDYix1Q0FBdUM7RUFDdkMsa0JBQWdCO0VBQ2hCLGtCQUFrQjtFQUNsQixVQUFVO0VBQ1YsaUJBQWlCO0VBQ2pCLHdEQUF3RDtFQUN4RCx5REFBeUQsRUFBQTtFQUUzRDtFQUVJLGdCQUFnQjtFQUNoQixlQUFlO0VBQUUsZ0JBQWdCLEVBQUE7RUFJckM7RUFDRSx5QkFBOEI7VUFBOUIsOEJBQThCO0VBQzlCLFlBQVksRUFBQTtFQUZkO0lBS0ksMkJBQW9CO0lBQXBCLG9CQUFvQjtJQUNwQixtQkFBbUI7SUFDbkIsa0JBQWtCO0lBQ2xCLGVBQWUsRUFBQTtFQVJuQjtJQVdJLGNBQWMsRUFBQTtFQVhsQjtJQWNJLHdDQUF3QyxFQUFBO0VBZDVDO0lBaUJJLGtCQUFrQixFQUFBO0VBakJ0QjtNQW1CTSxlQUFlO01BQ2YsbUJBQW1CO01BQ25CLGNBQWMsRUFBQTtFQXJCcEI7TUF3Qk0sZUFDRixFQUFBO0VBSUo7RUFDRSxpQkFBaUIsRUFBQTtFQUduQjtFQUNFLHlCQUNGLEVBQUE7RUFFQTtFQUdJLHlCQUE4QjtVQUE5Qiw4QkFBOEI7RUFDOUIsV0FBVztFQUNYLGVBQWUsRUFBQTtFQUxuQjtJQU9NLGVBQWU7SUFDZix3Q0FBd0MsRUFBQTtFQVI5QztFQWFJLGdCQUFnQixFQUFBO0VBYnBCO0lBZ0JNLFlBQVk7SUFDWix1QkFBdUI7SUFDdkIsWUFBWTtJQUNaLFdBQVc7SUFDWCxrQkFBa0IsRUFBQTtFQXBCeEI7SUF3Qk0sV0FBVyxFQUFBO0VBeEJqQjtFQTRCSSxnQkFBZ0IsRUFBQTtFQTVCcEI7SUErQk0sdUJBQ0YsRUFBQTtFQUlKO0VBQ0k7SUFDSSx1Q0FBYTtJQUNiLDJDQUEyQyxFQUFBLEVBQzlDIiwiZmlsZSI6InNyYy9hcHAvcmVuZGVyaW5nL21lZGlhLnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyIubWVkaWEge1xuICAgIHBvc2l0aW9uOiByZWxhdGl2ZTtcbiAgICB6LWluZGV4OiAyO1xuXG4gICAgaW9uLWxhYmVsIHtcbiAgICAgICAgZGlzcGxheTogZmxleDtcbiAgICAgICAgYWxpZ24taXRlbXM6IGNlbnRlcjtcbiAgICB9XG59XG4ubWVkaWFfX2NoZXZyb24ge1xuICAgIG1hcmdpbi1sZWZ0OiBhdXRvO1xuICAgIG1hcmdpbi1yaWdodDogMTBweDtcbn1cbi52b2x1bWVfX3ZhbHVlIHtcbiAgICBmb250LXNpemU6IDAuOHJlbTtcbn1cbmlvbi1yYW5nZSB7XG4gICAgLS1iYXItYmFja2dyb3VuZDogI2ZmZjtcbiAgICAtLWtub2Itc2l6ZTogMjRweDtcbiAgICAtLWtub2ItYmFja2dyb3VuZDogI2ZmZjtcblxuICAgIGlvbi1pY29uIHtcbiAgICAgICAgY29sb3I6IHZhcigtLWlvbi1jb2xvci1wcmltYXJ5LWNvbnRyYXN0KTtcbiAgICB9XG59XG4uZGFyayB7XG4gIC0tYmFja2dyb3VuZDogdmFyKC0taW9uLWNvbG9yLWRhcmspO1xuICBiYWNrZ3JvdW5kLWNvbG9yOiB2YXIoLS1pb24tY29sb3ItZGFyayk7XG4gIC0tYm9yZGVyLXJhZGl1czogMDtcbiAgcG9zaXRpb246IHJlbGF0aXZlO1xuICB6LWluZGV4OiAxO1xuICBtYXJnaW4tdG9wOiAtMjJweDtcbiAgYm9yZGVyLWJvdHRvbS1sZWZ0LXJhZGl1czogdmFyKC0tZHVvdGVjbm8tYm9yZGVyLXJhZGl1cyk7XG4gIGJvcmRlci1ib3R0b20tcmlnaHQtcmFkaXVzOiB2YXIoLS1kdW90ZWNuby1ib3JkZXItcmFkaXVzKTtcbn1cbi52b2x1bWVfX3NsaWRlciB7XG4gIGlvbi1yYW5nZSB7XG4gICAgbWFyZ2luLXRvcDogMTBweDtcbiAgICBwYWRkaW5nLWxlZnQ6IDA7IHBhZGRpbmctcmlnaHQ6IDA7XG4gIH1cbn1cblxuLmNob2ljZXMge1xuICBqdXN0aWZ5LWNvbnRlbnQ6IHNwYWNlLWJldHdlZW47XG4gIGNvbG9yOiB3aGl0ZTtcblxuICBpb24tc2VsZWN0IHtcbiAgICBkaXNwbGF5OiBpbmxpbmUtZmxleDtcbiAgICBtYXJnaW46IDAgMCAwIC0xMHB4O1xuICAgIG1heC13aWR0aDogaW5oZXJpdDtcbiAgICBmb250LXNpemU6IDEzcHg7XG4gIH1cbiAgaW9uLWljb24uZGVzdGljb24ge1xuICAgIG1hcmdpbi1sZWZ0OiAwO1xuICB9XG4gIGlvbi1pY29uIHtcbiAgICBjb2xvcjogdmFyKC0taW9uLWNvbG9yLXByaW1hcnktY29udHJhc3QpO1xuICB9XG4gIC5zb3VyY2Uge1xuICAgIG1heC13aWR0aDogaW5oZXJpdDtcbiAgICBpb24taWNvbiB7XG4gICAgICBmb250LXNpemU6IDI0cHg7XG4gICAgICBtYXJnaW4tYm90dG9tOiAtNXB4O1xuICAgICAgbWFyZ2luLWxlZnQ6IDA7XG4gICAgfVxuICAgIGlvbi1zZWxlY3Qge1xuICAgICAgbWFyZ2luLXJpZ2h0OiAwXG4gICAgfVxuICB9XG59XG5cbmlvbi1pdGVtLmZpcnN0IHtcbiAgcGFkZGluZy10b3A6IDIwcHg7XG59XG5cbi5wbGF5ZXIgaW9uLWJ1dHRvbnMgeyBcbiAgcGFkZGluZzogMCAzcHggIWltcG9ydGFudFxufVxuXG4uY29udHJvbHMge1xuICBcbiAgaW9uLWJ1dHRvbnMge1xuICAgIGp1c3RpZnktY29udGVudDogc3BhY2UtYmV0d2VlbjtcbiAgICB3aWR0aDogMTAwJTtcbiAgICBwYWRkaW5nOiAwIDE5cHg7XG4gICAgaW9uLWljb24ge1xuICAgICAgZm9udC1zaXplOiAyNHB4O1xuICAgICAgY29sb3I6IHZhcigtLWlvbi1jb2xvci1wcmltYXJ5LWNvbnRyYXN0KTtcbiAgICB9XG4gIH1cblxuICBpb24tYnV0dG9ucy5rZXlwYWQge1xuICAgIG1heC13aWR0aDogMzIwcHg7XG5cbiAgICBpb24tYnV0dG9uIHtcbiAgICAgIGNvbG9yOiB3aGl0ZTtcbiAgICAgIGJvcmRlcjogMXB4IHNvbGlkIHdoaXRlO1xuICAgICAgcGFkZGluZzogMHB4O1xuICAgICAgd2lkdGg6IDcwcHg7XG4gICAgICBib3JkZXItcmFkaXVzOiA4cHg7XG4gICAgfVxuXG4gICAgc3BhbiB7XG4gICAgICB3aWR0aDogNzNweDtcbiAgICB9XG4gIH1cbiAgaW9uLWJ1dHRvbnMubm9ib3JkZXIge1xuICAgIG1heC13aWR0aDogMzIwcHg7XG5cbiAgICBpb24tYnV0dG9uIHtcbiAgICAgIGJvcmRlcjogbm9uZSAhaW1wb3J0YW50XG4gICAgfVxuICB9XG59XG5cbkBtZWRpYSAocHJlZmVycy1jb2xvci1zY2hlbWU6IGRhcmspIHtcbiAgICAuZGFyayB7XG4gICAgICAgIC0tYmFja2dyb3VuZDogdmFyKC0taW9uLWNvbG9yLXN0ZXAtMTUwKTtcbiAgICAgICAgYmFja2dyb3VuZC1jb2xvcjogdmFyKC0taW9uLWNvbG9yLXN0ZXAtMTUwKTtcbiAgICB9XG59XG4iXX0= */");
+
+/***/ }),
+
+/***/ "./src/app/rendering/media.ts":
+/*!************************************!*\
+  !*** ./src/app/rendering/media.ts ***!
+  \************************************/
+/*! exports provided: MediaControl */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MediaControl", function() { return MediaControl; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/fesm2015/ionic-angular.js");
+/* harmony import */ var _core_stdUX__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../core/stdUX */ "./src/app/core/stdUX.ts");
+/* harmony import */ var _system_types__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../system/types */ "./src/app/system/types.ts");
+/* harmony import */ var _system_system__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../system/system */ "./src/app/system/system.ts");
+
+
+
+
+
+
+let MediaControl = class MediaControl {
+    constructor(toastCtrl, system) {
+        this.toastCtrl = toastCtrl;
+        this.system = system;
+        this.showSlider = false;
+        this.running = false;
+        this.clicked = false;
+        this.keypad = false;
+    }
+    basic() {
+        return (this.service.type === _system_types__WEBPACK_IMPORTED_MODULE_4__["UnitType"].kAudio);
+    }
+    arrow() {
+        return (this.showSlider) ? 'chevron-up' : 'chevron-down';
+    }
+    labelClick() {
+        this.showSlider = !this.showSlider;
+    }
+    click() {
+        // guard for not having ionChange trigger when status changes come in 
+        this.clicked = true;
+        setTimeout(() => this.clicked = false, 1000);
+    }
+    onoff() {
+        if (this.clicked)
+            this.service.setState(!!this.service.status); // make boolean
+    }
+    updown(updown) {
+        Object(_core_stdUX__WEBPACK_IMPORTED_MODULE_3__["doToast"])(this.toastCtrl, updown ? "Volume up" : "Volume down");
+        this.service.setState(updown ? -2 : -1);
+    }
+    change() {
+        if (this.clicked) {
+            Object(_core_stdUX__WEBPACK_IMPORTED_MODULE_3__["doToast"])(this.toastCtrl, "change volume " + this.service.value);
+            this.service.setState(this.service.value);
+        }
+    }
+    changeDest() {
+        if ((this.service.destination.source != 255))
+            this.service.audioSrcDest(this.service.destination.source, this.service.destinationId);
+    }
+    changeSrc() {
+        if ((this.service.destination.source != 255))
+            this.service.audioSrcDest(this.service.destination.source, this.service.destinationId);
+    }
+    action(action) {
+        if (action === "play")
+            this.running = true;
+        if (action === "stop")
+            this.running = false;
+        this.service.audioAction(action);
+    }
+    toggleKeypad() {
+        this.keypad = !this.keypad;
+    }
+    actionKeypad(action) {
+        this.service.audioAction("function", action);
+    }
+    same(a, b) {
+        return a * 1 == b * 1;
+    }
+};
+MediaControl.ctorParameters = () => [
+    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["ToastController"] },
+    { type: _system_system__WEBPACK_IMPORTED_MODULE_5__["System"] }
+];
+MediaControl = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+        selector: 'media',
+        inputs: ['service'],
+        template: `
+    <ion-item lines="none" class="media" *ngIf="service.destinations.length">
+      <ion-label tappable (click)="labelClick()">{{service.getName()}}
+        <ion-icon [name]="arrow()" class="media__chevron"></ion-icon>
+        <span class="volume__value">{{service.value}}%</span>
+      </ion-label>
+      <ion-toggle [(ngModel)]="service.status" (ionChange)="onoff()" (click)="click()"></ion-toggle>
+    </ion-item>
+
+    <ion-item lines="none" class="dark volume__slider" *ngIf="showSlider && basic()">
+      <ion-icon slot="start" name="remove" (click)="updown(false)"></ion-icon>
+      <ion-icon slot="end" name="add" (click)="updown(true)"></ion-icon>
+    </ion-item>
+
+    <ion-item lines="none" class="dark volume__slider" *ngIf="showSlider && ! basic()">
+      <ion-range min="1" max="100" debounce="400" [(ngModel)]="service.value" 
+                 (ionChange)="change()" (click)="click()">
+        <ion-icon slot="start" name="remove" (click)="updown(false)"></ion-icon>
+        <ion-icon slot="end" name="add" (click)="updown(true)"></ion-icon>
+      </ion-range>
+    </ion-item>
+
+    <ion-item lines="none" class="dark choices" *ngIf="showSlider">
+      <span class="source">
+        <ion-icon name="musical-notes" slot="start"></ion-icon>
+        <ion-select [(ngModel)]="service.destination.source" interface="popover" slot="start"
+                    [compareWith]="same" (ionChange)="changeSrc()" (click)="click()">
+          <ion-select-option value="255">{{"Media.Off" |_ }}</ion-select-option>
+          <ion-select-option *ngFor="let src of service.destination.sources" value="{{src.id}}">{{src.name}}</ion-select-option>
+        </ion-select>
+      </span>
+      
+      <ion-icon slot="end" name="volume-medium" *ngIf="(service.destinations.length > 1)" class="desticon"></ion-icon>
+      <ion-select [(ngModel)]="service.destinationId" interface="popover" slot="end"
+                  [compareWith]="same" (ionChange)="changeDest()" class="destination"
+                  *ngIf="(service.destinations.length > 1)" (click)="click()">
+        <ion-select-option value="255">{{"Media.Off" |_ }}</ion-select-option>
+        <ion-select-option *ngFor="let dest of service.destinations" value="{{dest.id}}">{{dest.name}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item lines="none" class="dark controls player" *ngIf="showSlider">
+      <ion-buttons>
+        <ion-icon name="play-back" (click)="action('back')"></ion-icon>
+        <!-- ion-icon name="play-skip-back" (click)="action('skipback')"></ion-icon -->
+        <ion-icon name="play" (click)="action('play')" *ngIf="!running"></ion-icon>
+        <ion-icon name="stop" (click)="action('stop')" *ngIf="running"></ion-icon>
+        <ion-icon name="pause" (click)="action('pause')"></ion-icon>
+        <!-- ion-icon name="play-skip-forward" (click)="action('skipforward')"></ion-icon -->
+        <ion-icon name="play-forward" (click)="action('forward')"></ion-icon>
+        <ion-icon name="keypad" (click)="toggleKeypad()"></ion-icon>
+      </ion-buttons>
+    </ion-item>
+
+    <ion-item lines="none" class="dark controls first" *ngIf="showSlider && keypad">
+      <ion-buttons class="keypad">
+        <ion-button (click)="actionKeypad('1')">1</ion-button>
+        <ion-button (click)="actionKeypad('2')">2</ion-button>
+        <ion-button (click)="actionKeypad('3')">3</ion-button>
+      </ion-buttons>
+      </ion-item>
+
+      <ion-item lines="none" class="dark controls" *ngIf="showSlider && keypad">
+        <ion-buttons class="keypad">
+        <ion-button (click)="actionKeypad('4')">4</ion-button>
+        <ion-button (click)="actionKeypad('5')">5</ion-button>
+        <ion-button (click)="actionKeypad('6')">6</ion-button>
+      </ion-buttons>
+      </ion-item>
+
+      <ion-item lines="none" class="dark controls" *ngIf="showSlider && keypad">
+        <ion-buttons class="keypad">
+        <ion-button (click)="actionKeypad('7')">7</ion-button>
+        <ion-button (click)="actionKeypad('8')">8</ion-button>
+        <ion-button (click)="actionKeypad('9')">9</ion-button>
+      </ion-buttons>
+      </ion-item>
+
+      <ion-item lines="none" class="dark controls" *ngIf="showSlider && keypad">
+        <ion-buttons class="keypad">
+          <ion-button (click)="actionKeypad('-')">./..</ion-button>
+          <ion-button (click)="actionKeypad('0')">0</ion-button>
+          <span></span>
+        </ion-buttons>
+      </ion-item>
+
+      <ion-item lines="none" class="dark controls" *ngIf="showSlider && keypad">
+        <ion-buttons class="keypad noborder">
+          <span></span>
+          <ion-button (click)="actionKeypad('up')"><ion-icon name="caret-up"></ion-icon></ion-button>
+          <span></span>
+        </ion-buttons>
+      </ion-item>
+
+      <ion-item lines="none" class="dark controls" *ngIf="showSlider && keypad">
+        <ion-buttons class="keypad noborder">
+          <ion-button (click)="actionKeypad('left')"><ion-icon name="caret-back"></ion-icon></ion-button>
+          <ion-button (click)="actionKeypad('enter')">OK</ion-button>
+          <ion-button (click)="actionKeypad('right')"><ion-icon name="caret-forward"></ion-icon></ion-button>
+        </ion-buttons>
+      </ion-item>
+
+      <ion-item lines="none" class="dark controls" *ngIf="showSlider && keypad">
+        <ion-buttons class="keypad noborder">
+          <span></span>
+          <ion-button (click)="actionKeypad('down')"><ion-icon name="caret-down"></ion-icon></ion-button>
+          <span></span>
+        </ion-buttons>
+    </ion-item>
+
+
+
+    <!-- ion-item lines="none" class="choices" *ngIf="showSlider">
+     1) play stop rewind enz...
+     2) 0-9
+    </ion-item>
+    -->
+  `,
+        styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./media.scss */ "./src/app/rendering/media.scss")).default]
+    }),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_ionic_angular__WEBPACK_IMPORTED_MODULE_2__["ToastController"], _system_system__WEBPACK_IMPORTED_MODULE_5__["System"]])
+], MediaControl);
 
 
 
@@ -1677,7 +2028,7 @@ SceneControl = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         template: `
     <ion-item lines="none">
       <ion-label>{{scene.name}}</ion-label>
-      <ion-button slot="end" shape="round" [color]="warning"
+      <ion-button slot="end" shape="round" color="warning"
                   (click)="click()"></ion-button>
     </ion-item>
   `,
@@ -1719,7 +2070,6 @@ __webpack_require__.r(__webpack_exports__);
 
 let SwitchControl = class SwitchControl {
     change() {
-        console.log("change: " + this.service.status);
         if (this.service.status == 2) {
             // don't do anything on timed PIR status
         }
@@ -1727,8 +2077,8 @@ let SwitchControl = class SwitchControl {
             this.service.setState(!!this.service.status); // make boolean
         }
     }
-    toggle(unit) {
-        unit.setState(!unit.status);
+    toggle() {
+        this.service.setState(!this.service.status);
     }
 };
 SwitchControl = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
@@ -1737,7 +2087,7 @@ SwitchControl = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         inputs: ['service'],
         template: `
     <ion-item lines="none">
-      <ion-label tappable (click)="toggle(service)">
+      <ion-label tappable (click)="toggle()">
         {{service.getName()}}
         <ion-icon class="state" *ngIf="service.status === 2" name="time" color="primary"></ion-icon>
       </ion-label>
@@ -1763,7 +2113,7 @@ SwitchControl = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (".temp,\n.presets {\n  margin-bottom: 40px;\n  padding: 20px;\n  border-radius: var(--duotecno-border-radius);\n  background: #fff; }\n\n.temp {\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-align: center;\n          align-items: center;\n  margin-bottom: 10px; }\n\n.temp__name {\n    font-weight: 700; }\n\n.temp__current {\n    margin: 15px 0;\n    font-size: 3.5rem;\n    font-weight: 700; }\n\n.temp__current .temp__celcius {\n      font-size: 1.5rem;\n      line-height: 1.8;\n      font-weight: 400; }\n\n.temp__celcius {\n    margin-bottom: 5px;\n    margin-left: 2px;\n    font-size: 0.7rem;\n    vertical-align: text-top; }\n\n.temp__data {\n    width: calc(100% - 90px); }\n\n.temp ion-buttons {\n    display: -webkit-box;\n    display: flex;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n            flex-direction: column;\n    width: 90px; }\n\n.temp ion-button {\n    --background: var(--ion-background-color);\n    --background-hover: var(--ion-background-color);\n    --border-radius: 4px;\n    --color: var(--ion-color-dark);\n    width: 70px;\n    height: 70px;\n    margin: 10px; }\n\n.temp ion-button ion-icon {\n      font-size: 3rem; }\n\n.presets {\n  padding-bottom: 0; }\n\n.presets ion-buttons {\n    display: -webkit-box;\n    display: flex;\n    -webkit-box-pack: justify;\n            justify-content: space-between; }\n\n.presets ion-button {\n    --color: var(--ion-color-dark);\n    width: 40px;\n    height: 40px; }\n\n.presets .icons ion-button {\n    --background: var(--ion-background-color);\n    --background-hover: var(--ion-background-color);\n    --border-radius: 4px; }\n\n.presets .icons ion-button.preset-active {\n      --background: var(--ion-color-primary);\n      --background-hover: var(--ion-color-primary);\n      --color: #fff; }\n\n.presets .icontext ion-button {\n    font-size: 0.8rem; }\n\n.presets .icontext ion-button .temp__celcius {\n      font-size: 0.5rem; }\n\n@media (min-width: 375px) {\n  .temp__current {\n    font-size: 4.8rem; }\n    .temp__current .temp__celcius {\n      font-size: 2rem;\n      line-height: 1.8; }\n  .presets ion-button {\n    width: 50px;\n    height: 50px; }\n  .presets .icontext ion-button {\n    font-size: 1rem; }\n    .presets .icontext ion-button .temp__celcius {\n      font-size: 0.7rem; } }\n\n@media (prefers-color-scheme: dark) {\n  .temp,\n  .presets {\n    background: var(--ion-color-step-150); } }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9qb2hhbi9MaWJyYXJ5L01vYmlsZSBEb2N1bWVudHMvY29tfmFwcGxlfkNsb3VkRG9jcy9Qcm9qZWN0cy9EdW90ZWNuby9zbWFydHN5c3RlbS9zcmMvYXBwL3JlbmRlcmluZy90ZW1wZXJhdHVyZS5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBOztFQUdJLG1CQUFtQjtFQUNuQixhQUFhO0VBQ2IsNENBQTRDO0VBQzVDLGdCQUFnQixFQUFBOztBQUVwQjtFQUNJLG9CQUFhO0VBQWIsYUFBYTtFQUNiLHlCQUFtQjtVQUFuQixtQkFBbUI7RUFDbkIsbUJBQW1CLEVBQUE7O0FBRW5CO0lBQ0ksZ0JBQWdCLEVBQUE7O0FBRXBCO0lBQ0ksY0FBYztJQUNkLGlCQUFpQjtJQUNqQixnQkFBZ0IsRUFBQTs7QUFIbkI7TUFNTyxpQkFBaUI7TUFDakIsZ0JBQWdCO01BQ2hCLGdCQUFnQixFQUFBOztBQUd4QjtJQUNJLGtCQUFrQjtJQUNsQixnQkFBZ0I7SUFDaEIsaUJBQWlCO0lBQ2pCLHdCQUF3QixFQUFBOztBQUU1QjtJQUNJLHdCQUF3QixFQUFBOztBQTFCaEM7SUE2QlEsb0JBQWE7SUFBYixhQUFhO0lBQ2IsNEJBQXNCO0lBQXRCLDZCQUFzQjtZQUF0QixzQkFBc0I7SUFDdEIsV0FBVyxFQUFBOztBQS9CbkI7SUFrQ1EseUNBQWE7SUFDYiwrQ0FBbUI7SUFDbkIsb0JBQWdCO0lBQ2hCLDhCQUFRO0lBQ1IsV0FBVztJQUNYLFlBQVk7SUFDWixZQUFZLEVBQUE7O0FBeENwQjtNQTJDWSxlQUFlLEVBQUE7O0FBSTNCO0VBQ0ksaUJBQWlCLEVBQUE7O0FBRHJCO0lBSVEsb0JBQWE7SUFBYixhQUFhO0lBQ2IseUJBQThCO1lBQTlCLDhCQUE4QixFQUFBOztBQUx0QztJQVFRLDhCQUFRO0lBQ1IsV0FBVztJQUNYLFlBQVksRUFBQTs7QUFWcEI7SUFhUSx5Q0FBYTtJQUNiLCtDQUFtQjtJQUNuQixvQkFBZ0IsRUFBQTs7QUFmeEI7TUFrQlksc0NBQWE7TUFDYiw0Q0FBbUI7TUFDbkIsYUFBUSxFQUFBOztBQXBCcEI7SUF3QlEsaUJBQWlCLEVBQUE7O0FBeEJ6QjtNQTJCWSxpQkFBaUIsRUFBQTs7QUFLN0I7RUFFUTtJQUNJLGlCQUFpQixFQUFBO0lBRHBCO01BSU8sZUFBZTtNQUNmLGdCQUFnQixFQUFBO0VBSTVCO0lBRVEsV0FBVztJQUNYLFlBQVksRUFBQTtFQUhwQjtJQU1RLGVBQWUsRUFBQTtJQU52QjtNQVNZLGlCQUFpQixFQUFBLEVBQ3BCOztBQUliO0VBQ0k7O0lBRUkscUNBQXFDLEVBQUEsRUFDeEMiLCJmaWxlIjoic3JjL2FwcC9yZW5kZXJpbmcvdGVtcGVyYXR1cmUuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbIi50ZW1wLFxuLnByZXNldHNcbiB7XG4gICAgbWFyZ2luLWJvdHRvbTogNDBweDtcbiAgICBwYWRkaW5nOiAyMHB4O1xuICAgIGJvcmRlci1yYWRpdXM6IHZhcigtLWR1b3RlY25vLWJvcmRlci1yYWRpdXMpO1xuICAgIGJhY2tncm91bmQ6ICNmZmY7XG59XG4udGVtcCB7XG4gICAgZGlzcGxheTogZmxleDtcbiAgICBhbGlnbi1pdGVtczogY2VudGVyO1xuICAgIG1hcmdpbi1ib3R0b206IDEwcHg7XG5cbiAgICAmX19uYW1lIHtcbiAgICAgICAgZm9udC13ZWlnaHQ6IDcwMDtcbiAgICB9XG4gICAgJl9fY3VycmVudCB7XG4gICAgICAgIG1hcmdpbjogMTVweCAwO1xuICAgICAgICBmb250LXNpemU6IDMuNXJlbTtcbiAgICAgICAgZm9udC13ZWlnaHQ6IDcwMDtcblxuICAgICAgICAudGVtcF9fY2VsY2l1cyB7XG4gICAgICAgICAgICBmb250LXNpemU6IDEuNXJlbTtcbiAgICAgICAgICAgIGxpbmUtaGVpZ2h0OiAxLjg7XG4gICAgICAgICAgICBmb250LXdlaWdodDogNDAwO1xuICAgICAgICB9XG4gICAgfVxuICAgICZfX2NlbGNpdXMge1xuICAgICAgICBtYXJnaW4tYm90dG9tOiA1cHg7XG4gICAgICAgIG1hcmdpbi1sZWZ0OiAycHg7XG4gICAgICAgIGZvbnQtc2l6ZTogMC43cmVtO1xuICAgICAgICB2ZXJ0aWNhbC1hbGlnbjogdGV4dC10b3A7XG4gICAgfVxuICAgICZfX2RhdGEge1xuICAgICAgICB3aWR0aDogY2FsYygxMDAlIC0gOTBweCk7XG4gICAgfVxuICAgIGlvbi1idXR0b25zIHtcbiAgICAgICAgZGlzcGxheTogZmxleDtcbiAgICAgICAgZmxleC1kaXJlY3Rpb246IGNvbHVtbjtcbiAgICAgICAgd2lkdGg6IDkwcHg7XG4gICAgfVxuICAgIGlvbi1idXR0b24ge1xuICAgICAgICAtLWJhY2tncm91bmQ6IHZhcigtLWlvbi1iYWNrZ3JvdW5kLWNvbG9yKTtcbiAgICAgICAgLS1iYWNrZ3JvdW5kLWhvdmVyOiB2YXIoLS1pb24tYmFja2dyb3VuZC1jb2xvcik7XG4gICAgICAgIC0tYm9yZGVyLXJhZGl1czogNHB4O1xuICAgICAgICAtLWNvbG9yOiB2YXIoLS1pb24tY29sb3ItZGFyayk7XG4gICAgICAgIHdpZHRoOiA3MHB4O1xuICAgICAgICBoZWlnaHQ6IDcwcHg7XG4gICAgICAgIG1hcmdpbjogMTBweDtcblxuICAgICAgICBpb24taWNvbiB7XG4gICAgICAgICAgICBmb250LXNpemU6IDNyZW07XG4gICAgICAgIH1cbiAgICB9XG59XG4ucHJlc2V0cyB7XG4gICAgcGFkZGluZy1ib3R0b206IDA7XG5cbiAgICBpb24tYnV0dG9ucyB7XG4gICAgICAgIGRpc3BsYXk6IGZsZXg7XG4gICAgICAgIGp1c3RpZnktY29udGVudDogc3BhY2UtYmV0d2VlbjtcbiAgICB9XG4gICAgaW9uLWJ1dHRvbiB7XG4gICAgICAgIC0tY29sb3I6IHZhcigtLWlvbi1jb2xvci1kYXJrKTtcbiAgICAgICAgd2lkdGg6IDQwcHg7XG4gICAgICAgIGhlaWdodDogNDBweDtcbiAgICB9XG4gICAgLmljb25zIGlvbi1idXR0b24ge1xuICAgICAgICAtLWJhY2tncm91bmQ6IHZhcigtLWlvbi1iYWNrZ3JvdW5kLWNvbG9yKTtcbiAgICAgICAgLS1iYWNrZ3JvdW5kLWhvdmVyOiB2YXIoLS1pb24tYmFja2dyb3VuZC1jb2xvcik7XG4gICAgICAgIC0tYm9yZGVyLXJhZGl1czogNHB4O1xuXG4gICAgICAgICYucHJlc2V0LWFjdGl2ZSB7XG4gICAgICAgICAgICAtLWJhY2tncm91bmQ6IHZhcigtLWlvbi1jb2xvci1wcmltYXJ5KTtcbiAgICAgICAgICAgIC0tYmFja2dyb3VuZC1ob3ZlcjogdmFyKC0taW9uLWNvbG9yLXByaW1hcnkpO1xuICAgICAgICAgICAgLS1jb2xvcjogI2ZmZjtcbiAgICAgICAgfVxuICAgIH1cbiAgICAuaWNvbnRleHQgaW9uLWJ1dHRvbiB7XG4gICAgICAgIGZvbnQtc2l6ZTogMC44cmVtO1xuXG4gICAgICAgIC50ZW1wX19jZWxjaXVzIHtcbiAgICAgICAgICAgIGZvbnQtc2l6ZTogMC41cmVtO1xuICAgICAgICB9XG4gICAgfVxufVxuXG5AbWVkaWEgKG1pbi13aWR0aDogMzc1cHgpIHtcbiAgICAudGVtcCB7XG4gICAgICAgICZfX2N1cnJlbnQge1xuICAgICAgICAgICAgZm9udC1zaXplOiA0LjhyZW07XG5cbiAgICAgICAgICAgIC50ZW1wX19jZWxjaXVzIHtcbiAgICAgICAgICAgICAgICBmb250LXNpemU6IDJyZW07XG4gICAgICAgICAgICAgICAgbGluZS1oZWlnaHQ6IDEuODtcbiAgICAgICAgICAgIH1cbiAgICAgICAgfVxuICAgIH1cbiAgICAucHJlc2V0cyB7XG4gICAgICAgIGlvbi1idXR0b24ge1xuICAgICAgICAgICAgd2lkdGg6IDUwcHg7XG4gICAgICAgICAgICBoZWlnaHQ6IDUwcHg7XG4gICAgICAgIH1cbiAgICAgICAgLmljb250ZXh0IGlvbi1idXR0b24ge1xuICAgICAgICAgICAgZm9udC1zaXplOiAxcmVtO1xuICAgIFxuICAgICAgICAgICAgLnRlbXBfX2NlbGNpdXMge1xuICAgICAgICAgICAgICAgIGZvbnQtc2l6ZTogMC43cmVtO1xuICAgICAgICAgICAgfVxuICAgICAgICB9XG4gICAgfVxufVxuQG1lZGlhIChwcmVmZXJzLWNvbG9yLXNjaGVtZTogZGFyaykge1xuICAgIC50ZW1wLFxuICAgIC5wcmVzZXRzIHtcbiAgICAgICAgYmFja2dyb3VuZDogdmFyKC0taW9uLWNvbG9yLXN0ZXAtMTUwKTtcbiAgICB9XG59Il19 */");
+/* harmony default export */ __webpack_exports__["default"] = (".temp,\n.presets {\n  margin-bottom: 14px;\n  padding: 16px;\n  border-radius: var(--duotecno-border-radius);\n  background: #fff; }\n\n.temp {\n  display: -webkit-box;\n  display: flex;\n  flex-wrap: wrap;\n  -webkit-box-align: center;\n          align-items: center;\n  margin-bottom: 10px; }\n\n.temp__name {\n    font-weight: 700;\n    width: 100%;\n    display: -webkit-box;\n    display: flex;\n    -webkit-box-pack: justify;\n            justify-content: space-between; }\n\n.temp__name ion-icon {\n      font-size: 20px; }\n\n.temp__current {\n    margin: 10px 0;\n    font-size: 60px;\n    line-height: 1;\n    font-weight: normal; }\n\n.temp__current .temp__celcius {\n      font-size: 20px; }\n\n.temp__asking {\n    font-size: 20px; }\n\n.temp__asking .temp__celcius {\n      font-size: 12px; }\n\n.temp__celcius {\n    line-height: 1;\n    margin-bottom: 5px;\n    margin-left: 2px;\n    vertical-align: text-top; }\n\n.temp__data {\n    width: calc(100% - 90px);\n    text-align: center;\n    font-size: 25px; }\n\n.temp ion-buttons {\n    display: -webkit-box;\n    display: flex;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n            flex-direction: column;\n    width: 90px;\n    -webkit-box-align: end;\n            align-items: flex-end; }\n\n.temp ion-button {\n    --background: var(--ion-background-color);\n    --background-hover: var(--ion-background-color);\n    --border-radius: 4px;\n    --color: var(--ion-color-dark);\n    width: 45px;\n    height: 45px;\n    margin: 5px;\n    margin-right: 0; }\n\n.temp ion-button ion-icon {\n      font-size: 3rem; }\n\n.presets {\n  margin-top: -30px;\n  padding-bottom: 0; }\n\n.presets ion-buttons {\n    display: -webkit-box;\n    display: flex;\n    -webkit-box-pack: justify;\n            justify-content: space-between; }\n\n.presets ion-button {\n    --color: var(--ion-color-dark);\n    width: calc(20% - 7px) !important;\n    height: 22px; }\n\n.presets .icons ion-button {\n    --background: var(--ion-background-color);\n    --background-hover: var(--ion-background-color);\n    --border-radius: 4px; }\n\n.presets .icons ion-button.preset-active {\n      --background: var(--ion-color-primary);\n      --background-hover: var(--ion-color-primary);\n      --color: #fff; }\n\n.presets .icontext ion-button {\n    font-size: 12px; }\n\n.presets .icontext ion-button .temp__celcius {\n      font-size: 8px; }\n\n@media (min-width: 375px) {\n  .temp__current {\n    font-size: 60px; }\n    .temp__current .temp__celcius {\n      font-size: 20px;\n      line-height: 1.8; }\n  .presets ion-button {\n    width: 50px;\n    height: 50px; }\n  .presets .icontext ion-button {\n    font-size: 12px; }\n    .presets .icontext ion-button .temp__celcius {\n      font-size: 8px; } }\n\n@media (prefers-color-scheme: dark) {\n  .temp,\n  .presets {\n    background: var(--ion-color-step-150); } }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9qb2hhbi9MaWJyYXJ5L01vYmlsZSBEb2N1bWVudHMvY29tfmFwcGxlfkNsb3VkRG9jcy9Qcm9qZWN0cy9EdW90ZWNuby9zbWFydHN5c3RlbS9zcmMvYXBwL3JlbmRlcmluZy90ZW1wZXJhdHVyZS5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBOztFQUVFLG1CQUFtQjtFQUNuQixhQUFhO0VBQ2IsNENBQTRDO0VBQzVDLGdCQUFnQixFQUFBOztBQUVsQjtFQUNFLG9CQUFhO0VBQWIsYUFBYTtFQUNiLGVBQWU7RUFDZix5QkFBbUI7VUFBbkIsbUJBQW1CO0VBQ25CLG1CQUFtQixFQUFBOztBQUVuQjtJQUNFLGdCQUFnQjtJQUNoQixXQUFXO0lBQ1gsb0JBQWE7SUFBYixhQUFhO0lBQ2IseUJBQThCO1lBQTlCLDhCQUE4QixFQUFBOztBQUovQjtNQUtZLGVBQWUsRUFBQTs7QUFFNUI7SUFDRSxjQUFjO0lBQ2QsZUFBZTtJQUNmLGNBQWM7SUFDZCxtQkFBbUIsRUFBQTs7QUFKcEI7TUFPRyxlQUFlLEVBQUE7O0FBR25CO0lBQ0UsZUFBZSxFQUFBOztBQURoQjtNQUlHLGVBQWUsRUFBQTs7QUFHbkI7SUFDRSxjQUFjO0lBQ2Qsa0JBQWtCO0lBQ2xCLGdCQUFnQjtJQUNoQix3QkFBd0IsRUFBQTs7QUFHMUI7SUFDRSx3QkFBd0I7SUFDeEIsa0JBQWtCO0lBQ2xCLGVBQ0YsRUFBQTs7QUF6Q0Y7SUEyQ0ksb0JBQWE7SUFBYixhQUFhO0lBQ2IsNEJBQXNCO0lBQXRCLDZCQUFzQjtZQUF0QixzQkFBc0I7SUFDdEIsV0FBVztJQUNYLHNCQUFxQjtZQUFyQixxQkFBcUIsRUFBQTs7QUE5Q3pCO0lBaURJLHlDQUFhO0lBQ2IsK0NBQW1CO0lBQ25CLG9CQUFnQjtJQUNoQiw4QkFBUTtJQUNSLFdBQVc7SUFDWCxZQUFZO0lBQ1osV0FBVztJQUNYLGVBQWUsRUFBQTs7QUF4RG5CO01BMERNLGVBQWUsRUFBQTs7QUFJckI7RUFDRSxpQkFBaUI7RUFDakIsaUJBQWlCLEVBQUE7O0FBRm5CO0lBS00sb0JBQWE7SUFBYixhQUFhO0lBQ2IseUJBQThCO1lBQTlCLDhCQUE4QixFQUFBOztBQU5wQztJQVNNLDhCQUFRO0lBQ1IsaUNBQWlDO0lBQUUsWUFFdkMsRUFBQTs7QUFaRjtJQWNJLHlDQUFhO0lBQ2IsK0NBQW1CO0lBQ25CLG9CQUFnQixFQUFBOztBQWhCcEI7TUFtQk0sc0NBQWE7TUFDYiw0Q0FBbUI7TUFDbkIsYUFBUSxFQUFBOztBQXJCZDtJQXlCSSxlQUFlLEVBQUE7O0FBekJuQjtNQTRCTSxjQUNGLEVBQUE7O0FBSUo7RUFFTTtJQUNFLGVBQWUsRUFBQTtJQURoQjtNQUlLLGVBQWU7TUFDZixnQkFBZ0IsRUFBQTtFQUl4QjtJQUVJLFdBQVc7SUFDWCxZQUFZLEVBQUE7RUFIaEI7SUFNSSxlQUFjLEVBQUE7SUFObEI7TUFTUSxjQUFjLEVBQUEsRUFDakI7O0FBSVQ7RUFDSTs7SUFFSSxxQ0FBcUMsRUFBQSxFQUN4QyIsImZpbGUiOiJzcmMvYXBwL3JlbmRlcmluZy90ZW1wZXJhdHVyZS5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLnRlbXAsXG4ucHJlc2V0cyB7XG4gIG1hcmdpbi1ib3R0b206IDE0cHg7XG4gIHBhZGRpbmc6IDE2cHg7XG4gIGJvcmRlci1yYWRpdXM6IHZhcigtLWR1b3RlY25vLWJvcmRlci1yYWRpdXMpO1xuICBiYWNrZ3JvdW5kOiAjZmZmO1xufVxuLnRlbXAge1xuICBkaXNwbGF5OiBmbGV4O1xuICBmbGV4LXdyYXA6IHdyYXA7XG4gIGFsaWduLWl0ZW1zOiBjZW50ZXI7XG4gIG1hcmdpbi1ib3R0b206IDEwcHg7XG5cbiAgJl9fbmFtZSB7XG4gICAgZm9udC13ZWlnaHQ6IDcwMDtcbiAgICB3aWR0aDogMTAwJTtcbiAgICBkaXNwbGF5OiBmbGV4O1xuICAgIGp1c3RpZnktY29udGVudDogc3BhY2UtYmV0d2VlbjtcbiAgICBpb24taWNvbiB7IGZvbnQtc2l6ZTogMjBweDt9XG4gIH1cbiAgJl9fY3VycmVudCB7XG4gICAgbWFyZ2luOiAxMHB4IDA7XG4gICAgZm9udC1zaXplOiA2MHB4O1xuICAgIGxpbmUtaGVpZ2h0OiAxO1xuICAgIGZvbnQtd2VpZ2h0OiBub3JtYWw7XG5cbiAgICAudGVtcF9fY2VsY2l1cyB7XG4gICAgICBmb250LXNpemU6IDIwcHg7XG4gICAgfVxuICB9XG4gICZfX2Fza2luZyB7XG4gICAgZm9udC1zaXplOiAyMHB4O1xuXG4gICAgLnRlbXBfX2NlbGNpdXMge1xuICAgICAgZm9udC1zaXplOiAxMnB4O1xuICAgIH1cbiAgfVxuICAmX19jZWxjaXVzIHtcbiAgICBsaW5lLWhlaWdodDogMTtcbiAgICBtYXJnaW4tYm90dG9tOiA1cHg7XG4gICAgbWFyZ2luLWxlZnQ6IDJweDtcbiAgICB2ZXJ0aWNhbC1hbGlnbjogdGV4dC10b3A7XG4gIH1cblxuICAmX19kYXRhIHtcbiAgICB3aWR0aDogY2FsYygxMDAlIC0gOTBweCk7XG4gICAgdGV4dC1hbGlnbjogY2VudGVyO1xuICAgIGZvbnQtc2l6ZTogMjVweFxuICB9XG4gIGlvbi1idXR0b25zIHtcbiAgICBkaXNwbGF5OiBmbGV4O1xuICAgIGZsZXgtZGlyZWN0aW9uOiBjb2x1bW47XG4gICAgd2lkdGg6IDkwcHg7XG4gICAgYWxpZ24taXRlbXM6IGZsZXgtZW5kO1xuICB9XG4gIGlvbi1idXR0b24ge1xuICAgIC0tYmFja2dyb3VuZDogdmFyKC0taW9uLWJhY2tncm91bmQtY29sb3IpO1xuICAgIC0tYmFja2dyb3VuZC1ob3ZlcjogdmFyKC0taW9uLWJhY2tncm91bmQtY29sb3IpO1xuICAgIC0tYm9yZGVyLXJhZGl1czogNHB4O1xuICAgIC0tY29sb3I6IHZhcigtLWlvbi1jb2xvci1kYXJrKTtcbiAgICB3aWR0aDogNDVweDtcbiAgICBoZWlnaHQ6IDQ1cHg7XG4gICAgbWFyZ2luOiA1cHg7XG4gICAgbWFyZ2luLXJpZ2h0OiAwO1xuICAgIGlvbi1pY29uIHtcbiAgICAgIGZvbnQtc2l6ZTogM3JlbTtcbiAgICB9XG4gIH1cbn1cbi5wcmVzZXRzIHtcbiAgbWFyZ2luLXRvcDogLTMwcHg7XG4gIHBhZGRpbmctYm90dG9tOiAwO1xuXG4gIGlvbi1idXR0b25zIHtcbiAgICAgIGRpc3BsYXk6IGZsZXg7XG4gICAgICBqdXN0aWZ5LWNvbnRlbnQ6IHNwYWNlLWJldHdlZW47XG4gIH1cbiAgaW9uLWJ1dHRvbiB7XG4gICAgICAtLWNvbG9yOiB2YXIoLS1pb24tY29sb3ItZGFyayk7XG4gICAgICB3aWR0aDogY2FsYygyMCUgLSA3cHgpICFpbXBvcnRhbnQ7IGhlaWdodDogMjJweFxuXG4gIH1cbiAgLmljb25zIGlvbi1idXR0b24ge1xuICAgIC0tYmFja2dyb3VuZDogdmFyKC0taW9uLWJhY2tncm91bmQtY29sb3IpO1xuICAgIC0tYmFja2dyb3VuZC1ob3ZlcjogdmFyKC0taW9uLWJhY2tncm91bmQtY29sb3IpO1xuICAgIC0tYm9yZGVyLXJhZGl1czogNHB4O1xuXG4gICAgJi5wcmVzZXQtYWN0aXZlIHtcbiAgICAgIC0tYmFja2dyb3VuZDogdmFyKC0taW9uLWNvbG9yLXByaW1hcnkpO1xuICAgICAgLS1iYWNrZ3JvdW5kLWhvdmVyOiB2YXIoLS1pb24tY29sb3ItcHJpbWFyeSk7XG4gICAgICAtLWNvbG9yOiAjZmZmO1xuICAgIH1cbiAgfVxuICAuaWNvbnRleHQgaW9uLWJ1dHRvbiB7XG4gICAgZm9udC1zaXplOiAxMnB4O1xuXG4gICAgLnRlbXBfX2NlbGNpdXMge1xuICAgICAgZm9udC1zaXplOiA4cHhcbiAgICB9XG4gIH1cbn1cblxuQG1lZGlhIChtaW4td2lkdGg6IDM3NXB4KSB7XG4gICAgLnRlbXAge1xuICAgICAgJl9fY3VycmVudCB7XG4gICAgICAgIGZvbnQtc2l6ZTogNjBweDtcblxuICAgICAgICAudGVtcF9fY2VsY2l1cyB7XG4gICAgICAgICAgICBmb250LXNpemU6IDIwcHg7XG4gICAgICAgICAgICBsaW5lLWhlaWdodDogMS44O1xuICAgICAgICB9XG4gICAgICB9XG4gICAgfVxuICAgIC5wcmVzZXRzIHtcbiAgICAgIGlvbi1idXR0b24ge1xuICAgICAgICB3aWR0aDogNTBweDtcbiAgICAgICAgaGVpZ2h0OiA1MHB4O1xuICAgICAgfVxuICAgICAgLmljb250ZXh0IGlvbi1idXR0b24ge1xuICAgICAgICBmb250LXNpemU6MTJweDtcblxuICAgICAgICAudGVtcF9fY2VsY2l1cyB7XG4gICAgICAgICAgICBmb250LXNpemU6IDhweDtcbiAgICAgICAgfVxuICAgICAgfVxuICAgIH1cbn1cbkBtZWRpYSAocHJlZmVycy1jb2xvci1zY2hlbWU6IGRhcmspIHtcbiAgICAudGVtcCxcbiAgICAucHJlc2V0cyB7XG4gICAgICAgIGJhY2tncm91bmQ6IHZhcigtLWlvbi1jb2xvci1zdGVwLTE1MCk7XG4gICAgfVxufSJdfQ== */");
 
 /***/ }),
 
@@ -1820,6 +2170,9 @@ class TemperatureControl {
     colorPreset(preset) {
         return (this.service.preset === preset) ? 'preset-active' : '';
     }
+    getCurrent() {
+        return this.service.value;
+    }
     getTemp() {
         switch (this.service.preset) {
             case 0: return this.service.sun;
@@ -1827,6 +2180,7 @@ class TemperatureControl {
             case 2: return this.service.moon;
             case 3: return this.service.hmoon;
         }
+        return this.service.sun;
     }
     incDecTemp(inc) {
         this.service.doIncDecPreset(inc);
@@ -1852,13 +2206,13 @@ TemperatureControl = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         inputs: ['service'],
         template: `
     <div class="temp">
+      <div class="temp__name">
+        {{service.getName()}}
+        <ion-icon *ngIf="service.preset >= 0" [color]="colorTemp()" name="thermometer"></ion-icon>
+        <!--span class="right">{{statusTemp()}}</span -->
+      </div>
       <div class="temp__data">
-        <div class="temp__name">
-          {{service.getName()}}
-          <ion-icon *ngIf="service.preset >= 0" class="right" [color]="colorTemp()" name="thermometer"></ion-icon>
-          <!--span class="right">{{statusTemp()}}</span -->
-        </div>
-        <div class="temp__current">{{service.value | temp}}<span class="temp__celcius">°C</span></div>
+        <div class="temp__current">{{getCurrent() | temp}}<span class="temp__celcius">°C</span></div>
         <div class="temp__asking">{{ "Temperature.Asking" |_ }}: {{ getTemp() | temp}}<span class="temp__celcius">°C</span></div>
       </div>
 
@@ -2002,11 +2356,11 @@ UpDownControl = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
       </ion-label>
 
       <ion-buttons slot="end">
-        <ion-button size="small" slot="icon-only" (click)="doDown(service)">
+        <ion-button size="small" slot="icon-only" (click)="doDown()">
           <ion-icon name="caret-down" [ngClass]="colorDown()"></ion-icon></ion-button>
-        <ion-button size="small" slot="icon-only" (click)="doStop(service)">
+        <ion-button size="small" slot="icon-only" (click)="doStop()">
           <ion-icon name="stop"></ion-icon></ion-button>
-        <ion-button size="small" slot="icon-only" (click)="doUp(service)" [ngClass]="colorUp()">
+        <ion-button size="small" slot="icon-only" (click)="doUp()" [ngClass]="colorUp()">
           <ion-icon name="caret-up" [ngClass]="colorUp()"></ion-icon></ion-button>
       </ion-buttons>
     </ion-item>
@@ -2041,7 +2395,7 @@ class Q {
         const len = this.queue.length;
         this.queue.push(fn);
         // start timer to execute this functon if nobody else calls "do"
-        this.logger('*Q* exec, we\'ve put stuff in the queue, start ' + (len ? 'long timer' : 'short timer'));
+        // this.logger('*Q* exec, we\'ve put stuff in the queue, start ' + (len ? 'long timer' : 'short timer'));
         this.startWaiter(len ? 500 : 0);
     }
     endWaiter() {
@@ -2059,7 +2413,7 @@ class Q {
         }, mSecs);
     }
     do() {
-        this.logger('*Q* Do, qlen=' + this.queue.length);
+        // this.logger('*Q* Do, qlen='+ this.queue.length);
         // Get the oldest function and execute
         if (this.queue.length > 0) {
             const fn = this.queue[0];
@@ -2136,6 +2490,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./types */ "./src/app/system/types.ts");
 /* harmony import */ var _logger__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./logger */ "./src/app/system/logger.ts");
 /* harmony import */ var _Q__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Q */ "./src/app/system/Q.ts");
+/* harmony import */ var _core_stdUX__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../core/stdUX */ "./src/app/core/stdUX.ts");
+
 
 
 
@@ -2250,6 +2606,7 @@ class Master extends _logger__WEBPACK_IMPORTED_MODULE_3__["Logger"] {
         this.nodes = [];
         this.nrNodes = 0;
         this.schedule = 0;
+        this.date = null;
         // connection to an IP node / smartbox
         this.socket = null;
         this.isOpen = false;
@@ -2257,14 +2614,6 @@ class Master extends _logger__WEBPACK_IMPORTED_MODULE_3__["Logger"] {
         this.closeRequested = false;
         // incoming data
         this.buffer = "";
-    }
-    toast(message) {
-        return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
-            const toast = yield this.toastCtrl.create({
-                message, duration: 1000, position: "top"
-            });
-            toast.present();
-        });
     }
     getName() {
         return this.config.name || "master";
@@ -2499,11 +2848,19 @@ class Master extends _logger__WEBPACK_IMPORTED_MODULE_3__["Logger"] {
             return false;
         }
         else {
-            this.log("incoming msg=" + Object(_protocol__WEBPACK_IMPORTED_MODULE_1__["recName"])(next.cmd) + ", status=" + next.isStatus +
-                ", data=" + ((next.message) ? next.message.join(",") : "--"));
+            if (next.cmd != _protocol__WEBPACK_IMPORTED_MODULE_1__["Rec"].Internal)
+                this.log("incoming msg=" + Object(_protocol__WEBPACK_IMPORTED_MODULE_1__["recName"])(next.cmd) + ", status=" + next.isStatus +
+                    ", data=" + ((next.message) ? next.message.join(",") : "--"));
+            else
+                this.log("incoming msg=" + Object(_protocol__WEBPACK_IMPORTED_MODULE_1__["recName"])(next.cmd) +
+                    ", data=" + ((next.raw) ? next.raw.substr(0, 50) : "--"));
             this.Q.do();
             if (next.isStatus) {
                 this.receiveStatus(next);
+                // non-unit specific
+            }
+            else if (next.cmd === _protocol__WEBPACK_IMPORTED_MODULE_1__["Rec"].TimeDateStatus) {
+                this.receiveDateTime(next.message);
             }
             else if (next.cmd === _protocol__WEBPACK_IMPORTED_MODULE_1__["Rec"].Info) {
                 this.receiveInfo(next);
@@ -2516,6 +2873,9 @@ class Master extends _logger__WEBPACK_IMPORTED_MODULE_3__["Logger"] {
             }
             else if (next.cmd === _protocol__WEBPACK_IMPORTED_MODULE_1__["Rec"].Internal) {
                 this.receiveInternal(next.raw);
+            }
+            else if ((next.cmd === _protocol__WEBPACK_IMPORTED_MODULE_1__["Rec"].AudioExtendedStatus) || (next.cmd === _protocol__WEBPACK_IMPORTED_MODULE_1__["Rec"].AudioStatus)) {
+                this.receiveAudioStatus(next);
             }
             else {
                 this.log("what to do with: " + next.message);
@@ -2533,7 +2893,10 @@ class Master extends _logger__WEBPACK_IMPORTED_MODULE_3__["Logger"] {
         const type = msg.substr(5, separ - 5);
         const data = msg.substr(type.length + 6, msg.length - type.length - 6);
         if (msg[2] === 'R') {
-            this.system.doReceiveBackup(type, data);
+            this.system.doReceiveBackup(this, data);
+        }
+        else if (msg[2] === 'A') {
+            this.system.doReceiveAudio(this, data);
         }
     }
     ///////////////////
@@ -2542,12 +2905,27 @@ class Master extends _logger__WEBPACK_IMPORTED_MODULE_3__["Logger"] {
     receiveLogin(message) {
         this.isLoggedIn = (message[2] === 1);
         if (this.resolveLogin) {
-            this.toast("Login " + (this.isLoggedIn ? "OK" : "FAIL") + " for " + this.config.address);
+            Object(_core_stdUX__WEBPACK_IMPORTED_MODULE_5__["doToast"])(this.toastCtrl, "Login " + (this.isLoggedIn ? "OK" : "FAIL") + " for " + this.config.address);
             this.resolveLogin(this.isLoggedIn);
             this.resolveLogin = null;
         }
         else {
             this.err("unexpected ConnectStatus ?");
+        }
+    }
+    ///////////
+    // Audio //
+    ///////////
+    requestAudio() {
+        this.system.doRequestAudio(this);
+    }
+    receiveAudioStatus(next) {
+        const unit = this.findUnit(next.message[2], next.message[3]);
+        if (unit) {
+            _protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].receiveAudioStatus(unit, next);
+        }
+        else {
+            this.err("could not find unit (" + Object(_types__WEBPACK_IMPORTED_MODULE_2__["hex"])(next.message[2]) + ", " + Object(_types__WEBPACK_IMPORTED_MODULE_2__["hex"])(next.message[3]) + ")");
         }
     }
     ///////////////////
@@ -2571,6 +2949,11 @@ class Master extends _logger__WEBPACK_IMPORTED_MODULE_3__["Logger"] {
     receiveSchedule(message) {
         this.schedule = message[2];
         this.info("received week schedule = " + this.schedule);
+    }
+    receiveDateTime(message) {
+        // 71,0,9,37,3,3,4,3,21,20 -> 09:37:03 Wednesday(3) 4 march 2120
+        this.date = new Date((message[8] - 1) * 100 + message[9], message[7] - 1, message[6], message[2], message[3], message[4]);
+        this.log("Received date/time: " + this.date);
     }
     receiveDBInfo(message) {
         const dbInfo = _protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].makeDBInfo(message);
@@ -2657,7 +3040,8 @@ class Master extends _logger__WEBPACK_IMPORTED_MODULE_3__["Logger"] {
     getDatabase(readDB = false) {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
             this.nodes = [];
-            if (readDB) {
+            const hasNames = this.system.config.cunits.filter(u => this.same(u.masterAddress, u.masterPort)).some(u => u.name);
+            if (readDB || !hasNames) {
                 yield this.fetchDbInfo();
                 // upon reception of the DB info, 
                 //   getNode info will be called, 
@@ -2798,6 +3182,7 @@ class Master extends _logger__WEBPACK_IMPORTED_MODULE_3__["Logger"] {
     }
     requestStatus() {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
+            this.log("requesting status of all units");
             for (let nodeInx = 0; nodeInx < this.nodes.length; nodeInx++) {
                 const node = this.nodes[nodeInx];
                 if (node.active) {
@@ -2864,6 +3249,18 @@ class Master extends _logger__WEBPACK_IMPORTED_MODULE_3__["Logger"] {
             this.info("set temp preset of " + unit.node.getName() + "-" + unit.getName() + ": " + (inc ? "up" : "down"));
         });
     }
+    setAudioSrcDest(unit, source, destination) {
+        return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
+            yield this.send(_protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildAudioSrcDest(unit.node, unit, source, destination));
+            this.info("send source " + source + " to " + destination + " of " + unit.getName());
+        });
+    }
+    sendAudioAction(unit, action, fnc) {
+        return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
+            yield this.send(_protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildAudioAction(unit.node, unit, action, fnc));
+            this.info("send action " + action + " to " + unit.getName());
+        });
+    }
 }
 
 
@@ -2873,7 +3270,7 @@ class Master extends _logger__WEBPACK_IMPORTED_MODULE_3__["Logger"] {
 /*!************************************!*\
   !*** ./src/app/system/protocol.ts ***!
   \************************************/
-/*! exports provided: cmdName, Rec, recName, NodeType, UnitState, UnitMotorCmd, UnitType, UnitExtendedType, Node, Unit, Protocol */
+/*! exports provided: cmdName, Rec, recName, UnitState, UnitMotorCmd, Node, Unit, Protocol */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2881,11 +3278,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "cmdName", function() { return cmdName; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Rec", function() { return Rec; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "recName", function() { return recName; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NodeType", function() { return NodeType; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UnitState", function() { return UnitState; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UnitMotorCmd", function() { return UnitMotorCmd; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UnitType", function() { return UnitType; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UnitExtendedType", function() { return UnitExtendedType; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Node", function() { return Node; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Unit", function() { return Unit; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Protocol", function() { return Protocol; });
@@ -2906,15 +3300,18 @@ __webpack_require__.r(__webpack_exports__);
 var Cmd;
 (function (Cmd) {
     Cmd[Cmd["Internal"] = 9] = "Internal";
+    Cmd[Cmd["SetBasicAudio"] = 159] = "SetBasicAudio";
+    Cmd[Cmd["SetExtendedAudio"] = 208] = "SetExtendedAudio";
+    Cmd[Cmd["SetAVMatrix"] = 202] = "SetAVMatrix";
     Cmd[Cmd["SetSwitch"] = 163] = "SetSwitch";
     Cmd[Cmd["SetDimmer"] = 162] = "SetDimmer";
     Cmd[Cmd["SetControl"] = 168] = "SetControl";
     Cmd[Cmd["SetMotor"] = 182] = "SetMotor";
     Cmd[Cmd["SetSensor"] = 136] = "SetSensor";
+    Cmd[Cmd["SetSchedule"] = 217] = "SetSchedule";
     Cmd[Cmd["Login"] = 214] = "Login";
     Cmd[Cmd["Heartbeat"] = 215] = "Heartbeat";
     Cmd[Cmd["DatabaseInfo"] = 209] = "DatabaseInfo";
-    Cmd[Cmd["SetSchedule"] = 217] = "SetSchedule";
 })(Cmd || (Cmd = {}));
 // for Set Switch/Dimmer/Control
 const reqDim = 3;
@@ -2931,7 +3328,7 @@ const reqUnitStatus = 3;
 // for Schedule
 const reqSchedule = 218;
 function cmdName(cmd) {
-    return Cmd[cmd] || 'cmd' + cmd;
+    return Cmd[cmd] || "cmd" + cmd;
 }
 //////////////////////
 // Received results //
@@ -2945,6 +3342,9 @@ var Rec;
     Rec[Rec["Internal"] = 9] = "Internal";
     Rec[Rec["ErrorMessage"] = 17] = "ErrorMessage";
     Rec[Rec["ConnectStatus"] = 67] = "ConnectStatus";
+    Rec[Rec["AudioStatus"] = 23] = "AudioStatus";
+    Rec[Rec["AudioExtendedStatus"] = 70] = "AudioExtendedStatus";
+    Rec[Rec["TimeDateStatus"] = 71] = "TimeDateStatus";
     Rec[Rec["ScheduleStatus"] = 73] = "ScheduleStatus";
     // return info from recDBInfo
     Rec[Rec["Info"] = 64] = "Info";
@@ -2959,16 +3359,6 @@ var Rec;
 function recName(rec) {
     return Rec[rec] || 'rec' + rec;
 }
-// Node types
-var NodeType;
-(function (NodeType) {
-    NodeType[NodeType["kNoNode"] = 0] = "kNoNode";
-    NodeType[NodeType["kStandardNode"] = 1] = "kStandardNode";
-    NodeType[NodeType["kGatewayNode"] = 4] = "kGatewayNode";
-    NodeType[NodeType["kModemNode"] = 8] = "kModemNode";
-    NodeType[NodeType["kGUINode"] = 32] = "kGUINode";
-})(NodeType || (NodeType = {}));
-;
 // States
 var UnitState;
 (function (UnitState) {
@@ -2986,50 +3376,6 @@ var UnitMotorCmd;
     UnitMotorCmd[UnitMotorCmd["kStop"] = 3] = "kStop";
 })(UnitMotorCmd || (UnitMotorCmd = {}));
 ;
-var UnitType;
-(function (UnitType) {
-    UnitType[UnitType["kNoType"] = 0] = "kNoType";
-    UnitType[UnitType["kDimmer"] = 1] = "kDimmer";
-    UnitType[UnitType["kSwitch"] = 2] = "kSwitch";
-    UnitType[UnitType["kInput"] = 3] = "kInput";
-    UnitType[UnitType["kTemperature"] = 4] = "kTemperature";
-    UnitType[UnitType["kExtendedAudio"] = 5] = "kExtendedAudio";
-    UnitType[UnitType["kMood"] = 7] = "kMood";
-    UnitType[UnitType["kSwitchingMotor"] = 8] = "kSwitchingMotor";
-    UnitType[UnitType["kAudio"] = 10] = "kAudio";
-    UnitType[UnitType["kAV"] = 11] = "kAV";
-    UnitType[UnitType["kIRTX"] = 12] = "kIRTX";
-    UnitType[UnitType["kVideo"] = 14] = "kVideo";
-})(UnitType || (UnitType = {}));
-;
-var UnitExtendedType;
-(function (UnitExtendedType) {
-    UnitExtendedType[UnitExtendedType["kNoType"] = 0] = "kNoType";
-    UnitExtendedType[UnitExtendedType["kDimmer"] = 1] = "kDimmer";
-    UnitExtendedType[UnitExtendedType["kSwitch"] = 2] = "kSwitch";
-    UnitExtendedType[UnitExtendedType["kInput"] = 3] = "kInput";
-    UnitExtendedType[UnitExtendedType["kTemperature"] = 4] = "kTemperature";
-    UnitExtendedType[UnitExtendedType["kExtendedAudio"] = 5] = "kExtendedAudio";
-    UnitExtendedType[UnitExtendedType["kMood"] = 7] = "kMood";
-    UnitExtendedType[UnitExtendedType["kSwitchingMotor"] = 8] = "kSwitchingMotor";
-    UnitExtendedType[UnitExtendedType["kAudio"] = 10] = "kAudio";
-    UnitExtendedType[UnitExtendedType["kAV"] = 11] = "kAV";
-    UnitExtendedType[UnitExtendedType["kIRTX"] = 12] = "kIRTX";
-    UnitExtendedType[UnitExtendedType["kVideo"] = 14] = "kVideo";
-    UnitExtendedType[UnitExtendedType["kLightbulb"] = 101] = "kLightbulb";
-    UnitExtendedType[UnitExtendedType["kCondition"] = 102] = "kCondition";
-    UnitExtendedType[UnitExtendedType["kGarageDoor"] = 201] = "kGarageDoor";
-    UnitExtendedType[UnitExtendedType["kDoor"] = 202] = "kDoor";
-    UnitExtendedType[UnitExtendedType["kLock"] = 203] = "kLock";
-    UnitExtendedType[UnitExtendedType["kUnlocker"] = 204] = "kUnlocker";
-})(UnitExtendedType || (UnitExtendedType = {}));
-;
-// kLightbulb  == kSwitch with no "*" or "$" in the name
-// kDoor == kSwitchingMotor with "*" in the name
-// kGarageDoor == kSwitchingMotor with "$" in the name
-// kCondition  == kMood with "*" in the name
-// kLock == kMood with $ in the name
-// kUnlocker = kMood with $ in the name
 /////////////////////////
 // Node in the network //
 /////////////////////////
@@ -3047,10 +3393,10 @@ class Node {
     }
     typeName() {
         switch (this.type) {
-            case NodeType.kStandardNode: return 'Standard';
-            case NodeType.kGatewayNode: return 'Gateway';
-            case NodeType.kModemNode: return 'Modem';
-            case NodeType.kGUINode: return 'GUI';
+            case _types__WEBPACK_IMPORTED_MODULE_1__["NodeType"].kStandardNode: return 'Standard';
+            case _types__WEBPACK_IMPORTED_MODULE_1__["NodeType"].kGatewayNode: return 'Gateway';
+            case _types__WEBPACK_IMPORTED_MODULE_1__["NodeType"].kModemNode: return 'Modem';
+            case _types__WEBPACK_IMPORTED_MODULE_1__["NodeType"].kGUINode: return 'GUI';
             default: return 'Unknown node type (' + this.type + ')';
         }
     }
@@ -3087,6 +3433,8 @@ class Unit {
         // delete all type modifiers ( $, * and ! )
         // if the display name is empty make a N[nodeAdr]-U[unitAdr] name.
         this.displayName = this.name.replace(/\$|\*|\!/g, '') || this.getSerialNr();
+        if (this.isMedia()) {
+        }
     }
     hasSpecials() {
         let special = this.name.indexOf("|20");
@@ -3112,7 +3460,7 @@ class Unit {
         }
     }
     sameValue(value) {
-        if (this.type === UnitType.kSwitchingMotor) {
+        if (this.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kSwitchingMotor) {
             return (((this.value == UnitState.kOpening) && (value == 4)) ||
                 ((this.value == UnitState.kClosing) && (value == 5)) ||
                 ((this.value <= UnitState.kOpen) && (value == 3)));
@@ -3123,23 +3471,23 @@ class Unit {
     }
     typeName() {
         switch (this.getType()) {
-            case UnitExtendedType.kDimmer: return 'Dimmer';
-            case UnitExtendedType.kSwitch: return 'Switch/Relay';
-            case UnitExtendedType.kLightbulb: return 'Lightbulb';
-            case UnitExtendedType.kInput: return 'Control input';
-            case UnitExtendedType.kTemperature: return 'Temperature sensor';
-            case UnitExtendedType.kExtendedAudio: return 'Extended audio';
-            case UnitExtendedType.kMood: return 'Virtual mood';
-            case UnitExtendedType.kCondition: return 'Condition';
-            case UnitExtendedType.kSwitchingMotor: return 'Switch motor';
-            case UnitExtendedType.kGarageDoor: return 'Garagedoor';
-            case UnitExtendedType.kDoor: return 'Door';
-            case UnitExtendedType.kLock: return 'Lock';
-            case UnitExtendedType.kUnlocker: return 'Unlocker';
-            case UnitExtendedType.kAudio: return 'Basic audio';
-            case UnitExtendedType.kAV: return 'AV Matrix';
-            case UnitExtendedType.kIRTX: return 'IRTX';
-            case UnitExtendedType.kVideo: return 'Video multiplexer';
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kDimmer: return 'Dimmer';
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kSwitch: return 'Switch/Relay';
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kLightbulb: return 'Lightbulb';
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kInput: return 'Control input';
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kTemperature: return 'Temperature sensor';
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kExtendedAudio: return 'Extended audio';
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kMood: return 'Virtual mood';
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kCondition: return 'Condition';
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kSwitchingMotor: return 'Switch motor';
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kGarageDoor: return 'Garagedoor';
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kDoor: return 'Door';
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kLock: return 'Lock';
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kUnlocker: return 'Unlocker';
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kAudio: return 'Basic audio';
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kAV: return 'AV Matrix';
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kIRTX: return 'IRTX';
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kVideo: return 'Video multiplexer';
             default: return 'Unknown unit type (' + this.type + ')';
         }
     }
@@ -3160,17 +3508,17 @@ class Unit {
     getSort() {
         const name = this.getName().toLowerCase();
         switch (this.type) {
-            case UnitType.kTemperature: return "01|" + name;
-            case UnitType.kSwitchingMotor: return "02|" + name;
-            case UnitType.kDimmer: return "03|" + name;
-            case UnitType.kSwitch: return "04|" + name;
-            case UnitType.kMood: return "09|" + name;
-            case UnitType.kInput: return "11|" + name;
-            case UnitType.kExtendedAudio: "12|" + name;
-            case UnitType.kAudio: return "12|" + name;
-            case UnitType.kAV: return "13|" + name;
-            case UnitType.kIRTX: return "19|" + name;
-            case UnitType.kVideo: return "14|" + name;
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kTemperature: return "01|" + name;
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kSwitchingMotor: return "02|" + name;
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kDimmer: return "03|" + name;
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kSwitch: return "04|" + name;
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kMood: return "09|" + name;
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kInput: return "11|" + name;
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kExtendedAudio: "12|" + name;
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kAudio: return "12|" + name;
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kAV: return "13|" + name;
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kIRTX: return "19|" + name;
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kVideo: return "14|" + name;
             default: return "99|" + name;
         }
     }
@@ -3201,45 +3549,45 @@ class Unit {
         // Switch //
         ////////////
         // Switch -> with * or STK -> Switch
-        if ((this.type === UnitType.kSwitch) &&
+        if ((this.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kSwitch) &&
             ((this.name.indexOf("STK") >= 0) || (this.name.indexOf("stk") >= 0) ||
                 (this.name.indexOf("Stk") >= 0) || (this.name.indexOf("*") >= 0)))
-            return UnitExtendedType.kSwitch;
+            return _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kSwitch;
         // Switch -> with $ -> Door
-        if ((this.type === UnitType.kSwitch) &&
+        if ((this.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kSwitch) &&
             (this.name.indexOf("$") >= 0))
-            return UnitExtendedType.kLock;
+            return _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kLock;
         // Switch -> default -> LightBulb
-        if (this.type === UnitType.kSwitch)
-            return UnitExtendedType.kLightbulb;
+        if (this.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kSwitch)
+            return _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kLightbulb;
         /////////////
         // Up/Down //
         /////////////
         // UpDown -> with $ -> GarageDoor
-        if ((this.type === UnitType.kSwitchingMotor) &&
+        if ((this.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kSwitchingMotor) &&
             (this.name.indexOf("$") >= 0))
-            return UnitExtendedType.kGarageDoor;
+            return _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kGarageDoor;
         // UpDown with * -> Door
-        if ((this.type === UnitType.kSwitchingMotor) &&
+        if ((this.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kSwitchingMotor) &&
             (this.name.indexOf("*") >= 0))
-            return UnitExtendedType.kDoor;
+            return _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kDoor;
         // UpDown -> default -> WindowCovering
-        if (this.type === UnitType.kSwitchingMotor)
-            return UnitExtendedType.kSwitchingMotor;
+        if (this.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kSwitchingMotor)
+            return _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kSwitchingMotor;
         ///////////
         // Moods //
         ///////////
         // Mood -> with $ -> Lock (re-closes after 1.2 secs)
-        if ((this.type === UnitType.kMood) &&
+        if ((this.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kMood) &&
             (this.name.indexOf("$") >= 0))
-            return UnitExtendedType.kUnlocker;
+            return _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kUnlocker;
         // Mood -> with * -> Mood with state
-        if ((this.type === UnitType.kMood) &&
+        if ((this.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kMood) &&
             (this.name.indexOf("*") >= 0))
-            return UnitExtendedType.kCondition;
+            return _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kCondition;
         // Mood -> default -> Mood (turn off after 1.2 secs)
-        if (this.type === UnitType.kMood)
-            return UnitExtendedType.kMood;
+        if (this.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kMood)
+            return _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kMood;
         ///////////////////////
         // All other default //
         ///////////////////////
@@ -3260,22 +3608,25 @@ class Unit {
         return this.isSwitch() || this.isDimmer() || this.isUpDown();
     }
     isSwitch() {
-        return (this.type === UnitType.kSwitch);
+        return (this.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kSwitch);
     }
     isMood() {
-        return (this.type === UnitType.kMood);
+        return (this.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kMood);
     }
     isInput() {
-        return (this.type === UnitType.kInput);
+        return (this.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kInput);
     }
     isTemperature() {
-        return (this.type === UnitType.kTemperature);
+        return (this.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kTemperature);
     }
     isDimmer() {
-        return (this.type === UnitType.kDimmer);
+        return (this.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kDimmer);
     }
     isUpDown() {
-        return (this.type === UnitType.kSwitchingMotor);
+        return (this.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kSwitchingMotor);
+    }
+    isMedia() {
+        return (this.type == _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kAudio) || (this.type == _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kAV) || (this.type == _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kExtendedAudio) || (this.type == _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kVideo);
     }
     setPreset(preset, temp) {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
@@ -3297,6 +3648,16 @@ class Unit {
             yield this.node.master.doIncDecPreset(this, inc);
         });
     }
+    audioSrcDest(source, destination) {
+        return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
+            yield this.node.master.setAudioSrcDest(this, source, destination);
+        });
+    }
+    audioAction(action, fnc) {
+        return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
+            yield this.node.master.sendAudioAction(this, action, fnc);
+        });
+    }
     inMultiNode() {
         return this.node.inMultiNode();
     }
@@ -3312,25 +3673,25 @@ class Unit {
     }
     getDispayState() {
         switch (this.getType()) {
-            case UnitExtendedType.kDimmer:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kDimmer:
                 return ((this.status) ? 'on' : 'off') + ' (' + this.value + '%)';
-            case UnitExtendedType.kSwitch:
-            case UnitExtendedType.kLightbulb:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kSwitch:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kLightbulb:
                 return (this.status) ? 'on' : 'off';
-            case UnitExtendedType.kInput:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kInput:
                 return (this.status) ? 'on' : 'off';
-            case UnitExtendedType.kTemperature:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kTemperature:
                 return isNaN(this.value) ? "-" : ((this.value / 10.0) + 'C');
-            case UnitExtendedType.kCondition:
-            case UnitExtendedType.kMood:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kCondition:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kMood:
                 return (this.status) ? 'on' : 'off';
-            case UnitExtendedType.kLock:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kLock:
                 return (this.status) ? 'locked' : 'unlocked';
-            case UnitExtendedType.kUnlocker:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kUnlocker:
                 return (this.status) ? 'unlocking' : 'locked';
-            case UnitExtendedType.kGarageDoor:
-            case UnitExtendedType.kDoor:
-            case UnitExtendedType.kSwitchingMotor:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kGarageDoor:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kDoor:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kSwitchingMotor:
                 if (this.status === UnitState.kOpening) {
                     return 'opening';
                 }
@@ -3416,7 +3777,9 @@ const Protocol = {
     // Socket methods //
     ////////////////////
     write: function (socket /* | Socket */, data) {
-        const cmd = parseInt(data[0]);
+        let cmd = parseInt(data[0]);
+        if (isNaN(cmd))
+            cmd = data[0];
         if (data instanceof Array) {
             data = data.join(',');
         }
@@ -3510,33 +3873,61 @@ const Protocol = {
         return [reqSchedule, 0];
     },
     getCmdAndMethod: function (unit, value) {
+        const updown = (bump, value) => {
+            if ((bump == -1) && (value > 0))
+                return value - 1;
+            else if ((bump == -2) && (value < 100))
+                return value + 1;
+            else
+                return value;
+        };
         switch (unit.type) {
-            case UnitType.kDimmer:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kDimmer:
                 if (typeof value === "boolean")
                     return { cmd: Cmd.SetDimmer, method: (value) ? reqOn : reqOff };
                 else if (value <= 0)
                     return { cmd: Cmd.SetDimmer, method: reqOff };
                 else
                     return { cmd: Cmd.SetDimmer, method: reqDim, value: Math.max(Math.min(value, 99), 1) };
-            case UnitType.kSwitch:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kSwitch:
                 return { cmd: Cmd.SetSwitch, method: (value) ? 3 : 2 };
-            case UnitType.kInput:
-            case UnitType.kMood:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kInput:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kMood:
                 if (value < 0)
                     return { cmd: Cmd.SetControl, method: 2 }; // short pulse
                 else
                     return { cmd: Cmd.SetControl, method: 3, value: (value) ? 1 : 0 }; // long event + 0/1
-            case UnitType.kSwitchingMotor:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kSwitchingMotor:
                 return { cmd: Cmd.SetMotor, method: value }; // 5 close, 4 open, 3 is stop
-            case UnitType.kTemperature:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kTemperature:
                 return { cmd: Cmd.SetSensor, method: 13 /* select preset */, value };
-            case UnitType.kExtendedAudio:
-            case UnitType.kAudio:
-            case UnitType.kAV:
-            case UnitType.kIRTX:
-            case UnitType.kVideo:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kAudio:
+                if (typeof value === "boolean")
+                    return { cmd: Cmd.SetBasicAudio, method: value ? 4 : 5 };
+                else
+                    return { cmd: Cmd.SetBasicAudio, method: (value == -1) ? 9 : 8 };
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kExtendedAudio:
+                if (typeof value === "boolean")
+                    return { cmd: Cmd.SetExtendedAudio, method: value ? 4 : 5,
+                        data: [unit.destinationId] };
+                else if (value < 0) // -1 = down, -2 = up
+                    return { cmd: Cmd.SetExtendedAudio, method: 12,
+                        data: [unit.destinationId, updown(value, unit.value)] };
+                else
+                    return { cmd: Cmd.SetExtendedAudio, method: 12,
+                        data: [unit.destinationId, unit.value] };
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kAV:
+                const source = (unit.destination) ? unit.destination.source : 255;
+                if (typeof value === "boolean")
+                    return { cmd: Cmd.SetAVMatrix, method: value ? 2 : 3, data: [unit.destinationId, source] }; // connect - disconnect
+                else if (value < 0) // -1 = down, -2 = up
+                    return { cmd: Cmd.SetAVMatrix, method: (value == -1) ? 8 : 7, data: [unit.destinationId] }; // volume inc/dec
+                else
+                    return { cmd: Cmd.SetAVMatrix, method: 4, data: [unit.destinationId, value] }; // volume
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kIRTX:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kVideo:
             default: // "Unknown unit type (" + unit.type + ")";
-                this.err('setting ' + unit.type + ' not yet implemented');
+                console.log('setting ' + unit.type + ' not yet implemented');
                 return { cmd: 0, method: 0, value: 0 };
         }
     },
@@ -3546,6 +3937,9 @@ const Protocol = {
             params.message = [params.cmd, params.method, node.logicalAddress, unit.logicalAddress];
             if (typeof params.value != 'undefined') {
                 params.message.push(params.value);
+            }
+            if (typeof params.data != 'undefined') {
+                params.message.push(...params.data);
             }
             // some need a requestStatus afterwards
             params.reqStatus = ((params.cmd === Cmd.SetDimmer) && (params.method === reqDim));
@@ -3569,6 +3963,67 @@ const Protocol = {
     /* Schedule commands */
     buildSendSchedule(schedule) {
         return [Cmd.SetSchedule, 0, Math.max(0, Math.min(3, schedule))];
+    },
+    /* Audio */
+    buildAudioSrcDest(node, unit, source, destination) {
+        if (unit.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kAudio) {
+            return [Cmd.SetBasicAudio, 1, node.logicalAddress, unit.logicalAddress,
+                Math.max(0, Math.min(7, source))];
+        }
+        else if (unit.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kExtendedAudio) {
+            return [Cmd.SetExtendedAudio, 1, node.logicalAddress, unit.logicalAddress,
+                Math.max(0, Math.min(3, destination)), Math.max(0, Math.min(7, source))];
+        }
+        else {
+            console.log('set SrcDest ' + unit.type + ' not yet implemented');
+            return null;
+        }
+    },
+    actions: {
+        basic: {
+            'back': 38,
+            'skipback': 36,
+            'play': 32,
+            'pause': 34,
+            'stop': 33,
+            'skipforward': 35,
+            'forward': 37,
+            'function': 23,
+            'functions': { '1': 0, '2': 1, '3': 2, '4': 3, '5': 4, '6': 5, '7': 6, '8': 7, '9': 8, '0': 9,
+                'up': 10, 'down': 11, 'left': 12, 'right': 13, 'enter': 14, '-': 15 }
+        },
+        extended: {
+            'back': 21,
+            'skipback': 19,
+            'play': 15,
+            'pause': 17,
+            'stop': 16,
+            'skipforward': 18,
+            'forward': 22,
+            'function': 24,
+            'functions': { '1': 0, '2': 1, '3': 2, '4': 3, '5': 4, '6': 5, '7': 6, '8': 7, '9': 8, '0': 9,
+                'up': 10, 'down': 11, 'left': 12, 'right': 13, 'enter': 14, '-': 15 }
+        }
+    },
+    buildAudioAction(node, unit, action, fnc) {
+        let msg = null;
+        if (unit.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kAudio) {
+            msg = [Cmd.SetBasicAudio, this.actions.basic[action], node.logicalAddress, unit.logicalAddress];
+            if (fnc) {
+                msg.push(this.actions.basic.functions[fnc]);
+            }
+        }
+        else if (unit.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kExtendedAudio) {
+            msg = [Cmd.SetExtendedAudio, this.actions.extended[action], node.logicalAddress, unit.logicalAddress,
+                unit.destinationId];
+            if (fnc) {
+                msg.push(this.actions.extended.functions[fnc]);
+            }
+        }
+        else {
+            console.log('send Action ' + unit.type + ' not yet implemented');
+        }
+        return msg;
     },
     ///////////////////
     // Received info //
@@ -3613,6 +4068,36 @@ const Protocol = {
             unit.value = next.message[6];
         }
         this.emitter.emit('update', unit);
+    },
+    receiveAudioStatus: function (unit, next) {
+        // 70,0,252,102,5,0,0,255,255,255,255,0,14,0,0
+        // 70,0,252,102,5,0,1,0,0,255,255,11,12,0,0
+        // 70,0,252,101,5,0,0,255,255,255,255,10,0,0,0 -> off
+        unit.destinationId = (next.cmd === Rec.AudioExtendedStatus) ? next.message[6] : 0;
+        if ((unit.destinations) && (next.cmd === Rec.AudioExtendedStatus)) {
+            unit.destinations.forEach(destination => {
+                destination.volume = next.message[destination.id + 11];
+                console.log("source " + destination.id + " = " + next.message[destination.id + 7]);
+                destination.source = next.message[destination.id + 7];
+                if (destination.id == unit.destinationId)
+                    unit.destination = destination;
+            });
+        }
+        if ((unit.destinations) && (next.cmd === Rec.AudioStatus)) {
+            unit.destination = unit.destination[0];
+            unit.destination.volume = next.message[7];
+            unit.destination.source = next.message[6];
+            unit.destination.disc = (next.message[8] != 255) ? next.message[8] + 1 : 0;
+            unit.destination.track = (next.message[9] != 255) ? next.message[9] + 1 : 0;
+            unit.destination.preset = (next.message[10] != 255) ? next.message[10] + 1 : 0;
+            unit.destination.frequency = (next.message[11] != 255) ? next.message[11] + "." + Object(_types__WEBPACK_IMPORTED_MODULE_1__["two"])(next.message[12]) : "";
+        }
+        // reflect volume and state of current destination in the value of the unit
+        if (unit.destination) {
+            unit.value = unit.destination.volume;
+            unit.status = (unit.destination.source == 255) ? 0 : 1;
+        }
+        console.log("receiveAudioStatus: ", unit);
     },
     makeDBInfo(res) {
         return { nrNodes: res[2] };
@@ -3667,6 +4152,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/fesm2015/ionic-angular.js");
 /* harmony import */ var events__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! events */ "./node_modules/events/events.js");
 /* harmony import */ var events__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(events__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _core_stdUX__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../core/stdUX */ "./src/app/core/stdUX.ts");
+
 
 
 
@@ -3688,6 +4175,8 @@ let System = class System extends _logger__WEBPACK_IMPORTED_MODULE_5__["Logger"]
         this.controls = [];
         this.temperatures = [];
         this.stores = [];
+        this.media = [];
+        this.rooms = [];
         this.trigger = null;
         this.emitter = new events__WEBPACK_IMPORTED_MODULE_7__["EventEmitter"]();
         _protocol__WEBPACK_IMPORTED_MODULE_4__["Protocol"].setEmitter(this.emitter);
@@ -3695,6 +4184,7 @@ let System = class System extends _logger__WEBPACK_IMPORTED_MODULE_5__["Logger"]
         this.readConfig();
         this.readGroups();
         this.readScenes();
+        this.readAudio();
         // open all masters listed in the config
         this.masters = [];
         this.openMasters();
@@ -3991,12 +4481,13 @@ let System = class System extends _logger__WEBPACK_IMPORTED_MODULE_5__["Logger"]
                 return 1;
             return 0;
         }
-        // sort masters, nodes in masters, units in nodes.
+        // sort masters, nodes in masters, units in nodes + get State
         this.log("rebuildMasters/Nodes");
         this.masters.sort(compare);
         this.masters.forEach((m) => {
             m.nodes.sort(compare);
             m.nodes.forEach((n) => n.units.sort(compare));
+            m.requestStatus();
         });
         // sort selected controls, temperatures and moods.
         this.log("rebuildServices");
@@ -4005,6 +4496,16 @@ let System = class System extends _logger__WEBPACK_IMPORTED_MODULE_5__["Logger"]
         this.temperatures = services.filter(s => s.isTemperature()).sort(compareN);
         this.moods = services.filter(s => (s.isMood() || s.isInput())).sort(compareN);
         this.stores = this.controls.filter(s => s.isUpDown());
+        this.media = services.filter(s => s.isMedia());
+        // attach the rooms to the units
+        this.media.forEach(s => {
+            const room = this.rooms.find(room => s.isUnit(room.master, room.port, room.nodeaddress, room.unitaddress));
+            console.log("attached to " + s.name, room);
+            if (room) {
+                s.destinations = room.destinations;
+                s.destination = null;
+            }
+        });
         this.emitter.emit('refresh');
     }
     ////////////
@@ -4018,14 +4519,15 @@ let System = class System extends _logger__WEBPACK_IMPORTED_MODULE_5__["Logger"]
         const scene = this.scenes.find(s => unit.isUnit(s.trigger.masterAddress, s.trigger.masterPort, s.trigger.logicalNodeAddress, s.trigger.logicalAddress));
         if (scene) {
             this.log("scene found -> " + scene.name + ", value = " + scene.trigger.value + " unit = " + unit.value);
-            console.log(scene);
             //if (unit.sameValue(scene.trigger.value)) {
             scene.units.forEach(u => {
-                this.log("Find unit: " + u.masterAddress + ", " + u.masterPort + ", " + u.logicalNodeAddress + ", " + u.logicalAddress);
                 const unit = this.findUnit(u.masterAddress, u.masterPort, u.logicalNodeAddress, u.logicalAddress);
                 if (unit) {
-                    this.log(" - unit found " + unit.getDisplayName() + " -> " + u.value);
+                    this.log(" - unit: " + unit.getDisplayName() + " -> " + u.value);
                     unit.setState(u.value);
+                }
+                else {
+                    this.log(" - !!! Didn't find unit: " + u.masterAddress + ", " + u.masterPort + ", " + u.logicalNodeAddress + ", " + u.logicalAddress);
                 }
             });
             //}
@@ -4061,6 +4563,10 @@ let System = class System extends _logger__WEBPACK_IMPORTED_MODULE_5__["Logger"]
         if (master) {
             _protocol__WEBPACK_IMPORTED_MODULE_4__["Protocol"].write(master.getSocket(), '[9,B-' + master.getAddress() + '-' + name + '-system:' +
                 this.toTransport({ groups: this.groups, scenes: this.scenes, config: this.config }) + ']');
+            Object(_core_stdUX__WEBPACK_IMPORTED_MODULE_8__["doToast"])(this.toastCtrl, "Sending backup");
+        }
+        else {
+            Object(_core_stdUX__WEBPACK_IMPORTED_MODULE_8__["doToast"])(this.toastCtrl, "No master -> No backups");
         }
     }
     sendScenes(name) {
@@ -4068,6 +4574,10 @@ let System = class System extends _logger__WEBPACK_IMPORTED_MODULE_5__["Logger"]
         const master = this.findOpenMaster();
         if (master) {
             _protocol__WEBPACK_IMPORTED_MODULE_4__["Protocol"].write(master.getSocket(), '[9,S-' + master.getAddress() + '-' + name + '-scenes:' + this.toTransport(this.scenes) + ']');
+            Object(_core_stdUX__WEBPACK_IMPORTED_MODULE_8__["doToast"])(this.toastCtrl, "Sending scenes");
+        }
+        else {
+            Object(_core_stdUX__WEBPACK_IMPORTED_MODULE_8__["doToast"])(this.toastCtrl, "No master -> No scenes");
         }
     }
     doRequestBackup(name) {
@@ -4077,14 +4587,19 @@ let System = class System extends _logger__WEBPACK_IMPORTED_MODULE_5__["Logger"]
         if (master) {
             this.log("requesting backup from " + master.getAddress());
             _protocol__WEBPACK_IMPORTED_MODULE_4__["Protocol"].write(master.getSocket(), '[9,R-' + master.getAddress() + '-' + name + '-system:]');
+            Object(_core_stdUX__WEBPACK_IMPORTED_MODULE_8__["doToast"])(this.toastCtrl, "Requesting backups");
+        }
+        else {
+            Object(_core_stdUX__WEBPACK_IMPORTED_MODULE_8__["doToast"])(this.toastCtrl, "No master -> No backups");
         }
     }
-    doReceiveBackup(type, data) {
+    doReceiveBackup(master, data) {
         this.backup = this.fromTransport(data);
         this.log("received backup: groups = " + this.backup.groups.length +
             ", scenes: " + this.backup.scenes.length +
             ", masters: " + this.backup.config.cmasters.length +
             ", units: " + this.backup.config.cunits.length);
+        Object(_core_stdUX__WEBPACK_IMPORTED_MODULE_8__["doToast"])(this.toastCtrl, "Received backup (" + this.backup.config.cunits.length + " units)");
         console.log(data);
     }
     doRestoreBackup() {
@@ -4096,7 +4611,75 @@ let System = class System extends _logger__WEBPACK_IMPORTED_MODULE_5__["Logger"]
         this.groups = this.backup.groups;
         this.config = this.backup.config;
         this.backup = null;
+        Object(_core_stdUX__WEBPACK_IMPORTED_MODULE_8__["doToast"])(this.toastCtrl, "Backups restored");
+        this.writeConfig();
+        this.writeGroups();
+        this.writeScenes();
     }
+    ///////////
+    // Audio //
+    ///////////
+    doRequestAudio(master) {
+        // request audio config (will come in async)
+        // prepend ip address of the master
+        if (master) {
+            this.log("requesting audio config from " + master.getAddress());
+            _protocol__WEBPACK_IMPORTED_MODULE_4__["Protocol"].write(master.getSocket(), '[9,A-' + master.getAddress() + '-audio:]');
+            Object(_core_stdUX__WEBPACK_IMPORTED_MODULE_8__["doToast"])(this.toastCtrl, "Requesting audio configs");
+        }
+        else {
+            Object(_core_stdUX__WEBPACK_IMPORTED_MODULE_8__["doToast"])(this.toastCtrl, "No master -> No audio configs");
+        }
+    }
+    doReceiveAudio(master, data) {
+        const audio = this.fromTransport(data);
+        this.log("received audio: sources = " + audio.length);
+        console.log(JSON.stringify(audio, null, 2));
+        this.rooms = audio.map(room => {
+            return {
+                id: room.id,
+                name: room.name,
+                nodeaddress: room.nodeaddress,
+                unitaddress: room.unitaddress,
+                master: master.getAddress(),
+                port: master.getPort(),
+                destination: 0,
+                destinations: room.destinations.map(destination => {
+                    return {
+                        id: destination.id,
+                        nr: destination.destinationnr,
+                        nodeaddress: room.nodeaddress,
+                        unitaddress: room.unitaddress,
+                        master: master.getAddress(),
+                        port: master.getPort(),
+                        name: destination.name,
+                        maxvolume: destination.maxvolume,
+                        volume: 0,
+                        source: 0,
+                        sources: destination.sources.map(source => {
+                            return {
+                                id: source.id,
+                                nr: source.sourcenr,
+                                name: source.name
+                            };
+                        })
+                    };
+                })
+            };
+        });
+        console.log("made rooms: ", this.rooms);
+        Object(_core_stdUX__WEBPACK_IMPORTED_MODULE_8__["doToast"])(this.toastCtrl, "Received " + this.rooms.length + " audio rooms");
+        this.writeAudio();
+    }
+    writeAudio() {
+        this.write("audio", this.rooms);
+    }
+    readAudio() {
+        this.rooms = this.read("audio");
+    }
+    ///////////
+    // Rooms //
+    ///////////
     //////////////////
     // Config stuff //
     //////////////////
@@ -4188,11 +4771,14 @@ System = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 /*!*********************************!*\
   !*** ./src/app/system/types.ts ***!
   \*********************************/
-/*! exports provided: kEmptyUnit, kEmptyUnitScene, kEmptyScene, kEmptyGroup, WriteError, kEmptyCommRecord, Sanitizers, ascii, char, two, hex, now, single */
+/*! exports provided: NodeType, UnitType, UnitExtendedType, kEmptyUnit, kEmptyUnitScene, kEmptyScene, kEmptyGroup, WriteError, kEmptyCommRecord, Sanitizers, ascii, char, two, hex, now, formatDT, single */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NodeType", function() { return NodeType; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UnitType", function() { return UnitType; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UnitExtendedType", function() { return UnitExtendedType; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "kEmptyUnit", function() { return kEmptyUnit; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "kEmptyUnitScene", function() { return kEmptyUnitScene; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "kEmptyScene", function() { return kEmptyScene; });
@@ -4205,9 +4791,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "two", function() { return two; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "hex", function() { return hex; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "now", function() { return now; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "formatDT", function() { return formatDT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "single", function() { return single; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
-/* harmony import */ var _protocol__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./protocol */ "./src/app/system/protocol.ts");
 // Johan Coppieters.
 //
 // v1 - server version Apr 2019
@@ -4215,7 +4801,54 @@ __webpack_require__.r(__webpack_exports__);
 // v3 - added scenes May 2020
 // v3.1 - brought in line with server version
 
-
+// Node types
+var NodeType;
+(function (NodeType) {
+    NodeType[NodeType["kNoNode"] = 0] = "kNoNode";
+    NodeType[NodeType["kStandardNode"] = 1] = "kStandardNode";
+    NodeType[NodeType["kGatewayNode"] = 4] = "kGatewayNode";
+    NodeType[NodeType["kModemNode"] = 8] = "kModemNode";
+    NodeType[NodeType["kGUINode"] = 32] = "kGUINode";
+})(NodeType || (NodeType = {}));
+;
+var UnitType;
+(function (UnitType) {
+    UnitType[UnitType["kNoType"] = 0] = "kNoType";
+    UnitType[UnitType["kDimmer"] = 1] = "kDimmer";
+    UnitType[UnitType["kSwitch"] = 2] = "kSwitch";
+    UnitType[UnitType["kInput"] = 3] = "kInput";
+    UnitType[UnitType["kTemperature"] = 4] = "kTemperature";
+    UnitType[UnitType["kExtendedAudio"] = 5] = "kExtendedAudio";
+    UnitType[UnitType["kMood"] = 7] = "kMood";
+    UnitType[UnitType["kSwitchingMotor"] = 8] = "kSwitchingMotor";
+    UnitType[UnitType["kAudio"] = 10] = "kAudio";
+    UnitType[UnitType["kAV"] = 11] = "kAV";
+    UnitType[UnitType["kIRTX"] = 12] = "kIRTX";
+    UnitType[UnitType["kVideo"] = 14] = "kVideo";
+})(UnitType || (UnitType = {}));
+;
+var UnitExtendedType;
+(function (UnitExtendedType) {
+    UnitExtendedType[UnitExtendedType["kNoType"] = 0] = "kNoType";
+    UnitExtendedType[UnitExtendedType["kDimmer"] = 1] = "kDimmer";
+    UnitExtendedType[UnitExtendedType["kSwitch"] = 2] = "kSwitch";
+    UnitExtendedType[UnitExtendedType["kInput"] = 3] = "kInput";
+    UnitExtendedType[UnitExtendedType["kTemperature"] = 4] = "kTemperature";
+    UnitExtendedType[UnitExtendedType["kExtendedAudio"] = 5] = "kExtendedAudio";
+    UnitExtendedType[UnitExtendedType["kMood"] = 7] = "kMood";
+    UnitExtendedType[UnitExtendedType["kSwitchingMotor"] = 8] = "kSwitchingMotor";
+    UnitExtendedType[UnitExtendedType["kAudio"] = 10] = "kAudio";
+    UnitExtendedType[UnitExtendedType["kAV"] = 11] = "kAV";
+    UnitExtendedType[UnitExtendedType["kIRTX"] = 12] = "kIRTX";
+    UnitExtendedType[UnitExtendedType["kVideo"] = 14] = "kVideo";
+    UnitExtendedType[UnitExtendedType["kLightbulb"] = 101] = "kLightbulb";
+    UnitExtendedType[UnitExtendedType["kCondition"] = 102] = "kCondition";
+    UnitExtendedType[UnitExtendedType["kGarageDoor"] = 201] = "kGarageDoor";
+    UnitExtendedType[UnitExtendedType["kDoor"] = 202] = "kDoor";
+    UnitExtendedType[UnitExtendedType["kLock"] = 203] = "kLock";
+    UnitExtendedType[UnitExtendedType["kUnlocker"] = 204] = "kUnlocker";
+})(UnitExtendedType || (UnitExtendedType = {}));
+;
 ;
 ;
 ;
@@ -4308,6 +4941,14 @@ const Sanitizers = {
         config.forEach(g => this.group(g));
         return config;
     },
+    /////////////////  
+    // Audio Rooms //
+    audio: function (config) {
+        if (!config) {
+            return [];
+        }
+        return config;
+    },
     ///////////
     // Nodes //
     nodeConfig: function (config) {
@@ -4358,7 +4999,7 @@ const Sanitizers = {
         info.index = info.index || -1;
         info.logicalNodeAddress = info.logicalNodeAddress || 0;
         info.logicalAddress = info.logicalAddress || 0;
-        info.type = info.type || _protocol__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kNoType;
+        info.type = info.type || UnitType.kNoType;
         info.flags = info.flags || 0;
         if (into) {
             Object.keys(info).forEach(prop => into[prop] = info[prop]);
@@ -4388,8 +5029,9 @@ const Sanitizers = {
         return newConfig;
     },
     scenes: function (config) {
+        // if (!config) { return [this.sceneConfig()]; }
         if (!config) {
-            return [this.sceneConfig()];
+            return [];
         }
         config.forEach(s => this.sceneConfig(s));
         return config;
@@ -4401,7 +5043,7 @@ const Sanitizers = {
         info.index = info.index || -1;
         info.logicalAddress = info.logicalAddress || 0;
         info.physicalAddress = info.physicalAddress || 0;
-        info.type = info.type || _protocol__WEBPACK_IMPORTED_MODULE_1__["NodeType"].kNoNode;
+        info.type = info.type || NodeType.kNoNode;
         info.flags = info.flags || 0;
         info.nrUnits = info.nrUnits || 0;
         if (into) {
@@ -4415,7 +5057,7 @@ const Sanitizers = {
         info.logicalAddress = info.logicalAddress || 0;
         info.masterAddress = info.masterAddress || '';
         info.masterPort = info.masterPort || 5001;
-        info.type = info.type || _protocol__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kNoType;
+        info.type = info.type || UnitType.kNoType;
         return info;
     }
 };
@@ -4436,13 +5078,15 @@ function hex(n) {
     return '0x' + n.toString(16);
 }
 function now() {
-    const aDate = new Date();
-    return aDate.getFullYear() + '-' +
-        two(aDate.getMonth() + 1) + '-' +
-        two(aDate.getDate()) + ' ' +
-        two(aDate.getHours()) + ':' +
-        two(aDate.getMinutes()) + ':' +
-        two(aDate.getSeconds());
+    return formatDT(new Date());
+}
+function formatDT(dt) {
+    return two(dt.getDate()) + '-' +
+        two(dt.getMonth() + 1) + '-' +
+        dt.getFullYear() + ' ' +
+        two(dt.getHours()) + ':' +
+        two(dt.getMinutes()) + ':' +
+        two(dt.getSeconds());
 }
 function single(val) {
     return (val instanceof Array) ? val[0] : val;

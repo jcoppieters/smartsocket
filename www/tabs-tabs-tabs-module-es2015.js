@@ -1,18 +1,5 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([["tabs-tabs-tabs-module"],{
 
-/***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/tabs/tabs/tabs.page.html":
-/*!********************************************************************************!*\
-  !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/tabs/tabs/tabs.page.html ***!
-  \********************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<ion-tabs>\n\n  <ion-tab-bar slot=\"bottom\">\n    <ion-tab-button tab=\"control\">\n      <ion-icon src=\"/assets/icon/light.svg\"></ion-icon>\n      <ion-label>{{'Page.Control' |_ }}</ion-label>\n    </ion-tab-button>\n\n    <ion-tab-button tab=\"temperature\">\n      <ion-icon src=\"/assets/icon/temperature.svg\"></ion-icon>\n      <ion-label>{{'Page.Temperature' |_ }}</ion-label>\n    </ion-tab-button>\n\n    <ion-tab-button tab=\"stores\" [ngClass]=\"!system.config.stores? 'ion-hide':''\">\n      <ion-icon src=\"/assets/icon/stores.svg\"></ion-icon>\n      <ion-label>{{'Page.Stores' |_ }}</ion-label>\n    </ion-tab-button>\n\n    <ion-tab-button tab=\"moods\">\n      <ion-icon name=\"list\"></ion-icon>\n      <ion-label>{{'Page.Moods' |_ }}</ion-label>\n    </ion-tab-button>\n\n    <ion-tab-button tab=\"config\">\n      <ion-icon name=\"settings-outline\"></ion-icon>\n      <ion-label>{{'Page.Config' |_ }}</ion-label>\n    </ion-tab-button>\n  </ion-tab-bar>\n\n</ion-tabs>\n");
-
-/***/ }),
-
 /***/ "./src/app/tabs/config/config.general.ts":
 /*!***********************************************!*\
   !*** ./src/app/tabs/config/config.general.ts ***!
@@ -41,7 +28,15 @@ let ConfigGeneral = class ConfigGeneral {
         this.alertCtrl = alertCtrl;
         this.showcomm = false;
     }
-    saveConfig() {
+    saveConfig(multipleChanged = false) {
+        if (multipleChanged) {
+            // turn off all but 1
+            if (!this.system.config.multiple) {
+                const first = this.system.groups.find(g => g.visible);
+                this.system.groups.forEach(g => { if (g != first)
+                    g.visible = false; });
+            }
+        }
         this.system.writeConfig();
     }
     allowComm() {
@@ -119,7 +114,7 @@ ConfigGeneral = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         </ion-item>
         <ion-item lines="none">
           <ion-label>{{ "Config.MultipleGroups" |_ }}</ion-label>
-          <ion-toggle name="multiple" [(ngModel)]="system.config.multiple" (ionChange)="saveConfig()"></ion-toggle>
+          <ion-toggle name="multiple" [(ngModel)]="system.config.multiple" (ionChange)="saveConfig(true)"></ion-toggle>
         </ion-item>
       </ion-item-group>
 
@@ -142,7 +137,7 @@ ConfigGeneral = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
           <ion-input name="socketport" type="text" [(ngModel)]="system.config.socketport" (ionBlur)="saveConfig()"></ion-input>
         </ion-item>
         <ion-item lines="none" *ngIf="showcomm">
-          <ion-label position="stacked">Remote Scenes</ion-label>
+          <ion-label>Remote Scenes</ion-label>
           <ion-toggle name="remotescenes" [(ngModel)]="system.config.remotescenes" (ionChange)="saveConfig()"></ion-toggle>
         </ion-item>
       </ion-list-group>
@@ -217,12 +212,22 @@ let ConfigGroupsComponent = class ConfigGroupsComponent {
         this.alertCtrl = alertCtrl;
     }
     saveGroups() {
+        // clean up each record and make clean ordering
         this.system.writeGroups();
     }
     reorderGroups(event) {
+        //console.log("from: " + event.detail.from + ", to: " + event.detail.to);
+        // prevent from "falling off"
+        const len = this.system.groups.length;
+        if (event.detail.to >= len)
+            event.detail.to = len - 1;
+        // swap the order numbers
         this.system.groups[event.detail.from].order = event.detail.to;
         this.system.groups[event.detail.to].order = event.detail.from;
+        // sort and clean up the numbering
         this.system.groups.sort((a, b) => a.order - b.order);
+        this.system.groups.forEach((s, i) => s.order = i);
+        //console.log("sorted: ", this.system.groups);
         event.detail.complete();
         this.saveGroups();
     }
@@ -283,7 +288,7 @@ ConfigGroupsComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("ion-item-group ion-item:not(:last-child) {\n  margin-bottom: 4px; }\n\nion-item-group ion-item:last-child {\n  margin-bottom: 24px; }\n\n.non-active {\n  color: var(--ion-color-medium); }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9qb2hhbi9MaWJyYXJ5L01vYmlsZSBEb2N1bWVudHMvY29tfmFwcGxlfkNsb3VkRG9jcy9Qcm9qZWN0cy9EdW90ZWNuby9zbWFydHN5c3RlbS9zcmMvYXBwL3RhYnMvY29uZmlnL2NvbmZpZy5tYXN0ZXJzLnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFHWSxrQkFBa0IsRUFBQTs7QUFIOUI7RUFNWSxtQkFBbUIsRUFBQTs7QUFLL0I7RUFDSSw4QkFBOEIsRUFBQSIsImZpbGUiOiJzcmMvYXBwL3RhYnMvY29uZmlnL2NvbmZpZy5tYXN0ZXJzLnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyJpb24taXRlbS1ncm91cCB7XG4gICAgaW9uLWl0ZW0ge1xuICAgICAgICAmOm5vdCg6bGFzdC1jaGlsZCkge1xuICAgICAgICAgICAgbWFyZ2luLWJvdHRvbTogNHB4O1xuICAgICAgICB9XG4gICAgICAgICY6bGFzdC1jaGlsZCB7XG4gICAgICAgICAgICBtYXJnaW4tYm90dG9tOiAyNHB4O1xuICAgICAgICB9XG4gICAgfVxufVxuXG4ubm9uLWFjdGl2ZSB7XG4gICAgY29sb3I6IHZhcigtLWlvbi1jb2xvci1tZWRpdW0pO1xufSJdfQ== */");
+/* harmony default export */ __webpack_exports__["default"] = ("ion-item-group ion-item:not(:last-child) {\n  margin-bottom: 4px; }\n\nion-item-group ion-item:last-child {\n  margin-bottom: 24px; }\n\n.non-active {\n  color: var(--ion-color-medium); }\n\nspan {\n  margin: 8px 0; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9qb2hhbi9MaWJyYXJ5L01vYmlsZSBEb2N1bWVudHMvY29tfmFwcGxlfkNsb3VkRG9jcy9Qcm9qZWN0cy9EdW90ZWNuby9zbWFydHN5c3RlbS9zcmMvYXBwL3RhYnMvY29uZmlnL2NvbmZpZy5tYXN0ZXJzLnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFHWSxrQkFBa0IsRUFBQTs7QUFIOUI7RUFNWSxtQkFBbUIsRUFBQTs7QUFLL0I7RUFDSSw4QkFBOEIsRUFBQTs7QUFFbEM7RUFBTyxhQUFjLEVBQUEiLCJmaWxlIjoic3JjL2FwcC90YWJzL2NvbmZpZy9jb25maWcubWFzdGVycy5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiaW9uLWl0ZW0tZ3JvdXAge1xuICAgIGlvbi1pdGVtIHtcbiAgICAgICAgJjpub3QoOmxhc3QtY2hpbGQpIHtcbiAgICAgICAgICAgIG1hcmdpbi1ib3R0b206IDRweDtcbiAgICAgICAgfVxuICAgICAgICAmOmxhc3QtY2hpbGQge1xuICAgICAgICAgICAgbWFyZ2luLWJvdHRvbTogMjRweDtcbiAgICAgICAgfVxuICAgIH1cbn1cblxuLm5vbi1hY3RpdmUge1xuICAgIGNvbG9yOiB2YXIoLS1pb24tY29sb3ItbWVkaXVtKTtcbn1cbnNwYW4geyBtYXJnaW46IDhweCAwIH0iXX0= */");
 
 /***/ }),
 
@@ -304,6 +309,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var src_app_core_stdUX__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! src/app/core/stdUX */ "./src/app/core/stdUX.ts");
 /* harmony import */ var _edit_node__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./edit.node */ "./src/app/tabs/config/edit.node.ts");
 /* harmony import */ var _edit_master__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./edit.master */ "./src/app/tabs/config/edit.master.ts");
+/* harmony import */ var src_app_system_types__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! src/app/system/types */ "./src/app/system/types.ts");
+
 
 
 
@@ -322,7 +329,7 @@ let ConfigMastersComponent = class ConfigMastersComponent {
     //////////////////
     editMaster(master) {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
-            const data = yield Object(src_app_core_stdUX__WEBPACK_IMPORTED_MODULE_4__["doModal"])(this.modalCtl, _edit_master__WEBPACK_IMPORTED_MODULE_6__["EditMasterComponent"], { masterConfig: master.config });
+            const data = yield Object(src_app_core_stdUX__WEBPACK_IMPORTED_MODULE_4__["doModal"])(this.modalCtl, _edit_master__WEBPACK_IMPORTED_MODULE_6__["EditMasterComponent"], { masterConfig: master.config, master });
             if (data.masterConfig) {
                 this.system.log("Rebuilding master: " + master.getName());
                 try {
@@ -350,7 +357,6 @@ let ConfigMastersComponent = class ConfigMastersComponent {
             });
             if (answer === 'delete') {
                 this.system.deleteMaster(master);
-                console.log('nr of masters: ' + this.system.masters.length);
             }
         });
     }
@@ -360,6 +366,9 @@ let ConfigMastersComponent = class ConfigMastersComponent {
     changeSchedule(master) {
         console.log("changeSchedule -> " + master.schedule + " (" + (typeof master.schedule) + ")");
         master.setSchedule();
+    }
+    showDate(master) {
+        return master.date ? Object(src_app_system_types__WEBPACK_IMPORTED_MODULE_7__["formatDT"])(master.date) : "";
     }
     ////////////////
     // Node Stuff //
@@ -385,7 +394,10 @@ ConfigMastersComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
       <ion-item-group *ngFor="let master of system.masters; let inx=index">
         <ion-item lines="none">
           <ion-icon name="code-working" slot="start"></ion-icon>
-          <span [class.non-active]="!master.config.active">{{master.getAddress()}}<br>{{master.config.name}}</span>
+          <span [class.non-active]="!master.config.active">{{master.config.name}}<br>
+            <small>{{master.getAddress()}}</small>
+            <small *ngIf="master.date"><br>{{showDate(master)}}</small>
+          </span>
           <ion-buttons slot="end">
             <ion-button (click)="editMaster(master)" color="primary">
               <ion-icon name="create"></ion-icon>
@@ -523,7 +535,6 @@ let ConfigScenes = class ConfigScenes {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
             const data = yield Object(src_app_core_stdUX__WEBPACK_IMPORTED_MODULE_3__["doModal"])(this.modalCtl, _edit_scene__WEBPACK_IMPORTED_MODULE_5__["EditScene"], { scene });
             if (data.trigger) {
-                console.log("result from editscene: ", data);
                 if (data.order === -1) {
                     // delete request
                     this.system.scenes.splice(inx, 1);
@@ -540,9 +551,16 @@ let ConfigScenes = class ConfigScenes {
     // Events //
     ////////////
     reorderGroups(event) {
+        // prevent from "faling off"
+        const len = this.system.groups.length;
+        if (event.detail.to >= len)
+            event.detail.to = len - 1;
+        // swap the order numbers
         this.system.scenes[event.detail.from].order = event.detail.to;
         this.system.scenes[event.detail.to].order = event.detail.from;
+        // sort and clean up the numbering
         this.system.scenes.sort((a, b) => a.order - b.order);
+        this.system.scenes.forEach((s, i) => s.order = i);
         event.detail.complete();
         this.system.writeScenes();
     }
@@ -557,7 +575,7 @@ ConfigScenes = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         template: `
     <ion-reorder-group disabled="false" (ionItemReorder)="reorderGroups($event)">
       <ion-item lines="none" *ngFor="let scene of system.scenes; let inx = index;">
-        <ion-label (click)="editScene(scene)">{{ scene.name }}</ion-label>
+        <ion-label (click)="editScene(scene, inx)">{{ scene.name }}</ion-label>
         <ion-buttons slot="end">
           <ion-button (click)="editScene(scene, inx)" color="primary">
             <ion-icon name="create"></ion-icon>
@@ -585,7 +603,7 @@ ConfigScenes = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (".version {\n  margin-left: 4px;\n  font-size: 0.8rem;\n  color: grey; }\n\n.version .manual {\n  float: right; }\n\n/* segment */\n\nion-segment {\n  margin-bottom: 16px; }\n\n.ios ion-segment-button {\n  --padding-top: 5px;\n  --indicator-color: #fff; }\n\n.md ion-segment-button {\n  --background-checked: #fff; }\n\n@media (prefers-color-scheme: dark) {\n  .ios ion-segment-button {\n    --indicator-color: #595959; }\n  .md ion-segment-button {\n    --background-checked: var(--ion-color-step-100); } }\n\nion-toolbar ion-title {\n  margin-right: -73px;\n  margin-left: inherit; }\n\nion-toolbar .config-adder {\n  width: 100px;\n  margin-top: 4px; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9qb2hhbi9MaWJyYXJ5L01vYmlsZSBEb2N1bWVudHMvY29tfmFwcGxlfkNsb3VkRG9jcy9Qcm9qZWN0cy9EdW90ZWNuby9zbWFydHN5c3RlbS9zcmMvYXBwL3RhYnMvY29uZmlnL2NvbmZpZy5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0ksZ0JBQWdCO0VBQ2hCLGlCQUFpQjtFQUNqQixXQUNKLEVBQUE7O0FBQ0E7RUFDRSxZQUNGLEVBQUE7O0FBRUEsWUFBQTs7QUFDQTtFQUNJLG1CQUFtQixFQUFBOztBQUV2QjtFQUVRLGtCQUFjO0VBQ2QsdUJBQWtCLEVBQUE7O0FBRzFCO0VBRVEsMEJBQXFCLEVBQUE7O0FBRzdCO0VBQ0k7SUFFUSwwQkFBa0IsRUFBQTtFQUcxQjtJQUVRLCtDQUFxQixFQUFBLEVBQ3hCOztBQUlUO0VBRVEsbUJBQW1CO0VBQ25CLG9CQUFvQixFQUFBOztBQUg1QjtFQU1RLFlBQVk7RUFDWixlQUFlLEVBQUEiLCJmaWxlIjoic3JjL2FwcC90YWJzL2NvbmZpZy9jb25maWcuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbIi52ZXJzaW9uIHtcbiAgICBtYXJnaW4tbGVmdDogNHB4O1xuICAgIGZvbnQtc2l6ZTogMC44cmVtO1xuICAgIGNvbG9yOiBncmV5XG59XG4udmVyc2lvbiAubWFudWFsIHtcbiAgZmxvYXQ6IHJpZ2h0XG59XG5cbi8qIHNlZ21lbnQgKi9cbmlvbi1zZWdtZW50IHtcbiAgICBtYXJnaW4tYm90dG9tOiAxNnB4O1xufVxuLmlvcyB7XG4gICAgaW9uLXNlZ21lbnQtYnV0dG9uIHtcbiAgICAgICAgLS1wYWRkaW5nLXRvcDogNXB4O1xuICAgICAgICAtLWluZGljYXRvci1jb2xvcjogI2ZmZjtcbiAgICB9XG59XG4ubWQge1xuICAgIGlvbi1zZWdtZW50LWJ1dHRvbiB7XG4gICAgICAgIC0tYmFja2dyb3VuZC1jaGVja2VkOiAjZmZmO1xuICAgIH1cbn1cbkBtZWRpYSAocHJlZmVycy1jb2xvci1zY2hlbWU6IGRhcmspIHtcbiAgICAuaW9zIHtcbiAgICAgICAgaW9uLXNlZ21lbnQtYnV0dG9uIHtcbiAgICAgICAgICAgIC0taW5kaWNhdG9yLWNvbG9yOiAjNTk1OTU5O1xuICAgICAgICB9XG4gICAgfVxuICAgIC5tZCB7XG4gICAgICAgIGlvbi1zZWdtZW50LWJ1dHRvbiB7XG4gICAgICAgICAgICAtLWJhY2tncm91bmQtY2hlY2tlZDogdmFyKC0taW9uLWNvbG9yLXN0ZXAtMTAwKTtcbiAgICAgICAgfVxuICAgIH1cbn1cblxuaW9uLXRvb2xiYXIge1xuICAgIGlvbi10aXRsZSB7XG4gICAgICAgIG1hcmdpbi1yaWdodDogLTczcHg7XG4gICAgICAgIG1hcmdpbi1sZWZ0OiBpbmhlcml0O1xuICAgIH1cbiAgICAuY29uZmlnLWFkZGVyIHtcbiAgICAgICAgd2lkdGg6IDEwMHB4O1xuICAgICAgICBtYXJnaW4tdG9wOiA0cHg7XG4gICAgfVxufVxuXG4iXX0= */");
+/* harmony default export */ __webpack_exports__["default"] = (".version {\n  margin-left: 4px;\n  font-size: 0.8rem;\n  color: grey; }\n\n.version .manual {\n  float: right; }\n\n/* segment */\n\nion-segment {\n  margin-bottom: 16px; }\n\n.ios ion-segment-button {\n  --padding-top: 5px;\n  --indicator-color: #fff; }\n\n.md ion-segment-button {\n  --background-checked: #fff; }\n\n@media (prefers-color-scheme: dark) {\n  .ios ion-segment-button {\n    --indicator-color: #595959; }\n  .md ion-segment-button {\n    --background-checked: var(--ion-color-step-100); } }\n\nion-toolbar ion-title {\n  margin-right: -75px;\n  margin-left: inherit; }\n\nion-toolbar .config-adder {\n  width: 100px;\n  margin-top: 4px;\n  display: block;\n  margin-right: 0; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9qb2hhbi9MaWJyYXJ5L01vYmlsZSBEb2N1bWVudHMvY29tfmFwcGxlfkNsb3VkRG9jcy9Qcm9qZWN0cy9EdW90ZWNuby9zbWFydHN5c3RlbS9zcmMvYXBwL3RhYnMvY29uZmlnL2NvbmZpZy5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0ksZ0JBQWdCO0VBQ2hCLGlCQUFpQjtFQUNqQixXQUNKLEVBQUE7O0FBQ0E7RUFDRSxZQUNGLEVBQUE7O0FBRUEsWUFBQTs7QUFDQTtFQUNJLG1CQUFtQixFQUFBOztBQUV2QjtFQUVRLGtCQUFjO0VBQ2QsdUJBQWtCLEVBQUE7O0FBRzFCO0VBRVEsMEJBQXFCLEVBQUE7O0FBRzdCO0VBQ0k7SUFFUSwwQkFBa0IsRUFBQTtFQUcxQjtJQUVRLCtDQUFxQixFQUFBLEVBQ3hCOztBQUlUO0VBRVEsbUJBQW1CO0VBQ25CLG9CQUFvQixFQUFBOztBQUg1QjtFQU1RLFlBQVk7RUFDWixlQUFlO0VBQ2YsY0FBYztFQUNkLGVBQWUsRUFBQSIsImZpbGUiOiJzcmMvYXBwL3RhYnMvY29uZmlnL2NvbmZpZy5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLnZlcnNpb24ge1xuICAgIG1hcmdpbi1sZWZ0OiA0cHg7XG4gICAgZm9udC1zaXplOiAwLjhyZW07XG4gICAgY29sb3I6IGdyZXlcbn1cbi52ZXJzaW9uIC5tYW51YWwge1xuICBmbG9hdDogcmlnaHRcbn1cblxuLyogc2VnbWVudCAqL1xuaW9uLXNlZ21lbnQge1xuICAgIG1hcmdpbi1ib3R0b206IDE2cHg7XG59XG4uaW9zIHtcbiAgICBpb24tc2VnbWVudC1idXR0b24ge1xuICAgICAgICAtLXBhZGRpbmctdG9wOiA1cHg7XG4gICAgICAgIC0taW5kaWNhdG9yLWNvbG9yOiAjZmZmO1xuICAgIH1cbn1cbi5tZCB7XG4gICAgaW9uLXNlZ21lbnQtYnV0dG9uIHtcbiAgICAgICAgLS1iYWNrZ3JvdW5kLWNoZWNrZWQ6ICNmZmY7XG4gICAgfVxufVxuQG1lZGlhIChwcmVmZXJzLWNvbG9yLXNjaGVtZTogZGFyaykge1xuICAgIC5pb3Mge1xuICAgICAgICBpb24tc2VnbWVudC1idXR0b24ge1xuICAgICAgICAgICAgLS1pbmRpY2F0b3ItY29sb3I6ICM1OTU5NTk7XG4gICAgICAgIH1cbiAgICB9XG4gICAgLm1kIHtcbiAgICAgICAgaW9uLXNlZ21lbnQtYnV0dG9uIHtcbiAgICAgICAgICAgIC0tYmFja2dyb3VuZC1jaGVja2VkOiB2YXIoLS1pb24tY29sb3Itc3RlcC0xMDApO1xuICAgICAgICB9XG4gICAgfVxufVxuXG5pb24tdG9vbGJhciB7XG4gICAgaW9uLXRpdGxlIHtcbiAgICAgICAgbWFyZ2luLXJpZ2h0OiAtNzVweDtcbiAgICAgICAgbWFyZ2luLWxlZnQ6IGluaGVyaXQ7XG4gICAgfVxuICAgIC5jb25maWctYWRkZXIge1xuICAgICAgICB3aWR0aDogMTAwcHg7XG4gICAgICAgIG1hcmdpbi10b3A6IDRweDtcbiAgICAgICAgZGlzcGxheTogYmxvY2s7XG4gICAgICAgIG1hcmdpbi1yaWdodDogMDtcbiAgICB9XG59XG5cbiJdfQ== */");
 
 /***/ }),
 
@@ -718,7 +736,7 @@ ConfigPage = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     <config-masters *ngIf="what === 'masters'"></config-masters>
 
     <p class="version">
-      <span>v2.2.0b1 © Duotecno by Johan Coppieters</span>
+      <span>v2.3.0b3 © Duotecno & Johan Coppieters</span>
       <span class="manual">Download the <a href="https://www.duotecno.be/wp-content/uploads/2020/05/Duotecno-smartbox-app-1.pdf">manual</a></span>
     </p>
   </ion-content>
@@ -765,6 +783,12 @@ let EditMasterComponent = class EditMasterComponent {
     }
     cancel() {
         this.modalCtrl.dismiss({});
+    }
+    audio() {
+        const master = this.navParams.get('master');
+        if (master && master.isLoggedIn) {
+            master.requestAudio();
+        }
     }
 };
 EditMasterComponent.ctorParameters = () => [
@@ -814,9 +838,11 @@ EditMasterComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     <ion-buttons>
       <ion-button (click)="save()" color="secondary">{{"General.Save" |_ }}</ion-button>
       <ion-button (click)="cancel()" color="primary">{{"General.Cancel" |_ }}</ion-button>
+      <ion-button (click)="audio()" color="secondary audio">{{"Config.GetAudioRooms" |_ }}</ion-button>
     </ion-buttons>
   </ion-footer>
-  `
+  `,
+        styles: ["ion-button.audio { float: right; display: inline-block }", "ion-buttons { display: inline }"]
     }),
     tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_ionic_angular__WEBPACK_IMPORTED_MODULE_3__["ModalController"],
         _ionic_angular__WEBPACK_IMPORTED_MODULE_3__["NavParams"]])
@@ -835,7 +861,7 @@ EditMasterComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (".select-text {\n  font-size: 1.2rem;\n  color: grey; }\n\n.select-ios .select-icon .select-icon-inner {\n  margin-top: -4px; }\n\n.item-select .label {\n  color: #000; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9qb2hhbi9MaWJyYXJ5L01vYmlsZSBEb2N1bWVudHMvY29tfmFwcGxlfkNsb3VkRG9jcy9Qcm9qZWN0cy9EdW90ZWNuby9zbWFydHN5c3RlbS9zcmMvYXBwL3RhYnMvY29uZmlnL2VkaXQubm9kZS5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0ksaUJBQWlCO0VBQ2pCLFdBQVcsRUFBQTs7QUFFZjtFQUNJLGdCQUFnQixFQUFBOztBQUVwQjtFQUNJLFdBQVcsRUFBQSIsImZpbGUiOiJzcmMvYXBwL3RhYnMvY29uZmlnL2VkaXQubm9kZS5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLnNlbGVjdC10ZXh0IHtcbiAgICBmb250LXNpemU6IDEuMnJlbTtcbiAgICBjb2xvcjogZ3JleTtcbn1cbi5zZWxlY3QtaW9zIC5zZWxlY3QtaWNvbiAuc2VsZWN0LWljb24taW5uZXIge1xuICAgIG1hcmdpbi10b3A6IC00cHg7XG59XG4uaXRlbS1zZWxlY3QgLmxhYmVsIHtcbiAgICBjb2xvcjogIzAwMDtcbn1cblxuIl19 */");
+/* harmony default export */ __webpack_exports__["default"] = (".select-text {\n  font-size: 1.2rem;\n  color: grey; }\n\n.select-ios .select-icon .select-icon-inner {\n  margin-top: -4px; }\n\n.item-select .label {\n  color: #000; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9qb2hhbi9MaWJyYXJ5L01vYmlsZSBEb2N1bWVudHMvY29tfmFwcGxlfkNsb3VkRG9jcy9Qcm9qZWN0cy9EdW90ZWNuby9zbWFydHN5c3RlbS9zcmMvYXBwL3RhYnMvY29uZmlnL2VkaXQubm9kZS5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0ksaUJBQWlCO0VBQ2pCLFdBQVcsRUFBQTs7QUFFZjtFQUNJLGdCQUFnQixFQUFBOztBQUVwQjtFQUNJLFdBQVcsRUFBQSIsImZpbGUiOiJzcmMvYXBwL3RhYnMvY29uZmlnL2VkaXQubm9kZS5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLnNlbGVjdC10ZXh0IHtcbiAgICBmb250LXNpemU6IDEuMnJlbTtcbiAgICBjb2xvcjogZ3JleTtcbn1cbi5zZWxlY3QtaW9zIC5zZWxlY3QtaWNvbiAuc2VsZWN0LWljb24taW5uZXIge1xuICAgIG1hcmdpbi10b3A6IC00cHg7XG59XG4uaXRlbS1zZWxlY3QgLmxhYmVsIHtcbiAgICBjb2xvcjogIzAwMDtcbn1cbiJdfQ== */");
 
 /***/ }),
 
@@ -906,7 +932,7 @@ EditNode = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
           <ion-checkbox slot="start" [(ngModel)]="unit.active" color="secondary" [disabled]="unit.name[0]==','"></ion-checkbox>
           <ion-select *ngIf="system.groups.length > 1" [(ngModel)]="unit.group" [compareWith]="sameGroup"
                       interface="popover" [interfaceOptions]="{title: unit.getName()}">
-            <ion-select-option value="-1">All groups</ion-select-option>
+            <ion-select-option value="-1">{{ "Config.GroupsAll" |_ }}</ion-select-option>
             <ion-select-option *ngFor="let group of system.groups" value="{{group.id}}">{{group.name}}</ion-select-option>
           </ion-select>
         </ion-item>
@@ -927,6 +953,19 @@ EditNode = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 ], EditNode);
 
 
+
+/***/ }),
+
+/***/ "./src/app/tabs/config/edit.scene.scss":
+/*!*********************************************!*\
+  !*** ./src/app/tabs/config/edit.scene.scss ***!
+  \*********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("ion-label.triggerName {\n  text-align: right;\n  margin-right: 8px; }\n\nspan.typeAndAddr {\n  font-size: 0.9rem;\n  color: var(--ion-color-medium); }\n\nion-button.delete {\n  float: right; }\n\nion-buttons {\n  display: inline; }\n\nion-input[type=number] {\n  text-align: right;\n  width: 50px; }\n\nion-checkbox {\n  margin-right: 16px; }\n\n.range {\n  width: 102px;\n  display: inline-block; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9qb2hhbi9MaWJyYXJ5L01vYmlsZSBEb2N1bWVudHMvY29tfmFwcGxlfkNsb3VkRG9jcy9Qcm9qZWN0cy9EdW90ZWNuby9zbWFydHN5c3RlbS9zcmMvYXBwL3RhYnMvY29uZmlnL2VkaXQuc2NlbmUuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUF3QixpQkFBaUI7RUFBRSxpQkFBa0IsRUFBQTs7QUFFN0Q7RUFBbUIsaUJBQWlCO0VBQUUsOEJBQThCLEVBQUE7O0FBRXBFO0VBQW9CLFlBQWEsRUFBQTs7QUFFakM7RUFBYyxlQUFnQixFQUFBOztBQUU5QjtFQUF5QixpQkFBaUI7RUFBRSxXQUFZLEVBQUE7O0FBRXhEO0VBQWUsa0JBQW1CLEVBQUE7O0FBRWxDO0VBQVMsWUFBWTtFQUFFLHFCQUFzQixFQUFBIiwiZmlsZSI6InNyYy9hcHAvdGFicy9jb25maWcvZWRpdC5zY2VuZS5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiaW9uLWxhYmVsLnRyaWdnZXJOYW1lIHsgdGV4dC1hbGlnbjogcmlnaHQ7IG1hcmdpbi1yaWdodDogOHB4IH1cblxuc3Bhbi50eXBlQW5kQWRkciB7IGZvbnQtc2l6ZTogMC45cmVtOyBjb2xvcjogdmFyKC0taW9uLWNvbG9yLW1lZGl1bSkgfVxuXG5pb24tYnV0dG9uLmRlbGV0ZSB7IGZsb2F0OiByaWdodCB9XG5cbmlvbi1idXR0b25zIHsgZGlzcGxheTogaW5saW5lIH1cblxuaW9uLWlucHV0W3R5cGU9bnVtYmVyXSB7IHRleHQtYWxpZ246IHJpZ2h0OyB3aWR0aDogNTBweCB9XG5cbmlvbi1jaGVja2JveCB7IG1hcmdpbi1yaWdodDogMTZweCB9XG5cbi5yYW5nZSB7IHdpZHRoOiAxMDJweDsgZGlzcGxheTogaW5saW5lLWJsb2NrIH0iXX0= */");
 
 /***/ }),
 
@@ -974,22 +1013,18 @@ let EditScene = class EditScene {
         this.system.controls.forEach(c => {
             const unit = this.scene.units.find(u => c.isUnit(u.masterAddress, u.masterPort, u.logicalNodeAddress, u.logicalAddress));
             this.selection.push(!!unit);
-            if (unit)
-                console.log(unit.logicalAddress + " = " + unit.value);
-            else
-                console.log("----");
             this.values.push((unit) ? unit.value : 0);
         });
         // find the name of the trigger
         this.triggerName = this.getTriggerName();
-        console.log('EditScene:', this.scene, ', selection: ', this.selection, ', values: ', this.values);
     }
     getTriggerName() {
         if (this.scene.trigger.masterAddress) {
             const master = this.system.findMaster(this.scene.trigger.masterAddress, this.scene.trigger.masterPort);
             if (master) {
                 const unit = master.findUnit(this.scene.trigger.logicalNodeAddress, this.scene.trigger.logicalAddress);
-                return unit.getName();
+                if (unit)
+                    return unit.getName();
             }
         }
         return "-";
@@ -998,7 +1033,6 @@ let EditScene = class EditScene {
         return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
             const data = yield Object(src_app_core_stdUX__WEBPACK_IMPORTED_MODULE_5__["doModal"])(this.modalCtrl, _select_trigger__WEBPACK_IMPORTED_MODULE_6__["SelectTrigger"], { trigger: scene.trigger, name: this.scene.name });
             if (data.masterAddress) {
-                console.log("result select trigger: ", data);
                 this.scene.trigger = data;
                 this.triggerName = this.getTriggerName();
             }
@@ -1073,19 +1107,19 @@ EditScene = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
           <ion-input type="text" name="name" [(ngModel)]="scene.name"></ion-input>
         </ion-item>
 
-        <ion-item lines="none">
+        <!-- ion-item lines="none">
           <ion-label>{{ "Config.Scenes.triggeredBy" |_ }}:</ion-label>
           <ion-label class="triggerName" (click)="selectTrigger(scene)">{{ triggerName }}</ion-label>
           <ion-icon name="create-outline" (click)="selectTrigger(scene)"></ion-icon>
-        </ion-item>
+        </ion-item -->
 
         <ion-item lines="none">
           <ion-label>{{ "Config.Scenes.group" |_ }}:</ion-label>
           <ion-select *ngIf="system.groups.length > 1" [(ngModel)]="scene.group" [compareWith]="sameGroup"
                       interface="popover" [interfaceOptions]="{title: scene.name}">
-            <ion-select-option value="-1">All groups</ion-select-option>
+            <ion-select-option value="-1">{{ "Config.GroupsAll" |_ }}</ion-select-option>
             <ion-select-option *ngFor="let group of system.groups" value="{{group.id}}">{{group.name}}</ion-select-option>
-            </ion-select>
+          </ion-select>
 
         </ion-item>
 
@@ -1095,20 +1129,26 @@ EditScene = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
           </ion-label>
           <ion-checkbox slot="start" [(ngModel)]="selection[inx]" color="secondary"></ion-checkbox>
           <ion-toggle *ngIf="unit.isSwitch()" slot="end" [(ngModel)]="values[inx]" (ionBlur)="changeS(inx)"></ion-toggle>
-          <ion-input *ngIf="unit.isDimmer()" slot="end" type="number" [(ngModel)]="values[inx]" (ionBlur)="changeD(inx)"></ion-input>
+          <ion-input *ngIf="false && unit.isDimmer()" slot="end" type="number" [(ngModel)]="values[inx]" 
+                     (ionBlur)="changeD(inx)"></ion-input>
+          <div *ngIf="unit.isDimmer()" class="range">
+            <ion-range min="1" max="100" debounce="400" [(ngModel)]="values[inx]" 
+                       (ionChange)="changeD(inx)" pin="true">
+            </ion-range>
+          </div>
         </ion-item>
       </ion-list>
     </ion-content>
 
     <ion-footer class="ion-padding">
       <ion-buttons>
-        <ion-button (click)="done()" color="secondary">{{ "General.Done" |_ }}</ion-button>
+        <ion-button (click)="done()" color="secondary">{{ "General.Save" |_ }}</ion-button>
         <ion-button (click)="cancel()" color="primary">{{ "General.Cancel" |_ }}</ion-button>
         <ion-button (click)="delete()" class="delete" color="primary"><ion-icon name="trash"></ion-icon>{{ "General.Delete" |_ }}</ion-button>
       </ion-buttons>
     </ion-footer>
   `,
-        styles: ["ion-label.triggerName { text-align: right; margin-right: 8px }", "span.typeAndAddr { font-size: 0.9rem; color: var(--ion-color-medium) }", "ion-button.delete { float: right; display: inline-block }", "ion-buttons { display: inline }", "ion-input[type=number] { text-align: right; width: 50px }"]
+        styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./edit.scene.scss */ "./src/app/tabs/config/edit.scene.scss")).default]
     }),
     tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_ionic_angular__WEBPACK_IMPORTED_MODULE_2__["ModalController"],
         _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["AlertController"],
@@ -1135,8 +1175,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/fesm2015/ionic-angular.js");
 /* harmony import */ var _system_system__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../system/system */ "./src/app/system/system.ts");
 /* harmony import */ var src_app_system_types__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! src/app/system/types */ "./src/app/system/types.ts");
-/* harmony import */ var src_app_system_protocol__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! src/app/system/protocol */ "./src/app/system/protocol.ts");
-
 
 
 
@@ -1150,14 +1188,13 @@ let SelectTrigger = class SelectTrigger {
         this.system = system;
         this.navParams = navParams;
         this.sceneName = "";
-        this.curType = src_app_system_protocol__WEBPACK_IMPORTED_MODULE_5__["UnitType"].kNoType;
+        this.curType = src_app_system_types__WEBPACK_IMPORTED_MODULE_4__["UnitType"].kNoType;
     }
     ngOnInit() {
         this.sceneName = this.navParams.get('name') || "";
         this.trigger = src_app_system_types__WEBPACK_IMPORTED_MODULE_4__["Sanitizers"].unitScene(this.navParams.get('trigger'));
         this.curUnit = "U" + this.system.moods.findIndex(mood => mood.isUnit(this.trigger.masterAddress, this.trigger.masterPort, this.trigger.logicalNodeAddress, this.trigger.logicalAddress));
         this.curType = this.trigger.value;
-        console.log('SelectTrigger:' + this.curUnit + ', trigger type: ' + this.curType);
     }
     done() {
         if (!this.curUnit)
@@ -1247,9 +1284,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ControlPage", function() { return ControlPage; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
-/* harmony import */ var _core_stdpage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../core/stdpage */ "./src/app/core/stdpage.ts");
-/* harmony import */ var _system_system__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../system/system */ "./src/app/system/system.ts");
-
+/* harmony import */ var src_app_system_system__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! src/app/system/system */ "./src/app/system/system.ts");
 
 
 
@@ -1257,39 +1292,66 @@ let ControlPage = class ControlPage {
     constructor(system) {
         this.system = system;
     }
-    ionViewWillEnter() {
-        this.stdPage.refreshServices();
-    }
 };
 ControlPage.ctorParameters = () => [
-    { type: _system_system__WEBPACK_IMPORTED_MODULE_3__["System"] }
+    { type: src_app_system_system__WEBPACK_IMPORTED_MODULE_2__["System"] }
 ];
-tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])(_core_stdpage__WEBPACK_IMPORTED_MODULE_2__["StdPage"], { static: true }),
-    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", _core_stdpage__WEBPACK_IMPORTED_MODULE_2__["StdPage"])
-], ControlPage.prototype, "stdPage", void 0);
 ControlPage = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
         selector: 'page-control',
         template: `
-    <ion-header>
-      <ion-toolbar>
-        <ion-menu-toggle slot="start">
-          <img src="/assets/icon/duotecno.png" />
-          <ion-icon name="{{ system.isSplitted ? '' : 'menu'}}"></ion-icon>
-        </ion-menu-toggle>
-        <ion-title>{{ "Page.Control" |_ }}</ion-title>
-      </ion-toolbar>
-    </ion-header>
+    <ctrl-header title='{{ "Page.Control" |_ }}'></ctrl-header>
 
     <ion-content class="ion-padding">
-      <std-page services="controls" [showUpDowns]="! this.system.config.stores"></std-page>
+      <ctrl-list services="controls" [showUpDowns]="! this.system.config.stores"></ctrl-list>
     </ion-content>
   `,
         styles: [":root .noMaster { text-align: center }"]
     }),
-    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_system_system__WEBPACK_IMPORTED_MODULE_3__["System"]])
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [src_app_system_system__WEBPACK_IMPORTED_MODULE_2__["System"]])
 ], ControlPage);
+
+
+
+/***/ }),
+
+/***/ "./src/app/tabs/media/media.page.ts":
+/*!******************************************!*\
+  !*** ./src/app/tabs/media/media.page.ts ***!
+  \******************************************/
+/*! exports provided: MediaPage */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MediaPage", function() { return MediaPage; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var src_app_system_system__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! src/app/system/system */ "./src/app/system/system.ts");
+
+
+
+let MediaPage = class MediaPage {
+    constructor(system) {
+        this.system = system;
+    }
+};
+MediaPage.ctorParameters = () => [
+    { type: src_app_system_system__WEBPACK_IMPORTED_MODULE_2__["System"] }
+];
+MediaPage = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+        selector: 'page-media',
+        template: `
+    <ctrl-header title='{{ "Page.Media" |_ }}'></ctrl-header>
+
+    <ion-content class="ion-padding">
+      <ctrl-list services="media"></ctrl-list>
+    </ion-content>
+  `
+    }),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [src_app_system_system__WEBPACK_IMPORTED_MODULE_2__["System"]])
+], MediaPage);
 
 
 
@@ -1307,9 +1369,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MoodsPage", function() { return MoodsPage; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
-/* harmony import */ var src_app_core_stdpage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! src/app/core/stdpage */ "./src/app/core/stdpage.ts");
-/* harmony import */ var src_app_system_system__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! src/app/system/system */ "./src/app/system/system.ts");
-
+/* harmony import */ var src_app_system_system__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! src/app/system/system */ "./src/app/system/system.ts");
 
 
 
@@ -1317,37 +1377,22 @@ let MoodsPage = class MoodsPage {
     constructor(system) {
         this.system = system;
     }
-    ionViewWillEnter() {
-        this.stdPage.refreshServices();
-    }
 };
 MoodsPage.ctorParameters = () => [
-    { type: src_app_system_system__WEBPACK_IMPORTED_MODULE_3__["System"] }
+    { type: src_app_system_system__WEBPACK_IMPORTED_MODULE_2__["System"] }
 ];
-tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])(src_app_core_stdpage__WEBPACK_IMPORTED_MODULE_2__["StdPage"], { static: false }),
-    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", src_app_core_stdpage__WEBPACK_IMPORTED_MODULE_2__["StdPage"])
-], MoodsPage.prototype, "stdPage", void 0);
 MoodsPage = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
         selector: 'page-moods',
         template: `
-    <ion-header>
-      <ion-toolbar>
-        <ion-menu-toggle slot="start">
-          <img src="/assets/icon/duotecno.png" />
-          <ion-icon name="{{ system.isSplitted ? '' : 'menu'}}"></ion-icon>
-        </ion-menu-toggle>
-        <ion-title>{{ "Page.Moods" |_ }}</ion-title>
-      </ion-toolbar>
-    </ion-header>
+    <ctrl-header title='{{ "Page.Moods" |_ }}'></ctrl-header>
 
     <ion-content class="ion-padding">
-      <std-page services="moods"></std-page>
+      <ctrl-list services="moods"></ctrl-list>
     </ion-content>
   `
     }),
-    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [src_app_system_system__WEBPACK_IMPORTED_MODULE_3__["System"]])
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [src_app_system_system__WEBPACK_IMPORTED_MODULE_2__["System"]])
 ], MoodsPage);
 
 
@@ -1366,9 +1411,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StoresPage", function() { return StoresPage; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
-/* harmony import */ var _core_stdpage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../core/stdpage */ "./src/app/core/stdpage.ts");
-/* harmony import */ var _system_system__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../system/system */ "./src/app/system/system.ts");
-
+/* harmony import */ var _system_system__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../system/system */ "./src/app/system/system.ts");
 
 
 
@@ -1376,37 +1419,22 @@ let StoresPage = class StoresPage {
     constructor(system) {
         this.system = system;
     }
-    ionViewWillEnter() {
-        this.stdPage.refreshServices();
-    }
 };
 StoresPage.ctorParameters = () => [
-    { type: _system_system__WEBPACK_IMPORTED_MODULE_3__["System"] }
+    { type: _system_system__WEBPACK_IMPORTED_MODULE_2__["System"] }
 ];
-tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])(_core_stdpage__WEBPACK_IMPORTED_MODULE_2__["StdPage"], { static: true }),
-    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", _core_stdpage__WEBPACK_IMPORTED_MODULE_2__["StdPage"])
-], StoresPage.prototype, "stdPage", void 0);
 StoresPage = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
         selector: 'page-stores',
         template: `
-    <ion-header>
-      <ion-toolbar>
-        <ion-menu-toggle slot="start">
-          <img src="/assets/icon/duotecno.png" />
-          <ion-icon name="{{ system.isSplitted ? '' : 'menu'}}"></ion-icon>
-        </ion-menu-toggle>
-        <ion-title>{{ "Page.Stores" |_ }}</ion-title>
-      </ion-toolbar>
-    </ion-header>
+    <ctrl-header title='{{ "Page.Stores" |_ }}'></ctrl-header>
 
     <ion-content class="ion-padding">
-      <std-page services="stores" [showUpDowns]="true"></std-page>
+      <ctrl-list services="stores" [showUpDowns]="true"></ctrl-list>
     </ion-content>
   `
     }),
-    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_system_system__WEBPACK_IMPORTED_MODULE_3__["System"]])
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_system_system__WEBPACK_IMPORTED_MODULE_2__["System"]])
 ], StoresPage);
 
 
@@ -1432,6 +1460,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _stores_stores_page__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../stores/stores.page */ "./src/app/tabs/stores/stores.page.ts");
 /* harmony import */ var _moods_moods_page__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../moods/moods.page */ "./src/app/tabs/moods/moods.page.ts");
 /* harmony import */ var _config_config__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../config/config */ "./src/app/tabs/config/config.ts");
+/* harmony import */ var _media_media_page__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../media/media.page */ "./src/app/tabs/media/media.page.ts");
+
 
 
 
@@ -1450,6 +1480,7 @@ const routes = [
             { path: 'temperature', component: _temperature_temperature_page__WEBPACK_IMPORTED_MODULE_5__["TemperaturePage"] },
             { path: 'stores', component: _stores_stores_page__WEBPACK_IMPORTED_MODULE_6__["StoresPage"] },
             { path: 'moods', component: _moods_moods_page__WEBPACK_IMPORTED_MODULE_7__["MoodsPage"] },
+            { path: 'media', component: _media_media_page__WEBPACK_IMPORTED_MODULE_9__["MediaPage"] },
             { path: 'config', component: _config_config__WEBPACK_IMPORTED_MODULE_8__["ConfigPage"] },
             { path: '', redirectTo: '/tabs/control', pathMatch: 'full' }
         ]
@@ -1492,6 +1523,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _temperature_temperature_page__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../temperature/temperature.page */ "./src/app/tabs/temperature/temperature.page.ts");
 /* harmony import */ var _control_control_page__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../control/control.page */ "./src/app/tabs/control/control.page.ts");
 /* harmony import */ var _config_config_module__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../config/config.module */ "./src/app/tabs/config/config.module.ts");
+/* harmony import */ var _media_media_page__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../media/media.page */ "./src/app/tabs/media/media.page.ts");
+
 
 
 
@@ -1517,7 +1550,7 @@ TabsPageModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
             _tabs_routing_module__WEBPACK_IMPORTED_MODULE_5__["TabsPageRoutingModule"],
             _config_config_module__WEBPACK_IMPORTED_MODULE_12__["ConfigPageModule"]
         ],
-        declarations: [_tabs_page__WEBPACK_IMPORTED_MODULE_6__["TabsPage"], _control_control_page__WEBPACK_IMPORTED_MODULE_11__["ControlPage"], _temperature_temperature_page__WEBPACK_IMPORTED_MODULE_10__["TemperaturePage"], _moods_moods_page__WEBPACK_IMPORTED_MODULE_8__["MoodsPage"], _stores_stores_page__WEBPACK_IMPORTED_MODULE_9__["StoresPage"]],
+        declarations: [_tabs_page__WEBPACK_IMPORTED_MODULE_6__["TabsPage"], _control_control_page__WEBPACK_IMPORTED_MODULE_11__["ControlPage"], _temperature_temperature_page__WEBPACK_IMPORTED_MODULE_10__["TemperaturePage"], _moods_moods_page__WEBPACK_IMPORTED_MODULE_8__["MoodsPage"], _stores_stores_page__WEBPACK_IMPORTED_MODULE_9__["StoresPage"], _media_media_page__WEBPACK_IMPORTED_MODULE_13__["MediaPage"]],
         schemas: [_angular_core__WEBPACK_IMPORTED_MODULE_2__["CUSTOM_ELEMENTS_SCHEMA"]]
     })
 ], TabsPageModule);
@@ -1543,6 +1576,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let TabsPage = class TabsPage {
+    // could be added to the ion-tab-button's
+    //    (click)="system.emitter.emit('refresh')"
     constructor(system) {
         this.system = system;
     }
@@ -1553,7 +1588,36 @@ TabsPage.ctorParameters = () => [
 TabsPage = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
         selector: 'app-tabs',
-        template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./tabs.page.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/tabs/tabs/tabs.page.html")).default
+        template: `
+    <ion-tabs>
+      <ion-tab-bar slot="bottom">
+        <ion-tab-button tab="control">
+          <ion-icon src="/assets/icon/light.svg"></ion-icon>
+          <ion-label>{{'Page.Control' |_ }}</ion-label>
+        </ion-tab-button>
+
+        <ion-tab-button tab="temperature">
+          <ion-icon src="/assets/icon/temperature.svg"></ion-icon>
+          <ion-label>{{'Page.Temperature' |_ }}</ion-label>
+        </ion-tab-button>
+
+        <ion-tab-button tab="stores" [ngClass]="{'ion-hide': !system.config.stores}">
+          <ion-icon src="/assets/icon/stores.svg"></ion-icon>
+          <ion-label>{{'Page.Stores' |_ }}</ion-label>
+        </ion-tab-button>
+
+        <ion-tab-button tab="moods">
+          <ion-icon name="list"></ion-icon>
+          <ion-label>{{'Page.Moods' |_ }}</ion-label>
+        </ion-tab-button>
+
+        <ion-tab-button tab="media" [ngClass]="{'ion-hide': !(system.media.length > 0)}">
+          <ion-icon name="music"></ion-icon>
+          <ion-label>{{'Page.Media' |_ }}</ion-label>
+        </ion-tab-button>
+      </ion-tab-bar>
+    </ion-tabs>
+  `
     }),
     tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [src_app_system_system__WEBPACK_IMPORTED_MODULE_2__["System"]])
 ], TabsPage);
@@ -1575,8 +1639,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
 /* harmony import */ var _system_system__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../system/system */ "./src/app/system/system.ts");
-/* harmony import */ var _core_stdpage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../core/stdpage */ "./src/app/core/stdpage.ts");
-
 
 
 
@@ -1584,33 +1646,18 @@ let TemperaturePage = class TemperaturePage {
     constructor(system) {
         this.system = system;
     }
-    ionViewWillEnter() {
-        this.stdPage.refreshServices();
-    }
 };
 TemperaturePage.ctorParameters = () => [
     { type: _system_system__WEBPACK_IMPORTED_MODULE_2__["System"] }
 ];
-tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])(_core_stdpage__WEBPACK_IMPORTED_MODULE_3__["StdPage"], { static: true }),
-    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", _core_stdpage__WEBPACK_IMPORTED_MODULE_3__["StdPage"])
-], TemperaturePage.prototype, "stdPage", void 0);
 TemperaturePage = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
         selector: 'page-temperature',
         template: `
-    <ion-header>
-      <ion-toolbar>
-        <ion-menu-toggle slot="start">
-          <img src="/assets/icon/duotecno.png" />
-          <ion-icon name="{{ system.isSplitted ? '' : 'menu'}}"></ion-icon>
-        </ion-menu-toggle>
-        <ion-title>{{ "Page.Temperature" |_ }}</ion-title>
-      </ion-toolbar>
-    </ion-header>
+    <ctrl-header title='{{ "Page.Temperature" |_ }}'></ctrl-header>
 
     <ion-content class="ion-padding">
-      <std-page services="temperatures"></std-page>
+      <ctrl-list services="temperatures"></ctrl-list>
     </ion-content>
   `
     }),

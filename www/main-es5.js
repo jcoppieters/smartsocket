@@ -173,26 +173,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
   },
 
   /***/
-  "./node_modules/raw-loader/dist/cjs.js!./src/app/app.component.html":
-  /*!**************************************************************************!*\
-    !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/app.component.html ***!
-    \**************************************************************************/
-
-  /*! exports provided: default */
-
-  /***/
-  function node_modulesRawLoaderDistCjsJsSrcAppAppComponentHtml(module, __webpack_exports__, __webpack_require__) {
-    "use strict";
-
-    __webpack_require__.r(__webpack_exports__);
-    /* harmony default export */
-
-
-    __webpack_exports__["default"] = "<ion-app>\n  <ion-split-pane (ionSplitPaneVisible)=\"splitter($event)\" contentId=\"main\">\n    <ion-menu contentId=\"main\">\n      <ion-header>\n        <ion-toolbar>\n          <ion-title>{{ \"Config.Groups\" |_ }}</ion-title>\n        </ion-toolbar>\n      </ion-header>\n\n      <ion-content class=\"ion-padding\">\n        <ion-list *ngIf=\"system.config.multiple\">\n          <ion-item *ngFor=\"let group of system.groups\" lines=\"none\">\n            <ion-label>\n              {{group.name}}\n            </ion-label>\n            <ion-checkbox slot=\"start\" [checked]=\"group.visible\" color=\"secondary\" (ionChange)=\"doCheck($event, group)\"></ion-checkbox>\n          </ion-item>\n        </ion-list>\n\n        <ion-radio-group *ngIf=\"! system.config.multiple\" value=\"{{selected()}}\" (ionChange)=\"doRadio($event)\">\n          <ion-item *ngFor=\"let group of system.groups\" lines=\"none\">\n            <ion-label>\n              {{group.name}}\n            </ion-label>\n            <ion-radio slot=\"start\" color=\"secondary\" value=\"{{group.id}}\"></ion-radio>\n          </ion-item>\n        </ion-radio-group>\n        \n        <ion-button *ngIf=\"!system.isSplitted && system.config.multiple\" (click)=\"done()\">{{ \"General.Done\" |_ }}</ion-button>\n      </ion-content>\n    </ion-menu>\n\n    <ion-router-outlet id=\"main\"></ion-router-outlet>\n  </ion-split-pane>\n</ion-app>";
-    /***/
-  },
-
-  /***/
   "./node_modules/tslib/tslib.es6.js":
   /*!*****************************************!*\
     !*** ./node_modules/tslib/tslib.es6.js ***!
@@ -953,6 +933,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           this.system.groups.forEach(function (g) {
             g.visible = g.id == selected;
           });
+          console.log("radio: ", event, "groups: ", this.system.groups);
           this.system.writeGroups();
           event.preventDefault(); // close if the menu controller is open
 
@@ -961,9 +942,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "doCheck",
         value: function doCheck(event, group) {
-          group.visible = !group.visible;
+          group.visible = event.detail.checked;
+          console.log("check: ", event, "groups: ", this.system.groups);
           this.system.writeGroups();
-          event.preventDefault();
         }
       }, {
         key: "done",
@@ -996,9 +977,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
     AppComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
       selector: 'app-root',
-      template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(
-      /*! raw-loader!./app.component.html */
-      "./node_modules/raw-loader/dist/cjs.js!./src/app/app.component.html")).default
+      template: "\n    <ion-app>\n      <ion-split-pane (ionSplitPaneVisible)=\"splitter($event)\" contentId=\"main\">\n        <ion-menu contentId=\"main\">\n          <ion-header>\n            <ion-toolbar>\n              <ion-title>{{ \"Config.Groups\" |_ }}</ion-title>\n            </ion-toolbar>\n          </ion-header>\n\n          <ion-content class=\"ion-padding\">\n            <ion-list *ngIf=\"system.config.multiple\">\n              <ion-item *ngFor=\"let group of system.groups\" lines=\"none\">\n                <ion-label>\n                  {{group.name}}\n                </ion-label>\n                <ion-checkbox slot=\"start\" (ionChange)=\"doCheck($event, group)\" [checked]=\"group.visible\"></ion-checkbox>\n              </ion-item>\n            </ion-list>\n\n            <ion-radio-group *ngIf=\"! system.config.multiple\" value=\"{{selected()}}\" (ionChange)=\"doRadio($event)\">\n              <ion-item *ngFor=\"let group of system.groups\" lines=\"none\">\n                <ion-label>\n                  {{group.name}}\n                </ion-label>\n                <ion-radio slot=\"start\" color=\"secondary\" value=\"{{group.id}}\"></ion-radio>\n              </ion-item>\n            </ion-radio-group>\n            \n            <ion-button *ngIf=\"!system.isSplitted && system.config.multiple\" (click)=\"done()\">{{ \"General.Done\" |_ }}</ion-button>\n          </ion-content>\n        </ion-menu>\n\n        <ion-router-outlet id=\"main\"></ion-router-outlet>\n      </ion-split-pane>\n    </ion-app>\n  "
     }), tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_ionic_angular__WEBPACK_IMPORTED_MODULE_2__["Platform"], _ionic_native_splash_screen_ngx__WEBPACK_IMPORTED_MODULE_3__["SplashScreen"], _ionic_native_status_bar_ngx__WEBPACK_IMPORTED_MODULE_4__["StatusBar"], _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["MenuController"], _system_system__WEBPACK_IMPORTED_MODULE_5__["System"]])], AppComponent);
     /***/
   },
@@ -1159,9 +1138,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     /* harmony import */
 
 
-    var _stdpage__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(
-    /*! ./stdpage */
-    "./src/app/core/stdpage.ts");
+    var _ctrllist__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(
+    /*! ./ctrllist */
+    "./src/app/core/ctrllist.ts");
     /* harmony import */
 
 
@@ -1210,6 +1189,18 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     var _rendering_scene__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(
     /*! ../rendering/scene */
     "./src/app/rendering/scene.ts");
+    /* harmony import */
+
+
+    var _ctrlheader__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(
+    /*! ./ctrlheader */
+    "./src/app/core/ctrlheader.ts");
+    /* harmony import */
+
+
+    var _rendering_media__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(
+    /*! ../rendering/media */
+    "./src/app/rendering/media.ts");
 
     var CoreModule = function CoreModule() {
       _classCallCheck(this, CoreModule);
@@ -1218,10 +1209,216 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     CoreModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
       imports: [_angular_common__WEBPACK_IMPORTED_MODULE_2__["CommonModule"], _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormsModule"], _ionic_angular__WEBPACK_IMPORTED_MODULE_4__["IonicModule"]],
       providers: [_translate_pipe__WEBPACK_IMPORTED_MODULE_6__["TranslatePipe"], _temp_pipe__WEBPACK_IMPORTED_MODULE_7__["TemperaturPipe"]],
-      declarations: [_stdpage__WEBPACK_IMPORTED_MODULE_5__["StdPage"], _translate_pipe__WEBPACK_IMPORTED_MODULE_6__["TranslatePipe"], _temp_pipe__WEBPACK_IMPORTED_MODULE_7__["TemperaturPipe"], _rendering_dimmer__WEBPACK_IMPORTED_MODULE_8__["DimmerControl"], _rendering_updown__WEBPACK_IMPORTED_MODULE_9__["UpDownControl"], _rendering_switch__WEBPACK_IMPORTED_MODULE_10__["SwitchControl"], _rendering_temperature__WEBPACK_IMPORTED_MODULE_12__["TemperatureControl"], _rendering_mood__WEBPACK_IMPORTED_MODULE_11__["MoodControl"], _rendering_scene__WEBPACK_IMPORTED_MODULE_13__["SceneControl"]],
-      exports: [_stdpage__WEBPACK_IMPORTED_MODULE_5__["StdPage"], _translate_pipe__WEBPACK_IMPORTED_MODULE_6__["TranslatePipe"], _temp_pipe__WEBPACK_IMPORTED_MODULE_7__["TemperaturPipe"], _rendering_dimmer__WEBPACK_IMPORTED_MODULE_8__["DimmerControl"], _rendering_updown__WEBPACK_IMPORTED_MODULE_9__["UpDownControl"], _rendering_switch__WEBPACK_IMPORTED_MODULE_10__["SwitchControl"], _rendering_temperature__WEBPACK_IMPORTED_MODULE_12__["TemperatureControl"], _rendering_mood__WEBPACK_IMPORTED_MODULE_11__["MoodControl"], _rendering_scene__WEBPACK_IMPORTED_MODULE_13__["SceneControl"]],
+      declarations: [_ctrllist__WEBPACK_IMPORTED_MODULE_5__["CtrlList"], _ctrlheader__WEBPACK_IMPORTED_MODULE_14__["CtrlHeader"], _translate_pipe__WEBPACK_IMPORTED_MODULE_6__["TranslatePipe"], _temp_pipe__WEBPACK_IMPORTED_MODULE_7__["TemperaturPipe"], _rendering_dimmer__WEBPACK_IMPORTED_MODULE_8__["DimmerControl"], _rendering_updown__WEBPACK_IMPORTED_MODULE_9__["UpDownControl"], _rendering_switch__WEBPACK_IMPORTED_MODULE_10__["SwitchControl"], _rendering_temperature__WEBPACK_IMPORTED_MODULE_12__["TemperatureControl"], _rendering_mood__WEBPACK_IMPORTED_MODULE_11__["MoodControl"], _rendering_scene__WEBPACK_IMPORTED_MODULE_13__["SceneControl"], _rendering_media__WEBPACK_IMPORTED_MODULE_15__["MediaControl"]],
+      exports: [_ctrllist__WEBPACK_IMPORTED_MODULE_5__["CtrlList"], _ctrlheader__WEBPACK_IMPORTED_MODULE_14__["CtrlHeader"], _translate_pipe__WEBPACK_IMPORTED_MODULE_6__["TranslatePipe"], _temp_pipe__WEBPACK_IMPORTED_MODULE_7__["TemperaturPipe"], _rendering_dimmer__WEBPACK_IMPORTED_MODULE_8__["DimmerControl"], _rendering_updown__WEBPACK_IMPORTED_MODULE_9__["UpDownControl"], _rendering_switch__WEBPACK_IMPORTED_MODULE_10__["SwitchControl"], _rendering_temperature__WEBPACK_IMPORTED_MODULE_12__["TemperatureControl"], _rendering_mood__WEBPACK_IMPORTED_MODULE_11__["MoodControl"], _rendering_scene__WEBPACK_IMPORTED_MODULE_13__["SceneControl"], _rendering_media__WEBPACK_IMPORTED_MODULE_15__["MediaControl"]],
       schemas: [_angular_core__WEBPACK_IMPORTED_MODULE_1__["CUSTOM_ELEMENTS_SCHEMA"]]
     })], CoreModule);
+    /***/
+  },
+
+  /***/
+  "./src/app/core/ctrlheader.ts":
+  /*!************************************!*\
+    !*** ./src/app/core/ctrlheader.ts ***!
+    \************************************/
+
+  /*! exports provided: CtrlHeader */
+
+  /***/
+  function srcAppCoreCtrlheaderTs(module, __webpack_exports__, __webpack_require__) {
+    "use strict";
+
+    __webpack_require__.r(__webpack_exports__);
+    /* harmony export (binding) */
+
+
+    __webpack_require__.d(__webpack_exports__, "CtrlHeader", function () {
+      return CtrlHeader;
+    });
+    /* harmony import */
+
+
+    var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+    /*! tslib */
+    "./node_modules/tslib/tslib.es6.js");
+    /* harmony import */
+
+
+    var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+    /*! @angular/core */
+    "./node_modules/@angular/core/fesm2015/core.js");
+    /* harmony import */
+
+
+    var _ctrllist__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+    /*! ./ctrllist */
+    "./src/app/core/ctrllist.ts");
+    /* harmony import */
+
+
+    var _system_system__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
+    /*! ../system/system */
+    "./src/app/system/system.ts");
+    /* harmony import */
+
+
+    var _angular_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
+    /*! @angular/router */
+    "./node_modules/@angular/router/fesm2015/router.js");
+
+    var CtrlHeader =
+    /*#__PURE__*/
+    function () {
+      function CtrlHeader(system, routes) {
+        _classCallCheck(this, CtrlHeader);
+
+        this.system = system;
+        this.routes = routes;
+      }
+
+      _createClass(CtrlHeader, [{
+        key: "ionViewWillEnter",
+        value: function ionViewWillEnter() {
+          this.stdPage.refreshServices();
+        }
+      }, {
+        key: "goConfig",
+        value: function goConfig() {
+          this.routes.navigateByUrl("/tabs/config");
+        }
+      }]);
+
+      return CtrlHeader;
+    }();
+
+    CtrlHeader.ctorParameters = function () {
+      return [{
+        type: _system_system__WEBPACK_IMPORTED_MODULE_3__["System"]
+      }, {
+        type: _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"]
+      }];
+    };
+
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])(_ctrllist__WEBPACK_IMPORTED_MODULE_2__["CtrlList"], {
+      static: true
+    }), tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", _ctrllist__WEBPACK_IMPORTED_MODULE_2__["CtrlList"])], CtrlHeader.prototype, "stdPage", void 0);
+    CtrlHeader = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+      selector: 'ctrl-header',
+      inputs: ['title'],
+      template: "\n  <ion-header>\n    <ion-toolbar>\n      <ion-menu-toggle slot=\"start\">\n        <img src=\"/assets/icon/duotecno.png\" />\n        <ion-icon name=\"{{ system.isSplitted ? '' : 'menu'}}\"></ion-icon>\n      </ion-menu-toggle>\n\n      <ion-title>{{ title }}</ion-title>\n\n      <ion-buttons slot=\"end\" class=\"config-adder\">\n        <ion-button (click)=\"goConfig()\">\n          <ion-icon name=\"settings-outline\"></ion-icon>\n        </ion-button>\n      </ion-buttons>\n\n    </ion-toolbar>\n  </ion-header>"
+    }), tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_system_system__WEBPACK_IMPORTED_MODULE_3__["System"], _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"]])], CtrlHeader);
+    /***/
+  },
+
+  /***/
+  "./src/app/core/ctrllist.ts":
+  /*!**********************************!*\
+    !*** ./src/app/core/ctrllist.ts ***!
+    \**********************************/
+
+  /*! exports provided: CtrlList */
+
+  /***/
+  function srcAppCoreCtrllistTs(module, __webpack_exports__, __webpack_require__) {
+    "use strict";
+
+    __webpack_require__.r(__webpack_exports__);
+    /* harmony export (binding) */
+
+
+    __webpack_require__.d(__webpack_exports__, "CtrlList", function () {
+      return CtrlList;
+    });
+    /* harmony import */
+
+
+    var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+    /*! tslib */
+    "./node_modules/tslib/tslib.es6.js");
+    /* harmony import */
+
+
+    var _system_system__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+    /*! ../system/system */
+    "./src/app/system/system.ts");
+    /* harmony import */
+
+
+    var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+    /*! @angular/core */
+    "./node_modules/@angular/core/fesm2015/core.js");
+
+    var CtrlList =
+    /*#__PURE__*/
+    function () {
+      function CtrlList(system) {
+        _classCallCheck(this, CtrlList);
+
+        this.system = system;
+        this.showUpDowns = true;
+      }
+
+      _createClass(CtrlList, [{
+        key: "ngOnInit",
+        value: function ngOnInit() {
+          this.system.emitter.on('refresh', this.refreshServices.bind(this));
+          console.log("ngOnInit - StdPage: " + this.services);
+        }
+      }, {
+        key: "refreshServices",
+        value: function refreshServices(event) {
+          var services = this.system[this.services];
+          console.log('stdPage.refreshServices: ' + this.services + " = " + services.length + ' services');
+          console.log('stdPage.refreshServices: #scenes = ' + this.system.scenes.length); // request the status of all (real) units used on this page
+
+          if (this.services != "scenes") services.forEach(function (u) {
+            return u.reqState();
+          }); // see if a group is used, either in a service or in a custom-scene when on the moods page
+          // this.system.groups.forEach((g: GroupConfig) => g.used = 
+          //   services.some(u => u.group == g.id) || 
+          //     ((this.services == "mood") && this.system.scenes.some(s => s.group == g.id))
+          // );
+        }
+      }, {
+        key: "used",
+        value: function used(group) {
+          return !!this.system[this.services].find(function (u) {
+            return u.group == group.id || u.group == -1;
+          }) || this.services == "moods" && !!this.system.scenes.find(function (s) {
+            return s.group == group.id || s.group == -1;
+          });
+        }
+      }, {
+        key: "toggle",
+        value: function toggle(event, inx) {
+          this.system.groups[inx].visible = !this.system.groups[inx].visible;
+
+          if (!this.system.config.multiple) {
+            var now = !this.system.groups[inx].visible;
+            this.system.groups.forEach(function (g, i) {
+              if (i != inx) g.visible = now;
+            });
+          }
+
+          event.preventDefault();
+        }
+      }]);
+
+      return CtrlList;
+    }();
+
+    CtrlList.ctorParameters = function () {
+      return [{
+        type: _system_system__WEBPACK_IMPORTED_MODULE_1__["System"]
+      }];
+    };
+
+    CtrlList = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["Component"])({
+      selector: 'ctrl-list',
+      // services= "moods", "stores", "controls", "media", ...
+      inputs: ['services', 'showUpDowns'],
+      template: "\n    <ion-list *ngIf=\"system.masters.length > 0\">\n      <ion-item-group *ngFor=\"let group of system.groups; let inx = index\">\n        <ion-list-header *ngIf=\"used(group) && (group.visible || system.config.multiple)\">\n          <ion-label (click)=\"toggle($event, inx)\">{{group.name}}</ion-label>\n          <ion-icon *ngIf=\"(! system.isSplitted) && system.config.multiple\" [class.list-open]=\"group.visible\" \n                    (click)=\"toggle($event, inx)\" name=\"chevron-forward-outline\"></ion-icon>\n        </ion-list-header>\n\n        <ng-container *ngIf=\"group.visible\">\n          <!-- add our own scenes to the app -->\n          <ng-container *ngIf=\"services == 'moods'\">\n            <ng-container *ngFor=\"let scene of system.scenes\">\n              <scene [scene]=\"scene\" *ngIf=\"((scene.group == group.id) || (scene.group == -1))\"></scene>\n            </ng-container>\n          </ng-container>\n\n          <ng-container *ngFor=\"let service of system[services]\">\n            <dimmer      [service]=\"service\" *ngIf=\"((service.group == group.id) || (service.group == -1)) \n                                                    && service.isDimmer()\"></dimmer>\n            <updown      [service]=\"service\" *ngIf=\"((service.group == group.id) || (service.group == -1))\n                                                    && showUpDowns && service.isUpDown()\"></updown>\n            <switch      [service]=\"service\" *ngIf=\"((service.group == group.id) || (service.group == -1)) \n                                                    && service.isSwitch()\"></switch>\n            <mood        [service]=\"service\" *ngIf=\"((service.group == group.id) || (service.group == -1)) \n                                                    && (service.isMood() || service.isInput())\"></mood>\n            <temperature [service]=\"service\" *ngIf=\"((service.group == group.id) || (service.group == -1)) \n                                                    && service.isTemperature()\"></temperature>\n            <media       [service]=\"service\" *ngIf=\"((service.group == group.id) || (service.group == -1)) \n                                                    && service.isMedia()\"></media>\n\n          </ng-container>\n        </ng-container>\n      </ion-item-group>\n    </ion-list>\n\n    <div *ngIf=\"system.masters.length <= 0\" class=\"noMaster\">\n      <h1>No masters yet?</h1>\n      <p>Go to \"Configure\" (top right icon) -> \"Masters\"<br>\n        Add a master by clicking on the \"+ Master\"<br>\n        Fill out the parameters.<br>\n        <br>\n        Once your first Node or Smartbox is visible<br>\n        Click on it and select the units you want to use.<br>\n        <br>\n        Later you can split the units (switches, temperature, dimmers, scenes, ...) in multiple sections by first adding more groups.<br>\n        <br>\n        Download the <a href=\"https://www.duotecno.be/wp-content/uploads/2020/05/Duotecno-smartbox-app-1.pdf\">manual</a>.\n      </p>\n    </div>\n"
+    }), tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_system_system__WEBPACK_IMPORTED_MODULE_1__["System"]])], CtrlList);
     /***/
   },
 
@@ -1427,116 +1624,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     }
     /***/
 
-  },
-
-  /***/
-  "./src/app/core/stdpage.ts":
-  /*!*********************************!*\
-    !*** ./src/app/core/stdpage.ts ***!
-    \*********************************/
-
-  /*! exports provided: StdPage */
-
-  /***/
-  function srcAppCoreStdpageTs(module, __webpack_exports__, __webpack_require__) {
-    "use strict";
-
-    __webpack_require__.r(__webpack_exports__);
-    /* harmony export (binding) */
-
-
-    __webpack_require__.d(__webpack_exports__, "StdPage", function () {
-      return StdPage;
-    });
-    /* harmony import */
-
-
-    var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
-    /*! tslib */
-    "./node_modules/tslib/tslib.es6.js");
-    /* harmony import */
-
-
-    var _system_system__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
-    /*! ../system/system */
-    "./src/app/system/system.ts");
-    /* harmony import */
-
-
-    var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
-    /*! @angular/core */
-    "./node_modules/@angular/core/fesm2015/core.js");
-
-    var StdPage =
-    /*#__PURE__*/
-    function () {
-      function StdPage(system) {
-        _classCallCheck(this, StdPage);
-
-        this.system = system;
-        this.showUpDowns = true;
-      }
-
-      _createClass(StdPage, [{
-        key: "ngOnInit",
-        value: function ngOnInit() {
-          this.system.emitter.on('refresh', this.refreshServices.bind(this));
-          console.log("ngOnInit - StdPage: " + this.services);
-        }
-      }, {
-        key: "refreshServices",
-        value: function refreshServices(event) {
-          var _this4 = this;
-
-          var services = this.system[this.services];
-          console.log('stdPage.refreshServices: ' + this.services + " = " + services.length + ' services');
-          console.log('stdPage.refreshServices: #scenes = ' + this.system.scenes.length); // request the status of all (real) units used on this page
-
-          if (this.services != "scenes") services.forEach(function (u) {
-            return u.reqState();
-          }); // see if a group is used, either in a service or in a custom-scene when on the moods page
-
-          this.system.groups.forEach(function (g) {
-            return g.used = services.some(function (u) {
-              return u.group == g.id;
-            }) || _this4.services == "mood" && _this4.system.scenes.some(function (s) {
-              return s.group == g.id;
-            });
-          });
-        }
-      }, {
-        key: "moreGroups",
-        value: function moreGroups(group) {
-          return !!this.system && !!this.system.groups && this.system.groups.length > 1 && (!this.system.isSplitted || group.visible);
-        }
-      }, {
-        key: "arrow",
-        value: function arrow(group) {
-          return group.visible ? 'list-open' : '';
-        }
-      }, {
-        key: "toggle",
-        value: function toggle(group) {
-          group.visible = !group.visible;
-        }
-      }]);
-
-      return StdPage;
-    }();
-
-    StdPage.ctorParameters = function () {
-      return [{
-        type: _system_system__WEBPACK_IMPORTED_MODULE_1__["System"]
-      }];
-    };
-
-    StdPage = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["Component"])({
-      selector: 'std-page',
-      // services= "moods", "stores", "controls", ...
-      inputs: ['services', 'showUpDowns'],
-      template: "\n    <ion-list *ngIf=\"system.masters.length > 0\">\n      <ion-item-group *ngFor=\"let group of system.groups\">\n        <ion-list-header *ngIf=\"group.used && moreGroups(group)\">\n          <ion-label>{{group.name}}</ion-label>\n          <ion-icon *ngIf=\"! system.isSplitted\" [ngClass]=\"arrow(group)\" (click)=\"toggle(group)\" name=\"chevron-forward-outline\"></ion-icon>\n        </ion-list-header>\n        <ng-container *ngIf=\"group.used && group.visible\">\n          <ng-container *ngIf=\"services == 'moods'\">\n            <ng-container *ngFor=\"let scene of system.scenes\">\n              <scene [scene]=\"scene\" *ngIf=\"((scene.group == group.id) || (scene.group == -1))\"></scene>\n            </ng-container>\n            <ion-item-divider></ion-item-divider>\n          </ng-container>\n          <ng-container *ngFor=\"let service of system[services]\">\n            <dimmer      [service]=\"service\" *ngIf=\"(service.group == group.id) \n                                                    && service.isDimmer()\"></dimmer>\n            <updown      [service]=\"service\" *ngIf=\"((service.group == group.id) || (service.group == -1))\n                                                    && showUpDowns && service.isUpDown()\"></updown>\n            <switch      [service]=\"service\" *ngIf=\"((service.group == group.id) || (service.group == -1)) \n                                                    && service.isSwitch()\"></switch>\n            <mood        [service]=\"service\" *ngIf=\"((service.group == group.id) || (service.group == -1)) \n                                                    && (service.isMood() || service.isInput())\"></mood>\n            <temperature [service]=\"service\" *ngIf=\"((service.group == group.id) || (service.group == -1)) \n                                                    && service.isTemperature()\"></temperature>\n          </ng-container>\n        </ng-container>\n      </ion-item-group>\n    </ion-list>\n\n    <div *ngIf=\"system.masters.length <= 0\" class=\"noMaster\">\n      <h1>No masters yet?</h1>\n      <p>Go to the tab \"Configure\" -> \"Masters\"<br>\n        Add a master by clicking on the \"+ Master\"<br>\n        Fill out the parameters.<br>\n        <br>\n        Once your first Node or Smartbox is visible<br>\n        Click on it and select the units you want to use.<br>\n        <br>\n        Later you can split the units (switches, temperature, dimmers, scenes, ...) in multiple sections by first adding more groups.<br>\n        <br>\n        Download the <a href=\"https://www.duotecno.be/wp-content/uploads/2020/05/Duotecno-smartbox-app-1.pdf\">manual</a>.\n      </p>\n    </div>\n"
-    }), tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_system_system__WEBPACK_IMPORTED_MODULE_1__["System"]])], StdPage);
-    /***/
   },
 
   /***/
@@ -1750,12 +1837,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         'Temperature.Off': 'Uit',
         'Page.Moods': 'Sferen',
         'Page.Stores': 'Rolluiken',
+        'Page.Media': 'Media',
+        'Media.Off': 'Uit',
         'Page.Config': 'Configureer',
         'Config.Masters': 'Masters',
         'Config.Master': 'Master',
         'Config.Week': 'Week',
         'Config.Holiday': 'Vakantie',
         'Config.NoScheduleSelected': 'Geen plan geselecteerd',
+        'Config.GetAudioRooms': 'Lees Audio Rooms',
         'Config.Scenes': 'Scenes',
         'Config.Scenes.scene': 'Scene',
         'Config.Scenes.group': 'Groep',
@@ -1770,6 +1860,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         'Config.Units': 'Units',
         'Config.Groups': 'Groepen',
         'Config.Group': 'Groep',
+        'Config.GroupsAll': 'Alle groepen',
         'Config.General': 'Algemeen',
         'Config.Settings': 'Instellingen',
         'Config.Language': 'Taal',
@@ -1801,19 +1892,22 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         'Temperature.Off': 'Désactivé',
         'Page.Moods': 'Atmosphères',
         'Page.Stores': 'Stores',
+        'Page.Media': 'Media',
+        'Media.Off': 'Off',
         'Page.Config': 'Configurer',
         'Config.Masters': 'Masters',
         'Config.Master': 'Master',
         'Config.Week': 'Semaine',
         'Config.Holiday': 'Vacances',
         'Config.NoScheduleSelected': 'Aucun plan sélectionné',
+        'Config.GetAudioRooms': 'Lire Audio Rooms',
         'Config.Scenes': 'Scènes',
         'Config.Scenes.scene': 'Scènes',
         'Config.Scenes.for': 'Configuration pour',
         'Config.Scenes.group': 'Group',
         'Config.Scenes.triggeredBy': 'Appellé par',
         'Config.Scenes.trigger': 'Trigger',
-        'Config.Scenes.selectTriggerFor': 'Trigger for',
+        'Config.Scenes.selectTriggerFor': 'Trigger pour',
         'Config.Scenes.name': 'Nom Scène',
         'scene.trigger.off': 'Off',
         'scene.trigger.on': 'On',
@@ -1821,6 +1915,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         'Config.Units': 'Unité',
         'Config.Groups': 'Groups',
         'Config.Group': 'Group',
+        'Config.GroupsAll': 'Tous les groupes',
         'Config.General': 'Général',
         'Config.Settings': 'Paramètres',
         'Config.Language': 'Langue',
@@ -1852,14 +1947,18 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         'Temperature.Off': 'Off',
         'Page.Moods': 'Scenes',
         'Page.Stores': 'Blinds',
+        'Page.Media': 'Media',
+        'Media.Off': 'Off',
         'Page.Config': 'Configure',
         'Config.Masters': 'Masters',
         'Config.Master': 'Master',
         'Config.Week': 'Week',
         'Config.Holiday': 'Holiday',
         'Config.NoScheduleSelected': 'No schedule selected',
+        'Config.GetAudioRooms': 'Get Audio Rooms',
         'Config.Groups': 'Groups',
         'Config.Group': 'Group',
+        'Config.GroupsAll': 'All groups',
         'Config.Scenes': 'Scenes',
         'Config.Scenes.scene': 'Scene',
         'Config.Scenes.for': 'Settings for',
@@ -2075,8 +2174,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "change",
         value: function change() {
-          console.log("change: " + this.service.status);
-
           if (this.service.status == 2) {// don't do anything on timed PIR status
           } else {
             this.service.setState(!!this.service.status); // make boolean
@@ -2099,11 +2196,202 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     DimmerControl = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
       selector: 'dimmer',
       inputs: ['service'],
-      template: "\n    <ion-item lines=\"none\" class=\"dimmer\">\n      <ion-label tappable (click)=\"labelClick()\">{{service.getName()}}\n        <ion-icon [name]=\"arrow()\" class=\"dimmer__chevron\"></ion-icon>\n        <span class=\"dimmer__value\">{{service.value}}%</span>\n        <ion-icon class=\"state\" *ngIf=\"service.status == 2\" name=\"time\"></ion-icon>\n      </ion-label>\n\n      <ion-toggle [(ngModel)]=\"service.status\" (ionChange)=\"change()\"></ion-toggle>\n    </ion-item>\n    <ion-item lines=\"none\" class=\"dimmer__slider\" *ngIf=\"showSlider\">\n      <ion-range min=\"1\" max=\"100\" debounce=\"400\" [(ngModel)]=\"service.value\" (ionChange)=\"changeValue()\">\n        <ion-icon slot=\"start\" name=\"remove\" name=\"remove\" (click)=\"changeValue(-5)\"></ion-icon>\n        <ion-icon slot=\"end\" name=\"add\" name=\"add\" (click)=\"changeValue(5)\"></ion-icon>\n      </ion-range>\n    </ion-item>\n  ",
+      template: "\n    <ion-item lines=\"none\" class=\"dimmer\">\n      <ion-label tappable (click)=\"labelClick()\">{{service.getName()}}\n        <ion-icon [name]=\"arrow()\" class=\"dimmer__chevron\"></ion-icon>\n        <span class=\"dimmer__value\">{{service.value}}%</span>\n        <ion-icon class=\"state\" *ngIf=\"service.status == 2\" name=\"time\"></ion-icon>\n      </ion-label>\n      <ion-toggle [(ngModel)]=\"service.status\" (ionChange)=\"change()\"></ion-toggle>\n    </ion-item>\n\n    <ion-item lines=\"none\" class=\"dimmer__slider\" *ngIf=\"showSlider\">\n      <ion-range min=\"1\" max=\"100\" debounce=\"400\" [(ngModel)]=\"service.value\" (ionChange)=\"changeValue()\">\n        <ion-icon slot=\"start\" name=\"remove\" (click)=\"changeValue(-5)\"></ion-icon>\n        <ion-icon slot=\"end\" name=\"add\" (click)=\"changeValue(5)\"></ion-icon>\n      </ion-range>\n    </ion-item>\n  ",
       styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(
       /*! ./dimmer.scss */
       "./src/app/rendering/dimmer.scss")).default]
     })], DimmerControl);
+    /***/
+  },
+
+  /***/
+  "./src/app/rendering/media.scss":
+  /*!**************************************!*\
+    !*** ./src/app/rendering/media.scss ***!
+    \**************************************/
+
+  /*! exports provided: default */
+
+  /***/
+  function srcAppRenderingMediaScss(module, __webpack_exports__, __webpack_require__) {
+    "use strict";
+
+    __webpack_require__.r(__webpack_exports__);
+    /* harmony default export */
+
+
+    __webpack_exports__["default"] = ".media {\n  position: relative;\n  z-index: 2; }\n  .media ion-label {\n    display: -webkit-box;\n    display: flex;\n    -webkit-box-align: center;\n            align-items: center; }\n  .media__chevron {\n  margin-left: auto;\n  margin-right: 10px; }\n  .volume__value {\n  font-size: 0.8rem; }\n  ion-range {\n  --bar-background: #fff;\n  --knob-size: 24px;\n  --knob-background: #fff; }\n  ion-range ion-icon {\n    color: var(--ion-color-primary-contrast); }\n  .dark {\n  --background: var(--ion-color-dark);\n  background-color: var(--ion-color-dark);\n  --border-radius: 0;\n  position: relative;\n  z-index: 1;\n  margin-top: -22px;\n  border-bottom-left-radius: var(--duotecno-border-radius);\n  border-bottom-right-radius: var(--duotecno-border-radius); }\n  .volume__slider ion-range {\n  margin-top: 10px;\n  padding-left: 0;\n  padding-right: 0; }\n  .choices {\n  -webkit-box-pack: justify;\n          justify-content: space-between;\n  color: white; }\n  .choices ion-select {\n    display: -webkit-inline-box;\n    display: inline-flex;\n    margin: 0 0 0 -10px;\n    max-width: inherit;\n    font-size: 13px; }\n  .choices ion-icon.desticon {\n    margin-left: 0; }\n  .choices ion-icon {\n    color: var(--ion-color-primary-contrast); }\n  .choices .source {\n    max-width: inherit; }\n  .choices .source ion-icon {\n      font-size: 24px;\n      margin-bottom: -5px;\n      margin-left: 0; }\n  .choices .source ion-select {\n      margin-right: 0; }\n  ion-item.first {\n  padding-top: 20px; }\n  .player ion-buttons {\n  padding: 0 3px !important; }\n  .controls ion-buttons {\n  -webkit-box-pack: justify;\n          justify-content: space-between;\n  width: 100%;\n  padding: 0 19px; }\n  .controls ion-buttons ion-icon {\n    font-size: 24px;\n    color: var(--ion-color-primary-contrast); }\n  .controls ion-buttons.keypad {\n  max-width: 320px; }\n  .controls ion-buttons.keypad ion-button {\n    color: white;\n    border: 1px solid white;\n    padding: 0px;\n    width: 70px;\n    border-radius: 8px; }\n  .controls ion-buttons.keypad span {\n    width: 73px; }\n  .controls ion-buttons.noborder {\n  max-width: 320px; }\n  .controls ion-buttons.noborder ion-button {\n    border: none !important; }\n  @media (prefers-color-scheme: dark) {\n  .dark {\n    --background: var(--ion-color-step-150);\n    background-color: var(--ion-color-step-150); } }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9qb2hhbi9MaWJyYXJ5L01vYmlsZSBEb2N1bWVudHMvY29tfmFwcGxlfkNsb3VkRG9jcy9Qcm9qZWN0cy9EdW90ZWNuby9zbWFydHN5c3RlbS9zcmMvYXBwL3JlbmRlcmluZy9tZWRpYS5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0ksa0JBQWtCO0VBQ2xCLFVBQVUsRUFBQTtFQUZkO0lBS1Esb0JBQWE7SUFBYixhQUFhO0lBQ2IseUJBQW1CO1lBQW5CLG1CQUFtQixFQUFBO0VBRzNCO0VBQ0ksaUJBQWlCO0VBQ2pCLGtCQUFrQixFQUFBO0VBRXRCO0VBQ0ksaUJBQWlCLEVBQUE7RUFFckI7RUFDSSxzQkFBaUI7RUFDakIsaUJBQVk7RUFDWix1QkFBa0IsRUFBQTtFQUh0QjtJQU1RLHdDQUF3QyxFQUFBO0VBR2hEO0VBQ0UsbUNBQWE7RUFDYix1Q0FBdUM7RUFDdkMsa0JBQWdCO0VBQ2hCLGtCQUFrQjtFQUNsQixVQUFVO0VBQ1YsaUJBQWlCO0VBQ2pCLHdEQUF3RDtFQUN4RCx5REFBeUQsRUFBQTtFQUUzRDtFQUVJLGdCQUFnQjtFQUNoQixlQUFlO0VBQUUsZ0JBQWdCLEVBQUE7RUFJckM7RUFDRSx5QkFBOEI7VUFBOUIsOEJBQThCO0VBQzlCLFlBQVksRUFBQTtFQUZkO0lBS0ksMkJBQW9CO0lBQXBCLG9CQUFvQjtJQUNwQixtQkFBbUI7SUFDbkIsa0JBQWtCO0lBQ2xCLGVBQWUsRUFBQTtFQVJuQjtJQVdJLGNBQWMsRUFBQTtFQVhsQjtJQWNJLHdDQUF3QyxFQUFBO0VBZDVDO0lBaUJJLGtCQUFrQixFQUFBO0VBakJ0QjtNQW1CTSxlQUFlO01BQ2YsbUJBQW1CO01BQ25CLGNBQWMsRUFBQTtFQXJCcEI7TUF3Qk0sZUFDRixFQUFBO0VBSUo7RUFDRSxpQkFBaUIsRUFBQTtFQUduQjtFQUNFLHlCQUNGLEVBQUE7RUFFQTtFQUdJLHlCQUE4QjtVQUE5Qiw4QkFBOEI7RUFDOUIsV0FBVztFQUNYLGVBQWUsRUFBQTtFQUxuQjtJQU9NLGVBQWU7SUFDZix3Q0FBd0MsRUFBQTtFQVI5QztFQWFJLGdCQUFnQixFQUFBO0VBYnBCO0lBZ0JNLFlBQVk7SUFDWix1QkFBdUI7SUFDdkIsWUFBWTtJQUNaLFdBQVc7SUFDWCxrQkFBa0IsRUFBQTtFQXBCeEI7SUF3Qk0sV0FBVyxFQUFBO0VBeEJqQjtFQTRCSSxnQkFBZ0IsRUFBQTtFQTVCcEI7SUErQk0sdUJBQ0YsRUFBQTtFQUlKO0VBQ0k7SUFDSSx1Q0FBYTtJQUNiLDJDQUEyQyxFQUFBLEVBQzlDIiwiZmlsZSI6InNyYy9hcHAvcmVuZGVyaW5nL21lZGlhLnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyIubWVkaWEge1xuICAgIHBvc2l0aW9uOiByZWxhdGl2ZTtcbiAgICB6LWluZGV4OiAyO1xuXG4gICAgaW9uLWxhYmVsIHtcbiAgICAgICAgZGlzcGxheTogZmxleDtcbiAgICAgICAgYWxpZ24taXRlbXM6IGNlbnRlcjtcbiAgICB9XG59XG4ubWVkaWFfX2NoZXZyb24ge1xuICAgIG1hcmdpbi1sZWZ0OiBhdXRvO1xuICAgIG1hcmdpbi1yaWdodDogMTBweDtcbn1cbi52b2x1bWVfX3ZhbHVlIHtcbiAgICBmb250LXNpemU6IDAuOHJlbTtcbn1cbmlvbi1yYW5nZSB7XG4gICAgLS1iYXItYmFja2dyb3VuZDogI2ZmZjtcbiAgICAtLWtub2Itc2l6ZTogMjRweDtcbiAgICAtLWtub2ItYmFja2dyb3VuZDogI2ZmZjtcblxuICAgIGlvbi1pY29uIHtcbiAgICAgICAgY29sb3I6IHZhcigtLWlvbi1jb2xvci1wcmltYXJ5LWNvbnRyYXN0KTtcbiAgICB9XG59XG4uZGFyayB7XG4gIC0tYmFja2dyb3VuZDogdmFyKC0taW9uLWNvbG9yLWRhcmspO1xuICBiYWNrZ3JvdW5kLWNvbG9yOiB2YXIoLS1pb24tY29sb3ItZGFyayk7XG4gIC0tYm9yZGVyLXJhZGl1czogMDtcbiAgcG9zaXRpb246IHJlbGF0aXZlO1xuICB6LWluZGV4OiAxO1xuICBtYXJnaW4tdG9wOiAtMjJweDtcbiAgYm9yZGVyLWJvdHRvbS1sZWZ0LXJhZGl1czogdmFyKC0tZHVvdGVjbm8tYm9yZGVyLXJhZGl1cyk7XG4gIGJvcmRlci1ib3R0b20tcmlnaHQtcmFkaXVzOiB2YXIoLS1kdW90ZWNuby1ib3JkZXItcmFkaXVzKTtcbn1cbi52b2x1bWVfX3NsaWRlciB7XG4gIGlvbi1yYW5nZSB7XG4gICAgbWFyZ2luLXRvcDogMTBweDtcbiAgICBwYWRkaW5nLWxlZnQ6IDA7IHBhZGRpbmctcmlnaHQ6IDA7XG4gIH1cbn1cblxuLmNob2ljZXMge1xuICBqdXN0aWZ5LWNvbnRlbnQ6IHNwYWNlLWJldHdlZW47XG4gIGNvbG9yOiB3aGl0ZTtcblxuICBpb24tc2VsZWN0IHtcbiAgICBkaXNwbGF5OiBpbmxpbmUtZmxleDtcbiAgICBtYXJnaW46IDAgMCAwIC0xMHB4O1xuICAgIG1heC13aWR0aDogaW5oZXJpdDtcbiAgICBmb250LXNpemU6IDEzcHg7XG4gIH1cbiAgaW9uLWljb24uZGVzdGljb24ge1xuICAgIG1hcmdpbi1sZWZ0OiAwO1xuICB9XG4gIGlvbi1pY29uIHtcbiAgICBjb2xvcjogdmFyKC0taW9uLWNvbG9yLXByaW1hcnktY29udHJhc3QpO1xuICB9XG4gIC5zb3VyY2Uge1xuICAgIG1heC13aWR0aDogaW5oZXJpdDtcbiAgICBpb24taWNvbiB7XG4gICAgICBmb250LXNpemU6IDI0cHg7XG4gICAgICBtYXJnaW4tYm90dG9tOiAtNXB4O1xuICAgICAgbWFyZ2luLWxlZnQ6IDA7XG4gICAgfVxuICAgIGlvbi1zZWxlY3Qge1xuICAgICAgbWFyZ2luLXJpZ2h0OiAwXG4gICAgfVxuICB9XG59XG5cbmlvbi1pdGVtLmZpcnN0IHtcbiAgcGFkZGluZy10b3A6IDIwcHg7XG59XG5cbi5wbGF5ZXIgaW9uLWJ1dHRvbnMgeyBcbiAgcGFkZGluZzogMCAzcHggIWltcG9ydGFudFxufVxuXG4uY29udHJvbHMge1xuICBcbiAgaW9uLWJ1dHRvbnMge1xuICAgIGp1c3RpZnktY29udGVudDogc3BhY2UtYmV0d2VlbjtcbiAgICB3aWR0aDogMTAwJTtcbiAgICBwYWRkaW5nOiAwIDE5cHg7XG4gICAgaW9uLWljb24ge1xuICAgICAgZm9udC1zaXplOiAyNHB4O1xuICAgICAgY29sb3I6IHZhcigtLWlvbi1jb2xvci1wcmltYXJ5LWNvbnRyYXN0KTtcbiAgICB9XG4gIH1cblxuICBpb24tYnV0dG9ucy5rZXlwYWQge1xuICAgIG1heC13aWR0aDogMzIwcHg7XG5cbiAgICBpb24tYnV0dG9uIHtcbiAgICAgIGNvbG9yOiB3aGl0ZTtcbiAgICAgIGJvcmRlcjogMXB4IHNvbGlkIHdoaXRlO1xuICAgICAgcGFkZGluZzogMHB4O1xuICAgICAgd2lkdGg6IDcwcHg7XG4gICAgICBib3JkZXItcmFkaXVzOiA4cHg7XG4gICAgfVxuXG4gICAgc3BhbiB7XG4gICAgICB3aWR0aDogNzNweDtcbiAgICB9XG4gIH1cbiAgaW9uLWJ1dHRvbnMubm9ib3JkZXIge1xuICAgIG1heC13aWR0aDogMzIwcHg7XG5cbiAgICBpb24tYnV0dG9uIHtcbiAgICAgIGJvcmRlcjogbm9uZSAhaW1wb3J0YW50XG4gICAgfVxuICB9XG59XG5cbkBtZWRpYSAocHJlZmVycy1jb2xvci1zY2hlbWU6IGRhcmspIHtcbiAgICAuZGFyayB7XG4gICAgICAgIC0tYmFja2dyb3VuZDogdmFyKC0taW9uLWNvbG9yLXN0ZXAtMTUwKTtcbiAgICAgICAgYmFja2dyb3VuZC1jb2xvcjogdmFyKC0taW9uLWNvbG9yLXN0ZXAtMTUwKTtcbiAgICB9XG59XG4iXX0= */";
+    /***/
+  },
+
+  /***/
+  "./src/app/rendering/media.ts":
+  /*!************************************!*\
+    !*** ./src/app/rendering/media.ts ***!
+    \************************************/
+
+  /*! exports provided: MediaControl */
+
+  /***/
+  function srcAppRenderingMediaTs(module, __webpack_exports__, __webpack_require__) {
+    "use strict";
+
+    __webpack_require__.r(__webpack_exports__);
+    /* harmony export (binding) */
+
+
+    __webpack_require__.d(__webpack_exports__, "MediaControl", function () {
+      return MediaControl;
+    });
+    /* harmony import */
+
+
+    var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+    /*! tslib */
+    "./node_modules/tslib/tslib.es6.js");
+    /* harmony import */
+
+
+    var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+    /*! @angular/core */
+    "./node_modules/@angular/core/fesm2015/core.js");
+    /* harmony import */
+
+
+    var _ionic_angular__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+    /*! @ionic/angular */
+    "./node_modules/@ionic/angular/fesm2015/ionic-angular.js");
+    /* harmony import */
+
+
+    var _core_stdUX__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
+    /*! ../core/stdUX */
+    "./src/app/core/stdUX.ts");
+    /* harmony import */
+
+
+    var _system_types__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
+    /*! ../system/types */
+    "./src/app/system/types.ts");
+    /* harmony import */
+
+
+    var _system_system__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(
+    /*! ../system/system */
+    "./src/app/system/system.ts");
+
+    var MediaControl =
+    /*#__PURE__*/
+    function () {
+      function MediaControl(toastCtrl, system) {
+        _classCallCheck(this, MediaControl);
+
+        this.toastCtrl = toastCtrl;
+        this.system = system;
+        this.showSlider = false;
+        this.running = false;
+        this.clicked = false;
+        this.keypad = false;
+      }
+
+      _createClass(MediaControl, [{
+        key: "basic",
+        value: function basic() {
+          return this.service.type === _system_types__WEBPACK_IMPORTED_MODULE_4__["UnitType"].kAudio;
+        }
+      }, {
+        key: "arrow",
+        value: function arrow() {
+          return this.showSlider ? 'chevron-up' : 'chevron-down';
+        }
+      }, {
+        key: "labelClick",
+        value: function labelClick() {
+          this.showSlider = !this.showSlider;
+        }
+      }, {
+        key: "click",
+        value: function click() {
+          var _this4 = this;
+
+          // guard for not having ionChange trigger when status changes come in 
+          this.clicked = true;
+          setTimeout(function () {
+            return _this4.clicked = false;
+          }, 1000);
+        }
+      }, {
+        key: "onoff",
+        value: function onoff() {
+          if (this.clicked) this.service.setState(!!this.service.status); // make boolean
+        }
+      }, {
+        key: "updown",
+        value: function updown(_updown) {
+          Object(_core_stdUX__WEBPACK_IMPORTED_MODULE_3__["doToast"])(this.toastCtrl, _updown ? "Volume up" : "Volume down");
+          this.service.setState(_updown ? -2 : -1);
+        }
+      }, {
+        key: "change",
+        value: function change() {
+          if (this.clicked) {
+            Object(_core_stdUX__WEBPACK_IMPORTED_MODULE_3__["doToast"])(this.toastCtrl, "change volume " + this.service.value);
+            this.service.setState(this.service.value);
+          }
+        }
+      }, {
+        key: "changeDest",
+        value: function changeDest() {
+          if (this.service.destination.source != 255) this.service.audioSrcDest(this.service.destination.source, this.service.destinationId);
+        }
+      }, {
+        key: "changeSrc",
+        value: function changeSrc() {
+          if (this.service.destination.source != 255) this.service.audioSrcDest(this.service.destination.source, this.service.destinationId);
+        }
+      }, {
+        key: "action",
+        value: function action(_action) {
+          if (_action === "play") this.running = true;
+          if (_action === "stop") this.running = false;
+          this.service.audioAction(_action);
+        }
+      }, {
+        key: "toggleKeypad",
+        value: function toggleKeypad() {
+          this.keypad = !this.keypad;
+        }
+      }, {
+        key: "actionKeypad",
+        value: function actionKeypad(action) {
+          this.service.audioAction("function", action);
+        }
+      }, {
+        key: "same",
+        value: function same(a, b) {
+          return a * 1 == b * 1;
+        }
+      }]);
+
+      return MediaControl;
+    }();
+
+    MediaControl.ctorParameters = function () {
+      return [{
+        type: _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["ToastController"]
+      }, {
+        type: _system_system__WEBPACK_IMPORTED_MODULE_5__["System"]
+      }];
+    };
+
+    MediaControl = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+      selector: 'media',
+      inputs: ['service'],
+      template: "\n    <ion-item lines=\"none\" class=\"media\" *ngIf=\"service.destinations.length\">\n      <ion-label tappable (click)=\"labelClick()\">{{service.getName()}}\n        <ion-icon [name]=\"arrow()\" class=\"media__chevron\"></ion-icon>\n        <span class=\"volume__value\">{{service.value}}%</span>\n      </ion-label>\n      <ion-toggle [(ngModel)]=\"service.status\" (ionChange)=\"onoff()\" (click)=\"click()\"></ion-toggle>\n    </ion-item>\n\n    <ion-item lines=\"none\" class=\"dark volume__slider\" *ngIf=\"showSlider && basic()\">\n      <ion-icon slot=\"start\" name=\"remove\" (click)=\"updown(false)\"></ion-icon>\n      <ion-icon slot=\"end\" name=\"add\" (click)=\"updown(true)\"></ion-icon>\n    </ion-item>\n\n    <ion-item lines=\"none\" class=\"dark volume__slider\" *ngIf=\"showSlider && ! basic()\">\n      <ion-range min=\"1\" max=\"100\" debounce=\"400\" [(ngModel)]=\"service.value\" \n                 (ionChange)=\"change()\" (click)=\"click()\">\n        <ion-icon slot=\"start\" name=\"remove\" (click)=\"updown(false)\"></ion-icon>\n        <ion-icon slot=\"end\" name=\"add\" (click)=\"updown(true)\"></ion-icon>\n      </ion-range>\n    </ion-item>\n\n    <ion-item lines=\"none\" class=\"dark choices\" *ngIf=\"showSlider\">\n      <span class=\"source\">\n        <ion-icon name=\"musical-notes\" slot=\"start\"></ion-icon>\n        <ion-select [(ngModel)]=\"service.destination.source\" interface=\"popover\" slot=\"start\"\n                    [compareWith]=\"same\" (ionChange)=\"changeSrc()\" (click)=\"click()\">\n          <ion-select-option value=\"255\">{{\"Media.Off\" |_ }}</ion-select-option>\n          <ion-select-option *ngFor=\"let src of service.destination.sources\" value=\"{{src.id}}\">{{src.name}}</ion-select-option>\n        </ion-select>\n      </span>\n      \n      <ion-icon slot=\"end\" name=\"volume-medium\" *ngIf=\"(service.destinations.length > 1)\" class=\"desticon\"></ion-icon>\n      <ion-select [(ngModel)]=\"service.destinationId\" interface=\"popover\" slot=\"end\"\n                  [compareWith]=\"same\" (ionChange)=\"changeDest()\" class=\"destination\"\n                  *ngIf=\"(service.destinations.length > 1)\" (click)=\"click()\">\n        <ion-select-option value=\"255\">{{\"Media.Off\" |_ }}</ion-select-option>\n        <ion-select-option *ngFor=\"let dest of service.destinations\" value=\"{{dest.id}}\">{{dest.name}}</ion-select-option>\n      </ion-select>\n    </ion-item>\n\n    <ion-item lines=\"none\" class=\"dark controls player\" *ngIf=\"showSlider\">\n      <ion-buttons>\n        <ion-icon name=\"play-back\" (click)=\"action('back')\"></ion-icon>\n        <!-- ion-icon name=\"play-skip-back\" (click)=\"action('skipback')\"></ion-icon -->\n        <ion-icon name=\"play\" (click)=\"action('play')\" *ngIf=\"!running\"></ion-icon>\n        <ion-icon name=\"stop\" (click)=\"action('stop')\" *ngIf=\"running\"></ion-icon>\n        <ion-icon name=\"pause\" (click)=\"action('pause')\"></ion-icon>\n        <!-- ion-icon name=\"play-skip-forward\" (click)=\"action('skipforward')\"></ion-icon -->\n        <ion-icon name=\"play-forward\" (click)=\"action('forward')\"></ion-icon>\n        <ion-icon name=\"keypad\" (click)=\"toggleKeypad()\"></ion-icon>\n      </ion-buttons>\n    </ion-item>\n\n    <ion-item lines=\"none\" class=\"dark controls first\" *ngIf=\"showSlider && keypad\">\n      <ion-buttons class=\"keypad\">\n        <ion-button (click)=\"actionKeypad('1')\">1</ion-button>\n        <ion-button (click)=\"actionKeypad('2')\">2</ion-button>\n        <ion-button (click)=\"actionKeypad('3')\">3</ion-button>\n      </ion-buttons>\n      </ion-item>\n\n      <ion-item lines=\"none\" class=\"dark controls\" *ngIf=\"showSlider && keypad\">\n        <ion-buttons class=\"keypad\">\n        <ion-button (click)=\"actionKeypad('4')\">4</ion-button>\n        <ion-button (click)=\"actionKeypad('5')\">5</ion-button>\n        <ion-button (click)=\"actionKeypad('6')\">6</ion-button>\n      </ion-buttons>\n      </ion-item>\n\n      <ion-item lines=\"none\" class=\"dark controls\" *ngIf=\"showSlider && keypad\">\n        <ion-buttons class=\"keypad\">\n        <ion-button (click)=\"actionKeypad('7')\">7</ion-button>\n        <ion-button (click)=\"actionKeypad('8')\">8</ion-button>\n        <ion-button (click)=\"actionKeypad('9')\">9</ion-button>\n      </ion-buttons>\n      </ion-item>\n\n      <ion-item lines=\"none\" class=\"dark controls\" *ngIf=\"showSlider && keypad\">\n        <ion-buttons class=\"keypad\">\n          <ion-button (click)=\"actionKeypad('-')\">./..</ion-button>\n          <ion-button (click)=\"actionKeypad('0')\">0</ion-button>\n          <span></span>\n        </ion-buttons>\n      </ion-item>\n\n      <ion-item lines=\"none\" class=\"dark controls\" *ngIf=\"showSlider && keypad\">\n        <ion-buttons class=\"keypad noborder\">\n          <span></span>\n          <ion-button (click)=\"actionKeypad('up')\"><ion-icon name=\"caret-up\"></ion-icon></ion-button>\n          <span></span>\n        </ion-buttons>\n      </ion-item>\n\n      <ion-item lines=\"none\" class=\"dark controls\" *ngIf=\"showSlider && keypad\">\n        <ion-buttons class=\"keypad noborder\">\n          <ion-button (click)=\"actionKeypad('left')\"><ion-icon name=\"caret-back\"></ion-icon></ion-button>\n          <ion-button (click)=\"actionKeypad('enter')\">OK</ion-button>\n          <ion-button (click)=\"actionKeypad('right')\"><ion-icon name=\"caret-forward\"></ion-icon></ion-button>\n        </ion-buttons>\n      </ion-item>\n\n      <ion-item lines=\"none\" class=\"dark controls\" *ngIf=\"showSlider && keypad\">\n        <ion-buttons class=\"keypad noborder\">\n          <span></span>\n          <ion-button (click)=\"actionKeypad('down')\"><ion-icon name=\"caret-down\"></ion-icon></ion-button>\n          <span></span>\n        </ion-buttons>\n    </ion-item>\n\n\n\n    <!-- ion-item lines=\"none\" class=\"choices\" *ngIf=\"showSlider\">\n     1) play stop rewind enz...\n     2) 0-9\n    </ion-item>\n    -->\n  ",
+      styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(
+      /*! ./media.scss */
+      "./src/app/rendering/media.scss")).default]
+    }), tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_ionic_angular__WEBPACK_IMPORTED_MODULE_2__["ToastController"], _system_system__WEBPACK_IMPORTED_MODULE_5__["System"]])], MediaControl);
     /***/
   },
 
@@ -2310,7 +2598,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     SceneControl = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
       selector: 'scene',
       inputs: ['scene'],
-      template: "\n    <ion-item lines=\"none\">\n      <ion-label>{{scene.name}}</ion-label>\n      <ion-button slot=\"end\" shape=\"round\" [color]=\"warning\"\n                  (click)=\"click()\"></ion-button>\n    </ion-item>\n  ",
+      template: "\n    <ion-item lines=\"none\">\n      <ion-label>{{scene.name}}</ion-label>\n      <ion-button slot=\"end\" shape=\"round\" color=\"warning\"\n                  (click)=\"click()\"></ion-button>\n    </ion-item>\n  ",
       styles: ["ion-button { width: 25px; height: 25px }"]
     }), tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_ionic_angular__WEBPACK_IMPORTED_MODULE_2__["ToastController"], _system_system__WEBPACK_IMPORTED_MODULE_4__["System"]])], SceneControl);
     /***/
@@ -2378,8 +2666,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       _createClass(SwitchControl, [{
         key: "change",
         value: function change() {
-          console.log("change: " + this.service.status);
-
           if (this.service.status == 2) {// don't do anything on timed PIR status
           } else {
             this.service.setState(!!this.service.status); // make boolean
@@ -2387,8 +2673,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }
       }, {
         key: "toggle",
-        value: function toggle(unit) {
-          unit.setState(!unit.status);
+        value: function toggle() {
+          this.service.setState(!this.service.status);
         }
       }]);
 
@@ -2398,7 +2684,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     SwitchControl = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
       selector: 'switch',
       inputs: ['service'],
-      template: "\n    <ion-item lines=\"none\">\n      <ion-label tappable (click)=\"toggle(service)\">\n        {{service.getName()}}\n        <ion-icon class=\"state\" *ngIf=\"service.status === 2\" name=\"time\" color=\"primary\"></ion-icon>\n      </ion-label>\n\n      <ion-toggle [(ngModel)]=\"service.status\" \n                  (ionChange)=\"change()\"></ion-toggle>\n    </ion-item>\n  ",
+      template: "\n    <ion-item lines=\"none\">\n      <ion-label tappable (click)=\"toggle()\">\n        {{service.getName()}}\n        <ion-icon class=\"state\" *ngIf=\"service.status === 2\" name=\"time\" color=\"primary\"></ion-icon>\n      </ion-label>\n\n      <ion-toggle [(ngModel)]=\"service.status\" \n                  (ionChange)=\"change()\"></ion-toggle>\n    </ion-item>\n  ",
       styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(
       /*! ./switch.scss */
       "./src/app/rendering/switch.scss")).default]
@@ -2422,7 +2708,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     /* harmony default export */
 
 
-    __webpack_exports__["default"] = ".temp,\n.presets {\n  margin-bottom: 40px;\n  padding: 20px;\n  border-radius: var(--duotecno-border-radius);\n  background: #fff; }\n\n.temp {\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-align: center;\n          align-items: center;\n  margin-bottom: 10px; }\n\n.temp__name {\n    font-weight: 700; }\n\n.temp__current {\n    margin: 15px 0;\n    font-size: 3.5rem;\n    font-weight: 700; }\n\n.temp__current .temp__celcius {\n      font-size: 1.5rem;\n      line-height: 1.8;\n      font-weight: 400; }\n\n.temp__celcius {\n    margin-bottom: 5px;\n    margin-left: 2px;\n    font-size: 0.7rem;\n    vertical-align: text-top; }\n\n.temp__data {\n    width: calc(100% - 90px); }\n\n.temp ion-buttons {\n    display: -webkit-box;\n    display: flex;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n            flex-direction: column;\n    width: 90px; }\n\n.temp ion-button {\n    --background: var(--ion-background-color);\n    --background-hover: var(--ion-background-color);\n    --border-radius: 4px;\n    --color: var(--ion-color-dark);\n    width: 70px;\n    height: 70px;\n    margin: 10px; }\n\n.temp ion-button ion-icon {\n      font-size: 3rem; }\n\n.presets {\n  padding-bottom: 0; }\n\n.presets ion-buttons {\n    display: -webkit-box;\n    display: flex;\n    -webkit-box-pack: justify;\n            justify-content: space-between; }\n\n.presets ion-button {\n    --color: var(--ion-color-dark);\n    width: 40px;\n    height: 40px; }\n\n.presets .icons ion-button {\n    --background: var(--ion-background-color);\n    --background-hover: var(--ion-background-color);\n    --border-radius: 4px; }\n\n.presets .icons ion-button.preset-active {\n      --background: var(--ion-color-primary);\n      --background-hover: var(--ion-color-primary);\n      --color: #fff; }\n\n.presets .icontext ion-button {\n    font-size: 0.8rem; }\n\n.presets .icontext ion-button .temp__celcius {\n      font-size: 0.5rem; }\n\n@media (min-width: 375px) {\n  .temp__current {\n    font-size: 4.8rem; }\n    .temp__current .temp__celcius {\n      font-size: 2rem;\n      line-height: 1.8; }\n  .presets ion-button {\n    width: 50px;\n    height: 50px; }\n  .presets .icontext ion-button {\n    font-size: 1rem; }\n    .presets .icontext ion-button .temp__celcius {\n      font-size: 0.7rem; } }\n\n@media (prefers-color-scheme: dark) {\n  .temp,\n  .presets {\n    background: var(--ion-color-step-150); } }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9qb2hhbi9MaWJyYXJ5L01vYmlsZSBEb2N1bWVudHMvY29tfmFwcGxlfkNsb3VkRG9jcy9Qcm9qZWN0cy9EdW90ZWNuby9zbWFydHN5c3RlbS9zcmMvYXBwL3JlbmRlcmluZy90ZW1wZXJhdHVyZS5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBOztFQUdJLG1CQUFtQjtFQUNuQixhQUFhO0VBQ2IsNENBQTRDO0VBQzVDLGdCQUFnQixFQUFBOztBQUVwQjtFQUNJLG9CQUFhO0VBQWIsYUFBYTtFQUNiLHlCQUFtQjtVQUFuQixtQkFBbUI7RUFDbkIsbUJBQW1CLEVBQUE7O0FBRW5CO0lBQ0ksZ0JBQWdCLEVBQUE7O0FBRXBCO0lBQ0ksY0FBYztJQUNkLGlCQUFpQjtJQUNqQixnQkFBZ0IsRUFBQTs7QUFIbkI7TUFNTyxpQkFBaUI7TUFDakIsZ0JBQWdCO01BQ2hCLGdCQUFnQixFQUFBOztBQUd4QjtJQUNJLGtCQUFrQjtJQUNsQixnQkFBZ0I7SUFDaEIsaUJBQWlCO0lBQ2pCLHdCQUF3QixFQUFBOztBQUU1QjtJQUNJLHdCQUF3QixFQUFBOztBQTFCaEM7SUE2QlEsb0JBQWE7SUFBYixhQUFhO0lBQ2IsNEJBQXNCO0lBQXRCLDZCQUFzQjtZQUF0QixzQkFBc0I7SUFDdEIsV0FBVyxFQUFBOztBQS9CbkI7SUFrQ1EseUNBQWE7SUFDYiwrQ0FBbUI7SUFDbkIsb0JBQWdCO0lBQ2hCLDhCQUFRO0lBQ1IsV0FBVztJQUNYLFlBQVk7SUFDWixZQUFZLEVBQUE7O0FBeENwQjtNQTJDWSxlQUFlLEVBQUE7O0FBSTNCO0VBQ0ksaUJBQWlCLEVBQUE7O0FBRHJCO0lBSVEsb0JBQWE7SUFBYixhQUFhO0lBQ2IseUJBQThCO1lBQTlCLDhCQUE4QixFQUFBOztBQUx0QztJQVFRLDhCQUFRO0lBQ1IsV0FBVztJQUNYLFlBQVksRUFBQTs7QUFWcEI7SUFhUSx5Q0FBYTtJQUNiLCtDQUFtQjtJQUNuQixvQkFBZ0IsRUFBQTs7QUFmeEI7TUFrQlksc0NBQWE7TUFDYiw0Q0FBbUI7TUFDbkIsYUFBUSxFQUFBOztBQXBCcEI7SUF3QlEsaUJBQWlCLEVBQUE7O0FBeEJ6QjtNQTJCWSxpQkFBaUIsRUFBQTs7QUFLN0I7RUFFUTtJQUNJLGlCQUFpQixFQUFBO0lBRHBCO01BSU8sZUFBZTtNQUNmLGdCQUFnQixFQUFBO0VBSTVCO0lBRVEsV0FBVztJQUNYLFlBQVksRUFBQTtFQUhwQjtJQU1RLGVBQWUsRUFBQTtJQU52QjtNQVNZLGlCQUFpQixFQUFBLEVBQ3BCOztBQUliO0VBQ0k7O0lBRUkscUNBQXFDLEVBQUEsRUFDeEMiLCJmaWxlIjoic3JjL2FwcC9yZW5kZXJpbmcvdGVtcGVyYXR1cmUuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbIi50ZW1wLFxuLnByZXNldHNcbiB7XG4gICAgbWFyZ2luLWJvdHRvbTogNDBweDtcbiAgICBwYWRkaW5nOiAyMHB4O1xuICAgIGJvcmRlci1yYWRpdXM6IHZhcigtLWR1b3RlY25vLWJvcmRlci1yYWRpdXMpO1xuICAgIGJhY2tncm91bmQ6ICNmZmY7XG59XG4udGVtcCB7XG4gICAgZGlzcGxheTogZmxleDtcbiAgICBhbGlnbi1pdGVtczogY2VudGVyO1xuICAgIG1hcmdpbi1ib3R0b206IDEwcHg7XG5cbiAgICAmX19uYW1lIHtcbiAgICAgICAgZm9udC13ZWlnaHQ6IDcwMDtcbiAgICB9XG4gICAgJl9fY3VycmVudCB7XG4gICAgICAgIG1hcmdpbjogMTVweCAwO1xuICAgICAgICBmb250LXNpemU6IDMuNXJlbTtcbiAgICAgICAgZm9udC13ZWlnaHQ6IDcwMDtcblxuICAgICAgICAudGVtcF9fY2VsY2l1cyB7XG4gICAgICAgICAgICBmb250LXNpemU6IDEuNXJlbTtcbiAgICAgICAgICAgIGxpbmUtaGVpZ2h0OiAxLjg7XG4gICAgICAgICAgICBmb250LXdlaWdodDogNDAwO1xuICAgICAgICB9XG4gICAgfVxuICAgICZfX2NlbGNpdXMge1xuICAgICAgICBtYXJnaW4tYm90dG9tOiA1cHg7XG4gICAgICAgIG1hcmdpbi1sZWZ0OiAycHg7XG4gICAgICAgIGZvbnQtc2l6ZTogMC43cmVtO1xuICAgICAgICB2ZXJ0aWNhbC1hbGlnbjogdGV4dC10b3A7XG4gICAgfVxuICAgICZfX2RhdGEge1xuICAgICAgICB3aWR0aDogY2FsYygxMDAlIC0gOTBweCk7XG4gICAgfVxuICAgIGlvbi1idXR0b25zIHtcbiAgICAgICAgZGlzcGxheTogZmxleDtcbiAgICAgICAgZmxleC1kaXJlY3Rpb246IGNvbHVtbjtcbiAgICAgICAgd2lkdGg6IDkwcHg7XG4gICAgfVxuICAgIGlvbi1idXR0b24ge1xuICAgICAgICAtLWJhY2tncm91bmQ6IHZhcigtLWlvbi1iYWNrZ3JvdW5kLWNvbG9yKTtcbiAgICAgICAgLS1iYWNrZ3JvdW5kLWhvdmVyOiB2YXIoLS1pb24tYmFja2dyb3VuZC1jb2xvcik7XG4gICAgICAgIC0tYm9yZGVyLXJhZGl1czogNHB4O1xuICAgICAgICAtLWNvbG9yOiB2YXIoLS1pb24tY29sb3ItZGFyayk7XG4gICAgICAgIHdpZHRoOiA3MHB4O1xuICAgICAgICBoZWlnaHQ6IDcwcHg7XG4gICAgICAgIG1hcmdpbjogMTBweDtcblxuICAgICAgICBpb24taWNvbiB7XG4gICAgICAgICAgICBmb250LXNpemU6IDNyZW07XG4gICAgICAgIH1cbiAgICB9XG59XG4ucHJlc2V0cyB7XG4gICAgcGFkZGluZy1ib3R0b206IDA7XG5cbiAgICBpb24tYnV0dG9ucyB7XG4gICAgICAgIGRpc3BsYXk6IGZsZXg7XG4gICAgICAgIGp1c3RpZnktY29udGVudDogc3BhY2UtYmV0d2VlbjtcbiAgICB9XG4gICAgaW9uLWJ1dHRvbiB7XG4gICAgICAgIC0tY29sb3I6IHZhcigtLWlvbi1jb2xvci1kYXJrKTtcbiAgICAgICAgd2lkdGg6IDQwcHg7XG4gICAgICAgIGhlaWdodDogNDBweDtcbiAgICB9XG4gICAgLmljb25zIGlvbi1idXR0b24ge1xuICAgICAgICAtLWJhY2tncm91bmQ6IHZhcigtLWlvbi1iYWNrZ3JvdW5kLWNvbG9yKTtcbiAgICAgICAgLS1iYWNrZ3JvdW5kLWhvdmVyOiB2YXIoLS1pb24tYmFja2dyb3VuZC1jb2xvcik7XG4gICAgICAgIC0tYm9yZGVyLXJhZGl1czogNHB4O1xuXG4gICAgICAgICYucHJlc2V0LWFjdGl2ZSB7XG4gICAgICAgICAgICAtLWJhY2tncm91bmQ6IHZhcigtLWlvbi1jb2xvci1wcmltYXJ5KTtcbiAgICAgICAgICAgIC0tYmFja2dyb3VuZC1ob3ZlcjogdmFyKC0taW9uLWNvbG9yLXByaW1hcnkpO1xuICAgICAgICAgICAgLS1jb2xvcjogI2ZmZjtcbiAgICAgICAgfVxuICAgIH1cbiAgICAuaWNvbnRleHQgaW9uLWJ1dHRvbiB7XG4gICAgICAgIGZvbnQtc2l6ZTogMC44cmVtO1xuXG4gICAgICAgIC50ZW1wX19jZWxjaXVzIHtcbiAgICAgICAgICAgIGZvbnQtc2l6ZTogMC41cmVtO1xuICAgICAgICB9XG4gICAgfVxufVxuXG5AbWVkaWEgKG1pbi13aWR0aDogMzc1cHgpIHtcbiAgICAudGVtcCB7XG4gICAgICAgICZfX2N1cnJlbnQge1xuICAgICAgICAgICAgZm9udC1zaXplOiA0LjhyZW07XG5cbiAgICAgICAgICAgIC50ZW1wX19jZWxjaXVzIHtcbiAgICAgICAgICAgICAgICBmb250LXNpemU6IDJyZW07XG4gICAgICAgICAgICAgICAgbGluZS1oZWlnaHQ6IDEuODtcbiAgICAgICAgICAgIH1cbiAgICAgICAgfVxuICAgIH1cbiAgICAucHJlc2V0cyB7XG4gICAgICAgIGlvbi1idXR0b24ge1xuICAgICAgICAgICAgd2lkdGg6IDUwcHg7XG4gICAgICAgICAgICBoZWlnaHQ6IDUwcHg7XG4gICAgICAgIH1cbiAgICAgICAgLmljb250ZXh0IGlvbi1idXR0b24ge1xuICAgICAgICAgICAgZm9udC1zaXplOiAxcmVtO1xuICAgIFxuICAgICAgICAgICAgLnRlbXBfX2NlbGNpdXMge1xuICAgICAgICAgICAgICAgIGZvbnQtc2l6ZTogMC43cmVtO1xuICAgICAgICAgICAgfVxuICAgICAgICB9XG4gICAgfVxufVxuQG1lZGlhIChwcmVmZXJzLWNvbG9yLXNjaGVtZTogZGFyaykge1xuICAgIC50ZW1wLFxuICAgIC5wcmVzZXRzIHtcbiAgICAgICAgYmFja2dyb3VuZDogdmFyKC0taW9uLWNvbG9yLXN0ZXAtMTUwKTtcbiAgICB9XG59Il19 */";
+    __webpack_exports__["default"] = ".temp,\n.presets {\n  margin-bottom: 14px;\n  padding: 16px;\n  border-radius: var(--duotecno-border-radius);\n  background: #fff; }\n\n.temp {\n  display: -webkit-box;\n  display: flex;\n  flex-wrap: wrap;\n  -webkit-box-align: center;\n          align-items: center;\n  margin-bottom: 10px; }\n\n.temp__name {\n    font-weight: 700;\n    width: 100%;\n    display: -webkit-box;\n    display: flex;\n    -webkit-box-pack: justify;\n            justify-content: space-between; }\n\n.temp__name ion-icon {\n      font-size: 20px; }\n\n.temp__current {\n    margin: 10px 0;\n    font-size: 60px;\n    line-height: 1;\n    font-weight: normal; }\n\n.temp__current .temp__celcius {\n      font-size: 20px; }\n\n.temp__asking {\n    font-size: 20px; }\n\n.temp__asking .temp__celcius {\n      font-size: 12px; }\n\n.temp__celcius {\n    line-height: 1;\n    margin-bottom: 5px;\n    margin-left: 2px;\n    vertical-align: text-top; }\n\n.temp__data {\n    width: calc(100% - 90px);\n    text-align: center;\n    font-size: 25px; }\n\n.temp ion-buttons {\n    display: -webkit-box;\n    display: flex;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n            flex-direction: column;\n    width: 90px;\n    -webkit-box-align: end;\n            align-items: flex-end; }\n\n.temp ion-button {\n    --background: var(--ion-background-color);\n    --background-hover: var(--ion-background-color);\n    --border-radius: 4px;\n    --color: var(--ion-color-dark);\n    width: 45px;\n    height: 45px;\n    margin: 5px;\n    margin-right: 0; }\n\n.temp ion-button ion-icon {\n      font-size: 3rem; }\n\n.presets {\n  margin-top: -30px;\n  padding-bottom: 0; }\n\n.presets ion-buttons {\n    display: -webkit-box;\n    display: flex;\n    -webkit-box-pack: justify;\n            justify-content: space-between; }\n\n.presets ion-button {\n    --color: var(--ion-color-dark);\n    width: calc(20% - 7px) !important;\n    height: 22px; }\n\n.presets .icons ion-button {\n    --background: var(--ion-background-color);\n    --background-hover: var(--ion-background-color);\n    --border-radius: 4px; }\n\n.presets .icons ion-button.preset-active {\n      --background: var(--ion-color-primary);\n      --background-hover: var(--ion-color-primary);\n      --color: #fff; }\n\n.presets .icontext ion-button {\n    font-size: 12px; }\n\n.presets .icontext ion-button .temp__celcius {\n      font-size: 8px; }\n\n@media (min-width: 375px) {\n  .temp__current {\n    font-size: 60px; }\n    .temp__current .temp__celcius {\n      font-size: 20px;\n      line-height: 1.8; }\n  .presets ion-button {\n    width: 50px;\n    height: 50px; }\n  .presets .icontext ion-button {\n    font-size: 12px; }\n    .presets .icontext ion-button .temp__celcius {\n      font-size: 8px; } }\n\n@media (prefers-color-scheme: dark) {\n  .temp,\n  .presets {\n    background: var(--ion-color-step-150); } }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9qb2hhbi9MaWJyYXJ5L01vYmlsZSBEb2N1bWVudHMvY29tfmFwcGxlfkNsb3VkRG9jcy9Qcm9qZWN0cy9EdW90ZWNuby9zbWFydHN5c3RlbS9zcmMvYXBwL3JlbmRlcmluZy90ZW1wZXJhdHVyZS5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBOztFQUVFLG1CQUFtQjtFQUNuQixhQUFhO0VBQ2IsNENBQTRDO0VBQzVDLGdCQUFnQixFQUFBOztBQUVsQjtFQUNFLG9CQUFhO0VBQWIsYUFBYTtFQUNiLGVBQWU7RUFDZix5QkFBbUI7VUFBbkIsbUJBQW1CO0VBQ25CLG1CQUFtQixFQUFBOztBQUVuQjtJQUNFLGdCQUFnQjtJQUNoQixXQUFXO0lBQ1gsb0JBQWE7SUFBYixhQUFhO0lBQ2IseUJBQThCO1lBQTlCLDhCQUE4QixFQUFBOztBQUovQjtNQUtZLGVBQWUsRUFBQTs7QUFFNUI7SUFDRSxjQUFjO0lBQ2QsZUFBZTtJQUNmLGNBQWM7SUFDZCxtQkFBbUIsRUFBQTs7QUFKcEI7TUFPRyxlQUFlLEVBQUE7O0FBR25CO0lBQ0UsZUFBZSxFQUFBOztBQURoQjtNQUlHLGVBQWUsRUFBQTs7QUFHbkI7SUFDRSxjQUFjO0lBQ2Qsa0JBQWtCO0lBQ2xCLGdCQUFnQjtJQUNoQix3QkFBd0IsRUFBQTs7QUFHMUI7SUFDRSx3QkFBd0I7SUFDeEIsa0JBQWtCO0lBQ2xCLGVBQ0YsRUFBQTs7QUF6Q0Y7SUEyQ0ksb0JBQWE7SUFBYixhQUFhO0lBQ2IsNEJBQXNCO0lBQXRCLDZCQUFzQjtZQUF0QixzQkFBc0I7SUFDdEIsV0FBVztJQUNYLHNCQUFxQjtZQUFyQixxQkFBcUIsRUFBQTs7QUE5Q3pCO0lBaURJLHlDQUFhO0lBQ2IsK0NBQW1CO0lBQ25CLG9CQUFnQjtJQUNoQiw4QkFBUTtJQUNSLFdBQVc7SUFDWCxZQUFZO0lBQ1osV0FBVztJQUNYLGVBQWUsRUFBQTs7QUF4RG5CO01BMERNLGVBQWUsRUFBQTs7QUFJckI7RUFDRSxpQkFBaUI7RUFDakIsaUJBQWlCLEVBQUE7O0FBRm5CO0lBS00sb0JBQWE7SUFBYixhQUFhO0lBQ2IseUJBQThCO1lBQTlCLDhCQUE4QixFQUFBOztBQU5wQztJQVNNLDhCQUFRO0lBQ1IsaUNBQWlDO0lBQUUsWUFFdkMsRUFBQTs7QUFaRjtJQWNJLHlDQUFhO0lBQ2IsK0NBQW1CO0lBQ25CLG9CQUFnQixFQUFBOztBQWhCcEI7TUFtQk0sc0NBQWE7TUFDYiw0Q0FBbUI7TUFDbkIsYUFBUSxFQUFBOztBQXJCZDtJQXlCSSxlQUFlLEVBQUE7O0FBekJuQjtNQTRCTSxjQUNGLEVBQUE7O0FBSUo7RUFFTTtJQUNFLGVBQWUsRUFBQTtJQURoQjtNQUlLLGVBQWU7TUFDZixnQkFBZ0IsRUFBQTtFQUl4QjtJQUVJLFdBQVc7SUFDWCxZQUFZLEVBQUE7RUFIaEI7SUFNSSxlQUFjLEVBQUE7SUFObEI7TUFTUSxjQUFjLEVBQUEsRUFDakI7O0FBSVQ7RUFDSTs7SUFFSSxxQ0FBcUMsRUFBQSxFQUN4QyIsImZpbGUiOiJzcmMvYXBwL3JlbmRlcmluZy90ZW1wZXJhdHVyZS5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLnRlbXAsXG4ucHJlc2V0cyB7XG4gIG1hcmdpbi1ib3R0b206IDE0cHg7XG4gIHBhZGRpbmc6IDE2cHg7XG4gIGJvcmRlci1yYWRpdXM6IHZhcigtLWR1b3RlY25vLWJvcmRlci1yYWRpdXMpO1xuICBiYWNrZ3JvdW5kOiAjZmZmO1xufVxuLnRlbXAge1xuICBkaXNwbGF5OiBmbGV4O1xuICBmbGV4LXdyYXA6IHdyYXA7XG4gIGFsaWduLWl0ZW1zOiBjZW50ZXI7XG4gIG1hcmdpbi1ib3R0b206IDEwcHg7XG5cbiAgJl9fbmFtZSB7XG4gICAgZm9udC13ZWlnaHQ6IDcwMDtcbiAgICB3aWR0aDogMTAwJTtcbiAgICBkaXNwbGF5OiBmbGV4O1xuICAgIGp1c3RpZnktY29udGVudDogc3BhY2UtYmV0d2VlbjtcbiAgICBpb24taWNvbiB7IGZvbnQtc2l6ZTogMjBweDt9XG4gIH1cbiAgJl9fY3VycmVudCB7XG4gICAgbWFyZ2luOiAxMHB4IDA7XG4gICAgZm9udC1zaXplOiA2MHB4O1xuICAgIGxpbmUtaGVpZ2h0OiAxO1xuICAgIGZvbnQtd2VpZ2h0OiBub3JtYWw7XG5cbiAgICAudGVtcF9fY2VsY2l1cyB7XG4gICAgICBmb250LXNpemU6IDIwcHg7XG4gICAgfVxuICB9XG4gICZfX2Fza2luZyB7XG4gICAgZm9udC1zaXplOiAyMHB4O1xuXG4gICAgLnRlbXBfX2NlbGNpdXMge1xuICAgICAgZm9udC1zaXplOiAxMnB4O1xuICAgIH1cbiAgfVxuICAmX19jZWxjaXVzIHtcbiAgICBsaW5lLWhlaWdodDogMTtcbiAgICBtYXJnaW4tYm90dG9tOiA1cHg7XG4gICAgbWFyZ2luLWxlZnQ6IDJweDtcbiAgICB2ZXJ0aWNhbC1hbGlnbjogdGV4dC10b3A7XG4gIH1cblxuICAmX19kYXRhIHtcbiAgICB3aWR0aDogY2FsYygxMDAlIC0gOTBweCk7XG4gICAgdGV4dC1hbGlnbjogY2VudGVyO1xuICAgIGZvbnQtc2l6ZTogMjVweFxuICB9XG4gIGlvbi1idXR0b25zIHtcbiAgICBkaXNwbGF5OiBmbGV4O1xuICAgIGZsZXgtZGlyZWN0aW9uOiBjb2x1bW47XG4gICAgd2lkdGg6IDkwcHg7XG4gICAgYWxpZ24taXRlbXM6IGZsZXgtZW5kO1xuICB9XG4gIGlvbi1idXR0b24ge1xuICAgIC0tYmFja2dyb3VuZDogdmFyKC0taW9uLWJhY2tncm91bmQtY29sb3IpO1xuICAgIC0tYmFja2dyb3VuZC1ob3ZlcjogdmFyKC0taW9uLWJhY2tncm91bmQtY29sb3IpO1xuICAgIC0tYm9yZGVyLXJhZGl1czogNHB4O1xuICAgIC0tY29sb3I6IHZhcigtLWlvbi1jb2xvci1kYXJrKTtcbiAgICB3aWR0aDogNDVweDtcbiAgICBoZWlnaHQ6IDQ1cHg7XG4gICAgbWFyZ2luOiA1cHg7XG4gICAgbWFyZ2luLXJpZ2h0OiAwO1xuICAgIGlvbi1pY29uIHtcbiAgICAgIGZvbnQtc2l6ZTogM3JlbTtcbiAgICB9XG4gIH1cbn1cbi5wcmVzZXRzIHtcbiAgbWFyZ2luLXRvcDogLTMwcHg7XG4gIHBhZGRpbmctYm90dG9tOiAwO1xuXG4gIGlvbi1idXR0b25zIHtcbiAgICAgIGRpc3BsYXk6IGZsZXg7XG4gICAgICBqdXN0aWZ5LWNvbnRlbnQ6IHNwYWNlLWJldHdlZW47XG4gIH1cbiAgaW9uLWJ1dHRvbiB7XG4gICAgICAtLWNvbG9yOiB2YXIoLS1pb24tY29sb3ItZGFyayk7XG4gICAgICB3aWR0aDogY2FsYygyMCUgLSA3cHgpICFpbXBvcnRhbnQ7IGhlaWdodDogMjJweFxuXG4gIH1cbiAgLmljb25zIGlvbi1idXR0b24ge1xuICAgIC0tYmFja2dyb3VuZDogdmFyKC0taW9uLWJhY2tncm91bmQtY29sb3IpO1xuICAgIC0tYmFja2dyb3VuZC1ob3ZlcjogdmFyKC0taW9uLWJhY2tncm91bmQtY29sb3IpO1xuICAgIC0tYm9yZGVyLXJhZGl1czogNHB4O1xuXG4gICAgJi5wcmVzZXQtYWN0aXZlIHtcbiAgICAgIC0tYmFja2dyb3VuZDogdmFyKC0taW9uLWNvbG9yLXByaW1hcnkpO1xuICAgICAgLS1iYWNrZ3JvdW5kLWhvdmVyOiB2YXIoLS1pb24tY29sb3ItcHJpbWFyeSk7XG4gICAgICAtLWNvbG9yOiAjZmZmO1xuICAgIH1cbiAgfVxuICAuaWNvbnRleHQgaW9uLWJ1dHRvbiB7XG4gICAgZm9udC1zaXplOiAxMnB4O1xuXG4gICAgLnRlbXBfX2NlbGNpdXMge1xuICAgICAgZm9udC1zaXplOiA4cHhcbiAgICB9XG4gIH1cbn1cblxuQG1lZGlhIChtaW4td2lkdGg6IDM3NXB4KSB7XG4gICAgLnRlbXAge1xuICAgICAgJl9fY3VycmVudCB7XG4gICAgICAgIGZvbnQtc2l6ZTogNjBweDtcblxuICAgICAgICAudGVtcF9fY2VsY2l1cyB7XG4gICAgICAgICAgICBmb250LXNpemU6IDIwcHg7XG4gICAgICAgICAgICBsaW5lLWhlaWdodDogMS44O1xuICAgICAgICB9XG4gICAgICB9XG4gICAgfVxuICAgIC5wcmVzZXRzIHtcbiAgICAgIGlvbi1idXR0b24ge1xuICAgICAgICB3aWR0aDogNTBweDtcbiAgICAgICAgaGVpZ2h0OiA1MHB4O1xuICAgICAgfVxuICAgICAgLmljb250ZXh0IGlvbi1idXR0b24ge1xuICAgICAgICBmb250LXNpemU6MTJweDtcblxuICAgICAgICAudGVtcF9fY2VsY2l1cyB7XG4gICAgICAgICAgICBmb250LXNpemU6IDhweDtcbiAgICAgICAgfVxuICAgICAgfVxuICAgIH1cbn1cbkBtZWRpYSAocHJlZmVycy1jb2xvci1zY2hlbWU6IGRhcmspIHtcbiAgICAudGVtcCxcbiAgICAucHJlc2V0cyB7XG4gICAgICAgIGJhY2tncm91bmQ6IHZhcigtLWlvbi1jb2xvci1zdGVwLTE1MCk7XG4gICAgfVxufSJdfQ== */";
     /***/
   },
 
@@ -2505,6 +2791,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           return this.service.preset === preset ? 'preset-active' : '';
         }
       }, {
+        key: "getCurrent",
+        value: function getCurrent() {
+          return this.service.value;
+        }
+      }, {
         key: "getTemp",
         value: function getTemp() {
           switch (this.service.preset) {
@@ -2520,6 +2811,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             case 3:
               return this.service.hmoon;
           }
+
+          return this.service.sun;
         }
       }, {
         key: "incDecTemp",
@@ -2551,7 +2844,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     TemperatureControl = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
       selector: 'temperature',
       inputs: ['service'],
-      template: "\n    <div class=\"temp\">\n      <div class=\"temp__data\">\n        <div class=\"temp__name\">\n          {{service.getName()}}\n          <ion-icon *ngIf=\"service.preset >= 0\" class=\"right\" [color]=\"colorTemp()\" name=\"thermometer\"></ion-icon>\n          <!--span class=\"right\">{{statusTemp()}}</span -->\n        </div>\n        <div class=\"temp__current\">{{service.value | temp}}<span class=\"temp__celcius\">\xB0C</span></div>\n        <div class=\"temp__asking\">{{ \"Temperature.Asking\" |_ }}: {{ getTemp() | temp}}<span class=\"temp__celcius\">\xB0C</span></div>\n      </div>\n\n      <ion-buttons>\n        <ion-button fill=\"solid\" slot=\"icon-only\" (click)=\"incDecTemp(true)\">\n          <ion-icon name=\"chevron-up\"></ion-icon></ion-button>\n        <ion-button fill=\"solid\" slot=\"icon-only\" (click)=\"incDecTemp(false)\">\n          <ion-icon name=\"chevron-down\"></ion-icon></ion-button>\n      </ion-buttons>\n    </div>\n\n    <div class=\"presets\">\n      <ion-buttons class=\"icons\">\n        <ion-button fill=\"solid\" slot=\"icon-only\" [ngClass]=\"colorPreset(-1)\" (click)=\"changePreset(-1)\">\n          <ion-icon name=\"close-outline\"></ion-icon></ion-button>\n        <ion-button fill=\"solid\" slot=\"icon-only\" [ngClass]=\"colorPreset(1)\" (click)=\"changePreset(1)\">\n          <ion-icon src=\"/assets/icon/hsun.svg\"></ion-icon></ion-button>\n        <ion-button fill=\"solid\" slot=\"icon-only\" [ngClass]=\"colorPreset(0)\" (click)=\"changePreset(0)\">\n          <ion-icon name=\"sunny\"></ion-icon></ion-button>\n        <ion-button fill=\"solid\" slot=\"icon-only\" [ngClass]=\"colorPreset(3)\" (click)=\"changePreset(3)\">\n          <ion-icon src=\"/assets/icon/hmoon.svg\"></ion-icon></ion-button>\n        <ion-button fill=\"solid\" slot=\"icon-only\" [ngClass]=\"colorPreset(2)\" (click)=\"changePreset(2)\">\n          <ion-icon name=\"moon-sharp\"></ion-icon></ion-button>\n      </ion-buttons>\n\n      <ion-buttons class=\"icontext\">\n        <ion-button fill=\"clear\" mode=\"ios\" (click)=\"changePreset(-1)\" color=\"dark\">\n          {{ \"Temperature.Off\" |_ }}</ion-button>\n        <ion-button fill=\"clear\" mode=\"ios\" (click)=\"changePreset(1)\" color=\"dark\">\n          {{service.hsun | temp}}<span class=\"temp__celcius\">\xB0C</span></ion-button>\n        <ion-button fill=\"clear\" mode=\"ios\" (click)=\"changePreset(0)\" color=\"dark\">\n          {{service.sun | temp}}<span class=\"temp__celcius\">\xB0C</span></ion-button>\n        <ion-button fill=\"clear\" mode=\"ios\" (click)=\"changePreset(3)\" color=\"dark\">\n          {{service.hmoon | temp}}<span class=\"temp__celcius\">\xB0C</span></ion-button>\n        <ion-button fill=\"clear\" mode=\"ios\" (click)=\"changePreset(2)\" color=\"dark\">\n          {{service.moon | temp}}<span class=\"temp__celcius\">\xB0C</span></ion-button>\n      </ion-buttons>\n    </div>\n  ",
+      template: "\n    <div class=\"temp\">\n      <div class=\"temp__name\">\n        {{service.getName()}}\n        <ion-icon *ngIf=\"service.preset >= 0\" [color]=\"colorTemp()\" name=\"thermometer\"></ion-icon>\n        <!--span class=\"right\">{{statusTemp()}}</span -->\n      </div>\n      <div class=\"temp__data\">\n        <div class=\"temp__current\">{{getCurrent() | temp}}<span class=\"temp__celcius\">\xB0C</span></div>\n        <div class=\"temp__asking\">{{ \"Temperature.Asking\" |_ }}: {{ getTemp() | temp}}<span class=\"temp__celcius\">\xB0C</span></div>\n      </div>\n\n      <ion-buttons>\n        <ion-button fill=\"solid\" slot=\"icon-only\" (click)=\"incDecTemp(true)\">\n          <ion-icon name=\"chevron-up\"></ion-icon></ion-button>\n        <ion-button fill=\"solid\" slot=\"icon-only\" (click)=\"incDecTemp(false)\">\n          <ion-icon name=\"chevron-down\"></ion-icon></ion-button>\n      </ion-buttons>\n    </div>\n\n    <div class=\"presets\">\n      <ion-buttons class=\"icons\">\n        <ion-button fill=\"solid\" slot=\"icon-only\" [ngClass]=\"colorPreset(-1)\" (click)=\"changePreset(-1)\">\n          <ion-icon name=\"close-outline\"></ion-icon></ion-button>\n        <ion-button fill=\"solid\" slot=\"icon-only\" [ngClass]=\"colorPreset(1)\" (click)=\"changePreset(1)\">\n          <ion-icon src=\"/assets/icon/hsun.svg\"></ion-icon></ion-button>\n        <ion-button fill=\"solid\" slot=\"icon-only\" [ngClass]=\"colorPreset(0)\" (click)=\"changePreset(0)\">\n          <ion-icon name=\"sunny\"></ion-icon></ion-button>\n        <ion-button fill=\"solid\" slot=\"icon-only\" [ngClass]=\"colorPreset(3)\" (click)=\"changePreset(3)\">\n          <ion-icon src=\"/assets/icon/hmoon.svg\"></ion-icon></ion-button>\n        <ion-button fill=\"solid\" slot=\"icon-only\" [ngClass]=\"colorPreset(2)\" (click)=\"changePreset(2)\">\n          <ion-icon name=\"moon-sharp\"></ion-icon></ion-button>\n      </ion-buttons>\n\n      <ion-buttons class=\"icontext\">\n        <ion-button fill=\"clear\" mode=\"ios\" (click)=\"changePreset(-1)\" color=\"dark\">\n          {{ \"Temperature.Off\" |_ }}</ion-button>\n        <ion-button fill=\"clear\" mode=\"ios\" (click)=\"changePreset(1)\" color=\"dark\">\n          {{service.hsun | temp}}<span class=\"temp__celcius\">\xB0C</span></ion-button>\n        <ion-button fill=\"clear\" mode=\"ios\" (click)=\"changePreset(0)\" color=\"dark\">\n          {{service.sun | temp}}<span class=\"temp__celcius\">\xB0C</span></ion-button>\n        <ion-button fill=\"clear\" mode=\"ios\" (click)=\"changePreset(3)\" color=\"dark\">\n          {{service.hmoon | temp}}<span class=\"temp__celcius\">\xB0C</span></ion-button>\n        <ion-button fill=\"clear\" mode=\"ios\" (click)=\"changePreset(2)\" color=\"dark\">\n          {{service.moon | temp}}<span class=\"temp__celcius\">\xB0C</span></ion-button>\n      </ion-buttons>\n    </div>\n  ",
       styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(
       /*! ./temperature.scss */
       "./src/app/rendering/temperature.scss")).default]
@@ -2695,7 +2988,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     UpDownControl = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
       selector: 'updown',
       inputs: ['service'],
-      template: "\n    <ion-item lines=\"none\" class=\"updown\">\n      <ion-label>{{service.getName()}}\n        <span class=\"state\">{{state()}}</span>\n      </ion-label>\n\n      <ion-buttons slot=\"end\">\n        <ion-button size=\"small\" slot=\"icon-only\" (click)=\"doDown(service)\">\n          <ion-icon name=\"caret-down\" [ngClass]=\"colorDown()\"></ion-icon></ion-button>\n        <ion-button size=\"small\" slot=\"icon-only\" (click)=\"doStop(service)\">\n          <ion-icon name=\"stop\"></ion-icon></ion-button>\n        <ion-button size=\"small\" slot=\"icon-only\" (click)=\"doUp(service)\" [ngClass]=\"colorUp()\">\n          <ion-icon name=\"caret-up\" [ngClass]=\"colorUp()\"></ion-icon></ion-button>\n      </ion-buttons>\n    </ion-item>\n  ",
+      template: "\n    <ion-item lines=\"none\" class=\"updown\">\n      <ion-label>{{service.getName()}}\n        <span class=\"state\">{{state()}}</span>\n      </ion-label>\n\n      <ion-buttons slot=\"end\">\n        <ion-button size=\"small\" slot=\"icon-only\" (click)=\"doDown()\">\n          <ion-icon name=\"caret-down\" [ngClass]=\"colorDown()\"></ion-icon></ion-button>\n        <ion-button size=\"small\" slot=\"icon-only\" (click)=\"doStop()\">\n          <ion-icon name=\"stop\"></ion-icon></ion-button>\n        <ion-button size=\"small\" slot=\"icon-only\" (click)=\"doUp()\" [ngClass]=\"colorUp()\">\n          <ion-icon name=\"caret-up\" [ngClass]=\"colorUp()\"></ion-icon></ion-button>\n      </ion-buttons>\n    </ion-item>\n  ",
       styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(
       /*! ./updown.scss */
       "./src/app/rendering/updown.scss")).default]
@@ -2745,8 +3038,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         value: function exec(fn) {
           var len = this.queue.length;
           this.queue.push(fn); // start timer to execute this functon if nobody else calls "do"
+          // this.logger('*Q* exec, we\'ve put stuff in the queue, start ' + (len ? 'long timer' : 'short timer'));
 
-          this.logger('*Q* exec, we\'ve put stuff in the queue, start ' + (len ? 'long timer' : 'short timer'));
           this.startWaiter(len ? 500 : 0);
         }
       }, {
@@ -2774,8 +3067,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "do",
         value: function _do() {
-          this.logger('*Q* Do, qlen=' + this.queue.length); // Get the oldest function and execute
-
+          // this.logger('*Q* Do, qlen='+ this.queue.length);
+          // Get the oldest function and execute
           if (this.queue.length > 0) {
             var fn = this.queue[0];
             this.queue.splice(0, 1); // this.logger("*Q* Do: calling function");
@@ -2923,7 +3216,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
     var _Q__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
     /*! ./Q */
-    "./src/app/system/Q.ts"); // import { Socket } from "cz.blocshop.socketsforcordova/socket.js";
+    "./src/app/system/Q.ts");
+    /* harmony import */
+
+
+    var _core_stdUX__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(
+    /*! ../core/stdUX */
+    "./src/app/core/stdUX.ts"); // import { Socket } from "cz.blocshop.socketsforcordova/socket.js";
 
 
     var Master =
@@ -3037,7 +3336,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
         _this8.nodes = [];
         _this8.nrNodes = 0;
-        _this8.schedule = 0; // connection to an IP node / smartbox
+        _this8.schedule = 0;
+        _this8.date = null; // connection to an IP node / smartbox
 
         _this8.socket = null;
         _this8.isOpen = false;
@@ -3049,36 +3349,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }
 
       _createClass(Master, [{
-        key: "toast",
-        value: function toast(message) {
-          return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
-          /*#__PURE__*/
-          regeneratorRuntime.mark(function _callee5() {
-            var toast;
-            return regeneratorRuntime.wrap(function _callee5$(_context5) {
-              while (1) {
-                switch (_context5.prev = _context5.next) {
-                  case 0:
-                    _context5.next = 2;
-                    return this.toastCtrl.create({
-                      message: message,
-                      duration: 1000,
-                      position: "top"
-                    });
-
-                  case 2:
-                    toast = _context5.sent;
-                    toast.present();
-
-                  case 4:
-                  case "end":
-                    return _context5.stop();
-                }
-              }
-            }, _callee5, this);
-          }));
-        }
-      }, {
         key: "getName",
         value: function getName() {
           return this.config.name || "master";
@@ -3160,6 +3430,26 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         value: function open() {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
+          regeneratorRuntime.mark(function _callee5() {
+            return regeneratorRuntime.wrap(function _callee5$(_context5) {
+              while (1) {
+                switch (_context5.prev = _context5.next) {
+                  case 0:
+                    return _context5.abrupt("return", this.openWeb());
+
+                  case 1:
+                  case "end":
+                    return _context5.stop();
+                }
+              }
+            }, _callee5, this);
+          }));
+        }
+      }, {
+        key: "openTCP",
+        value: function openTCP() {
+          return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
+          /*#__PURE__*/
           regeneratorRuntime.mark(function _callee6() {
             return regeneratorRuntime.wrap(function _callee6$(_context6) {
               while (1) {
@@ -3176,38 +3466,18 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           }));
         }
       }, {
-        key: "openTCP",
-        value: function openTCP() {
-          return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
-          /*#__PURE__*/
-          regeneratorRuntime.mark(function _callee7() {
-            return regeneratorRuntime.wrap(function _callee7$(_context7) {
-              while (1) {
-                switch (_context7.prev = _context7.next) {
-                  case 0:
-                    return _context7.abrupt("return", this.openWeb());
-
-                  case 1:
-                  case "end":
-                    return _context7.stop();
-                }
-              }
-            }, _callee7, this);
-          }));
-        }
-      }, {
         key: "openWeb",
         value: function openWeb() {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
-          regeneratorRuntime.mark(function _callee8() {
+          regeneratorRuntime.mark(function _callee7() {
             var _this9 = this;
 
-            return regeneratorRuntime.wrap(function _callee8$(_context8) {
+            return regeneratorRuntime.wrap(function _callee7$(_context7) {
               while (1) {
-                switch (_context8.prev = _context8.next) {
+                switch (_context7.prev = _context7.next) {
                   case 0:
-                    return _context8.abrupt("return", new Promise(function (resolve, reject) {
+                    return _context7.abrupt("return", new Promise(function (resolve, reject) {
                       try {
                         ////////////////////////////////
                         // try to open the connection //
@@ -3267,10 +3537,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
                   case 1:
                   case "end":
-                    return _context8.stop();
+                    return _context7.stop();
                 }
               }
-            }, _callee8);
+            }, _callee7);
           }));
         }
       }, {
@@ -3278,38 +3548,38 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         value: function close() {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
-          regeneratorRuntime.mark(function _callee9() {
+          regeneratorRuntime.mark(function _callee8() {
             var message;
-            return regeneratorRuntime.wrap(function _callee9$(_context9) {
+            return regeneratorRuntime.wrap(function _callee8$(_context8) {
               while (1) {
-                switch (_context9.prev = _context9.next) {
+                switch (_context8.prev = _context8.next) {
                   case 0:
                     if (!this.isOpen) {
-                      _context9.next = 11;
+                      _context8.next = 11;
                       break;
                     }
 
                     message = _protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildDisconnect();
-                    _context9.prev = 2;
+                    _context8.prev = 2;
                     this.closeRequested = true;
-                    _context9.next = 6;
+                    _context8.next = 6;
                     return this.send(message);
 
                   case 6:
-                    _context9.next = 11;
+                    _context8.next = 11;
                     break;
 
                   case 8:
-                    _context9.prev = 8;
-                    _context9.t0 = _context9["catch"](2);
-                    this.err("Disconnect failure: " + _context9.t0);
+                    _context8.prev = 8;
+                    _context8.t0 = _context8["catch"](2);
+                    this.err("Disconnect failure: " + _context8.t0);
 
                   case 11:
                   case "end":
-                    return _context9.stop();
+                    return _context8.stop();
                 }
               }
-            }, _callee9, this, [[2, 8]]);
+            }, _callee8, this, [[2, 8]]);
           }));
         }
       }, {
@@ -3317,14 +3587,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         value: function login() {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
-          regeneratorRuntime.mark(function _callee10() {
+          regeneratorRuntime.mark(function _callee9() {
             var _this10 = this;
 
-            return regeneratorRuntime.wrap(function _callee10$(_context10) {
+            return regeneratorRuntime.wrap(function _callee9$(_context9) {
               while (1) {
-                switch (_context10.prev = _context10.next) {
+                switch (_context9.prev = _context9.next) {
                   case 0:
-                    return _context10.abrupt("return", new Promise(function (resolve, reject) {
+                    return _context9.abrupt("return", new Promise(function (resolve, reject) {
                       try {
                         var message = _protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildLogin(_this10.config.password);
 
@@ -3343,10 +3613,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
                   case 1:
                   case "end":
-                    return _context10.stop();
+                    return _context9.stop();
                 }
               }
-            }, _callee10);
+            }, _callee9);
           }));
         }
       }, {
@@ -3359,59 +3629,59 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         value: function send(message) {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
-          regeneratorRuntime.mark(function _callee12() {
+          regeneratorRuntime.mark(function _callee11() {
             var _this11 = this;
 
-            return regeneratorRuntime.wrap(function _callee12$(_context12) {
+            return regeneratorRuntime.wrap(function _callee11$(_context11) {
               while (1) {
-                switch (_context12.prev = _context12.next) {
+                switch (_context11.prev = _context11.next) {
                   case 0:
-                    return _context12.abrupt("return", this.Q.exec(function () {
+                    return _context11.abrupt("return", this.Q.exec(function () {
                       return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this11, void 0, void 0,
                       /*#__PURE__*/
-                      regeneratorRuntime.mark(function _callee11() {
-                        return regeneratorRuntime.wrap(function _callee11$(_context11) {
+                      regeneratorRuntime.mark(function _callee10() {
+                        return regeneratorRuntime.wrap(function _callee10$(_context10) {
                           while (1) {
-                            switch (_context11.prev = _context11.next) {
+                            switch (_context10.prev = _context10.next) {
                               case 0:
                                 if (this.isOpen) {
-                                  _context11.next = 7;
+                                  _context10.next = 7;
                                   break;
                                 }
 
-                                _context11.next = 3;
+                                _context10.next = 3;
                                 return this.open();
 
                               case 3:
-                                _context11.next = 5;
+                                _context10.next = 5;
                                 return this.login();
 
                               case 5:
-                                if (_context11.sent) {
-                                  _context11.next = 7;
+                                if (_context10.sent) {
+                                  _context10.next = 7;
                                   break;
                                 }
 
-                                return _context11.abrupt("return", _types__WEBPACK_IMPORTED_MODULE_2__["WriteError"].writeFatal);
+                                return _context10.abrupt("return", _types__WEBPACK_IMPORTED_MODULE_2__["WriteError"].writeFatal);
 
                               case 7:
-                                return _context11.abrupt("return", _protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].write(this.socket, message));
+                                return _context10.abrupt("return", _protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].write(this.socket, message));
 
                               case 8:
                               case "end":
-                                return _context11.stop();
+                                return _context10.stop();
                             }
                           }
-                        }, _callee11, this);
+                        }, _callee10, this);
                       }));
                     }));
 
                   case 1:
                   case "end":
-                    return _context12.stop();
+                    return _context11.stop();
                 }
               }
-            }, _callee12, this);
+            }, _callee11, this);
           }));
         }
       }, {
@@ -3433,11 +3703,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           if (!next.cmd) {
             return false;
           } else {
-            this.log("incoming msg=" + Object(_protocol__WEBPACK_IMPORTED_MODULE_1__["recName"])(next.cmd) + ", status=" + next.isStatus + ", data=" + (next.message ? next.message.join(",") : "--"));
+            if (next.cmd != _protocol__WEBPACK_IMPORTED_MODULE_1__["Rec"].Internal) this.log("incoming msg=" + Object(_protocol__WEBPACK_IMPORTED_MODULE_1__["recName"])(next.cmd) + ", status=" + next.isStatus + ", data=" + (next.message ? next.message.join(",") : "--"));else this.log("incoming msg=" + Object(_protocol__WEBPACK_IMPORTED_MODULE_1__["recName"])(next.cmd) + ", data=" + (next.raw ? next.raw.substr(0, 50) : "--"));
             this.Q.do();
 
             if (next.isStatus) {
-              this.receiveStatus(next);
+              this.receiveStatus(next); // non-unit specific
+            } else if (next.cmd === _protocol__WEBPACK_IMPORTED_MODULE_1__["Rec"].TimeDateStatus) {
+              this.receiveDateTime(next.message);
             } else if (next.cmd === _protocol__WEBPACK_IMPORTED_MODULE_1__["Rec"].Info) {
               this.receiveInfo(next);
             } else if (next.cmd === _protocol__WEBPACK_IMPORTED_MODULE_1__["Rec"].ConnectStatus) {
@@ -3446,6 +3718,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
               this.receiveSchedule(next.message);
             } else if (next.cmd === _protocol__WEBPACK_IMPORTED_MODULE_1__["Rec"].Internal) {
               this.receiveInternal(next.raw);
+            } else if (next.cmd === _protocol__WEBPACK_IMPORTED_MODULE_1__["Rec"].AudioExtendedStatus || next.cmd === _protocol__WEBPACK_IMPORTED_MODULE_1__["Rec"].AudioStatus) {
+              this.receiveAudioStatus(next);
             } else {
               this.log("what to do with: " + next.message);
             }
@@ -3465,7 +3739,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           var data = msg.substr(type.length + 6, msg.length - type.length - 6);
 
           if (msg[2] === 'R') {
-            this.system.doReceiveBackup(type, data);
+            this.system.doReceiveBackup(this, data);
+          } else if (msg[2] === 'A') {
+            this.system.doReceiveAudio(this, data);
           }
         } ///////////////////
         // Login message //
@@ -3477,11 +3753,30 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           this.isLoggedIn = message[2] === 1;
 
           if (this.resolveLogin) {
-            this.toast("Login " + (this.isLoggedIn ? "OK" : "FAIL") + " for " + this.config.address);
+            Object(_core_stdUX__WEBPACK_IMPORTED_MODULE_5__["doToast"])(this.toastCtrl, "Login " + (this.isLoggedIn ? "OK" : "FAIL") + " for " + this.config.address);
             this.resolveLogin(this.isLoggedIn);
             this.resolveLogin = null;
           } else {
             this.err("unexpected ConnectStatus ?");
+          }
+        } ///////////
+        // Audio //
+        ///////////
+
+      }, {
+        key: "requestAudio",
+        value: function requestAudio() {
+          this.system.doRequestAudio(this);
+        }
+      }, {
+        key: "receiveAudioStatus",
+        value: function receiveAudioStatus(next) {
+          var unit = this.findUnit(next.message[2], next.message[3]);
+
+          if (unit) {
+            _protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].receiveAudioStatus(unit, next);
+          } else {
+            this.err("could not find unit (" + Object(_types__WEBPACK_IMPORTED_MODULE_2__["hex"])(next.message[2]) + ", " + Object(_types__WEBPACK_IMPORTED_MODULE_2__["hex"])(next.message[3]) + ")");
           }
         } ///////////////////
         // Info messages //
@@ -3507,6 +3802,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         value: function receiveSchedule(message) {
           this.schedule = message[2];
           this.info("received week schedule = " + this.schedule);
+        }
+      }, {
+        key: "receiveDateTime",
+        value: function receiveDateTime(message) {
+          // 71,0,9,37,3,3,4,3,21,20 -> 09:37:03 Wednesday(3) 4 march 2120
+          this.date = new Date((message[8] - 1) * 100 + message[9], message[7] - 1, message[6], message[2], message[3], message[4]);
+          this.log("Received date/time: " + this.date);
         }
       }, {
         key: "receiveDBInfo",
@@ -3575,39 +3877,72 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         value: function fetchDbInfo() {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
-          regeneratorRuntime.mark(function _callee13() {
-            return regeneratorRuntime.wrap(function _callee13$(_context13) {
+          regeneratorRuntime.mark(function _callee12() {
+            return regeneratorRuntime.wrap(function _callee12$(_context12) {
               while (1) {
-                switch (_context13.prev = _context13.next) {
+                switch (_context12.prev = _context12.next) {
                   case 0:
-                    _context13.prev = 0;
-                    _context13.next = 3;
+                    _context12.prev = 0;
+                    _context12.next = 3;
                     return this.send(_protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildDBInfo());
 
                   case 3:
-                    _context13.next = 5;
+                    _context12.next = 5;
                     return this.send(_protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildRequestSchedule());
 
                   case 5:
-                    _context13.next = 10;
+                    _context12.next = 10;
                     break;
 
                   case 7:
-                    _context13.prev = 7;
-                    _context13.t0 = _context13["catch"](0);
-                    this.err("dbInfo call failed -> " + _context13.t0);
+                    _context12.prev = 7;
+                    _context12.t0 = _context12["catch"](0);
+                    this.err("dbInfo call failed -> " + _context12.t0);
 
                   case 10:
                   case "end":
-                    return _context13.stop();
+                    return _context12.stop();
                 }
               }
-            }, _callee13, this, [[0, 7]]);
+            }, _callee12, this, [[0, 7]]);
           }));
         }
       }, {
         key: "fetchNode",
         value: function fetchNode(nodeInx) {
+          return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
+          /*#__PURE__*/
+          regeneratorRuntime.mark(function _callee13() {
+            var message;
+            return regeneratorRuntime.wrap(function _callee13$(_context13) {
+              while (1) {
+                switch (_context13.prev = _context13.next) {
+                  case 0:
+                    message = _protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildNodeInfo(nodeInx);
+                    _context13.prev = 1;
+                    _context13.next = 4;
+                    return this.send(message);
+
+                  case 4:
+                    _context13.next = 9;
+                    break;
+
+                  case 6:
+                    _context13.prev = 6;
+                    _context13.t0 = _context13["catch"](1);
+                    this.err("nodeInfo call failed -> " + _context13.t0);
+
+                  case 9:
+                  case "end":
+                    return _context13.stop();
+                }
+              }
+            }, _callee13, this, [[1, 6]]);
+          }));
+        }
+      }, {
+        key: "fetchUnit",
+        value: function fetchUnit(node, unitInx) {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
           regeneratorRuntime.mark(function _callee14() {
@@ -3616,7 +3951,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
               while (1) {
                 switch (_context14.prev = _context14.next) {
                   case 0:
-                    message = _protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildNodeInfo(nodeInx);
+                    message = _protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildUnitInfo(node, unitInx);
                     _context14.prev = 1;
                     _context14.next = 4;
                     return this.send(message);
@@ -3628,7 +3963,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                   case 6:
                     _context14.prev = 6;
                     _context14.t0 = _context14["catch"](1);
-                    this.err("nodeInfo call failed -> " + _context14.t0);
+                    this.err("unitInfo call failed -> " + _context14.t0);
 
                   case 9:
                   case "end":
@@ -3639,66 +3974,39 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           }));
         }
       }, {
-        key: "fetchUnit",
-        value: function fetchUnit(node, unitInx) {
-          return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
-          /*#__PURE__*/
-          regeneratorRuntime.mark(function _callee15() {
-            var message;
-            return regeneratorRuntime.wrap(function _callee15$(_context15) {
-              while (1) {
-                switch (_context15.prev = _context15.next) {
-                  case 0:
-                    message = _protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildUnitInfo(node, unitInx);
-                    _context15.prev = 1;
-                    _context15.next = 4;
-                    return this.send(message);
-
-                  case 4:
-                    _context15.next = 9;
-                    break;
-
-                  case 6:
-                    _context15.prev = 6;
-                    _context15.t0 = _context15["catch"](1);
-                    this.err("unitInfo call failed -> " + _context15.t0);
-
-                  case 9:
-                  case "end":
-                    return _context15.stop();
-                }
-              }
-            }, _callee15, this, [[1, 6]]);
-          }));
-        }
-      }, {
         key: "getDatabase",
         value: function getDatabase() {
           var readDB = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
-          regeneratorRuntime.mark(function _callee16() {
+          regeneratorRuntime.mark(function _callee15() {
             var _this12 = this;
 
-            return regeneratorRuntime.wrap(function _callee16$(_context16) {
+            var hasNames;
+            return regeneratorRuntime.wrap(function _callee15$(_context15) {
               while (1) {
-                switch (_context16.prev = _context16.next) {
+                switch (_context15.prev = _context15.next) {
                   case 0:
                     this.nodes = [];
+                    hasNames = this.system.config.cunits.filter(function (u) {
+                      return _this12.same(u.masterAddress, u.masterPort);
+                    }).some(function (u) {
+                      return u.name;
+                    });
 
-                    if (!readDB) {
-                      _context16.next = 6;
+                    if (!(readDB || !hasNames)) {
+                      _context15.next = 7;
                       break;
                     }
 
-                    _context16.next = 4;
+                    _context15.next = 5;
                     return this.fetchDbInfo();
 
-                  case 4:
-                    _context16.next = 8;
+                  case 5:
+                    _context15.next = 9;
                     break;
 
-                  case 6:
+                  case 7:
                     // loop over all nodes/units in the config with a matching ip address
                     //  fill: this.nrNodes
                     //  call: kind of receive-Node/Unit-Info
@@ -3733,12 +4041,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                       _this12.system.setActiveState(unit);
                     });
 
-                  case 8:
+                  case 9:
                   case "end":
-                    return _context16.stop();
+                    return _context15.stop();
                 }
               }
-            }, _callee16, this);
+            }, _callee15, this);
           }));
         }
       }, {
@@ -3890,49 +4198,90 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         value: function requestStatus() {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
-          regeneratorRuntime.mark(function _callee17() {
+          regeneratorRuntime.mark(function _callee16() {
             var nodeInx, node, unitInx;
-            return regeneratorRuntime.wrap(function _callee17$(_context17) {
+            return regeneratorRuntime.wrap(function _callee16$(_context16) {
               while (1) {
-                switch (_context17.prev = _context17.next) {
+                switch (_context16.prev = _context16.next) {
                   case 0:
+                    this.log("requesting status of all units");
                     nodeInx = 0;
 
-                  case 1:
+                  case 2:
                     if (!(nodeInx < this.nodes.length)) {
-                      _context17.next = 14;
+                      _context16.next = 15;
                       break;
                     }
 
                     node = this.nodes[nodeInx];
 
                     if (!node.active) {
-                      _context17.next = 11;
+                      _context16.next = 12;
                       break;
                     }
 
                     unitInx = 0;
 
-                  case 5:
+                  case 6:
                     if (!(unitInx < node.units.length)) {
-                      _context17.next = 11;
+                      _context16.next = 12;
                       break;
                     }
 
-                    _context17.next = 8;
+                    _context16.next = 9;
                     return this.requestUnitStatus(node.units[unitInx]);
 
-                  case 8:
+                  case 9:
                     unitInx++;
-                    _context17.next = 5;
+                    _context16.next = 6;
                     break;
 
-                  case 11:
+                  case 12:
                     nodeInx++;
+                    _context16.next = 2;
+                    break;
+
+                  case 15:
+                  case "end":
+                    return _context16.stop();
+                }
+              }
+            }, _callee16, this);
+          }));
+        }
+      }, {
+        key: "requestNodeStatus",
+        value: function requestNodeStatus(node) {
+          return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
+          /*#__PURE__*/
+          regeneratorRuntime.mark(function _callee17() {
+            var unitInx;
+            return regeneratorRuntime.wrap(function _callee17$(_context17) {
+              while (1) {
+                switch (_context17.prev = _context17.next) {
+                  case 0:
+                    unitInx = 0;
+
+                  case 1:
+                    if (!(unitInx < node.units.length)) {
+                      _context17.next = 8;
+                      break;
+                    }
+
+                    if (!node.units[unitInx].active) {
+                      _context17.next = 5;
+                      break;
+                    }
+
+                    _context17.next = 5;
+                    return this.requestUnitStatus(node.units[unitInx]);
+
+                  case 5:
+                    unitInx++;
                     _context17.next = 1;
                     break;
 
-                  case 14:
+                  case 8:
                   case "end":
                     return _context17.stop();
                 }
@@ -3941,38 +4290,26 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           }));
         }
       }, {
-        key: "requestNodeStatus",
-        value: function requestNodeStatus(node) {
+        key: "requestUnitStatus",
+        value: function requestUnitStatus(unit) {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
           regeneratorRuntime.mark(function _callee18() {
-            var unitInx;
+            var message, res;
             return regeneratorRuntime.wrap(function _callee18$(_context18) {
               while (1) {
                 switch (_context18.prev = _context18.next) {
                   case 0:
-                    unitInx = 0;
+                    message = _protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildRequestUnitStatus(unit.node, unit);
+                    _context18.next = 3;
+                    return this.send(message);
 
-                  case 1:
-                    if (!(unitInx < node.units.length)) {
-                      _context18.next = 8;
-                      break;
-                    }
-
-                    if (!node.units[unitInx].active) {
-                      _context18.next = 5;
-                      break;
-                    }
-
-                    _context18.next = 5;
-                    return this.requestUnitStatus(node.units[unitInx]);
+                  case 3:
+                    res = _context18.sent;
+                    // results will be set by the data event listener
+                    this.info("get value of " + unit.node.getName() + "-" + unit.getName());
 
                   case 5:
-                    unitInx++;
-                    _context18.next = 1;
-                    break;
-
-                  case 8:
                   case "end":
                     return _context18.stop();
                 }
@@ -3981,24 +4318,28 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           }));
         }
       }, {
-        key: "requestUnitStatus",
-        value: function requestUnitStatus(unit) {
+        key: "setUnitStatus",
+        value: function setUnitStatus(unit, value) {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
           regeneratorRuntime.mark(function _callee19() {
-            var message, res;
+            var params;
             return regeneratorRuntime.wrap(function _callee19$(_context19) {
               while (1) {
                 switch (_context19.prev = _context19.next) {
                   case 0:
-                    message = _protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildRequestUnitStatus(unit.node, unit);
-                    _context19.next = 3;
-                    return this.send(message);
+                    params = _protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildSetCmd(unit.node, unit, value);
 
-                  case 3:
-                    res = _context19.sent;
-                    // results will be set by the data event listener
-                    this.info("get value of " + unit.node.getName() + "-" + unit.getName());
+                    if (!params.cmd) {
+                      _context19.next = 4;
+                      break;
+                    }
+
+                    _context19.next = 4;
+                    return this.send(params.message);
+
+                  case 4:
+                    this.system.checkScenes(unit);
 
                   case 5:
                   case "end":
@@ -4009,30 +4350,22 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           }));
         }
       }, {
-        key: "setUnitStatus",
-        value: function setUnitStatus(unit, value) {
+        key: "setPreset",
+        value: function setPreset(unit, preset, temp) {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
           regeneratorRuntime.mark(function _callee20() {
-            var params;
             return regeneratorRuntime.wrap(function _callee20$(_context20) {
               while (1) {
                 switch (_context20.prev = _context20.next) {
                   case 0:
-                    params = _protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildSetCmd(unit.node, unit, value);
+                    _context20.next = 2;
+                    return this.send(_protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildSetPreset(unit.node, unit, preset, temp));
 
-                    if (!params.cmd) {
-                      _context20.next = 4;
-                      break;
-                    }
+                  case 2:
+                    this.info("set temp preset: " + preset + " of " + unit.node.getName() + "-" + unit.getName() + " to temp " + temp);
 
-                    _context20.next = 4;
-                    return this.send(params.message);
-
-                  case 4:
-                    this.system.checkScenes(unit);
-
-                  case 5:
+                  case 3:
                   case "end":
                     return _context20.stop();
                 }
@@ -4041,8 +4374,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           }));
         }
       }, {
-        key: "setPreset",
-        value: function setPreset(unit, preset, temp) {
+        key: "selectPreset",
+        value: function selectPreset(unit, preset) {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
           regeneratorRuntime.mark(function _callee21() {
@@ -4051,10 +4384,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 switch (_context21.prev = _context21.next) {
                   case 0:
                     _context21.next = 2;
-                    return this.send(_protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildSetPreset(unit.node, unit, preset, temp));
+                    return this.send(_protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildSelectPreset(unit.node, unit, preset));
 
                   case 2:
-                    this.info("set temp preset: " + preset + " of " + unit.node.getName() + "-" + unit.getName() + " to temp " + temp);
+                    this.info("set temp preset of " + unit.node.getName() + "-" + unit.getName() + " to: " + preset);
 
                   case 3:
                   case "end":
@@ -4065,8 +4398,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           }));
         }
       }, {
-        key: "selectPreset",
-        value: function selectPreset(unit, preset) {
+        key: "setSchedule",
+        value: function setSchedule() {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
           regeneratorRuntime.mark(function _callee22() {
@@ -4075,10 +4408,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 switch (_context22.prev = _context22.next) {
                   case 0:
                     _context22.next = 2;
-                    return this.send(_protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildSelectPreset(unit.node, unit, preset));
+                    return this.send(_protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildSendSchedule(this.schedule));
 
                   case 2:
-                    this.info("set temp preset of " + unit.node.getName() + "-" + unit.getName() + " to: " + preset);
+                    this.info("set schedule to week nr: " + this.schedule);
 
                   case 3:
                   case "end":
@@ -4089,8 +4422,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           }));
         }
       }, {
-        key: "setSchedule",
-        value: function setSchedule() {
+        key: "setTempOnOff",
+        value: function setTempOnOff(unit, on) {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
           regeneratorRuntime.mark(function _callee23() {
@@ -4099,10 +4432,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 switch (_context23.prev = _context23.next) {
                   case 0:
                     _context23.next = 2;
-                    return this.send(_protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildSendSchedule(this.schedule));
+                    return this.send(_protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildSensorOnOff(unit.node, unit, on));
 
                   case 2:
-                    this.info("set schedule to week nr: " + this.schedule);
+                    this.info("turn temp sensor of " + unit.node.getName() + "-" + unit.getName() + ": " + (on ? "on" : "off"));
 
                   case 3:
                   case "end":
@@ -4113,8 +4446,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           }));
         }
       }, {
-        key: "setTempOnOff",
-        value: function setTempOnOff(unit, on) {
+        key: "doIncDecPreset",
+        value: function doIncDecPreset(unit, inc) {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
           regeneratorRuntime.mark(function _callee24() {
@@ -4123,10 +4456,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 switch (_context24.prev = _context24.next) {
                   case 0:
                     _context24.next = 2;
-                    return this.send(_protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildSensorOnOff(unit.node, unit, on));
+                    return this.send(_protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildIncDecPreset(unit.node, unit, inc));
 
                   case 2:
-                    this.info("turn temp sensor of " + unit.node.getName() + "-" + unit.getName() + ": " + (on ? "on" : "off"));
+                    this.info("set temp preset of " + unit.node.getName() + "-" + unit.getName() + ": " + (inc ? "up" : "down"));
 
                   case 3:
                   case "end":
@@ -4137,8 +4470,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           }));
         }
       }, {
-        key: "doIncDecPreset",
-        value: function doIncDecPreset(unit, inc) {
+        key: "setAudioSrcDest",
+        value: function setAudioSrcDest(unit, source, destination) {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
           regeneratorRuntime.mark(function _callee25() {
@@ -4147,10 +4480,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 switch (_context25.prev = _context25.next) {
                   case 0:
                     _context25.next = 2;
-                    return this.send(_protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildIncDecPreset(unit.node, unit, inc));
+                    return this.send(_protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildAudioSrcDest(unit.node, unit, source, destination));
 
                   case 2:
-                    this.info("set temp preset of " + unit.node.getName() + "-" + unit.getName() + ": " + (inc ? "up" : "down"));
+                    this.info("send source " + source + " to " + destination + " of " + unit.getName());
 
                   case 3:
                   case "end":
@@ -4158,6 +4491,30 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 }
               }
             }, _callee25, this);
+          }));
+        }
+      }, {
+        key: "sendAudioAction",
+        value: function sendAudioAction(unit, action, fnc) {
+          return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
+          /*#__PURE__*/
+          regeneratorRuntime.mark(function _callee26() {
+            return regeneratorRuntime.wrap(function _callee26$(_context26) {
+              while (1) {
+                switch (_context26.prev = _context26.next) {
+                  case 0:
+                    _context26.next = 2;
+                    return this.send(_protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildAudioAction(unit.node, unit, action, fnc));
+
+                  case 2:
+                    this.info("send action " + action + " to " + unit.getName());
+
+                  case 3:
+                  case "end":
+                    return _context26.stop();
+                }
+              }
+            }, _callee26, this);
           }));
         }
       }]);
@@ -4174,7 +4531,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     !*** ./src/app/system/protocol.ts ***!
     \************************************/
 
-  /*! exports provided: cmdName, Rec, recName, NodeType, UnitState, UnitMotorCmd, UnitType, UnitExtendedType, Node, Unit, Protocol */
+  /*! exports provided: cmdName, Rec, recName, UnitState, UnitMotorCmd, Node, Unit, Protocol */
 
   /***/
   function srcAppSystemProtocolTs(module, __webpack_exports__, __webpack_require__) {
@@ -4202,12 +4559,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     /* harmony export (binding) */
 
 
-    __webpack_require__.d(__webpack_exports__, "NodeType", function () {
-      return NodeType;
-    });
-    /* harmony export (binding) */
-
-
     __webpack_require__.d(__webpack_exports__, "UnitState", function () {
       return UnitState;
     });
@@ -4216,18 +4567,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
     __webpack_require__.d(__webpack_exports__, "UnitMotorCmd", function () {
       return UnitMotorCmd;
-    });
-    /* harmony export (binding) */
-
-
-    __webpack_require__.d(__webpack_exports__, "UnitType", function () {
-      return UnitType;
-    });
-    /* harmony export (binding) */
-
-
-    __webpack_require__.d(__webpack_exports__, "UnitExtendedType", function () {
-      return UnitExtendedType;
     });
     /* harmony export (binding) */
 
@@ -4274,15 +4613,18 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
     (function (Cmd) {
       Cmd[Cmd["Internal"] = 9] = "Internal";
+      Cmd[Cmd["SetBasicAudio"] = 159] = "SetBasicAudio";
+      Cmd[Cmd["SetExtendedAudio"] = 208] = "SetExtendedAudio";
+      Cmd[Cmd["SetAVMatrix"] = 202] = "SetAVMatrix";
       Cmd[Cmd["SetSwitch"] = 163] = "SetSwitch";
       Cmd[Cmd["SetDimmer"] = 162] = "SetDimmer";
       Cmd[Cmd["SetControl"] = 168] = "SetControl";
       Cmd[Cmd["SetMotor"] = 182] = "SetMotor";
       Cmd[Cmd["SetSensor"] = 136] = "SetSensor";
+      Cmd[Cmd["SetSchedule"] = 217] = "SetSchedule";
       Cmd[Cmd["Login"] = 214] = "Login";
       Cmd[Cmd["Heartbeat"] = 215] = "Heartbeat";
       Cmd[Cmd["DatabaseInfo"] = 209] = "DatabaseInfo";
-      Cmd[Cmd["SetSchedule"] = 217] = "SetSchedule";
     })(Cmd || (Cmd = {})); // for Set Switch/Dimmer/Control
 
 
@@ -4301,7 +4643,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     var reqSchedule = 218;
 
     function cmdName(cmd) {
-      return Cmd[cmd] || 'cmd' + cmd;
+      return Cmd[cmd] || "cmd" + cmd;
     } //////////////////////
     // Received results //
     //////////////////////
@@ -4317,6 +4659,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       Rec[Rec["Internal"] = 9] = "Internal";
       Rec[Rec["ErrorMessage"] = 17] = "ErrorMessage";
       Rec[Rec["ConnectStatus"] = 67] = "ConnectStatus";
+      Rec[Rec["AudioStatus"] = 23] = "AudioStatus";
+      Rec[Rec["AudioExtendedStatus"] = 70] = "AudioExtendedStatus";
+      Rec[Rec["TimeDateStatus"] = 71] = "TimeDateStatus";
       Rec[Rec["ScheduleStatus"] = 73] = "ScheduleStatus"; // return info from recDBInfo
 
       Rec[Rec["Info"] = 64] = "Info"; // return info from reqUnitStatus
@@ -4331,20 +4676,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
     function recName(rec) {
       return Rec[rec] || 'rec' + rec;
-    } // Node types
+    } // States
 
-
-    var NodeType;
-
-    (function (NodeType) {
-      NodeType[NodeType["kNoNode"] = 0] = "kNoNode";
-      NodeType[NodeType["kStandardNode"] = 1] = "kStandardNode";
-      NodeType[NodeType["kGatewayNode"] = 4] = "kGatewayNode";
-      NodeType[NodeType["kModemNode"] = 8] = "kModemNode";
-      NodeType[NodeType["kGUINode"] = 32] = "kGUINode";
-    })(NodeType || (NodeType = {}));
-
-    ; // States
 
     var UnitState;
 
@@ -4365,55 +4698,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       UnitMotorCmd[UnitMotorCmd["kStop"] = 3] = "kStop";
     })(UnitMotorCmd || (UnitMotorCmd = {}));
 
-    ;
-    var UnitType;
-
-    (function (UnitType) {
-      UnitType[UnitType["kNoType"] = 0] = "kNoType";
-      UnitType[UnitType["kDimmer"] = 1] = "kDimmer";
-      UnitType[UnitType["kSwitch"] = 2] = "kSwitch";
-      UnitType[UnitType["kInput"] = 3] = "kInput";
-      UnitType[UnitType["kTemperature"] = 4] = "kTemperature";
-      UnitType[UnitType["kExtendedAudio"] = 5] = "kExtendedAudio";
-      UnitType[UnitType["kMood"] = 7] = "kMood";
-      UnitType[UnitType["kSwitchingMotor"] = 8] = "kSwitchingMotor";
-      UnitType[UnitType["kAudio"] = 10] = "kAudio";
-      UnitType[UnitType["kAV"] = 11] = "kAV";
-      UnitType[UnitType["kIRTX"] = 12] = "kIRTX";
-      UnitType[UnitType["kVideo"] = 14] = "kVideo";
-    })(UnitType || (UnitType = {}));
-
-    ;
-    var UnitExtendedType;
-
-    (function (UnitExtendedType) {
-      UnitExtendedType[UnitExtendedType["kNoType"] = 0] = "kNoType";
-      UnitExtendedType[UnitExtendedType["kDimmer"] = 1] = "kDimmer";
-      UnitExtendedType[UnitExtendedType["kSwitch"] = 2] = "kSwitch";
-      UnitExtendedType[UnitExtendedType["kInput"] = 3] = "kInput";
-      UnitExtendedType[UnitExtendedType["kTemperature"] = 4] = "kTemperature";
-      UnitExtendedType[UnitExtendedType["kExtendedAudio"] = 5] = "kExtendedAudio";
-      UnitExtendedType[UnitExtendedType["kMood"] = 7] = "kMood";
-      UnitExtendedType[UnitExtendedType["kSwitchingMotor"] = 8] = "kSwitchingMotor";
-      UnitExtendedType[UnitExtendedType["kAudio"] = 10] = "kAudio";
-      UnitExtendedType[UnitExtendedType["kAV"] = 11] = "kAV";
-      UnitExtendedType[UnitExtendedType["kIRTX"] = 12] = "kIRTX";
-      UnitExtendedType[UnitExtendedType["kVideo"] = 14] = "kVideo";
-      UnitExtendedType[UnitExtendedType["kLightbulb"] = 101] = "kLightbulb";
-      UnitExtendedType[UnitExtendedType["kCondition"] = 102] = "kCondition";
-      UnitExtendedType[UnitExtendedType["kGarageDoor"] = 201] = "kGarageDoor";
-      UnitExtendedType[UnitExtendedType["kDoor"] = 202] = "kDoor";
-      UnitExtendedType[UnitExtendedType["kLock"] = 203] = "kLock";
-      UnitExtendedType[UnitExtendedType["kUnlocker"] = 204] = "kUnlocker";
-    })(UnitExtendedType || (UnitExtendedType = {}));
-
-    ; // kLightbulb  == kSwitch with no "*" or "$" in the name
-    // kDoor == kSwitchingMotor with "*" in the name
-    // kGarageDoor == kSwitchingMotor with "$" in the name
-    // kCondition  == kMood with "*" in the name
-    // kLock == kMood with $ in the name
-    // kUnlocker = kMood with $ in the name
-    /////////////////////////
+    ; /////////////////////////
     // Node in the network //
     /////////////////////////
 
@@ -4442,16 +4727,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         key: "typeName",
         value: function typeName() {
           switch (this.type) {
-            case NodeType.kStandardNode:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["NodeType"].kStandardNode:
               return 'Standard';
 
-            case NodeType.kGatewayNode:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["NodeType"].kGatewayNode:
               return 'Gateway';
 
-            case NodeType.kModemNode:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["NodeType"].kModemNode:
               return 'Modem';
 
-            case NodeType.kGUINode:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["NodeType"].kGUINode:
               return 'GUI';
 
             default:
@@ -4517,6 +4802,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         // if the display name is empty make a N[nodeAdr]-U[unitAdr] name.
 
         this.displayName = this.name.replace(/\$|\*|\!/g, '') || this.getSerialNr();
+
+        if (this.isMedia()) {}
       }
 
       _createClass(Unit, [{
@@ -4542,7 +4829,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "sameValue",
         value: function sameValue(value) {
-          if (this.type === UnitType.kSwitchingMotor) {
+          if (this.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kSwitchingMotor) {
             return this.value == UnitState.kOpening && value == 4 || this.value == UnitState.kClosing && value == 5 || this.value <= UnitState.kOpen && value == 3;
           } else {
             return this.value == value;
@@ -4552,55 +4839,55 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         key: "typeName",
         value: function typeName() {
           switch (this.getType()) {
-            case UnitExtendedType.kDimmer:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kDimmer:
               return 'Dimmer';
 
-            case UnitExtendedType.kSwitch:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kSwitch:
               return 'Switch/Relay';
 
-            case UnitExtendedType.kLightbulb:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kLightbulb:
               return 'Lightbulb';
 
-            case UnitExtendedType.kInput:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kInput:
               return 'Control input';
 
-            case UnitExtendedType.kTemperature:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kTemperature:
               return 'Temperature sensor';
 
-            case UnitExtendedType.kExtendedAudio:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kExtendedAudio:
               return 'Extended audio';
 
-            case UnitExtendedType.kMood:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kMood:
               return 'Virtual mood';
 
-            case UnitExtendedType.kCondition:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kCondition:
               return 'Condition';
 
-            case UnitExtendedType.kSwitchingMotor:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kSwitchingMotor:
               return 'Switch motor';
 
-            case UnitExtendedType.kGarageDoor:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kGarageDoor:
               return 'Garagedoor';
 
-            case UnitExtendedType.kDoor:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kDoor:
               return 'Door';
 
-            case UnitExtendedType.kLock:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kLock:
               return 'Lock';
 
-            case UnitExtendedType.kUnlocker:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kUnlocker:
               return 'Unlocker';
 
-            case UnitExtendedType.kAudio:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kAudio:
               return 'Basic audio';
 
-            case UnitExtendedType.kAV:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kAV:
               return 'AV Matrix';
 
-            case UnitExtendedType.kIRTX:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kIRTX:
               return 'IRTX';
 
-            case UnitExtendedType.kVideo:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kVideo:
               return 'Video multiplexer';
 
             default:
@@ -4632,37 +4919,37 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           var name = this.getName().toLowerCase();
 
           switch (this.type) {
-            case UnitType.kTemperature:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kTemperature:
               return "01|" + name;
 
-            case UnitType.kSwitchingMotor:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kSwitchingMotor:
               return "02|" + name;
 
-            case UnitType.kDimmer:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kDimmer:
               return "03|" + name;
 
-            case UnitType.kSwitch:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kSwitch:
               return "04|" + name;
 
-            case UnitType.kMood:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kMood:
               return "09|" + name;
 
-            case UnitType.kInput:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kInput:
               return "11|" + name;
 
-            case UnitType.kExtendedAudio:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kExtendedAudio:
               "12|" + name;
 
-            case UnitType.kAudio:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kAudio:
               return "12|" + name;
 
-            case UnitType.kAV:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kAV:
               return "13|" + name;
 
-            case UnitType.kIRTX:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kIRTX:
               return "19|" + name;
 
-            case UnitType.kVideo:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kVideo:
               return "14|" + name;
 
             default:
@@ -4700,29 +4987,29 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           // Switch //
           ////////////
           // Switch -> with * or STK -> Switch
-          if (this.type === UnitType.kSwitch && (this.name.indexOf("STK") >= 0 || this.name.indexOf("stk") >= 0 || this.name.indexOf("Stk") >= 0 || this.name.indexOf("*") >= 0)) return UnitExtendedType.kSwitch; // Switch -> with $ -> Door
+          if (this.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kSwitch && (this.name.indexOf("STK") >= 0 || this.name.indexOf("stk") >= 0 || this.name.indexOf("Stk") >= 0 || this.name.indexOf("*") >= 0)) return _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kSwitch; // Switch -> with $ -> Door
 
-          if (this.type === UnitType.kSwitch && this.name.indexOf("$") >= 0) return UnitExtendedType.kLock; // Switch -> default -> LightBulb
+          if (this.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kSwitch && this.name.indexOf("$") >= 0) return _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kLock; // Switch -> default -> LightBulb
 
-          if (this.type === UnitType.kSwitch) return UnitExtendedType.kLightbulb; /////////////
+          if (this.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kSwitch) return _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kLightbulb; /////////////
           // Up/Down //
           /////////////
           // UpDown -> with $ -> GarageDoor
 
-          if (this.type === UnitType.kSwitchingMotor && this.name.indexOf("$") >= 0) return UnitExtendedType.kGarageDoor; // UpDown with * -> Door
+          if (this.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kSwitchingMotor && this.name.indexOf("$") >= 0) return _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kGarageDoor; // UpDown with * -> Door
 
-          if (this.type === UnitType.kSwitchingMotor && this.name.indexOf("*") >= 0) return UnitExtendedType.kDoor; // UpDown -> default -> WindowCovering
+          if (this.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kSwitchingMotor && this.name.indexOf("*") >= 0) return _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kDoor; // UpDown -> default -> WindowCovering
 
-          if (this.type === UnitType.kSwitchingMotor) return UnitExtendedType.kSwitchingMotor; ///////////
+          if (this.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kSwitchingMotor) return _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kSwitchingMotor; ///////////
           // Moods //
           ///////////
           // Mood -> with $ -> Lock (re-closes after 1.2 secs)
 
-          if (this.type === UnitType.kMood && this.name.indexOf("$") >= 0) return UnitExtendedType.kUnlocker; // Mood -> with * -> Mood with state
+          if (this.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kMood && this.name.indexOf("$") >= 0) return _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kUnlocker; // Mood -> with * -> Mood with state
 
-          if (this.type === UnitType.kMood && this.name.indexOf("*") >= 0) return UnitExtendedType.kCondition; // Mood -> default -> Mood (turn off after 1.2 secs)
+          if (this.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kMood && this.name.indexOf("*") >= 0) return _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kCondition; // Mood -> default -> Mood (turn off after 1.2 secs)
 
-          if (this.type === UnitType.kMood) return UnitExtendedType.kMood; ///////////////////////
+          if (this.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kMood) return _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kMood; ///////////////////////
           // All other default //
           ///////////////////////
 
@@ -4750,57 +5037,41 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "isSwitch",
         value: function isSwitch() {
-          return this.type === UnitType.kSwitch;
+          return this.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kSwitch;
         }
       }, {
         key: "isMood",
         value: function isMood() {
-          return this.type === UnitType.kMood;
+          return this.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kMood;
         }
       }, {
         key: "isInput",
         value: function isInput() {
-          return this.type === UnitType.kInput;
+          return this.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kInput;
         }
       }, {
         key: "isTemperature",
         value: function isTemperature() {
-          return this.type === UnitType.kTemperature;
+          return this.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kTemperature;
         }
       }, {
         key: "isDimmer",
         value: function isDimmer() {
-          return this.type === UnitType.kDimmer;
+          return this.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kDimmer;
         }
       }, {
         key: "isUpDown",
         value: function isUpDown() {
-          return this.type === UnitType.kSwitchingMotor;
+          return this.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kSwitchingMotor;
+        }
+      }, {
+        key: "isMedia",
+        value: function isMedia() {
+          return this.type == _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kAudio || this.type == _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kAV || this.type == _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kExtendedAudio || this.type == _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kVideo;
         }
       }, {
         key: "setPreset",
         value: function setPreset(preset, temp) {
-          return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
-          /*#__PURE__*/
-          regeneratorRuntime.mark(function _callee26() {
-            return regeneratorRuntime.wrap(function _callee26$(_context26) {
-              while (1) {
-                switch (_context26.prev = _context26.next) {
-                  case 0:
-                    _context26.next = 2;
-                    return this.node.master.setPreset(this, preset, temp);
-
-                  case 2:
-                  case "end":
-                    return _context26.stop();
-                }
-              }
-            }, _callee26, this);
-          }));
-        }
-      }, {
-        key: "selectPreset",
-        value: function selectPreset(preset) {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
           regeneratorRuntime.mark(function _callee27() {
@@ -4809,7 +5080,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 switch (_context27.prev = _context27.next) {
                   case 0:
                     _context27.next = 2;
-                    return this.node.master.selectPreset(this, preset);
+                    return this.node.master.setPreset(this, preset, temp);
 
                   case 2:
                   case "end":
@@ -4820,8 +5091,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           }));
         }
       }, {
-        key: "sensorOnOff",
-        value: function sensorOnOff(on) {
+        key: "selectPreset",
+        value: function selectPreset(preset) {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
           regeneratorRuntime.mark(function _callee28() {
@@ -4830,7 +5101,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 switch (_context28.prev = _context28.next) {
                   case 0:
                     _context28.next = 2;
-                    return this.node.master.setTempOnOff(this, on);
+                    return this.node.master.selectPreset(this, preset);
 
                   case 2:
                   case "end":
@@ -4841,8 +5112,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           }));
         }
       }, {
-        key: "doIncDecPreset",
-        value: function doIncDecPreset(inc) {
+        key: "sensorOnOff",
+        value: function sensorOnOff(on) {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
           regeneratorRuntime.mark(function _callee29() {
@@ -4851,7 +5122,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 switch (_context29.prev = _context29.next) {
                   case 0:
                     _context29.next = 2;
-                    return this.node.master.doIncDecPreset(this, inc);
+                    return this.node.master.setTempOnOff(this, on);
 
                   case 2:
                   case "end":
@@ -4859,6 +5130,69 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 }
               }
             }, _callee29, this);
+          }));
+        }
+      }, {
+        key: "doIncDecPreset",
+        value: function doIncDecPreset(inc) {
+          return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
+          /*#__PURE__*/
+          regeneratorRuntime.mark(function _callee30() {
+            return regeneratorRuntime.wrap(function _callee30$(_context30) {
+              while (1) {
+                switch (_context30.prev = _context30.next) {
+                  case 0:
+                    _context30.next = 2;
+                    return this.node.master.doIncDecPreset(this, inc);
+
+                  case 2:
+                  case "end":
+                    return _context30.stop();
+                }
+              }
+            }, _callee30, this);
+          }));
+        }
+      }, {
+        key: "audioSrcDest",
+        value: function audioSrcDest(source, destination) {
+          return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
+          /*#__PURE__*/
+          regeneratorRuntime.mark(function _callee31() {
+            return regeneratorRuntime.wrap(function _callee31$(_context31) {
+              while (1) {
+                switch (_context31.prev = _context31.next) {
+                  case 0:
+                    _context31.next = 2;
+                    return this.node.master.setAudioSrcDest(this, source, destination);
+
+                  case 2:
+                  case "end":
+                    return _context31.stop();
+                }
+              }
+            }, _callee31, this);
+          }));
+        }
+      }, {
+        key: "audioAction",
+        value: function audioAction(action, fnc) {
+          return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
+          /*#__PURE__*/
+          regeneratorRuntime.mark(function _callee32() {
+            return regeneratorRuntime.wrap(function _callee32$(_context32) {
+              while (1) {
+                switch (_context32.prev = _context32.next) {
+                  case 0:
+                    _context32.next = 2;
+                    return this.node.master.sendAudioAction(this, action, fnc);
+
+                  case 2:
+                  case "end":
+                    return _context32.stop();
+                }
+              }
+            }, _callee32, this);
           }));
         }
       }, {
@@ -4871,20 +5205,20 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         value: function reqState() {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
-          regeneratorRuntime.mark(function _callee30() {
-            return regeneratorRuntime.wrap(function _callee30$(_context30) {
+          regeneratorRuntime.mark(function _callee33() {
+            return regeneratorRuntime.wrap(function _callee33$(_context33) {
               while (1) {
-                switch (_context30.prev = _context30.next) {
+                switch (_context33.prev = _context33.next) {
                   case 0:
-                    _context30.next = 2;
+                    _context33.next = 2;
                     return this.node.master.requestUnitStatus(this);
 
                   case 2:
                   case "end":
-                    return _context30.stop();
+                    return _context33.stop();
                 }
               }
-            }, _callee30, this);
+            }, _callee33, this);
           }));
         }
       }, {
@@ -4892,52 +5226,52 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         value: function setState(value) {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
-          regeneratorRuntime.mark(function _callee31() {
-            return regeneratorRuntime.wrap(function _callee31$(_context31) {
+          regeneratorRuntime.mark(function _callee34() {
+            return regeneratorRuntime.wrap(function _callee34$(_context34) {
               while (1) {
-                switch (_context31.prev = _context31.next) {
+                switch (_context34.prev = _context34.next) {
                   case 0:
-                    _context31.next = 2;
+                    _context34.next = 2;
                     return this.node.master.setUnitStatus(this, value);
 
                   case 2:
                   case "end":
-                    return _context31.stop();
+                    return _context34.stop();
                 }
               }
-            }, _callee31, this);
+            }, _callee34, this);
           }));
         }
       }, {
         key: "getDispayState",
         value: function getDispayState() {
           switch (this.getType()) {
-            case UnitExtendedType.kDimmer:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kDimmer:
               return (this.status ? 'on' : 'off') + ' (' + this.value + '%)';
 
-            case UnitExtendedType.kSwitch:
-            case UnitExtendedType.kLightbulb:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kSwitch:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kLightbulb:
               return this.status ? 'on' : 'off';
 
-            case UnitExtendedType.kInput:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kInput:
               return this.status ? 'on' : 'off';
 
-            case UnitExtendedType.kTemperature:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kTemperature:
               return isNaN(this.value) ? "-" : this.value / 10.0 + 'C';
 
-            case UnitExtendedType.kCondition:
-            case UnitExtendedType.kMood:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kCondition:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kMood:
               return this.status ? 'on' : 'off';
 
-            case UnitExtendedType.kLock:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kLock:
               return this.status ? 'locked' : 'unlocked';
 
-            case UnitExtendedType.kUnlocker:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kUnlocker:
               return this.status ? 'unlocking' : 'locked';
 
-            case UnitExtendedType.kGarageDoor:
-            case UnitExtendedType.kDoor:
-            case UnitExtendedType.kSwitchingMotor:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kGarageDoor:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kDoor:
+            case _types__WEBPACK_IMPORTED_MODULE_1__["UnitExtendedType"].kSwitchingMotor:
               if (this.status === UnitState.kOpening) {
                 return 'opening';
               }
@@ -5055,6 +5389,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       /* | Socket */
       , data) {
         var cmd = parseInt(data[0]);
+        if (isNaN(cmd)) cmd = data[0];
 
         if (data instanceof Array) {
           data = data.join(',');
@@ -5161,8 +5496,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         return [reqSchedule, 0];
       },
       getCmdAndMethod: function getCmdAndMethod(unit, value) {
+        var updown = function updown(bump, value) {
+          if (bump == -1 && value > 0) return value - 1;else if (bump == -2 && value < 100) return value + 1;else return value;
+        };
+
         switch (unit.type) {
-          case UnitType.kDimmer:
+          case _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kDimmer:
             if (typeof value === "boolean") return {
               cmd: Cmd.SetDimmer,
               method: value ? reqOn : reqOff
@@ -5175,14 +5514,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
               value: Math.max(Math.min(value, 99), 1)
             };
 
-          case UnitType.kSwitch:
+          case _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kSwitch:
             return {
               cmd: Cmd.SetSwitch,
               method: value ? 3 : 2
             };
 
-          case UnitType.kInput:
-          case UnitType.kMood:
+          case _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kInput:
+          case _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kMood:
             if (value < 0) return {
               cmd: Cmd.SetControl,
               method: 2
@@ -5194,14 +5533,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
               };
           // long event + 0/1
 
-          case UnitType.kSwitchingMotor:
+          case _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kSwitchingMotor:
             return {
               cmd: Cmd.SetMotor,
               method: value
             };
           // 5 close, 4 open, 3 is stop
 
-          case UnitType.kTemperature:
+          case _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kTemperature:
             return {
               cmd: Cmd.SetSensor,
               method: 13
@@ -5210,14 +5549,56 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
               value: value
             };
 
-          case UnitType.kExtendedAudio:
-          case UnitType.kAudio:
-          case UnitType.kAV:
-          case UnitType.kIRTX:
-          case UnitType.kVideo:
+          case _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kAudio:
+            if (typeof value === "boolean") return {
+              cmd: Cmd.SetBasicAudio,
+              method: value ? 4 : 5
+            };else return {
+              cmd: Cmd.SetBasicAudio,
+              method: value == -1 ? 9 : 8
+            };
+
+          case _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kExtendedAudio:
+            if (typeof value === "boolean") return {
+              cmd: Cmd.SetExtendedAudio,
+              method: value ? 4 : 5,
+              data: [unit.destinationId]
+            };else if (value < 0) // -1 = down, -2 = up
+              return {
+                cmd: Cmd.SetExtendedAudio,
+                method: 12,
+                data: [unit.destinationId, updown(value, unit.value)]
+              };else return {
+              cmd: Cmd.SetExtendedAudio,
+              method: 12,
+              data: [unit.destinationId, unit.value]
+            };
+
+          case _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kAV:
+            var source = unit.destination ? unit.destination.source : 255;
+            if (typeof value === "boolean") return {
+              cmd: Cmd.SetAVMatrix,
+              method: value ? 2 : 3,
+              data: [unit.destinationId, source]
+            }; // connect - disconnect
+            else if (value < 0) // -1 = down, -2 = up
+                return {
+                  cmd: Cmd.SetAVMatrix,
+                  method: value == -1 ? 8 : 7,
+                  data: [unit.destinationId]
+                }; // volume inc/dec
+              else return {
+                  cmd: Cmd.SetAVMatrix,
+                  method: 4,
+                  data: [unit.destinationId, value]
+                };
+          // volume
+
+          case _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kIRTX:
+          case _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kVideo:
           default:
             // "Unknown unit type (" + unit.type + ")";
-            this.err('setting ' + unit.type + ' not yet implemented');
+            console.log('setting ' + unit.type + ' not yet implemented');
             return {
               cmd: 0,
               method: 0,
@@ -5233,6 +5614,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
           if (typeof params.value != 'undefined') {
             params.message.push(params.value);
+          }
+
+          if (typeof params.data != 'undefined') {
+            var _params$message;
+
+            (_params$message = params.message).push.apply(_params$message, _toConsumableArray(params.data));
           } // some need a requestStatus afterwards
 
 
@@ -5260,6 +5647,97 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       /* Schedule commands */
       buildSendSchedule: function buildSendSchedule(schedule) {
         return [Cmd.SetSchedule, 0, Math.max(0, Math.min(3, schedule))];
+      },
+
+      /* Audio */
+      buildAudioSrcDest: function buildAudioSrcDest(node, unit, source, destination) {
+        if (unit.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kAudio) {
+          return [Cmd.SetBasicAudio, 1, node.logicalAddress, unit.logicalAddress, Math.max(0, Math.min(7, source))];
+        } else if (unit.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kExtendedAudio) {
+          return [Cmd.SetExtendedAudio, 1, node.logicalAddress, unit.logicalAddress, Math.max(0, Math.min(3, destination)), Math.max(0, Math.min(7, source))];
+        } else {
+          console.log('set SrcDest ' + unit.type + ' not yet implemented');
+          return null;
+        }
+      },
+      actions: {
+        basic: {
+          'back': 38,
+          'skipback': 36,
+          'play': 32,
+          'pause': 34,
+          'stop': 33,
+          'skipforward': 35,
+          'forward': 37,
+          'function': 23,
+          'functions': {
+            '1': 0,
+            '2': 1,
+            '3': 2,
+            '4': 3,
+            '5': 4,
+            '6': 5,
+            '7': 6,
+            '8': 7,
+            '9': 8,
+            '0': 9,
+            'up': 10,
+            'down': 11,
+            'left': 12,
+            'right': 13,
+            'enter': 14,
+            '-': 15
+          }
+        },
+        extended: {
+          'back': 21,
+          'skipback': 19,
+          'play': 15,
+          'pause': 17,
+          'stop': 16,
+          'skipforward': 18,
+          'forward': 22,
+          'function': 24,
+          'functions': {
+            '1': 0,
+            '2': 1,
+            '3': 2,
+            '4': 3,
+            '5': 4,
+            '6': 5,
+            '7': 6,
+            '8': 7,
+            '9': 8,
+            '0': 9,
+            'up': 10,
+            'down': 11,
+            'left': 12,
+            'right': 13,
+            'enter': 14,
+            '-': 15
+          }
+        }
+      },
+      buildAudioAction: function buildAudioAction(node, unit, action, fnc) {
+        var msg = null;
+
+        if (unit.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kAudio) {
+          msg = [Cmd.SetBasicAudio, this.actions.basic[action], node.logicalAddress, unit.logicalAddress];
+
+          if (fnc) {
+            msg.push(this.actions.basic.functions[fnc]);
+          }
+        } else if (unit.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kExtendedAudio) {
+          msg = [Cmd.SetExtendedAudio, this.actions.extended[action], node.logicalAddress, unit.logicalAddress, unit.destinationId];
+
+          if (fnc) {
+            msg.push(this.actions.extended.functions[fnc]);
+          }
+        } else {
+          console.log('send Action ' + unit.type + ' not yet implemented');
+        }
+
+        return msg;
       },
       ///////////////////
       // Received info //
@@ -5308,6 +5786,39 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }
 
         this.emitter.emit('update', unit);
+      },
+      receiveAudioStatus: function receiveAudioStatus(unit, next) {
+        // 70,0,252,102,5,0,0,255,255,255,255,0,14,0,0
+        // 70,0,252,102,5,0,1,0,0,255,255,11,12,0,0
+        // 70,0,252,101,5,0,0,255,255,255,255,10,0,0,0 -> off
+        unit.destinationId = next.cmd === Rec.AudioExtendedStatus ? next.message[6] : 0;
+
+        if (unit.destinations && next.cmd === Rec.AudioExtendedStatus) {
+          unit.destinations.forEach(function (destination) {
+            destination.volume = next.message[destination.id + 11];
+            console.log("source " + destination.id + " = " + next.message[destination.id + 7]);
+            destination.source = next.message[destination.id + 7];
+            if (destination.id == unit.destinationId) unit.destination = destination;
+          });
+        }
+
+        if (unit.destinations && next.cmd === Rec.AudioStatus) {
+          unit.destination = unit.destination[0];
+          unit.destination.volume = next.message[7];
+          unit.destination.source = next.message[6];
+          unit.destination.disc = next.message[8] != 255 ? next.message[8] + 1 : 0;
+          unit.destination.track = next.message[9] != 255 ? next.message[9] + 1 : 0;
+          unit.destination.preset = next.message[10] != 255 ? next.message[10] + 1 : 0;
+          unit.destination.frequency = next.message[11] != 255 ? next.message[11] + "." + Object(_types__WEBPACK_IMPORTED_MODULE_1__["two"])(next.message[12]) : "";
+        } // reflect volume and state of current destination in the value of the unit
+
+
+        if (unit.destination) {
+          unit.value = unit.destination.volume;
+          unit.status = unit.destination.source == 255 ? 0 : 1;
+        }
+
+        console.log("receiveAudioStatus: ", unit);
       },
       makeDBInfo: function makeDBInfo(res) {
         return {
@@ -5417,6 +5928,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     var events__WEBPACK_IMPORTED_MODULE_7___default =
     /*#__PURE__*/
     __webpack_require__.n(events__WEBPACK_IMPORTED_MODULE_7__);
+    /* harmony import */
+
+
+    var _core_stdUX__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(
+    /*! ../core/stdUX */
+    "./src/app/core/stdUX.ts");
 
     var System =
     /*#__PURE__*/
@@ -5439,6 +5956,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         _this14.controls = [];
         _this14.temperatures = [];
         _this14.stores = [];
+        _this14.media = [];
+        _this14.rooms = [];
         _this14.trigger = null;
         _this14.emitter = new events__WEBPACK_IMPORTED_MODULE_7__["EventEmitter"]();
 
@@ -5449,7 +5968,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
         _this14.readGroups();
 
-        _this14.readScenes(); // open all masters listed in the config
+        _this14.readScenes();
+
+        _this14.readAudio(); // open all masters listed in the config
 
 
         _this14.masters = [];
@@ -5485,34 +6006,34 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         value: function closeMasters() {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
-          regeneratorRuntime.mark(function _callee32() {
+          regeneratorRuntime.mark(function _callee35() {
             var inx;
-            return regeneratorRuntime.wrap(function _callee32$(_context32) {
+            return regeneratorRuntime.wrap(function _callee35$(_context35) {
               while (1) {
-                switch (_context32.prev = _context32.next) {
+                switch (_context35.prev = _context35.next) {
                   case 0:
                     inx = 0;
 
                   case 1:
                     if (!(inx < this.masters.length)) {
-                      _context32.next = 7;
+                      _context35.next = 7;
                       break;
                     }
 
-                    _context32.next = 4;
+                    _context35.next = 4;
                     return this.closeMaster(this.masters[inx]);
 
                   case 4:
                     inx++;
-                    _context32.next = 1;
+                    _context35.next = 1;
                     break;
 
                   case 7:
                   case "end":
-                    return _context32.stop();
+                    return _context35.stop();
                 }
               }
-            }, _callee32, this);
+            }, _callee35, this);
           }));
         }
       }, {
@@ -5521,70 +6042,70 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           var readDB = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
-          regeneratorRuntime.mark(function _callee33() {
+          regeneratorRuntime.mark(function _callee36() {
             var master;
-            return regeneratorRuntime.wrap(function _callee33$(_context33) {
+            return regeneratorRuntime.wrap(function _callee36$(_context36) {
               while (1) {
-                switch (_context33.prev = _context33.next) {
+                switch (_context36.prev = _context36.next) {
                   case 0:
                     master = new _master__WEBPACK_IMPORTED_MODULE_2__["Master"](this, config, this.toastCtrl);
                     this.masters.push(master); // check for old configs that don't contain the active flag
 
                     if (!(typeof master.config.active === "boolean" && !master.config.active)) {
-                      _context33.next = 4;
+                      _context36.next = 4;
                       break;
                     }
 
-                    return _context33.abrupt("return");
+                    return _context36.abrupt("return");
 
                   case 4:
                     this.log("opening master: " + master.getAddress());
-                    _context33.next = 7;
+                    _context36.next = 7;
                     return master.open();
 
                   case 7:
-                    if (!_context33.sent) {
-                      _context33.next = 20;
+                    if (!_context36.sent) {
+                      _context36.next = 20;
                       break;
                     }
 
-                    _context33.next = 10;
+                    _context36.next = 10;
                     return master.login();
 
                   case 10:
-                    if (!_context33.sent) {
-                      _context33.next = 17;
+                    if (!_context36.sent) {
+                      _context36.next = 17;
                       break;
                     }
 
-                    _context33.next = 13;
+                    _context36.next = 13;
                     return master.getDatabase(readDB);
 
                   case 13:
                     this.log("master: " + master.getAddress() + " opened with " + master.nodes.length + " nodes.");
                     this.triggerRebuild();
-                    _context33.next = 18;
+                    _context36.next = 18;
                     break;
 
                   case 17:
                     this.err("failed to log in on " + master.getAddress());
 
                   case 18:
-                    _context33.next = 21;
+                    _context36.next = 21;
                     break;
 
                   case 20:
                     this.err("failed to open connection on " + master.getAddress());
 
                   case 21:
-                    return _context33.abrupt("return", master);
+                    return _context36.abrupt("return", master);
 
                   case 22:
                   case "end":
-                    return _context33.stop();
+                    return _context36.stop();
                 }
               }
-            }, _callee33, this);
+            }, _callee36, this);
           }));
         }
       }, {
@@ -5592,39 +6113,39 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         value: function closeMaster(master) {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
-          regeneratorRuntime.mark(function _callee34() {
+          regeneratorRuntime.mark(function _callee37() {
             var inx;
-            return regeneratorRuntime.wrap(function _callee34$(_context34) {
+            return regeneratorRuntime.wrap(function _callee37$(_context37) {
               while (1) {
-                switch (_context34.prev = _context34.next) {
+                switch (_context37.prev = _context37.next) {
                   case 0:
                     if (master) {
-                      _context34.next = 2;
+                      _context37.next = 2;
                       break;
                     }
 
-                    return _context34.abrupt("return");
+                    return _context37.abrupt("return");
 
                   case 2:
                     // find its index (we need it to delete it from the list)
                     inx = this.findMasterInx(master); // close if open
 
                     if (!master.isOpen) {
-                      _context34.next = 12;
+                      _context37.next = 12;
                       break;
                     }
 
-                    _context34.prev = 4;
-                    _context34.next = 7;
+                    _context37.prev = 4;
+                    _context37.next = 7;
                     return master.close();
 
                   case 7:
-                    _context34.next = 12;
+                    _context37.next = 12;
                     break;
 
                   case 9:
-                    _context34.prev = 9;
-                    _context34.t0 = _context34["catch"](4);
+                    _context37.prev = 9;
+                    _context37.t0 = _context37["catch"](4);
                     this.err("failed to close master on " + master.getAddress() + ":" + master.getPort());
 
                   case 12:
@@ -5635,10 +6156,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
                   case 13:
                   case "end":
-                    return _context34.stop();
+                    return _context37.stop();
                 }
               }
-            }, _callee34, this, [[4, 9]]);
+            }, _callee37, this, [[4, 9]]);
           }));
         }
       }, {
@@ -5656,37 +6177,37 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         value: function addMaster(cmaster) {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
-          regeneratorRuntime.mark(function _callee35() {
+          regeneratorRuntime.mark(function _callee38() {
             var inx, master;
-            return regeneratorRuntime.wrap(function _callee35$(_context35) {
+            return regeneratorRuntime.wrap(function _callee38$(_context38) {
               while (1) {
-                switch (_context35.prev = _context35.next) {
+                switch (_context38.prev = _context38.next) {
                   case 0:
                     if (cmaster.address) {
-                      _context35.next = 2;
+                      _context38.next = 2;
                       break;
                     }
 
-                    return _context35.abrupt("return");
+                    return _context38.abrupt("return");
 
                   case 2:
                     // see if this master already exists
                     inx = this.findCMasterInx(cmaster.address, cmaster.port); // store in config if not yet known
 
                     if (!(inx < 0)) {
-                      _context35.next = 8;
+                      _context38.next = 8;
                       break;
                     }
 
                     this.config.cmasters.push(cmaster);
                     inx = this.masters.length - 1;
-                    _context35.next = 12;
+                    _context38.next = 12;
                     break;
 
                   case 8:
                     // close to re-open (master is deleted from the master array)
                     master = this.findMaster(cmaster.address, cmaster.port);
-                    _context35.next = 11;
+                    _context38.next = 11;
                     return this.closeMaster(master);
 
                   case 11:
@@ -5696,18 +6217,18 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                   case 12:
                     this.writeConfig(); // master is openened and added to the master array
 
-                    _context35.next = 15;
+                    _context38.next = 15;
                     return this.openMaster(cmaster, true);
 
                   case 15:
-                    return _context35.abrupt("return", _context35.sent);
+                    return _context38.abrupt("return", _context38.sent);
 
                   case 16:
                   case "end":
-                    return _context35.stop();
+                    return _context38.stop();
                 }
               }
-            }, _callee35, this);
+            }, _callee38, this);
           }));
         }
       }, {
@@ -5715,22 +6236,22 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         value: function deleteMaster(master) {
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
-          regeneratorRuntime.mark(function _callee36() {
+          regeneratorRuntime.mark(function _callee39() {
             var masterAddress, masterPort, inx;
-            return regeneratorRuntime.wrap(function _callee36$(_context36) {
+            return regeneratorRuntime.wrap(function _callee39$(_context39) {
               while (1) {
-                switch (_context36.prev = _context36.next) {
+                switch (_context39.prev = _context39.next) {
                   case 0:
                     masterAddress = master.getAddress();
                     masterPort = master.getPort();
                     inx = this.findCMasterInx(masterAddress, masterPort);
 
                     if (!(inx >= 0)) {
-                      _context36.next = 11;
+                      _context39.next = 11;
                       break;
                     }
 
-                    _context36.next = 6;
+                    _context39.next = 6;
                     return this.closeMaster(master);
 
                   case 6:
@@ -5741,7 +6262,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                       return unit.masterPort != masterPort || unit.masterAddress != masterAddress;
                     });
                     this.writeConfig();
-                    _context36.next = 12;
+                    _context39.next = 12;
                     break;
 
                   case 11:
@@ -5749,10 +6270,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
                   case 12:
                   case "end":
-                    return _context36.stop();
+                    return _context39.stop();
                 }
               }
-            }, _callee36, this);
+            }, _callee39, this);
           }));
         }
       }, {
@@ -5977,6 +6498,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "rebuildServices",
         value: function rebuildServices() {
+          var _this17 = this;
+
           function compare(a, b) {
             var an = a.getSort();
             var bn = b.getSort();
@@ -5991,7 +6514,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             if (aname < bname) return -1;
             if (aname > bname) return 1;
             return 0;
-          } // sort masters, nodes in masters, units in nodes.
+          } // sort masters, nodes in masters, units in nodes + get State
 
 
           this.log("rebuildMasters/Nodes");
@@ -6001,6 +6524,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             m.nodes.forEach(function (n) {
               return n.units.sort(compare);
             });
+            m.requestStatus();
           }); // sort selected controls, temperatures and moods.
 
           this.log("rebuildServices");
@@ -6017,6 +6541,22 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           this.stores = this.controls.filter(function (s) {
             return s.isUpDown();
           });
+          this.media = services.filter(function (s) {
+            return s.isMedia();
+          }); // attach the rooms to the units
+
+          this.media.forEach(function (s) {
+            var room = _this17.rooms.find(function (room) {
+              return s.isUnit(room.master, room.port, room.nodeaddress, room.unitaddress);
+            });
+
+            console.log("attached to " + s.name, room);
+
+            if (room) {
+              s.destinations = room.destinations;
+              s.destination = null;
+            }
+          });
           this.emitter.emit('refresh');
         } ////////////
         // Scenes //
@@ -6025,7 +6565,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "checkScenes",
         value: function checkScenes(unit) {
-          var _this17 = this;
+          var _this18 = this;
 
           // do local scene implementation only if not handle by server
           if (this.config.remotescenes) return; // used when local-scenes = true.
@@ -6035,18 +6575,17 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           });
 
           if (scene) {
-            this.log("scene found -> " + scene.name + ", value = " + scene.trigger.value + " unit = " + unit.value);
-            console.log(scene); //if (unit.sameValue(scene.trigger.value)) {
+            this.log("scene found -> " + scene.name + ", value = " + scene.trigger.value + " unit = " + unit.value); //if (unit.sameValue(scene.trigger.value)) {
 
             scene.units.forEach(function (u) {
-              _this17.log("Find unit: " + u.masterAddress + ", " + u.masterPort + ", " + u.logicalNodeAddress + ", " + u.logicalAddress);
-
-              var unit = _this17.findUnit(u.masterAddress, u.masterPort, u.logicalNodeAddress, u.logicalAddress);
+              var unit = _this18.findUnit(u.masterAddress, u.masterPort, u.logicalNodeAddress, u.logicalAddress);
 
               if (unit) {
-                _this17.log(" - unit found " + unit.getDisplayName() + " -> " + u.value);
+                _this18.log(" - unit: " + unit.getDisplayName() + " -> " + u.value);
 
                 unit.setState(u.value);
+              } else {
+                _this18.log(" - !!! Didn't find unit: " + u.masterAddress + ", " + u.masterPort + ", " + u.logicalNodeAddress + ", " + u.logicalAddress);
               }
             }); //}
           }
@@ -6095,6 +6634,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
               scenes: this.scenes,
               config: this.config
             }) + ']');
+
+            Object(_core_stdUX__WEBPACK_IMPORTED_MODULE_8__["doToast"])(this.toastCtrl, "Sending backup");
+          } else {
+            Object(_core_stdUX__WEBPACK_IMPORTED_MODULE_8__["doToast"])(this.toastCtrl, "No master -> No backups");
           }
         }
       }, {
@@ -6105,6 +6648,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
           if (master) {
             _protocol__WEBPACK_IMPORTED_MODULE_4__["Protocol"].write(master.getSocket(), '[9,S-' + master.getAddress() + '-' + name + '-scenes:' + this.toTransport(this.scenes) + ']');
+
+            Object(_core_stdUX__WEBPACK_IMPORTED_MODULE_8__["doToast"])(this.toastCtrl, "Sending scenes");
+          } else {
+            Object(_core_stdUX__WEBPACK_IMPORTED_MODULE_8__["doToast"])(this.toastCtrl, "No master -> No scenes");
           }
         }
       }, {
@@ -6118,13 +6665,18 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             this.log("requesting backup from " + master.getAddress());
 
             _protocol__WEBPACK_IMPORTED_MODULE_4__["Protocol"].write(master.getSocket(), '[9,R-' + master.getAddress() + '-' + name + '-system:]');
+
+            Object(_core_stdUX__WEBPACK_IMPORTED_MODULE_8__["doToast"])(this.toastCtrl, "Requesting backups");
+          } else {
+            Object(_core_stdUX__WEBPACK_IMPORTED_MODULE_8__["doToast"])(this.toastCtrl, "No master -> No backups");
           }
         }
       }, {
         key: "doReceiveBackup",
-        value: function doReceiveBackup(type, data) {
+        value: function doReceiveBackup(master, data) {
           this.backup = this.fromTransport(data);
           this.log("received backup: groups = " + this.backup.groups.length + ", scenes: " + this.backup.scenes.length + ", masters: " + this.backup.config.cmasters.length + ", units: " + this.backup.config.cunits.length);
+          Object(_core_stdUX__WEBPACK_IMPORTED_MODULE_8__["doToast"])(this.toastCtrl, "Received backup (" + this.backup.config.cunits.length + " units)");
           console.log(data);
         }
       }, {
@@ -6135,7 +6687,84 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           this.groups = this.backup.groups;
           this.config = this.backup.config;
           this.backup = null;
-        } //////////////////
+          Object(_core_stdUX__WEBPACK_IMPORTED_MODULE_8__["doToast"])(this.toastCtrl, "Backups restored");
+          this.writeConfig();
+          this.writeGroups();
+          this.writeScenes();
+        } ///////////
+        // Audio //
+        ///////////
+
+      }, {
+        key: "doRequestAudio",
+        value: function doRequestAudio(master) {
+          // request audio config (will come in async)
+          // prepend ip address of the master
+          if (master) {
+            this.log("requesting audio config from " + master.getAddress());
+
+            _protocol__WEBPACK_IMPORTED_MODULE_4__["Protocol"].write(master.getSocket(), '[9,A-' + master.getAddress() + '-audio:]');
+
+            Object(_core_stdUX__WEBPACK_IMPORTED_MODULE_8__["doToast"])(this.toastCtrl, "Requesting audio configs");
+          } else {
+            Object(_core_stdUX__WEBPACK_IMPORTED_MODULE_8__["doToast"])(this.toastCtrl, "No master -> No audio configs");
+          }
+        }
+      }, {
+        key: "doReceiveAudio",
+        value: function doReceiveAudio(master, data) {
+          var audio = this.fromTransport(data);
+          this.log("received audio: sources = " + audio.length);
+          console.log(JSON.stringify(audio, null, 2));
+          this.rooms = audio.map(function (room) {
+            return {
+              id: room.id,
+              name: room.name,
+              nodeaddress: room.nodeaddress,
+              unitaddress: room.unitaddress,
+              master: master.getAddress(),
+              port: master.getPort(),
+              destination: 0,
+              destinations: room.destinations.map(function (destination) {
+                return {
+                  id: destination.id,
+                  nr: destination.destinationnr,
+                  nodeaddress: room.nodeaddress,
+                  unitaddress: room.unitaddress,
+                  master: master.getAddress(),
+                  port: master.getPort(),
+                  name: destination.name,
+                  maxvolume: destination.maxvolume,
+                  volume: 0,
+                  source: 0,
+                  sources: destination.sources.map(function (source) {
+                    return {
+                      id: source.id,
+                      nr: source.sourcenr,
+                      name: source.name
+                    };
+                  })
+                };
+              })
+            };
+          });
+          console.log("made rooms: ", this.rooms);
+          Object(_core_stdUX__WEBPACK_IMPORTED_MODULE_8__["doToast"])(this.toastCtrl, "Received " + this.rooms.length + " audio rooms");
+          this.writeAudio();
+        }
+      }, {
+        key: "writeAudio",
+        value: function writeAudio() {
+          this.write("audio", this.rooms);
+        }
+      }, {
+        key: "readAudio",
+        value: function readAudio() {
+          this.rooms = this.read("audio");
+        } ///////////
+        // Rooms //
+        ///////////
+        //////////////////
         // Config stuff //
         //////////////////
 
@@ -6262,13 +6891,31 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     !*** ./src/app/system/types.ts ***!
     \*********************************/
 
-  /*! exports provided: kEmptyUnit, kEmptyUnitScene, kEmptyScene, kEmptyGroup, WriteError, kEmptyCommRecord, Sanitizers, ascii, char, two, hex, now, single */
+  /*! exports provided: NodeType, UnitType, UnitExtendedType, kEmptyUnit, kEmptyUnitScene, kEmptyScene, kEmptyGroup, WriteError, kEmptyCommRecord, Sanitizers, ascii, char, two, hex, now, formatDT, single */
 
   /***/
   function srcAppSystemTypesTs(module, __webpack_exports__, __webpack_require__) {
     "use strict";
 
     __webpack_require__.r(__webpack_exports__);
+    /* harmony export (binding) */
+
+
+    __webpack_require__.d(__webpack_exports__, "NodeType", function () {
+      return NodeType;
+    });
+    /* harmony export (binding) */
+
+
+    __webpack_require__.d(__webpack_exports__, "UnitType", function () {
+      return UnitType;
+    });
+    /* harmony export (binding) */
+
+
+    __webpack_require__.d(__webpack_exports__, "UnitExtendedType", function () {
+      return UnitExtendedType;
+    });
     /* harmony export (binding) */
 
 
@@ -6344,6 +6991,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     /* harmony export (binding) */
 
 
+    __webpack_require__.d(__webpack_exports__, "formatDT", function () {
+      return formatDT;
+    });
+    /* harmony export (binding) */
+
+
     __webpack_require__.d(__webpack_exports__, "single", function () {
       return single;
     });
@@ -6352,20 +7005,68 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
     var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
     /*! tslib */
-    "./node_modules/tslib/tslib.es6.js");
-    /* harmony import */
-
-
-    var _protocol__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
-    /*! ./protocol */
-    "./src/app/system/protocol.ts"); // Johan Coppieters.
+    "./node_modules/tslib/tslib.es6.js"); // Johan Coppieters.
     //
     // v1 - server version Apr 2019
     // v2 - app version
     // v3 - added scenes May 2020
     // v3.1 - brought in line with server version
+    // Node types
 
 
+    var NodeType;
+
+    (function (NodeType) {
+      NodeType[NodeType["kNoNode"] = 0] = "kNoNode";
+      NodeType[NodeType["kStandardNode"] = 1] = "kStandardNode";
+      NodeType[NodeType["kGatewayNode"] = 4] = "kGatewayNode";
+      NodeType[NodeType["kModemNode"] = 8] = "kModemNode";
+      NodeType[NodeType["kGUINode"] = 32] = "kGUINode";
+    })(NodeType || (NodeType = {}));
+
+    ;
+    var UnitType;
+
+    (function (UnitType) {
+      UnitType[UnitType["kNoType"] = 0] = "kNoType";
+      UnitType[UnitType["kDimmer"] = 1] = "kDimmer";
+      UnitType[UnitType["kSwitch"] = 2] = "kSwitch";
+      UnitType[UnitType["kInput"] = 3] = "kInput";
+      UnitType[UnitType["kTemperature"] = 4] = "kTemperature";
+      UnitType[UnitType["kExtendedAudio"] = 5] = "kExtendedAudio";
+      UnitType[UnitType["kMood"] = 7] = "kMood";
+      UnitType[UnitType["kSwitchingMotor"] = 8] = "kSwitchingMotor";
+      UnitType[UnitType["kAudio"] = 10] = "kAudio";
+      UnitType[UnitType["kAV"] = 11] = "kAV";
+      UnitType[UnitType["kIRTX"] = 12] = "kIRTX";
+      UnitType[UnitType["kVideo"] = 14] = "kVideo";
+    })(UnitType || (UnitType = {}));
+
+    ;
+    var UnitExtendedType;
+
+    (function (UnitExtendedType) {
+      UnitExtendedType[UnitExtendedType["kNoType"] = 0] = "kNoType";
+      UnitExtendedType[UnitExtendedType["kDimmer"] = 1] = "kDimmer";
+      UnitExtendedType[UnitExtendedType["kSwitch"] = 2] = "kSwitch";
+      UnitExtendedType[UnitExtendedType["kInput"] = 3] = "kInput";
+      UnitExtendedType[UnitExtendedType["kTemperature"] = 4] = "kTemperature";
+      UnitExtendedType[UnitExtendedType["kExtendedAudio"] = 5] = "kExtendedAudio";
+      UnitExtendedType[UnitExtendedType["kMood"] = 7] = "kMood";
+      UnitExtendedType[UnitExtendedType["kSwitchingMotor"] = 8] = "kSwitchingMotor";
+      UnitExtendedType[UnitExtendedType["kAudio"] = 10] = "kAudio";
+      UnitExtendedType[UnitExtendedType["kAV"] = 11] = "kAV";
+      UnitExtendedType[UnitExtendedType["kIRTX"] = 12] = "kIRTX";
+      UnitExtendedType[UnitExtendedType["kVideo"] = 14] = "kVideo";
+      UnitExtendedType[UnitExtendedType["kLightbulb"] = 101] = "kLightbulb";
+      UnitExtendedType[UnitExtendedType["kCondition"] = 102] = "kCondition";
+      UnitExtendedType[UnitExtendedType["kGarageDoor"] = 201] = "kGarageDoor";
+      UnitExtendedType[UnitExtendedType["kDoor"] = 202] = "kDoor";
+      UnitExtendedType[UnitExtendedType["kLock"] = 203] = "kLock";
+      UnitExtendedType[UnitExtendedType["kUnlocker"] = 204] = "kUnlocker";
+    })(UnitExtendedType || (UnitExtendedType = {}));
+
+    ;
     ;
     ;
     ;
@@ -6445,7 +7146,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         return config;
       },
       system: function system(config) {
-        var _this18 = this;
+        var _this19 = this;
 
         if (!config) {
           config = {};
@@ -6462,7 +7163,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         delete config["cnodes"];
         config.cunits = config.cunits || [];
         config.cunits.forEach(function (u) {
-          return _this18.unitDef(u);
+          return _this19.unitDef(u);
         }); // support old style groups, pre v1.1
 
         if (typeof config.cgroups != 'undefined') {
@@ -6495,15 +7196,24 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         return config;
       },
       groups: function groups(config) {
-        var _this19 = this;
+        var _this20 = this;
 
         if (!config) {
           return [this.group()];
         }
 
         config.forEach(function (g) {
-          return _this19.group(g);
+          return _this20.group(g);
         });
+        return config;
+      },
+      /////////////////  
+      // Audio Rooms //
+      audio: function audio(config) {
+        if (!config) {
+          return [];
+        }
+
         return config;
       },
       ///////////
@@ -6561,7 +7271,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         info.index = info.index || -1;
         info.logicalNodeAddress = info.logicalNodeAddress || 0;
         info.logicalAddress = info.logicalAddress || 0;
-        info.type = info.type || _protocol__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kNoType;
+        info.type = info.type || UnitType.kNoType;
         info.flags = info.flags || 0;
 
         if (into) {
@@ -6575,7 +7285,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       ////////////
       // Scenes //
       sceneConfig: function sceneConfig(config) {
-        var _this20 = this;
+        var _this21 = this;
 
         // don't change -> create new clean record for writing to config files
         if (!config) {
@@ -6599,19 +7309,20 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         newConfig.trigger = this.unitScene(config.trigger);
         config.units = config.units || kEmptyScene.units;
         newConfig.units = config.units.map(function (u) {
-          return _this20.unitScene(u);
+          return _this21.unitScene(u);
         });
         return newConfig;
       },
       scenes: function scenes(config) {
-        var _this21 = this;
+        var _this22 = this;
 
+        // if (!config) { return [this.sceneConfig()]; }
         if (!config) {
-          return [this.sceneConfig()];
+          return [];
         }
 
         config.forEach(function (s) {
-          return _this21.sceneConfig(s);
+          return _this22.sceneConfig(s);
         });
         return config;
       },
@@ -6622,7 +7333,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         info.index = info.index || -1;
         info.logicalAddress = info.logicalAddress || 0;
         info.physicalAddress = info.physicalAddress || 0;
-        info.type = info.type || _protocol__WEBPACK_IMPORTED_MODULE_1__["NodeType"].kNoNode;
+        info.type = info.type || NodeType.kNoNode;
         info.flags = info.flags || 0;
         info.nrUnits = info.nrUnits || 0;
 
@@ -6640,7 +7351,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         info.logicalAddress = info.logicalAddress || 0;
         info.masterAddress = info.masterAddress || '';
         info.masterPort = info.masterPort || 5001;
-        info.type = info.type || _protocol__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kNoType;
+        info.type = info.type || UnitType.kNoType;
         return info;
       }
     }; //////////////////////
@@ -6665,8 +7376,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     }
 
     function now() {
-      var aDate = new Date();
-      return aDate.getFullYear() + '-' + two(aDate.getMonth() + 1) + '-' + two(aDate.getDate()) + ' ' + two(aDate.getHours()) + ':' + two(aDate.getMinutes()) + ':' + two(aDate.getSeconds());
+      return formatDT(new Date());
+    }
+
+    function formatDT(dt) {
+      return two(dt.getDate()) + '-' + two(dt.getMonth() + 1) + '-' + dt.getFullYear() + ' ' + two(dt.getHours()) + ':' + two(dt.getMinutes()) + ':' + two(dt.getSeconds());
     }
 
     function single(val) {
