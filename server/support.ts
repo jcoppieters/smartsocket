@@ -27,7 +27,7 @@ export class Support {
   }
 
   getFN(name: string) {
-    return "./data/" + name + ".json";
+    return "./data/" + name.toLowerCase() + ".json";
   }
 
   doBackup(name: string, data: string): string {

@@ -104,6 +104,7 @@ switch =>
 - return audio room config
 - (b2) try fix for mood pushes
 - (b3) new app build
+- (b4) read lowercase files for backup & audio + new app
 
 ### Todo
 - setup openstack server
