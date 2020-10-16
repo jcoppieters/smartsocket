@@ -1160,6 +1160,10 @@ __webpack_require__.r(__webpack_exports__);
 
 function doAlert(alertCtrl, options) {
     return new Promise((resolve, reject) => tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
+        if (!options)
+            options = {};
+        if (!options.buttons)
+            options.buttons = [{ text: "OK", id: "OK" }];
         const buttons = options.buttons.map(b => {
             return { text: b.text,
                 handler: () => resolve(b.id) };
@@ -1175,6 +1179,10 @@ function doAlert(alertCtrl, options) {
 }
 function doAsk(alertCtrl, options) {
     return new Promise((resolve, reject) => tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
+        if (!options)
+            options = {};
+        if (!options.buttons)
+            options.buttons = [{ text: "OK", id: "OK" }];
         const buttons = options.buttons.map(b => {
             return { text: b.text,
                 handler: (data) => { b.handler && b.handler(data); resolve(data); } };
@@ -1683,7 +1691,7 @@ DimmerControl = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (".media {\n  position: relative;\n  z-index: 2; }\n  .media ion-label {\n    display: -webkit-box;\n    display: flex;\n    -webkit-box-align: center;\n            align-items: center; }\n  .media__chevron {\n  margin-left: auto;\n  margin-right: 10px; }\n  .volume__value {\n  font-size: 0.8rem; }\n  ion-range {\n  --bar-background: #fff;\n  --knob-size: 24px;\n  --knob-background: #fff; }\n  ion-range ion-icon {\n    color: var(--ion-color-primary-contrast); }\n  .dark {\n  --background: var(--ion-color-dark);\n  background-color: var(--ion-color-dark);\n  --border-radius: 0;\n  position: relative;\n  z-index: 1;\n  margin-top: -22px;\n  border-bottom-left-radius: var(--duotecno-border-radius);\n  border-bottom-right-radius: var(--duotecno-border-radius); }\n  .volume__slider ion-range {\n  margin-top: 10px;\n  padding-left: 0;\n  padding-right: 0; }\n  .choices {\n  -webkit-box-pack: justify;\n          justify-content: space-between;\n  color: white; }\n  .choices ion-select {\n    display: -webkit-inline-box;\n    display: inline-flex;\n    margin: 0 0 0 -10px;\n    max-width: inherit;\n    font-size: 13px; }\n  .choices ion-icon.desticon {\n    margin-left: 0; }\n  .choices ion-icon {\n    color: var(--ion-color-primary-contrast); }\n  .choices .source {\n    max-width: inherit; }\n  .choices .source ion-icon {\n      font-size: 24px;\n      margin-bottom: -5px;\n      margin-left: 0; }\n  .choices .source ion-select {\n      margin-right: 0; }\n  ion-item.first {\n  padding-top: 20px; }\n  .player ion-buttons {\n  padding: 0 3px !important; }\n  .controls ion-buttons {\n  -webkit-box-pack: justify;\n          justify-content: space-between;\n  width: 100%;\n  padding: 0 19px; }\n  .controls ion-buttons ion-icon {\n    font-size: 24px;\n    color: var(--ion-color-primary-contrast); }\n  .controls ion-buttons.keypad {\n  max-width: 320px; }\n  .controls ion-buttons.keypad ion-button {\n    color: white;\n    border: 1px solid white;\n    padding: 0px;\n    width: 70px;\n    border-radius: 8px; }\n  .controls ion-buttons.keypad span {\n    width: 73px; }\n  .controls ion-buttons.noborder {\n  max-width: 320px; }\n  .controls ion-buttons.noborder ion-button {\n    border: none !important; }\n  @media (prefers-color-scheme: dark) {\n  .dark {\n    --background: var(--ion-color-step-150);\n    background-color: var(--ion-color-step-150); } }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9qb2hhbi9MaWJyYXJ5L01vYmlsZSBEb2N1bWVudHMvY29tfmFwcGxlfkNsb3VkRG9jcy9Qcm9qZWN0cy9EdW90ZWNuby9zbWFydHN5c3RlbS9zcmMvYXBwL3JlbmRlcmluZy9tZWRpYS5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0ksa0JBQWtCO0VBQ2xCLFVBQVUsRUFBQTtFQUZkO0lBS1Esb0JBQWE7SUFBYixhQUFhO0lBQ2IseUJBQW1CO1lBQW5CLG1CQUFtQixFQUFBO0VBRzNCO0VBQ0ksaUJBQWlCO0VBQ2pCLGtCQUFrQixFQUFBO0VBRXRCO0VBQ0ksaUJBQWlCLEVBQUE7RUFFckI7RUFDSSxzQkFBaUI7RUFDakIsaUJBQVk7RUFDWix1QkFBa0IsRUFBQTtFQUh0QjtJQU1RLHdDQUF3QyxFQUFBO0VBR2hEO0VBQ0UsbUNBQWE7RUFDYix1Q0FBdUM7RUFDdkMsa0JBQWdCO0VBQ2hCLGtCQUFrQjtFQUNsQixVQUFVO0VBQ1YsaUJBQWlCO0VBQ2pCLHdEQUF3RDtFQUN4RCx5REFBeUQsRUFBQTtFQUUzRDtFQUVJLGdCQUFnQjtFQUNoQixlQUFlO0VBQUUsZ0JBQWdCLEVBQUE7RUFJckM7RUFDRSx5QkFBOEI7VUFBOUIsOEJBQThCO0VBQzlCLFlBQVksRUFBQTtFQUZkO0lBS0ksMkJBQW9CO0lBQXBCLG9CQUFvQjtJQUNwQixtQkFBbUI7SUFDbkIsa0JBQWtCO0lBQ2xCLGVBQWUsRUFBQTtFQVJuQjtJQVdJLGNBQWMsRUFBQTtFQVhsQjtJQWNJLHdDQUF3QyxFQUFBO0VBZDVDO0lBaUJJLGtCQUFrQixFQUFBO0VBakJ0QjtNQW1CTSxlQUFlO01BQ2YsbUJBQW1CO01BQ25CLGNBQWMsRUFBQTtFQXJCcEI7TUF3Qk0sZUFDRixFQUFBO0VBSUo7RUFDRSxpQkFBaUIsRUFBQTtFQUduQjtFQUNFLHlCQUNGLEVBQUE7RUFFQTtFQUdJLHlCQUE4QjtVQUE5Qiw4QkFBOEI7RUFDOUIsV0FBVztFQUNYLGVBQWUsRUFBQTtFQUxuQjtJQU9NLGVBQWU7SUFDZix3Q0FBd0MsRUFBQTtFQVI5QztFQWFJLGdCQUFnQixFQUFBO0VBYnBCO0lBZ0JNLFlBQVk7SUFDWix1QkFBdUI7SUFDdkIsWUFBWTtJQUNaLFdBQVc7SUFDWCxrQkFBa0IsRUFBQTtFQXBCeEI7SUF3Qk0sV0FBVyxFQUFBO0VBeEJqQjtFQTRCSSxnQkFBZ0IsRUFBQTtFQTVCcEI7SUErQk0sdUJBQ0YsRUFBQTtFQUlKO0VBQ0k7SUFDSSx1Q0FBYTtJQUNiLDJDQUEyQyxFQUFBLEVBQzlDIiwiZmlsZSI6InNyYy9hcHAvcmVuZGVyaW5nL21lZGlhLnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyIubWVkaWEge1xuICAgIHBvc2l0aW9uOiByZWxhdGl2ZTtcbiAgICB6LWluZGV4OiAyO1xuXG4gICAgaW9uLWxhYmVsIHtcbiAgICAgICAgZGlzcGxheTogZmxleDtcbiAgICAgICAgYWxpZ24taXRlbXM6IGNlbnRlcjtcbiAgICB9XG59XG4ubWVkaWFfX2NoZXZyb24ge1xuICAgIG1hcmdpbi1sZWZ0OiBhdXRvO1xuICAgIG1hcmdpbi1yaWdodDogMTBweDtcbn1cbi52b2x1bWVfX3ZhbHVlIHtcbiAgICBmb250LXNpemU6IDAuOHJlbTtcbn1cbmlvbi1yYW5nZSB7XG4gICAgLS1iYXItYmFja2dyb3VuZDogI2ZmZjtcbiAgICAtLWtub2Itc2l6ZTogMjRweDtcbiAgICAtLWtub2ItYmFja2dyb3VuZDogI2ZmZjtcblxuICAgIGlvbi1pY29uIHtcbiAgICAgICAgY29sb3I6IHZhcigtLWlvbi1jb2xvci1wcmltYXJ5LWNvbnRyYXN0KTtcbiAgICB9XG59XG4uZGFyayB7XG4gIC0tYmFja2dyb3VuZDogdmFyKC0taW9uLWNvbG9yLWRhcmspO1xuICBiYWNrZ3JvdW5kLWNvbG9yOiB2YXIoLS1pb24tY29sb3ItZGFyayk7XG4gIC0tYm9yZGVyLXJhZGl1czogMDtcbiAgcG9zaXRpb246IHJlbGF0aXZlO1xuICB6LWluZGV4OiAxO1xuICBtYXJnaW4tdG9wOiAtMjJweDtcbiAgYm9yZGVyLWJvdHRvbS1sZWZ0LXJhZGl1czogdmFyKC0tZHVvdGVjbm8tYm9yZGVyLXJhZGl1cyk7XG4gIGJvcmRlci1ib3R0b20tcmlnaHQtcmFkaXVzOiB2YXIoLS1kdW90ZWNuby1ib3JkZXItcmFkaXVzKTtcbn1cbi52b2x1bWVfX3NsaWRlciB7XG4gIGlvbi1yYW5nZSB7XG4gICAgbWFyZ2luLXRvcDogMTBweDtcbiAgICBwYWRkaW5nLWxlZnQ6IDA7IHBhZGRpbmctcmlnaHQ6IDA7XG4gIH1cbn1cblxuLmNob2ljZXMge1xuICBqdXN0aWZ5LWNvbnRlbnQ6IHNwYWNlLWJldHdlZW47XG4gIGNvbG9yOiB3aGl0ZTtcblxuICBpb24tc2VsZWN0IHtcbiAgICBkaXNwbGF5OiBpbmxpbmUtZmxleDtcbiAgICBtYXJnaW46IDAgMCAwIC0xMHB4O1xuICAgIG1heC13aWR0aDogaW5oZXJpdDtcbiAgICBmb250LXNpemU6IDEzcHg7XG4gIH1cbiAgaW9uLWljb24uZGVzdGljb24ge1xuICAgIG1hcmdpbi1sZWZ0OiAwO1xuICB9XG4gIGlvbi1pY29uIHtcbiAgICBjb2xvcjogdmFyKC0taW9uLWNvbG9yLXByaW1hcnktY29udHJhc3QpO1xuICB9XG4gIC5zb3VyY2Uge1xuICAgIG1heC13aWR0aDogaW5oZXJpdDtcbiAgICBpb24taWNvbiB7XG4gICAgICBmb250LXNpemU6IDI0cHg7XG4gICAgICBtYXJnaW4tYm90dG9tOiAtNXB4O1xuICAgICAgbWFyZ2luLWxlZnQ6IDA7XG4gICAgfVxuICAgIGlvbi1zZWxlY3Qge1xuICAgICAgbWFyZ2luLXJpZ2h0OiAwXG4gICAgfVxuICB9XG59XG5cbmlvbi1pdGVtLmZpcnN0IHtcbiAgcGFkZGluZy10b3A6IDIwcHg7XG59XG5cbi5wbGF5ZXIgaW9uLWJ1dHRvbnMgeyBcbiAgcGFkZGluZzogMCAzcHggIWltcG9ydGFudFxufVxuXG4uY29udHJvbHMge1xuICBcbiAgaW9uLWJ1dHRvbnMge1xuICAgIGp1c3RpZnktY29udGVudDogc3BhY2UtYmV0d2VlbjtcbiAgICB3aWR0aDogMTAwJTtcbiAgICBwYWRkaW5nOiAwIDE5cHg7XG4gICAgaW9uLWljb24ge1xuICAgICAgZm9udC1zaXplOiAyNHB4O1xuICAgICAgY29sb3I6IHZhcigtLWlvbi1jb2xvci1wcmltYXJ5LWNvbnRyYXN0KTtcbiAgICB9XG4gIH1cblxuICBpb24tYnV0dG9ucy5rZXlwYWQge1xuICAgIG1heC13aWR0aDogMzIwcHg7XG5cbiAgICBpb24tYnV0dG9uIHtcbiAgICAgIGNvbG9yOiB3aGl0ZTtcbiAgICAgIGJvcmRlcjogMXB4IHNvbGlkIHdoaXRlO1xuICAgICAgcGFkZGluZzogMHB4O1xuICAgICAgd2lkdGg6IDcwcHg7XG4gICAgICBib3JkZXItcmFkaXVzOiA4cHg7XG4gICAgfVxuXG4gICAgc3BhbiB7XG4gICAgICB3aWR0aDogNzNweDtcbiAgICB9XG4gIH1cbiAgaW9uLWJ1dHRvbnMubm9ib3JkZXIge1xuICAgIG1heC13aWR0aDogMzIwcHg7XG5cbiAgICBpb24tYnV0dG9uIHtcbiAgICAgIGJvcmRlcjogbm9uZSAhaW1wb3J0YW50XG4gICAgfVxuICB9XG59XG5cbkBtZWRpYSAocHJlZmVycy1jb2xvci1zY2hlbWU6IGRhcmspIHtcbiAgICAuZGFyayB7XG4gICAgICAgIC0tYmFja2dyb3VuZDogdmFyKC0taW9uLWNvbG9yLXN0ZXAtMTUwKTtcbiAgICAgICAgYmFja2dyb3VuZC1jb2xvcjogdmFyKC0taW9uLWNvbG9yLXN0ZXAtMTUwKTtcbiAgICB9XG59XG4iXX0= */");
+/* harmony default export */ __webpack_exports__["default"] = (".media {\n  position: relative;\n  z-index: 2; }\n  .media ion-label {\n    display: -webkit-box;\n    display: flex;\n    -webkit-box-align: center;\n            align-items: center; }\n  .media__chevron {\n  margin-left: auto;\n  margin-right: 5px; }\n  .volume__value {\n  font-size: 0.8rem;\n  width: 27px;\n  text-align: right; }\n  ion-range {\n  --bar-background: #fff;\n  --knob-size: 24px;\n  --knob-background: #fff; }\n  ion-range ion-icon {\n    color: var(--ion-color-primary-contrast); }\n  .dark {\n  --background: var(--ion-color-dark);\n  background-color: var(--ion-color-dark);\n  --border-radius: 0;\n  position: relative;\n  z-index: 1;\n  margin-top: -22px;\n  border-bottom-left-radius: var(--duotecno-border-radius);\n  border-bottom-right-radius: var(--duotecno-border-radius); }\n  .volume__slider ion-range {\n  margin-top: 10px;\n  padding-left: 0;\n  padding-right: 0; }\n  .choices {\n  -webkit-box-pack: justify;\n          justify-content: space-between;\n  color: white; }\n  .choices ion-select {\n    display: -webkit-inline-box;\n    display: inline-flex;\n    margin: 0 0 0 -10px;\n    max-width: inherit;\n    font-size: 13px; }\n  .choices ion-icon.desticon {\n    margin: 0 0 4px 0; }\n  .choices ion-icon {\n    color: var(--ion-color-primary-contrast); }\n  .choices .source {\n    max-width: inherit; }\n  .choices .source ion-icon {\n      font-size: 24px;\n      margin-bottom: -5px;\n      margin-left: 0; }\n  .choices .source ion-select {\n      margin-right: 0; }\n  ion-item.first {\n  padding-top: 20px; }\n  .basic span {\n  height: 64px; }\n  .basic ion-buttons {\n  margin-left: 0; }\n  .basic ion-buttons ion-icon {\n    margin-top: 0px;\n    font-size: 35px !important; }\n  .basic ion-buttons ion-icon:first-child {\n    margin-right: 25px; }\n  .basic ion-select {\n  color: var(--ion-color-primary-contrast);\n  margin-top: 15px; }\n  .player ion-buttons {\n  padding: 0 0 0 3px !important; }\n  .player ion-buttons ion-icon {\n    font-size: 24px !important; }\n  .controls ion-buttons {\n  -webkit-box-pack: justify;\n          justify-content: space-between;\n  width: 100%;\n  padding: 0; }\n  .controls ion-buttons ion-icon {\n    font-size: 36px;\n    color: var(--ion-color-primary-contrast); }\n  .controls ion-buttons ion-icon.toggle {\n    color: var(--ion-color-primary); }\n  .controls ion-buttons ion-icon.side {\n    width: 22px !important;\n    min-width: 22px !important; }\n  .controls ion-buttons.keypad {\n  max-width: 320px; }\n  .controls ion-buttons.keypad ion-button {\n    color: white;\n    border: 1px solid white;\n    padding: 0px;\n    width: 70px;\n    border-radius: 8px; }\n  .controls ion-buttons.keypad span {\n    width: 73px; }\n  .controls ion-buttons.noborder {\n  max-width: 320px; }\n  .controls ion-buttons.noborder ion-button {\n    border: none !important; }\n  @media (prefers-color-scheme: dark) {\n  .dark {\n    --background: var(--ion-color-step-150);\n    background-color: var(--ion-color-step-150); } }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9qb2hhbi9MaWJyYXJ5L01vYmlsZSBEb2N1bWVudHMvY29tfmFwcGxlfkNsb3VkRG9jcy9Qcm9qZWN0cy9EdW90ZWNuby9zbWFydHN5c3RlbS9zcmMvYXBwL3JlbmRlcmluZy9tZWRpYS5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0Usa0JBQWtCO0VBQ2xCLFVBQVUsRUFBQTtFQUZaO0lBS0ksb0JBQWE7SUFBYixhQUFhO0lBQ2IseUJBQW1CO1lBQW5CLG1CQUFtQixFQUFBO0VBR3ZCO0VBQ0UsaUJBQWlCO0VBQ2pCLGlCQUFpQixFQUFBO0VBRW5CO0VBQ0UsaUJBQWlCO0VBQ2pCLFdBQVc7RUFDWCxpQkFBaUIsRUFBQTtFQUVuQjtFQUNFLHNCQUFpQjtFQUNqQixpQkFBWTtFQUNaLHVCQUFrQixFQUFBO0VBSHBCO0lBTUksd0NBQXdDLEVBQUE7RUFHNUM7RUFDRSxtQ0FBYTtFQUNiLHVDQUF1QztFQUN2QyxrQkFBZ0I7RUFDaEIsa0JBQWtCO0VBQ2xCLFVBQVU7RUFDVixpQkFBaUI7RUFDakIsd0RBQXdEO0VBQ3hELHlEQUF5RCxFQUFBO0VBRTNEO0VBRUksZ0JBQWdCO0VBQ2hCLGVBQWU7RUFBRSxnQkFBZ0IsRUFBQTtFQUlyQztFQUNFLHlCQUE4QjtVQUE5Qiw4QkFBOEI7RUFDOUIsWUFBWSxFQUFBO0VBRmQ7SUFLSSwyQkFBb0I7SUFBcEIsb0JBQW9CO0lBQ3BCLG1CQUFtQjtJQUNuQixrQkFBa0I7SUFDbEIsZUFBZSxFQUFBO0VBUm5CO0lBV0ksaUJBQWlCLEVBQUE7RUFYckI7SUFjSSx3Q0FBd0MsRUFBQTtFQWQ1QztJQWtCSSxrQkFBa0IsRUFBQTtFQWxCdEI7TUFvQk0sZUFBZTtNQUNmLG1CQUFtQjtNQUNuQixjQUFjLEVBQUE7RUF0QnBCO01BeUJNLGVBQ0YsRUFBQTtFQUlKO0VBQ0UsaUJBQWlCLEVBQUE7RUFHbkI7RUFFSSxZQUFZLEVBQUE7RUFGaEI7RUFLSSxjQUFjLEVBQUE7RUFMbEI7SUFPTSxlQUFlO0lBQ2YsMEJBQTBCLEVBQUE7RUFSaEM7SUFXTSxrQkFBa0IsRUFBQTtFQVh4QjtFQWVJLHdDQUF3QztFQUN4QyxnQkFBZ0IsRUFBQTtFQUlwQjtFQUNFLDZCQUE2QixFQUFBO0VBRC9CO0lBR0ksMEJBQTBCLEVBQUE7RUFJOUI7RUFFSSx5QkFBOEI7VUFBOUIsOEJBQThCO0VBQzlCLFdBQVc7RUFDWCxVQUFVLEVBQUE7RUFKZDtJQU1NLGVBQWU7SUFDZix3Q0FBd0MsRUFBQTtFQVA5QztJQVVNLCtCQUErQixFQUFBO0VBVnJDO0lBYU0sc0JBQXNCO0lBQ3RCLDBCQUEwQixFQUFBO0VBZGhDO0VBbUJJLGdCQUFnQixFQUFBO0VBbkJwQjtJQXNCTSxZQUFZO0lBQ1osdUJBQXVCO0lBQ3ZCLFlBQVk7SUFDWixXQUFXO0lBQ1gsa0JBQWtCLEVBQUE7RUExQnhCO0lBOEJNLFdBQVcsRUFBQTtFQTlCakI7RUFrQ0ksZ0JBQWdCLEVBQUE7RUFsQ3BCO0lBcUNNLHVCQUNGLEVBQUE7RUFJSjtFQUNJO0lBQ0ksdUNBQWE7SUFDYiwyQ0FBMkMsRUFBQSxFQUM5QyIsImZpbGUiOiJzcmMvYXBwL3JlbmRlcmluZy9tZWRpYS5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLm1lZGlhIHtcbiAgcG9zaXRpb246IHJlbGF0aXZlO1xuICB6LWluZGV4OiAyO1xuXG4gIGlvbi1sYWJlbCB7XG4gICAgZGlzcGxheTogZmxleDtcbiAgICBhbGlnbi1pdGVtczogY2VudGVyO1xuICB9XG59XG4ubWVkaWFfX2NoZXZyb24ge1xuICBtYXJnaW4tbGVmdDogYXV0bztcbiAgbWFyZ2luLXJpZ2h0OiA1cHg7XG59XG4udm9sdW1lX192YWx1ZSB7XG4gIGZvbnQtc2l6ZTogMC44cmVtO1xuICB3aWR0aDogMjdweDtcbiAgdGV4dC1hbGlnbjogcmlnaHQ7XG59XG5pb24tcmFuZ2Uge1xuICAtLWJhci1iYWNrZ3JvdW5kOiAjZmZmO1xuICAtLWtub2Itc2l6ZTogMjRweDtcbiAgLS1rbm9iLWJhY2tncm91bmQ6ICNmZmY7XG5cbiAgaW9uLWljb24ge1xuICAgIGNvbG9yOiB2YXIoLS1pb24tY29sb3ItcHJpbWFyeS1jb250cmFzdCk7XG4gIH1cbn1cbi5kYXJrIHtcbiAgLS1iYWNrZ3JvdW5kOiB2YXIoLS1pb24tY29sb3ItZGFyayk7XG4gIGJhY2tncm91bmQtY29sb3I6IHZhcigtLWlvbi1jb2xvci1kYXJrKTtcbiAgLS1ib3JkZXItcmFkaXVzOiAwO1xuICBwb3NpdGlvbjogcmVsYXRpdmU7XG4gIHotaW5kZXg6IDE7XG4gIG1hcmdpbi10b3A6IC0yMnB4O1xuICBib3JkZXItYm90dG9tLWxlZnQtcmFkaXVzOiB2YXIoLS1kdW90ZWNuby1ib3JkZXItcmFkaXVzKTtcbiAgYm9yZGVyLWJvdHRvbS1yaWdodC1yYWRpdXM6IHZhcigtLWR1b3RlY25vLWJvcmRlci1yYWRpdXMpO1xufVxuLnZvbHVtZV9fc2xpZGVyIHtcbiAgaW9uLXJhbmdlIHtcbiAgICBtYXJnaW4tdG9wOiAxMHB4O1xuICAgIHBhZGRpbmctbGVmdDogMDsgcGFkZGluZy1yaWdodDogMDtcbiAgfVxufVxuXG4uY2hvaWNlcyB7XG4gIGp1c3RpZnktY29udGVudDogc3BhY2UtYmV0d2VlbjtcbiAgY29sb3I6IHdoaXRlO1xuXG4gIGlvbi1zZWxlY3Qge1xuICAgIGRpc3BsYXk6IGlubGluZS1mbGV4O1xuICAgIG1hcmdpbjogMCAwIDAgLTEwcHg7XG4gICAgbWF4LXdpZHRoOiBpbmhlcml0O1xuICAgIGZvbnQtc2l6ZTogMTNweDtcbiAgfVxuICBpb24taWNvbi5kZXN0aWNvbiB7XG4gICAgbWFyZ2luOiAwIDAgNHB4IDA7XG4gIH1cbiAgaW9uLWljb24ge1xuICAgIGNvbG9yOiB2YXIoLS1pb24tY29sb3ItcHJpbWFyeS1jb250cmFzdCk7XG4gIH1cblxuICAuc291cmNlIHtcbiAgICBtYXgtd2lkdGg6IGluaGVyaXQ7XG4gICAgaW9uLWljb24ge1xuICAgICAgZm9udC1zaXplOiAyNHB4O1xuICAgICAgbWFyZ2luLWJvdHRvbTogLTVweDtcbiAgICAgIG1hcmdpbi1sZWZ0OiAwO1xuICAgIH1cbiAgICBpb24tc2VsZWN0IHtcbiAgICAgIG1hcmdpbi1yaWdodDogMFxuICAgIH1cbiAgfVxufVxuXG5pb24taXRlbS5maXJzdCB7XG4gIHBhZGRpbmctdG9wOiAyMHB4O1xufVxuXG4uYmFzaWMge1xuICBzcGFuIHtcbiAgICBoZWlnaHQ6IDY0cHg7XG4gIH1cbiAgaW9uLWJ1dHRvbnMge1xuICAgIG1hcmdpbi1sZWZ0OiAwO1xuICAgIGlvbi1pY29uIHtcbiAgICAgIG1hcmdpbi10b3A6IDBweDtcbiAgICAgIGZvbnQtc2l6ZTogMzVweCAhaW1wb3J0YW50O1xuICAgIH1cbiAgICBpb24taWNvbjpmaXJzdC1jaGlsZCB7XG4gICAgICBtYXJnaW4tcmlnaHQ6IDI1cHg7XG4gICAgfVxuICB9XG4gIGlvbi1zZWxlY3Qge1xuICAgIGNvbG9yOiB2YXIoLS1pb24tY29sb3ItcHJpbWFyeS1jb250cmFzdCk7XG4gICAgbWFyZ2luLXRvcDogMTVweDtcbiAgfVxufVxuXG4ucGxheWVyIGlvbi1idXR0b25zIHsgXG4gIHBhZGRpbmc6IDAgMCAwIDNweCAhaW1wb3J0YW50O1xuICBpb24taWNvbntcbiAgICBmb250LXNpemU6IDI0cHggIWltcG9ydGFudDtcbiAgfVxufVxuXG4uY29udHJvbHMge1xuICBpb24tYnV0dG9ucyB7XG4gICAganVzdGlmeS1jb250ZW50OiBzcGFjZS1iZXR3ZWVuO1xuICAgIHdpZHRoOiAxMDAlO1xuICAgIHBhZGRpbmc6IDA7XG4gICAgaW9uLWljb24ge1xuICAgICAgZm9udC1zaXplOiAzNnB4O1xuICAgICAgY29sb3I6IHZhcigtLWlvbi1jb2xvci1wcmltYXJ5LWNvbnRyYXN0KTtcbiAgICB9XG4gICAgaW9uLWljb24udG9nZ2xlIHtcbiAgICAgIGNvbG9yOiB2YXIoLS1pb24tY29sb3ItcHJpbWFyeSlcbiAgICB9XG4gICAgaW9uLWljb24uc2lkZSB7XG4gICAgICB3aWR0aDogMjJweCAhaW1wb3J0YW50O1xuICAgICAgbWluLXdpZHRoOiAyMnB4ICFpbXBvcnRhbnQ7XG4gICAgfVxuICB9XG5cbiAgaW9uLWJ1dHRvbnMua2V5cGFkIHtcbiAgICBtYXgtd2lkdGg6IDMyMHB4O1xuXG4gICAgaW9uLWJ1dHRvbiB7XG4gICAgICBjb2xvcjogd2hpdGU7XG4gICAgICBib3JkZXI6IDFweCBzb2xpZCB3aGl0ZTtcbiAgICAgIHBhZGRpbmc6IDBweDtcbiAgICAgIHdpZHRoOiA3MHB4O1xuICAgICAgYm9yZGVyLXJhZGl1czogOHB4O1xuICAgIH1cblxuICAgIHNwYW4ge1xuICAgICAgd2lkdGg6IDczcHg7XG4gICAgfVxuICB9XG4gIGlvbi1idXR0b25zLm5vYm9yZGVyIHtcbiAgICBtYXgtd2lkdGg6IDMyMHB4O1xuXG4gICAgaW9uLWJ1dHRvbiB7XG4gICAgICBib3JkZXI6IG5vbmUgIWltcG9ydGFudFxuICAgIH1cbiAgfVxufVxuXG5AbWVkaWEgKHByZWZlcnMtY29sb3Itc2NoZW1lOiBkYXJrKSB7XG4gICAgLmRhcmsge1xuICAgICAgICAtLWJhY2tncm91bmQ6IHZhcigtLWlvbi1jb2xvci1zdGVwLTE1MCk7XG4gICAgICAgIGJhY2tncm91bmQtY29sb3I6IHZhcigtLWlvbi1jb2xvci1zdGVwLTE1MCk7XG4gICAgfVxufVxuIl19 */");
 
 /***/ }),
 
@@ -1710,13 +1718,34 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let MediaControl = class MediaControl {
-    constructor(toastCtrl, system) {
+    constructor(toastCtrl, alertCtrl, system) {
         this.toastCtrl = toastCtrl;
+        this.alertCtrl = alertCtrl;
         this.system = system;
         this.showSlider = false;
-        this.running = false;
         this.clicked = false;
         this.keypad = false;
+    }
+    ngOnInit() {
+        console.log("ngOnInit -> checking up on input service -> ", this.service);
+        // set a destination if no selected
+        if ((!this.service.destination) && (this.service.destinations)) {
+            this.service.destination = this.service.destinations.find(d => d.id == this.service.destinationId);
+        }
+        if ((!this.service.destination) && (this.service.destinations.length > 0)) {
+            this.service.destinationId = this.service.destinations[0].id;
+            this.service.destination = this.service.destinations[0];
+        }
+        // see if a source if selected (even if 255 == "off")
+        if (this.service.destination) {
+            this.service.destinationId = this.service.destination.id;
+        }
+        else {
+            //doAlert(this.alertCtrl, {title: "audio troubles", 
+            //  message: "The unit " + this.service.displayName + " (" + this.service.getNumber() + ") has no destinations"
+            //});
+            console.log("****  The unit " + this.service.displayName + " (" + this.service.getNumber() + ") has no destinations");
+        }
     }
     basic() {
         return (this.service.type === _system_types__WEBPACK_IMPORTED_MODULE_4__["UnitType"].kAudio);
@@ -1739,6 +1768,10 @@ let MediaControl = class MediaControl {
     updown(updown) {
         Object(_core_stdUX__WEBPACK_IMPORTED_MODULE_3__["doToast"])(this.toastCtrl, updown ? "Volume up" : "Volume down");
         this.service.setState(updown ? -2 : -1);
+        // stop the volume change for basic audio devices
+        if (this.basic()) {
+            setTimeout(() => this.service.setState(true), 300);
+        }
     }
     change() {
         if (this.clicked) {
@@ -1747,18 +1780,18 @@ let MediaControl = class MediaControl {
         }
     }
     changeDest() {
-        if ((this.service.destination.source != 255))
+        if (this.service.destination.source == 255)
+            this.service.setState(false);
+        else
             this.service.audioSrcDest(this.service.destination.source, this.service.destinationId);
     }
     changeSrc() {
-        if ((this.service.destination.source != 255))
+        if (this.service.destination.source == 255)
+            this.service.setState(false);
+        else
             this.service.audioSrcDest(this.service.destination.source, this.service.destinationId);
     }
     action(action) {
-        if (action === "play")
-            this.running = true;
-        if (action === "stop")
-            this.running = false;
         this.service.audioAction(action);
     }
     toggleKeypad() {
@@ -1773,6 +1806,7 @@ let MediaControl = class MediaControl {
 };
 MediaControl.ctorParameters = () => [
     { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["ToastController"] },
+    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["AlertController"] },
     { type: _system_system__WEBPACK_IMPORTED_MODULE_5__["System"] }
 ];
 MediaControl = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
@@ -1788,11 +1822,6 @@ MediaControl = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
       <ion-toggle [(ngModel)]="service.status" (ionChange)="onoff()" (click)="click()"></ion-toggle>
     </ion-item>
 
-    <ion-item lines="none" class="dark volume__slider" *ngIf="showSlider && basic()">
-      <ion-icon slot="start" name="remove" (click)="updown(false)"></ion-icon>
-      <ion-icon slot="end" name="add" (click)="updown(true)"></ion-icon>
-    </ion-item>
-
     <ion-item lines="none" class="dark volume__slider" *ngIf="showSlider && ! basic()">
       <ion-range min="1" max="100" debounce="400" [(ngModel)]="service.value" 
                  (ionChange)="change()" (click)="click()">
@@ -1801,35 +1830,47 @@ MediaControl = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
       </ion-range>
     </ion-item>
 
-    <ion-item lines="none" class="dark choices" *ngIf="showSlider">
+    <ion-item lines="none" class="dark choices" *ngIf="showSlider && ! basic()">
       <span class="source">
         <ion-icon name="musical-notes" slot="start"></ion-icon>
         <ion-select [(ngModel)]="service.destination.source" interface="popover" slot="start"
-                    [compareWith]="same" (ionChange)="changeSrc()" (click)="click()">
+                    [compareWith]="same" (ionChange)="changeSrc()">
           <ion-select-option value="255">{{"Media.Off" |_ }}</ion-select-option>
           <ion-select-option *ngFor="let src of service.destination.sources" value="{{src.id}}">{{src.name}}</ion-select-option>
         </ion-select>
       </span>
-      
       <ion-icon slot="end" name="volume-medium" *ngIf="(service.destinations.length > 1)" class="desticon"></ion-icon>
       <ion-select [(ngModel)]="service.destinationId" interface="popover" slot="end"
                   [compareWith]="same" (ionChange)="changeDest()" class="destination"
-                  *ngIf="(service.destinations.length > 1)" (click)="click()">
-        <ion-select-option value="255">{{"Media.Off" |_ }}</ion-select-option>
+                  *ngIf="(service.destinations.length > 1)">
         <ion-select-option *ngFor="let dest of service.destinations" value="{{dest.id}}">{{dest.name}}</ion-select-option>
       </ion-select>
     </ion-item>
 
+    <ion-item lines="none" class="dark choices basic" *ngIf="showSlider && basic()">
+      <span class="source">
+        <ion-icon name="musical-notes" slot="start"></ion-icon>
+        <ion-select [(ngModel)]="service.destination.source" interface="popover" slot="start"
+                    [compareWith]="same" (ionChange)="changeSrc()">
+          <ion-select-option value="255">{{"Media.Off" |_ }}</ion-select-option>
+          <ion-select-option *ngFor="let src of service.destination.sources" value="{{src.id}}">{{src.name}}</ion-select-option>
+        </ion-select>
+      </span>
+      <ion-buttons slot="end" >
+        <ion-icon *ngIf="basic()" name="remove-circle" (click)="updown(false)"></ion-icon>
+        <ion-icon *ngIf="basic()" name="add-circle" (click)="updown(true)"></ion-icon>
+      </ion-buttons>
+    </ion-item>
+
+
     <ion-item lines="none" class="dark controls player" *ngIf="showSlider">
       <ion-buttons>
         <ion-icon name="play-back" (click)="action('back')"></ion-icon>
-        <!-- ion-icon name="play-skip-back" (click)="action('skipback')"></ion-icon -->
-        <ion-icon name="play" (click)="action('play')" *ngIf="!running"></ion-icon>
-        <ion-icon name="stop" (click)="action('stop')" *ngIf="running"></ion-icon>
+        <ion-icon name="play" (click)="action('play')"></ion-icon>
+        <ion-icon name="stop" (click)="action('stop')"></ion-icon>
         <ion-icon name="pause" (click)="action('pause')"></ion-icon>
-        <!-- ion-icon name="play-skip-forward" (click)="action('skipforward')"></ion-icon -->
         <ion-icon name="play-forward" (click)="action('forward')"></ion-icon>
-        <ion-icon name="keypad" (click)="toggleKeypad()"></ion-icon>
+        <ion-icon name="keypad" (click)="toggleKeypad()" class="toggle"></ion-icon>
       </ion-buttons>
     </ion-item>
 
@@ -1838,23 +1879,29 @@ MediaControl = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         <ion-button (click)="actionKeypad('1')">1</ion-button>
         <ion-button (click)="actionKeypad('2')">2</ion-button>
         <ion-button (click)="actionKeypad('3')">3</ion-button>
+        <span></span>
+        <ion-icon name="caret-up-circle" (click)="action('skipforward')" class="side"></ion-icon>
       </ion-buttons>
       </ion-item>
 
       <ion-item lines="none" class="dark controls" *ngIf="showSlider && keypad">
         <ion-buttons class="keypad">
-        <ion-button (click)="actionKeypad('4')">4</ion-button>
-        <ion-button (click)="actionKeypad('5')">5</ion-button>
-        <ion-button (click)="actionKeypad('6')">6</ion-button>
-      </ion-buttons>
+          <ion-button (click)="actionKeypad('4')">4</ion-button>
+          <ion-button (click)="actionKeypad('5')">5</ion-button>
+          <ion-button (click)="actionKeypad('6')">6</ion-button>
+          <span></span>
+          <ion-icon name="caret-down-circle" (click)="action('skipback')" class="side"></ion-icon>
+        </ion-buttons>
       </ion-item>
 
       <ion-item lines="none" class="dark controls" *ngIf="showSlider && keypad">
         <ion-buttons class="keypad">
-        <ion-button (click)="actionKeypad('7')">7</ion-button>
-        <ion-button (click)="actionKeypad('8')">8</ion-button>
-        <ion-button (click)="actionKeypad('9')">9</ion-button>
-      </ion-buttons>
+          <ion-button (click)="actionKeypad('7')">7</ion-button>
+          <ion-button (click)="actionKeypad('8')">8</ion-button>
+          <ion-button (click)="actionKeypad('9')">9</ion-button>
+          <span></span>
+          <ion-icon class="side"></ion-icon>
+        </ion-buttons>
       </ion-item>
 
       <ion-item lines="none" class="dark controls" *ngIf="showSlider && keypad">
@@ -1862,6 +1909,8 @@ MediaControl = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
           <ion-button (click)="actionKeypad('-')">./..</ion-button>
           <ion-button (click)="actionKeypad('0')">0</ion-button>
           <span></span>
+          <span></span>
+          <ion-icon name="menu" (click)="action('menu')" class="side"></ion-icon>
         </ion-buttons>
       </ion-item>
 
@@ -1870,6 +1919,8 @@ MediaControl = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
           <span></span>
           <ion-button (click)="actionKeypad('up')"><ion-icon name="caret-up"></ion-icon></ion-button>
           <span></span>
+          <span></span>
+          <ion-icon name="reader" (click)="action('guide')" class="side"></ion-icon>
         </ion-buttons>
       </ion-item>
 
@@ -1878,6 +1929,8 @@ MediaControl = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
           <ion-button (click)="actionKeypad('left')"><ion-icon name="caret-back"></ion-icon></ion-button>
           <ion-button (click)="actionKeypad('enter')">OK</ion-button>
           <ion-button (click)="actionKeypad('right')"><ion-icon name="caret-forward"></ion-icon></ion-button>
+          <span></span>
+          <ion-icon name="information-circle" (click)="action('info')" class="side"></ion-icon>
         </ion-buttons>
       </ion-item>
 
@@ -1886,20 +1939,15 @@ MediaControl = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
           <span></span>
           <ion-button (click)="actionKeypad('down')"><ion-icon name="caret-down"></ion-icon></ion-button>
           <span></span>
+          <span></span>
+          <ion-icon name="exit" (click)="action('exit')" class="side"></ion-icon>
         </ion-buttons>
     </ion-item>
-
-
-
-    <!-- ion-item lines="none" class="choices" *ngIf="showSlider">
-     1) play stop rewind enz...
-     2) 0-9
-    </ion-item>
-    -->
   `,
         styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./media.scss */ "./src/app/rendering/media.scss")).default]
     }),
-    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_ionic_angular__WEBPACK_IMPORTED_MODULE_2__["ToastController"], _system_system__WEBPACK_IMPORTED_MODULE_5__["System"]])
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_ionic_angular__WEBPACK_IMPORTED_MODULE_2__["ToastController"], _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["AlertController"],
+        _system_system__WEBPACK_IMPORTED_MODULE_5__["System"]])
 ], MediaControl);
 
 
@@ -2848,12 +2896,15 @@ class Master extends _logger__WEBPACK_IMPORTED_MODULE_3__["Logger"] {
             return false;
         }
         else {
-            if (next.cmd != _protocol__WEBPACK_IMPORTED_MODULE_1__["Rec"].Internal)
-                this.log("incoming msg=" + Object(_protocol__WEBPACK_IMPORTED_MODULE_1__["recName"])(next.cmd) + ", status=" + next.isStatus +
-                    ", data=" + ((next.message) ? next.message.join(",") : "--"));
-            else
+            if (next.cmd != _protocol__WEBPACK_IMPORTED_MODULE_1__["Rec"].Internal) {
+                if (next.cmd != 7) // don't log temperature
+                    this.log("incoming msg=" + Object(_protocol__WEBPACK_IMPORTED_MODULE_1__["recName"])(next.cmd) + ", status=" + next.isStatus +
+                        ", data=" + ((next.message) ? next.message.join(",") : "--"));
+            }
+            else {
                 this.log("incoming msg=" + Object(_protocol__WEBPACK_IMPORTED_MODULE_1__["recName"])(next.cmd) +
                     ", data=" + ((next.raw) ? next.raw.substr(0, 50) : "--"));
+            }
             this.Q.do();
             if (next.isStatus) {
                 this.receiveStatus(next);
@@ -3161,7 +3212,7 @@ class Master extends _logger__WEBPACK_IMPORTED_MODULE_3__["Logger"] {
         const nodeLogical = next.message[2];
         const node = this.nodes.find(node => node && (node.logicalAddress == nodeLogical));
         if (!node) {
-            this.err("status message " + next.cmd + " for unknown node = " + nodeLogical);
+            // this.err("status message " + next.cmd + " for unknown node = " + nodeLogical);
             return;
         }
         // find unit
@@ -3921,7 +3972,7 @@ const Protocol = {
                 if (typeof value === "boolean")
                     return { cmd: Cmd.SetAVMatrix, method: value ? 2 : 3, data: [unit.destinationId, source] }; // connect - disconnect
                 else if (value < 0) // -1 = down, -2 = up
-                    return { cmd: Cmd.SetAVMatrix, method: (value == -1) ? 8 : 7, data: [unit.destinationId] }; // volume inc/dec
+                    return { cmd: Cmd.SetAVMatrix, method: (value == -1) ? 8 : 7, data: [unit.destinationId, 1] }; // volume inc/dec
                 else
                     return { cmd: Cmd.SetAVMatrix, method: 4, data: [unit.destinationId, value] }; // volume
             case _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kIRTX:
@@ -3965,14 +4016,25 @@ const Protocol = {
         return [Cmd.SetSchedule, 0, Math.max(0, Math.min(3, schedule))];
     },
     /* Audio */
+    getAudioIds(unit, source, destination) {
+        const destNr = Math.max(0, Math.min(unit.destinations.length - 1, destination));
+        const srcNr = Math.max(0, Math.min(unit.destinations[destNr].sources.length, source));
+        const unitAdr = unit.destinations[destNr].unitaddress;
+        const nodeAdr = unit.destinations[destNr].nodeaddress;
+        return { destNr, srcNr, unitAdr, nodeAdr };
+    },
     buildAudioSrcDest(node, unit, source, destination) {
         if (unit.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kAudio) {
             return [Cmd.SetBasicAudio, 1, node.logicalAddress, unit.logicalAddress,
                 Math.max(0, Math.min(7, source))];
         }
         else if (unit.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kExtendedAudio) {
-            return [Cmd.SetExtendedAudio, 1, node.logicalAddress, unit.logicalAddress,
-                Math.max(0, Math.min(3, destination)), Math.max(0, Math.min(7, source))];
+            if ((!unit.destinations) || (!unit.destinations.length)) {
+                console.log('set SrcDest ' + unit.displayName + ' has no destinations');
+                return null;
+            }
+            const { destNr, srcNr, unitAdr, nodeAdr } = this.getAudioIds(unit, source, destination);
+            return [Cmd.SetExtendedAudio, 1, nodeAdr, unitAdr, destNr, srcNr];
         }
         else {
             console.log('set SrcDest ' + unit.type + ' not yet implemented');
@@ -3990,7 +4052,8 @@ const Protocol = {
             'forward': 37,
             'function': 23,
             'functions': { '1': 0, '2': 1, '3': 2, '4': 3, '5': 4, '6': 5, '7': 6, '8': 7, '9': 8, '0': 9,
-                'up': 10, 'down': 11, 'left': 12, 'right': 13, 'enter': 14, '-': 15 }
+                'up': 10, 'down': 11, 'left': 12, 'right': 13, 'enter': 14, '-': 15,
+                'menu': 16, 'guide': 17, 'info': 18, 'exit': 19 }
         },
         extended: {
             'back': 21,
@@ -4002,7 +4065,8 @@ const Protocol = {
             'forward': 22,
             'function': 24,
             'functions': { '1': 0, '2': 1, '3': 2, '4': 3, '5': 4, '6': 5, '7': 6, '8': 7, '9': 8, '0': 9,
-                'up': 10, 'down': 11, 'left': 12, 'right': 13, 'enter': 14, '-': 15 }
+                'up': 10, 'down': 11, 'left': 12, 'right': 13, 'enter': 14, '-': 15,
+                'menu': 16, 'guide': 17, 'info': 18, 'exit': 19 }
         }
     },
     buildAudioAction(node, unit, action, fnc) {
@@ -4014,14 +4078,14 @@ const Protocol = {
             }
         }
         else if (unit.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kExtendedAudio) {
-            msg = [Cmd.SetExtendedAudio, this.actions.extended[action], node.logicalAddress, unit.logicalAddress,
-                unit.destinationId];
+            const { destNr, unitAdr, nodeAdr } = this.getAudioIds(unit, 0, unit.destinationId);
+            msg = [Cmd.SetExtendedAudio, this.actions.extended[action], nodeAdr, unitAdr, destNr];
             if (fnc) {
                 msg.push(this.actions.extended.functions[fnc]);
             }
         }
         else {
-            console.log('send Action ' + unit.type + ' not yet implemented');
+            console.log('send Action to ' + unit.typeName() + ' not yet implemented');
         }
         return msg;
     },
@@ -4038,7 +4102,7 @@ const Protocol = {
             unit.hsun = next.message[13] * 256 + next.message[14]; // 10x temperature
             unit.moon = next.message[15] * 256 + next.message[16]; // 10x temperature
             unit.hmoon = next.message[17] * 256 + next.message[18]; // 10x temperature
-            this.logger('received temperature = ' + unit.value / 10.0);
+            // this.logger('received temperature = ' + <number>unit.value / 10.0);
         }
         else if (next.cmd === Rec.Switch) {
             // switch -> boolean
@@ -4070,9 +4134,14 @@ const Protocol = {
         this.emitter.emit('update', unit);
     },
     receiveAudioStatus: function (unit, next) {
+        // extended
         // 70,0,252,102,5,0,0,255,255,255,255,0,14,0,0
         // 70,0,252,102,5,0,1,0,0,255,255,11,12,0,0
         // 70,0,252,101,5,0,0,255,255,255,255,10,0,0,0 -> off
+        //
+        // Basic
+        // 23,0=status,61=node,0=unit,10=rs232,3=type,255=src,28=vol,
+        //    255=disc,[9]255=track,[10]2=preset,[11]102=freq,[12]70=freq
         unit.destinationId = (next.cmd === Rec.AudioExtendedStatus) ? next.message[6] : 0;
         if ((unit.destinations) && (next.cmd === Rec.AudioExtendedStatus)) {
             unit.destinations.forEach(destination => {
@@ -4084,7 +4153,7 @@ const Protocol = {
             });
         }
         if ((unit.destinations) && (next.cmd === Rec.AudioStatus)) {
-            unit.destination = unit.destination[0];
+            unit.destination = unit.destinations[0];
             unit.destination.volume = next.message[7];
             unit.destination.source = next.message[6];
             unit.destination.disc = (next.message[8] != 255) ? next.message[8] + 1 : 0;
@@ -4097,7 +4166,7 @@ const Protocol = {
             unit.value = unit.destination.volume;
             unit.status = (unit.destination.source == 255) ? 0 : 1;
         }
-        console.log("receiveAudioStatus: ", unit);
+        console.log((next.cmd === Rec.AudioExtendedStatus) ? "receiveAudioExtendedStatus: " : "receiveAudioStatus: ", unit);
     },
     makeDBInfo(res) {
         return { nrNodes: res[2] };
@@ -4497,15 +4566,8 @@ let System = class System extends _logger__WEBPACK_IMPORTED_MODULE_5__["Logger"]
         this.moods = services.filter(s => (s.isMood() || s.isInput())).sort(compareN);
         this.stores = this.controls.filter(s => s.isUpDown());
         this.media = services.filter(s => s.isMedia());
-        // attach the rooms to the units
-        this.media.forEach(s => {
-            const room = this.rooms.find(room => s.isUnit(room.master, room.port, room.nodeaddress, room.unitaddress));
-            console.log("attached to " + s.name, room);
-            if (room) {
-                s.destinations = room.destinations;
-                s.destination = null;
-            }
-        });
+        console.log("media: ", this.media);
+        this.attachAudio(); //TODO -> IN OPEN MASTER ???
         this.emitter.emit('refresh');
     }
     ////////////
@@ -4619,6 +4681,79 @@ let System = class System extends _logger__WEBPACK_IMPORTED_MODULE_5__["Logger"]
     ///////////
     // Audio //
     ///////////
+    attachAudio() {
+        // attach the rooms to the units
+        this.media.forEach(s => {
+            const room = this.rooms.find(room => s.isUnit(room.master, room.port, room.nodeaddress, room.unitaddress));
+            console.log("attached to " + s.name, room);
+            if (room) {
+                s.destinations = room.destinations;
+                s.destination = null;
+                s.destinationId = 255;
+            }
+        });
+        this.allActiveUnits().forEach(unit => {
+            if (unit.type == _types__WEBPACK_IMPORTED_MODULE_3__["UnitType"].kAudio) {
+                if (!unit.destinations) {
+                    unit.destinations = [];
+                }
+                if (!unit.destinations.length) {
+                    unit.destinations.push({ id: 0, nr: 0, type: 0,
+                        nodeaddress: unit.node.logicalAddress,
+                        unitaddress: unit.logicalAddress,
+                        master: unit.node.master.getAddress(),
+                        port: unit.node.master.getPort(),
+                        name: "Audio",
+                        maxvolume: 100,
+                        volume: 0,
+                        source: 0,
+                        sources: [
+                            { id: 0, nr: 0, name: "Src 1" },
+                            { id: 1, nr: 1, name: "Src 2" },
+                            { id: 2, nr: 2, name: "Src 3" },
+                            { id: 3, nr: 3, name: "Src 4" },
+                            { id: 4, nr: 4, name: "Src 5" },
+                            { id: 5, nr: 5, name: "Src 6" },
+                            { id: 6, nr: 6, name: "Src 7" },
+                            { id: 7, nr: 7, name: "Src 8" },
+                        ],
+                        disc: 0, track: 0, frequency: "-", preset: 0 });
+                }
+                unit.destinationId = 0;
+                unit.destination = unit.destinations[0];
+                console.log("*****  Destinations for basic audio", unit);
+                console.log("*****  destination != null " + (unit.destination != null));
+            }
+        });
+    }
+    neededVirtualUnits() {
+        this.rooms.forEach(room => {
+            if (room.nodeaddress == 255) {
+                const master = this.findMaster(room.master, room.port);
+                if (master) {
+                    let node = this.findNode(master, room.nodeaddress);
+                    if (!node) {
+                        // add node to master
+                        node = new _protocol__WEBPACK_IMPORTED_MODULE_4__["Node"](master, { name: "Virtual Node",
+                            logicalReqNodeAddress: 255, nrUnits: 0,
+                            index: 0, logicalAddress: 255, physicalAddress: 255,
+                            type: _types__WEBPACK_IMPORTED_MODULE_3__["NodeType"].kNoNode });
+                        master.nodes.push(node);
+                    }
+                    if (!this.findUnit(master, room.nodeaddress, room.unitaddress)) {
+                        // add unit to node
+                        const unit = new _protocol__WEBPACK_IMPORTED_MODULE_4__["Unit"](node, { name: room.name,
+                            logicalReqNodeAddress: 255, logicalNodeAddress: 255,
+                            index: room.unitaddress, logicalAddress: room.unitaddress, physicalAddress: room.unitaddress,
+                            type: _types__WEBPACK_IMPORTED_MODULE_3__["UnitType"].kAV });
+                        unit.active = true;
+                        node.units.push(unit);
+                        node.nrUnits++; // we never get a database info for this unit, so increment ourself
+                    }
+                }
+            }
+        });
+    }
     doRequestAudio(master) {
         // request audio config (will come in async)
         // prepend ip address of the master
@@ -4648,12 +4783,13 @@ let System = class System extends _logger__WEBPACK_IMPORTED_MODULE_5__["Logger"]
                     return {
                         id: destination.id,
                         nr: destination.destinationnr,
-                        nodeaddress: room.nodeaddress,
-                        unitaddress: room.unitaddress,
+                        nodeaddress: destination.nodeaddress,
+                        unitaddress: destination.unitaddress,
                         master: master.getAddress(),
                         port: master.getPort(),
                         name: destination.name,
                         maxvolume: destination.maxvolume,
+                        type: destination.type,
                         volume: 0,
                         source: 0,
                         sources: destination.sources.map(source => {
@@ -4670,6 +4806,7 @@ let System = class System extends _logger__WEBPACK_IMPORTED_MODULE_5__["Logger"]
         console.log("made rooms: ", this.rooms);
         Object(_core_stdUX__WEBPACK_IMPORTED_MODULE_8__["doToast"])(this.toastCtrl, "Received " + this.rooms.length + " audio rooms");
         this.writeAudio();
+        this.neededVirtualUnits();
     }
     writeAudio() {
         this.write("audio", this.rooms);

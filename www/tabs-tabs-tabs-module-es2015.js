@@ -736,7 +736,7 @@ ConfigPage = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     <config-masters *ngIf="what === 'masters'"></config-masters>
 
     <p class="version">
-      <span>v2.3.0b3 © Duotecno & Johan Coppieters</span>
+      <span>v2.3.0b5 © Duotecno & Johan Coppieters</span>
       <span class="manual">Download the <a href="https://www.duotecno.be/wp-content/uploads/2020/05/Duotecno-smartbox-app-1.pdf">manual</a></span>
     </p>
   </ion-content>

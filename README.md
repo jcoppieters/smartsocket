@@ -105,6 +105,7 @@ switch =>
 - (b2) try fix for mood pushes
 - (b3) new app build
 - (b4) read lowercase files for backup & audio + new app
+- (b5) new app version
 
 ### Todo
 - setup openstack server

@@ -1478,6 +1478,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             while (1) {
               switch (_context.prev = _context.next) {
                 case 0:
+                  if (!options) options = {};
+                  if (!options.buttons) options.buttons = [{
+                    text: "OK",
+                    id: "OK"
+                  }];
                   buttons = options.buttons.map(function (b) {
                     return {
                       text: b.text,
@@ -1486,7 +1491,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                       }
                     };
                   });
-                  _context.next = 3;
+                  _context.next = 5;
                   return alertCtrl.create({
                     header: 'Duotecno',
                     subHeader: options.title,
@@ -1494,12 +1499,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     buttons: buttons
                   });
 
-                case 3:
+                case 5:
                   alert = _context.sent;
-                  _context.next = 6;
+                  _context.next = 8;
                   return alert.present();
 
-                case 6:
+                case 8:
                 case "end":
                   return _context.stop();
               }
@@ -1521,6 +1526,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             while (1) {
               switch (_context2.prev = _context2.next) {
                 case 0:
+                  if (!options) options = {};
+                  if (!options.buttons) options.buttons = [{
+                    text: "OK",
+                    id: "OK"
+                  }];
                   buttons = options.buttons.map(function (b) {
                     return {
                       text: b.text,
@@ -1530,7 +1540,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                       }
                     };
                   });
-                  _context2.next = 3;
+                  _context2.next = 5;
                   return alertCtrl.create({
                     header: 'Duotecno',
                     subHeader: options.title,
@@ -1539,12 +1549,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     inputs: options.inputs
                   });
 
-                case 3:
+                case 5:
                   alert = _context2.sent;
-                  _context2.next = 6;
+                  _context2.next = 8;
                   return alert.present();
 
-                case 6:
+                case 8:
                 case "end":
                   return _context2.stop();
               }
@@ -2220,7 +2230,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     /* harmony default export */
 
 
-    __webpack_exports__["default"] = ".media {\n  position: relative;\n  z-index: 2; }\n  .media ion-label {\n    display: -webkit-box;\n    display: flex;\n    -webkit-box-align: center;\n            align-items: center; }\n  .media__chevron {\n  margin-left: auto;\n  margin-right: 10px; }\n  .volume__value {\n  font-size: 0.8rem; }\n  ion-range {\n  --bar-background: #fff;\n  --knob-size: 24px;\n  --knob-background: #fff; }\n  ion-range ion-icon {\n    color: var(--ion-color-primary-contrast); }\n  .dark {\n  --background: var(--ion-color-dark);\n  background-color: var(--ion-color-dark);\n  --border-radius: 0;\n  position: relative;\n  z-index: 1;\n  margin-top: -22px;\n  border-bottom-left-radius: var(--duotecno-border-radius);\n  border-bottom-right-radius: var(--duotecno-border-radius); }\n  .volume__slider ion-range {\n  margin-top: 10px;\n  padding-left: 0;\n  padding-right: 0; }\n  .choices {\n  -webkit-box-pack: justify;\n          justify-content: space-between;\n  color: white; }\n  .choices ion-select {\n    display: -webkit-inline-box;\n    display: inline-flex;\n    margin: 0 0 0 -10px;\n    max-width: inherit;\n    font-size: 13px; }\n  .choices ion-icon.desticon {\n    margin-left: 0; }\n  .choices ion-icon {\n    color: var(--ion-color-primary-contrast); }\n  .choices .source {\n    max-width: inherit; }\n  .choices .source ion-icon {\n      font-size: 24px;\n      margin-bottom: -5px;\n      margin-left: 0; }\n  .choices .source ion-select {\n      margin-right: 0; }\n  ion-item.first {\n  padding-top: 20px; }\n  .player ion-buttons {\n  padding: 0 3px !important; }\n  .controls ion-buttons {\n  -webkit-box-pack: justify;\n          justify-content: space-between;\n  width: 100%;\n  padding: 0 19px; }\n  .controls ion-buttons ion-icon {\n    font-size: 24px;\n    color: var(--ion-color-primary-contrast); }\n  .controls ion-buttons.keypad {\n  max-width: 320px; }\n  .controls ion-buttons.keypad ion-button {\n    color: white;\n    border: 1px solid white;\n    padding: 0px;\n    width: 70px;\n    border-radius: 8px; }\n  .controls ion-buttons.keypad span {\n    width: 73px; }\n  .controls ion-buttons.noborder {\n  max-width: 320px; }\n  .controls ion-buttons.noborder ion-button {\n    border: none !important; }\n  @media (prefers-color-scheme: dark) {\n  .dark {\n    --background: var(--ion-color-step-150);\n    background-color: var(--ion-color-step-150); } }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9qb2hhbi9MaWJyYXJ5L01vYmlsZSBEb2N1bWVudHMvY29tfmFwcGxlfkNsb3VkRG9jcy9Qcm9qZWN0cy9EdW90ZWNuby9zbWFydHN5c3RlbS9zcmMvYXBwL3JlbmRlcmluZy9tZWRpYS5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0ksa0JBQWtCO0VBQ2xCLFVBQVUsRUFBQTtFQUZkO0lBS1Esb0JBQWE7SUFBYixhQUFhO0lBQ2IseUJBQW1CO1lBQW5CLG1CQUFtQixFQUFBO0VBRzNCO0VBQ0ksaUJBQWlCO0VBQ2pCLGtCQUFrQixFQUFBO0VBRXRCO0VBQ0ksaUJBQWlCLEVBQUE7RUFFckI7RUFDSSxzQkFBaUI7RUFDakIsaUJBQVk7RUFDWix1QkFBa0IsRUFBQTtFQUh0QjtJQU1RLHdDQUF3QyxFQUFBO0VBR2hEO0VBQ0UsbUNBQWE7RUFDYix1Q0FBdUM7RUFDdkMsa0JBQWdCO0VBQ2hCLGtCQUFrQjtFQUNsQixVQUFVO0VBQ1YsaUJBQWlCO0VBQ2pCLHdEQUF3RDtFQUN4RCx5REFBeUQsRUFBQTtFQUUzRDtFQUVJLGdCQUFnQjtFQUNoQixlQUFlO0VBQUUsZ0JBQWdCLEVBQUE7RUFJckM7RUFDRSx5QkFBOEI7VUFBOUIsOEJBQThCO0VBQzlCLFlBQVksRUFBQTtFQUZkO0lBS0ksMkJBQW9CO0lBQXBCLG9CQUFvQjtJQUNwQixtQkFBbUI7SUFDbkIsa0JBQWtCO0lBQ2xCLGVBQWUsRUFBQTtFQVJuQjtJQVdJLGNBQWMsRUFBQTtFQVhsQjtJQWNJLHdDQUF3QyxFQUFBO0VBZDVDO0lBaUJJLGtCQUFrQixFQUFBO0VBakJ0QjtNQW1CTSxlQUFlO01BQ2YsbUJBQW1CO01BQ25CLGNBQWMsRUFBQTtFQXJCcEI7TUF3Qk0sZUFDRixFQUFBO0VBSUo7RUFDRSxpQkFBaUIsRUFBQTtFQUduQjtFQUNFLHlCQUNGLEVBQUE7RUFFQTtFQUdJLHlCQUE4QjtVQUE5Qiw4QkFBOEI7RUFDOUIsV0FBVztFQUNYLGVBQWUsRUFBQTtFQUxuQjtJQU9NLGVBQWU7SUFDZix3Q0FBd0MsRUFBQTtFQVI5QztFQWFJLGdCQUFnQixFQUFBO0VBYnBCO0lBZ0JNLFlBQVk7SUFDWix1QkFBdUI7SUFDdkIsWUFBWTtJQUNaLFdBQVc7SUFDWCxrQkFBa0IsRUFBQTtFQXBCeEI7SUF3Qk0sV0FBVyxFQUFBO0VBeEJqQjtFQTRCSSxnQkFBZ0IsRUFBQTtFQTVCcEI7SUErQk0sdUJBQ0YsRUFBQTtFQUlKO0VBQ0k7SUFDSSx1Q0FBYTtJQUNiLDJDQUEyQyxFQUFBLEVBQzlDIiwiZmlsZSI6InNyYy9hcHAvcmVuZGVyaW5nL21lZGlhLnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyIubWVkaWEge1xuICAgIHBvc2l0aW9uOiByZWxhdGl2ZTtcbiAgICB6LWluZGV4OiAyO1xuXG4gICAgaW9uLWxhYmVsIHtcbiAgICAgICAgZGlzcGxheTogZmxleDtcbiAgICAgICAgYWxpZ24taXRlbXM6IGNlbnRlcjtcbiAgICB9XG59XG4ubWVkaWFfX2NoZXZyb24ge1xuICAgIG1hcmdpbi1sZWZ0OiBhdXRvO1xuICAgIG1hcmdpbi1yaWdodDogMTBweDtcbn1cbi52b2x1bWVfX3ZhbHVlIHtcbiAgICBmb250LXNpemU6IDAuOHJlbTtcbn1cbmlvbi1yYW5nZSB7XG4gICAgLS1iYXItYmFja2dyb3VuZDogI2ZmZjtcbiAgICAtLWtub2Itc2l6ZTogMjRweDtcbiAgICAtLWtub2ItYmFja2dyb3VuZDogI2ZmZjtcblxuICAgIGlvbi1pY29uIHtcbiAgICAgICAgY29sb3I6IHZhcigtLWlvbi1jb2xvci1wcmltYXJ5LWNvbnRyYXN0KTtcbiAgICB9XG59XG4uZGFyayB7XG4gIC0tYmFja2dyb3VuZDogdmFyKC0taW9uLWNvbG9yLWRhcmspO1xuICBiYWNrZ3JvdW5kLWNvbG9yOiB2YXIoLS1pb24tY29sb3ItZGFyayk7XG4gIC0tYm9yZGVyLXJhZGl1czogMDtcbiAgcG9zaXRpb246IHJlbGF0aXZlO1xuICB6LWluZGV4OiAxO1xuICBtYXJnaW4tdG9wOiAtMjJweDtcbiAgYm9yZGVyLWJvdHRvbS1sZWZ0LXJhZGl1czogdmFyKC0tZHVvdGVjbm8tYm9yZGVyLXJhZGl1cyk7XG4gIGJvcmRlci1ib3R0b20tcmlnaHQtcmFkaXVzOiB2YXIoLS1kdW90ZWNuby1ib3JkZXItcmFkaXVzKTtcbn1cbi52b2x1bWVfX3NsaWRlciB7XG4gIGlvbi1yYW5nZSB7XG4gICAgbWFyZ2luLXRvcDogMTBweDtcbiAgICBwYWRkaW5nLWxlZnQ6IDA7IHBhZGRpbmctcmlnaHQ6IDA7XG4gIH1cbn1cblxuLmNob2ljZXMge1xuICBqdXN0aWZ5LWNvbnRlbnQ6IHNwYWNlLWJldHdlZW47XG4gIGNvbG9yOiB3aGl0ZTtcblxuICBpb24tc2VsZWN0IHtcbiAgICBkaXNwbGF5OiBpbmxpbmUtZmxleDtcbiAgICBtYXJnaW46IDAgMCAwIC0xMHB4O1xuICAgIG1heC13aWR0aDogaW5oZXJpdDtcbiAgICBmb250LXNpemU6IDEzcHg7XG4gIH1cbiAgaW9uLWljb24uZGVzdGljb24ge1xuICAgIG1hcmdpbi1sZWZ0OiAwO1xuICB9XG4gIGlvbi1pY29uIHtcbiAgICBjb2xvcjogdmFyKC0taW9uLWNvbG9yLXByaW1hcnktY29udHJhc3QpO1xuICB9XG4gIC5zb3VyY2Uge1xuICAgIG1heC13aWR0aDogaW5oZXJpdDtcbiAgICBpb24taWNvbiB7XG4gICAgICBmb250LXNpemU6IDI0cHg7XG4gICAgICBtYXJnaW4tYm90dG9tOiAtNXB4O1xuICAgICAgbWFyZ2luLWxlZnQ6IDA7XG4gICAgfVxuICAgIGlvbi1zZWxlY3Qge1xuICAgICAgbWFyZ2luLXJpZ2h0OiAwXG4gICAgfVxuICB9XG59XG5cbmlvbi1pdGVtLmZpcnN0IHtcbiAgcGFkZGluZy10b3A6IDIwcHg7XG59XG5cbi5wbGF5ZXIgaW9uLWJ1dHRvbnMgeyBcbiAgcGFkZGluZzogMCAzcHggIWltcG9ydGFudFxufVxuXG4uY29udHJvbHMge1xuICBcbiAgaW9uLWJ1dHRvbnMge1xuICAgIGp1c3RpZnktY29udGVudDogc3BhY2UtYmV0d2VlbjtcbiAgICB3aWR0aDogMTAwJTtcbiAgICBwYWRkaW5nOiAwIDE5cHg7XG4gICAgaW9uLWljb24ge1xuICAgICAgZm9udC1zaXplOiAyNHB4O1xuICAgICAgY29sb3I6IHZhcigtLWlvbi1jb2xvci1wcmltYXJ5LWNvbnRyYXN0KTtcbiAgICB9XG4gIH1cblxuICBpb24tYnV0dG9ucy5rZXlwYWQge1xuICAgIG1heC13aWR0aDogMzIwcHg7XG5cbiAgICBpb24tYnV0dG9uIHtcbiAgICAgIGNvbG9yOiB3aGl0ZTtcbiAgICAgIGJvcmRlcjogMXB4IHNvbGlkIHdoaXRlO1xuICAgICAgcGFkZGluZzogMHB4O1xuICAgICAgd2lkdGg6IDcwcHg7XG4gICAgICBib3JkZXItcmFkaXVzOiA4cHg7XG4gICAgfVxuXG4gICAgc3BhbiB7XG4gICAgICB3aWR0aDogNzNweDtcbiAgICB9XG4gIH1cbiAgaW9uLWJ1dHRvbnMubm9ib3JkZXIge1xuICAgIG1heC13aWR0aDogMzIwcHg7XG5cbiAgICBpb24tYnV0dG9uIHtcbiAgICAgIGJvcmRlcjogbm9uZSAhaW1wb3J0YW50XG4gICAgfVxuICB9XG59XG5cbkBtZWRpYSAocHJlZmVycy1jb2xvci1zY2hlbWU6IGRhcmspIHtcbiAgICAuZGFyayB7XG4gICAgICAgIC0tYmFja2dyb3VuZDogdmFyKC0taW9uLWNvbG9yLXN0ZXAtMTUwKTtcbiAgICAgICAgYmFja2dyb3VuZC1jb2xvcjogdmFyKC0taW9uLWNvbG9yLXN0ZXAtMTUwKTtcbiAgICB9XG59XG4iXX0= */";
+    __webpack_exports__["default"] = ".media {\n  position: relative;\n  z-index: 2; }\n  .media ion-label {\n    display: -webkit-box;\n    display: flex;\n    -webkit-box-align: center;\n            align-items: center; }\n  .media__chevron {\n  margin-left: auto;\n  margin-right: 5px; }\n  .volume__value {\n  font-size: 0.8rem;\n  width: 27px;\n  text-align: right; }\n  ion-range {\n  --bar-background: #fff;\n  --knob-size: 24px;\n  --knob-background: #fff; }\n  ion-range ion-icon {\n    color: var(--ion-color-primary-contrast); }\n  .dark {\n  --background: var(--ion-color-dark);\n  background-color: var(--ion-color-dark);\n  --border-radius: 0;\n  position: relative;\n  z-index: 1;\n  margin-top: -22px;\n  border-bottom-left-radius: var(--duotecno-border-radius);\n  border-bottom-right-radius: var(--duotecno-border-radius); }\n  .volume__slider ion-range {\n  margin-top: 10px;\n  padding-left: 0;\n  padding-right: 0; }\n  .choices {\n  -webkit-box-pack: justify;\n          justify-content: space-between;\n  color: white; }\n  .choices ion-select {\n    display: -webkit-inline-box;\n    display: inline-flex;\n    margin: 0 0 0 -10px;\n    max-width: inherit;\n    font-size: 13px; }\n  .choices ion-icon.desticon {\n    margin: 0 0 4px 0; }\n  .choices ion-icon {\n    color: var(--ion-color-primary-contrast); }\n  .choices .source {\n    max-width: inherit; }\n  .choices .source ion-icon {\n      font-size: 24px;\n      margin-bottom: -5px;\n      margin-left: 0; }\n  .choices .source ion-select {\n      margin-right: 0; }\n  ion-item.first {\n  padding-top: 20px; }\n  .basic span {\n  height: 64px; }\n  .basic ion-buttons {\n  margin-left: 0; }\n  .basic ion-buttons ion-icon {\n    margin-top: 0px;\n    font-size: 35px !important; }\n  .basic ion-buttons ion-icon:first-child {\n    margin-right: 25px; }\n  .basic ion-select {\n  color: var(--ion-color-primary-contrast);\n  margin-top: 15px; }\n  .player ion-buttons {\n  padding: 0 0 0 3px !important; }\n  .player ion-buttons ion-icon {\n    font-size: 24px !important; }\n  .controls ion-buttons {\n  -webkit-box-pack: justify;\n          justify-content: space-between;\n  width: 100%;\n  padding: 0; }\n  .controls ion-buttons ion-icon {\n    font-size: 36px;\n    color: var(--ion-color-primary-contrast); }\n  .controls ion-buttons ion-icon.toggle {\n    color: var(--ion-color-primary); }\n  .controls ion-buttons ion-icon.side {\n    width: 22px !important;\n    min-width: 22px !important; }\n  .controls ion-buttons.keypad {\n  max-width: 320px; }\n  .controls ion-buttons.keypad ion-button {\n    color: white;\n    border: 1px solid white;\n    padding: 0px;\n    width: 70px;\n    border-radius: 8px; }\n  .controls ion-buttons.keypad span {\n    width: 73px; }\n  .controls ion-buttons.noborder {\n  max-width: 320px; }\n  .controls ion-buttons.noborder ion-button {\n    border: none !important; }\n  @media (prefers-color-scheme: dark) {\n  .dark {\n    --background: var(--ion-color-step-150);\n    background-color: var(--ion-color-step-150); } }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9qb2hhbi9MaWJyYXJ5L01vYmlsZSBEb2N1bWVudHMvY29tfmFwcGxlfkNsb3VkRG9jcy9Qcm9qZWN0cy9EdW90ZWNuby9zbWFydHN5c3RlbS9zcmMvYXBwL3JlbmRlcmluZy9tZWRpYS5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0Usa0JBQWtCO0VBQ2xCLFVBQVUsRUFBQTtFQUZaO0lBS0ksb0JBQWE7SUFBYixhQUFhO0lBQ2IseUJBQW1CO1lBQW5CLG1CQUFtQixFQUFBO0VBR3ZCO0VBQ0UsaUJBQWlCO0VBQ2pCLGlCQUFpQixFQUFBO0VBRW5CO0VBQ0UsaUJBQWlCO0VBQ2pCLFdBQVc7RUFDWCxpQkFBaUIsRUFBQTtFQUVuQjtFQUNFLHNCQUFpQjtFQUNqQixpQkFBWTtFQUNaLHVCQUFrQixFQUFBO0VBSHBCO0lBTUksd0NBQXdDLEVBQUE7RUFHNUM7RUFDRSxtQ0FBYTtFQUNiLHVDQUF1QztFQUN2QyxrQkFBZ0I7RUFDaEIsa0JBQWtCO0VBQ2xCLFVBQVU7RUFDVixpQkFBaUI7RUFDakIsd0RBQXdEO0VBQ3hELHlEQUF5RCxFQUFBO0VBRTNEO0VBRUksZ0JBQWdCO0VBQ2hCLGVBQWU7RUFBRSxnQkFBZ0IsRUFBQTtFQUlyQztFQUNFLHlCQUE4QjtVQUE5Qiw4QkFBOEI7RUFDOUIsWUFBWSxFQUFBO0VBRmQ7SUFLSSwyQkFBb0I7SUFBcEIsb0JBQW9CO0lBQ3BCLG1CQUFtQjtJQUNuQixrQkFBa0I7SUFDbEIsZUFBZSxFQUFBO0VBUm5CO0lBV0ksaUJBQWlCLEVBQUE7RUFYckI7SUFjSSx3Q0FBd0MsRUFBQTtFQWQ1QztJQWtCSSxrQkFBa0IsRUFBQTtFQWxCdEI7TUFvQk0sZUFBZTtNQUNmLG1CQUFtQjtNQUNuQixjQUFjLEVBQUE7RUF0QnBCO01BeUJNLGVBQ0YsRUFBQTtFQUlKO0VBQ0UsaUJBQWlCLEVBQUE7RUFHbkI7RUFFSSxZQUFZLEVBQUE7RUFGaEI7RUFLSSxjQUFjLEVBQUE7RUFMbEI7SUFPTSxlQUFlO0lBQ2YsMEJBQTBCLEVBQUE7RUFSaEM7SUFXTSxrQkFBa0IsRUFBQTtFQVh4QjtFQWVJLHdDQUF3QztFQUN4QyxnQkFBZ0IsRUFBQTtFQUlwQjtFQUNFLDZCQUE2QixFQUFBO0VBRC9CO0lBR0ksMEJBQTBCLEVBQUE7RUFJOUI7RUFFSSx5QkFBOEI7VUFBOUIsOEJBQThCO0VBQzlCLFdBQVc7RUFDWCxVQUFVLEVBQUE7RUFKZDtJQU1NLGVBQWU7SUFDZix3Q0FBd0MsRUFBQTtFQVA5QztJQVVNLCtCQUErQixFQUFBO0VBVnJDO0lBYU0sc0JBQXNCO0lBQ3RCLDBCQUEwQixFQUFBO0VBZGhDO0VBbUJJLGdCQUFnQixFQUFBO0VBbkJwQjtJQXNCTSxZQUFZO0lBQ1osdUJBQXVCO0lBQ3ZCLFlBQVk7SUFDWixXQUFXO0lBQ1gsa0JBQWtCLEVBQUE7RUExQnhCO0lBOEJNLFdBQVcsRUFBQTtFQTlCakI7RUFrQ0ksZ0JBQWdCLEVBQUE7RUFsQ3BCO0lBcUNNLHVCQUNGLEVBQUE7RUFJSjtFQUNJO0lBQ0ksdUNBQWE7SUFDYiwyQ0FBMkMsRUFBQSxFQUM5QyIsImZpbGUiOiJzcmMvYXBwL3JlbmRlcmluZy9tZWRpYS5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLm1lZGlhIHtcbiAgcG9zaXRpb246IHJlbGF0aXZlO1xuICB6LWluZGV4OiAyO1xuXG4gIGlvbi1sYWJlbCB7XG4gICAgZGlzcGxheTogZmxleDtcbiAgICBhbGlnbi1pdGVtczogY2VudGVyO1xuICB9XG59XG4ubWVkaWFfX2NoZXZyb24ge1xuICBtYXJnaW4tbGVmdDogYXV0bztcbiAgbWFyZ2luLXJpZ2h0OiA1cHg7XG59XG4udm9sdW1lX192YWx1ZSB7XG4gIGZvbnQtc2l6ZTogMC44cmVtO1xuICB3aWR0aDogMjdweDtcbiAgdGV4dC1hbGlnbjogcmlnaHQ7XG59XG5pb24tcmFuZ2Uge1xuICAtLWJhci1iYWNrZ3JvdW5kOiAjZmZmO1xuICAtLWtub2Itc2l6ZTogMjRweDtcbiAgLS1rbm9iLWJhY2tncm91bmQ6ICNmZmY7XG5cbiAgaW9uLWljb24ge1xuICAgIGNvbG9yOiB2YXIoLS1pb24tY29sb3ItcHJpbWFyeS1jb250cmFzdCk7XG4gIH1cbn1cbi5kYXJrIHtcbiAgLS1iYWNrZ3JvdW5kOiB2YXIoLS1pb24tY29sb3ItZGFyayk7XG4gIGJhY2tncm91bmQtY29sb3I6IHZhcigtLWlvbi1jb2xvci1kYXJrKTtcbiAgLS1ib3JkZXItcmFkaXVzOiAwO1xuICBwb3NpdGlvbjogcmVsYXRpdmU7XG4gIHotaW5kZXg6IDE7XG4gIG1hcmdpbi10b3A6IC0yMnB4O1xuICBib3JkZXItYm90dG9tLWxlZnQtcmFkaXVzOiB2YXIoLS1kdW90ZWNuby1ib3JkZXItcmFkaXVzKTtcbiAgYm9yZGVyLWJvdHRvbS1yaWdodC1yYWRpdXM6IHZhcigtLWR1b3RlY25vLWJvcmRlci1yYWRpdXMpO1xufVxuLnZvbHVtZV9fc2xpZGVyIHtcbiAgaW9uLXJhbmdlIHtcbiAgICBtYXJnaW4tdG9wOiAxMHB4O1xuICAgIHBhZGRpbmctbGVmdDogMDsgcGFkZGluZy1yaWdodDogMDtcbiAgfVxufVxuXG4uY2hvaWNlcyB7XG4gIGp1c3RpZnktY29udGVudDogc3BhY2UtYmV0d2VlbjtcbiAgY29sb3I6IHdoaXRlO1xuXG4gIGlvbi1zZWxlY3Qge1xuICAgIGRpc3BsYXk6IGlubGluZS1mbGV4O1xuICAgIG1hcmdpbjogMCAwIDAgLTEwcHg7XG4gICAgbWF4LXdpZHRoOiBpbmhlcml0O1xuICAgIGZvbnQtc2l6ZTogMTNweDtcbiAgfVxuICBpb24taWNvbi5kZXN0aWNvbiB7XG4gICAgbWFyZ2luOiAwIDAgNHB4IDA7XG4gIH1cbiAgaW9uLWljb24ge1xuICAgIGNvbG9yOiB2YXIoLS1pb24tY29sb3ItcHJpbWFyeS1jb250cmFzdCk7XG4gIH1cblxuICAuc291cmNlIHtcbiAgICBtYXgtd2lkdGg6IGluaGVyaXQ7XG4gICAgaW9uLWljb24ge1xuICAgICAgZm9udC1zaXplOiAyNHB4O1xuICAgICAgbWFyZ2luLWJvdHRvbTogLTVweDtcbiAgICAgIG1hcmdpbi1sZWZ0OiAwO1xuICAgIH1cbiAgICBpb24tc2VsZWN0IHtcbiAgICAgIG1hcmdpbi1yaWdodDogMFxuICAgIH1cbiAgfVxufVxuXG5pb24taXRlbS5maXJzdCB7XG4gIHBhZGRpbmctdG9wOiAyMHB4O1xufVxuXG4uYmFzaWMge1xuICBzcGFuIHtcbiAgICBoZWlnaHQ6IDY0cHg7XG4gIH1cbiAgaW9uLWJ1dHRvbnMge1xuICAgIG1hcmdpbi1sZWZ0OiAwO1xuICAgIGlvbi1pY29uIHtcbiAgICAgIG1hcmdpbi10b3A6IDBweDtcbiAgICAgIGZvbnQtc2l6ZTogMzVweCAhaW1wb3J0YW50O1xuICAgIH1cbiAgICBpb24taWNvbjpmaXJzdC1jaGlsZCB7XG4gICAgICBtYXJnaW4tcmlnaHQ6IDI1cHg7XG4gICAgfVxuICB9XG4gIGlvbi1zZWxlY3Qge1xuICAgIGNvbG9yOiB2YXIoLS1pb24tY29sb3ItcHJpbWFyeS1jb250cmFzdCk7XG4gICAgbWFyZ2luLXRvcDogMTVweDtcbiAgfVxufVxuXG4ucGxheWVyIGlvbi1idXR0b25zIHsgXG4gIHBhZGRpbmc6IDAgMCAwIDNweCAhaW1wb3J0YW50O1xuICBpb24taWNvbntcbiAgICBmb250LXNpemU6IDI0cHggIWltcG9ydGFudDtcbiAgfVxufVxuXG4uY29udHJvbHMge1xuICBpb24tYnV0dG9ucyB7XG4gICAganVzdGlmeS1jb250ZW50OiBzcGFjZS1iZXR3ZWVuO1xuICAgIHdpZHRoOiAxMDAlO1xuICAgIHBhZGRpbmc6IDA7XG4gICAgaW9uLWljb24ge1xuICAgICAgZm9udC1zaXplOiAzNnB4O1xuICAgICAgY29sb3I6IHZhcigtLWlvbi1jb2xvci1wcmltYXJ5LWNvbnRyYXN0KTtcbiAgICB9XG4gICAgaW9uLWljb24udG9nZ2xlIHtcbiAgICAgIGNvbG9yOiB2YXIoLS1pb24tY29sb3ItcHJpbWFyeSlcbiAgICB9XG4gICAgaW9uLWljb24uc2lkZSB7XG4gICAgICB3aWR0aDogMjJweCAhaW1wb3J0YW50O1xuICAgICAgbWluLXdpZHRoOiAyMnB4ICFpbXBvcnRhbnQ7XG4gICAgfVxuICB9XG5cbiAgaW9uLWJ1dHRvbnMua2V5cGFkIHtcbiAgICBtYXgtd2lkdGg6IDMyMHB4O1xuXG4gICAgaW9uLWJ1dHRvbiB7XG4gICAgICBjb2xvcjogd2hpdGU7XG4gICAgICBib3JkZXI6IDFweCBzb2xpZCB3aGl0ZTtcbiAgICAgIHBhZGRpbmc6IDBweDtcbiAgICAgIHdpZHRoOiA3MHB4O1xuICAgICAgYm9yZGVyLXJhZGl1czogOHB4O1xuICAgIH1cblxuICAgIHNwYW4ge1xuICAgICAgd2lkdGg6IDczcHg7XG4gICAgfVxuICB9XG4gIGlvbi1idXR0b25zLm5vYm9yZGVyIHtcbiAgICBtYXgtd2lkdGg6IDMyMHB4O1xuXG4gICAgaW9uLWJ1dHRvbiB7XG4gICAgICBib3JkZXI6IG5vbmUgIWltcG9ydGFudFxuICAgIH1cbiAgfVxufVxuXG5AbWVkaWEgKHByZWZlcnMtY29sb3Itc2NoZW1lOiBkYXJrKSB7XG4gICAgLmRhcmsge1xuICAgICAgICAtLWJhY2tncm91bmQ6IHZhcigtLWlvbi1jb2xvci1zdGVwLTE1MCk7XG4gICAgICAgIGJhY2tncm91bmQtY29sb3I6IHZhcigtLWlvbi1jb2xvci1zdGVwLTE1MCk7XG4gICAgfVxufVxuIl19 */";
     /***/
   },
 
@@ -2283,18 +2293,46 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     var MediaControl =
     /*#__PURE__*/
     function () {
-      function MediaControl(toastCtrl, system) {
+      function MediaControl(toastCtrl, alertCtrl, system) {
         _classCallCheck(this, MediaControl);
 
         this.toastCtrl = toastCtrl;
+        this.alertCtrl = alertCtrl;
         this.system = system;
         this.showSlider = false;
-        this.running = false;
         this.clicked = false;
         this.keypad = false;
       }
 
       _createClass(MediaControl, [{
+        key: "ngOnInit",
+        value: function ngOnInit() {
+          var _this4 = this;
+
+          console.log("ngOnInit -> checking up on input service -> ", this.service); // set a destination if no selected
+
+          if (!this.service.destination && this.service.destinations) {
+            this.service.destination = this.service.destinations.find(function (d) {
+              return d.id == _this4.service.destinationId;
+            });
+          }
+
+          if (!this.service.destination && this.service.destinations.length > 0) {
+            this.service.destinationId = this.service.destinations[0].id;
+            this.service.destination = this.service.destinations[0];
+          } // see if a source if selected (even if 255 == "off")
+
+
+          if (this.service.destination) {
+            this.service.destinationId = this.service.destination.id;
+          } else {
+            //doAlert(this.alertCtrl, {title: "audio troubles", 
+            //  message: "The unit " + this.service.displayName + " (" + this.service.getNumber() + ") has no destinations"
+            //});
+            console.log("****  The unit " + this.service.displayName + " (" + this.service.getNumber() + ") has no destinations");
+          }
+        }
+      }, {
         key: "basic",
         value: function basic() {
           return this.service.type === _system_types__WEBPACK_IMPORTED_MODULE_4__["UnitType"].kAudio;
@@ -2312,12 +2350,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "click",
         value: function click() {
-          var _this4 = this;
+          var _this5 = this;
 
           // guard for not having ionChange trigger when status changes come in 
           this.clicked = true;
           setTimeout(function () {
-            return _this4.clicked = false;
+            return _this5.clicked = false;
           }, 1000);
         }
       }, {
@@ -2328,8 +2366,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "updown",
         value: function updown(_updown) {
+          var _this6 = this;
+
           Object(_core_stdUX__WEBPACK_IMPORTED_MODULE_3__["doToast"])(this.toastCtrl, _updown ? "Volume up" : "Volume down");
-          this.service.setState(_updown ? -2 : -1);
+          this.service.setState(_updown ? -2 : -1); // stop the volume change for basic audio devices
+
+          if (this.basic()) {
+            setTimeout(function () {
+              return _this6.service.setState(true);
+            }, 300);
+          }
         }
       }, {
         key: "change",
@@ -2342,18 +2388,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "changeDest",
         value: function changeDest() {
-          if (this.service.destination.source != 255) this.service.audioSrcDest(this.service.destination.source, this.service.destinationId);
+          if (this.service.destination.source == 255) this.service.setState(false);else this.service.audioSrcDest(this.service.destination.source, this.service.destinationId);
         }
       }, {
         key: "changeSrc",
         value: function changeSrc() {
-          if (this.service.destination.source != 255) this.service.audioSrcDest(this.service.destination.source, this.service.destinationId);
+          if (this.service.destination.source == 255) this.service.setState(false);else this.service.audioSrcDest(this.service.destination.source, this.service.destinationId);
         }
       }, {
         key: "action",
         value: function action(_action) {
-          if (_action === "play") this.running = true;
-          if (_action === "stop") this.running = false;
           this.service.audioAction(_action);
         }
       }, {
@@ -2380,6 +2424,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       return [{
         type: _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["ToastController"]
       }, {
+        type: _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["AlertController"]
+      }, {
         type: _system_system__WEBPACK_IMPORTED_MODULE_5__["System"]
       }];
     };
@@ -2387,11 +2433,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     MediaControl = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
       selector: 'media',
       inputs: ['service'],
-      template: "\n    <ion-item lines=\"none\" class=\"media\" *ngIf=\"service.destinations.length\">\n      <ion-label tappable (click)=\"labelClick()\">{{service.getName()}}\n        <ion-icon [name]=\"arrow()\" class=\"media__chevron\"></ion-icon>\n        <span class=\"volume__value\">{{service.value}}%</span>\n      </ion-label>\n      <ion-toggle [(ngModel)]=\"service.status\" (ionChange)=\"onoff()\" (click)=\"click()\"></ion-toggle>\n    </ion-item>\n\n    <ion-item lines=\"none\" class=\"dark volume__slider\" *ngIf=\"showSlider && basic()\">\n      <ion-icon slot=\"start\" name=\"remove\" (click)=\"updown(false)\"></ion-icon>\n      <ion-icon slot=\"end\" name=\"add\" (click)=\"updown(true)\"></ion-icon>\n    </ion-item>\n\n    <ion-item lines=\"none\" class=\"dark volume__slider\" *ngIf=\"showSlider && ! basic()\">\n      <ion-range min=\"1\" max=\"100\" debounce=\"400\" [(ngModel)]=\"service.value\" \n                 (ionChange)=\"change()\" (click)=\"click()\">\n        <ion-icon slot=\"start\" name=\"remove\" (click)=\"updown(false)\"></ion-icon>\n        <ion-icon slot=\"end\" name=\"add\" (click)=\"updown(true)\"></ion-icon>\n      </ion-range>\n    </ion-item>\n\n    <ion-item lines=\"none\" class=\"dark choices\" *ngIf=\"showSlider\">\n      <span class=\"source\">\n        <ion-icon name=\"musical-notes\" slot=\"start\"></ion-icon>\n        <ion-select [(ngModel)]=\"service.destination.source\" interface=\"popover\" slot=\"start\"\n                    [compareWith]=\"same\" (ionChange)=\"changeSrc()\" (click)=\"click()\">\n          <ion-select-option value=\"255\">{{\"Media.Off\" |_ }}</ion-select-option>\n          <ion-select-option *ngFor=\"let src of service.destination.sources\" value=\"{{src.id}}\">{{src.name}}</ion-select-option>\n        </ion-select>\n      </span>\n      \n      <ion-icon slot=\"end\" name=\"volume-medium\" *ngIf=\"(service.destinations.length > 1)\" class=\"desticon\"></ion-icon>\n      <ion-select [(ngModel)]=\"service.destinationId\" interface=\"popover\" slot=\"end\"\n                  [compareWith]=\"same\" (ionChange)=\"changeDest()\" class=\"destination\"\n                  *ngIf=\"(service.destinations.length > 1)\" (click)=\"click()\">\n        <ion-select-option value=\"255\">{{\"Media.Off\" |_ }}</ion-select-option>\n        <ion-select-option *ngFor=\"let dest of service.destinations\" value=\"{{dest.id}}\">{{dest.name}}</ion-select-option>\n      </ion-select>\n    </ion-item>\n\n    <ion-item lines=\"none\" class=\"dark controls player\" *ngIf=\"showSlider\">\n      <ion-buttons>\n        <ion-icon name=\"play-back\" (click)=\"action('back')\"></ion-icon>\n        <!-- ion-icon name=\"play-skip-back\" (click)=\"action('skipback')\"></ion-icon -->\n        <ion-icon name=\"play\" (click)=\"action('play')\" *ngIf=\"!running\"></ion-icon>\n        <ion-icon name=\"stop\" (click)=\"action('stop')\" *ngIf=\"running\"></ion-icon>\n        <ion-icon name=\"pause\" (click)=\"action('pause')\"></ion-icon>\n        <!-- ion-icon name=\"play-skip-forward\" (click)=\"action('skipforward')\"></ion-icon -->\n        <ion-icon name=\"play-forward\" (click)=\"action('forward')\"></ion-icon>\n        <ion-icon name=\"keypad\" (click)=\"toggleKeypad()\"></ion-icon>\n      </ion-buttons>\n    </ion-item>\n\n    <ion-item lines=\"none\" class=\"dark controls first\" *ngIf=\"showSlider && keypad\">\n      <ion-buttons class=\"keypad\">\n        <ion-button (click)=\"actionKeypad('1')\">1</ion-button>\n        <ion-button (click)=\"actionKeypad('2')\">2</ion-button>\n        <ion-button (click)=\"actionKeypad('3')\">3</ion-button>\n      </ion-buttons>\n      </ion-item>\n\n      <ion-item lines=\"none\" class=\"dark controls\" *ngIf=\"showSlider && keypad\">\n        <ion-buttons class=\"keypad\">\n        <ion-button (click)=\"actionKeypad('4')\">4</ion-button>\n        <ion-button (click)=\"actionKeypad('5')\">5</ion-button>\n        <ion-button (click)=\"actionKeypad('6')\">6</ion-button>\n      </ion-buttons>\n      </ion-item>\n\n      <ion-item lines=\"none\" class=\"dark controls\" *ngIf=\"showSlider && keypad\">\n        <ion-buttons class=\"keypad\">\n        <ion-button (click)=\"actionKeypad('7')\">7</ion-button>\n        <ion-button (click)=\"actionKeypad('8')\">8</ion-button>\n        <ion-button (click)=\"actionKeypad('9')\">9</ion-button>\n      </ion-buttons>\n      </ion-item>\n\n      <ion-item lines=\"none\" class=\"dark controls\" *ngIf=\"showSlider && keypad\">\n        <ion-buttons class=\"keypad\">\n          <ion-button (click)=\"actionKeypad('-')\">./..</ion-button>\n          <ion-button (click)=\"actionKeypad('0')\">0</ion-button>\n          <span></span>\n        </ion-buttons>\n      </ion-item>\n\n      <ion-item lines=\"none\" class=\"dark controls\" *ngIf=\"showSlider && keypad\">\n        <ion-buttons class=\"keypad noborder\">\n          <span></span>\n          <ion-button (click)=\"actionKeypad('up')\"><ion-icon name=\"caret-up\"></ion-icon></ion-button>\n          <span></span>\n        </ion-buttons>\n      </ion-item>\n\n      <ion-item lines=\"none\" class=\"dark controls\" *ngIf=\"showSlider && keypad\">\n        <ion-buttons class=\"keypad noborder\">\n          <ion-button (click)=\"actionKeypad('left')\"><ion-icon name=\"caret-back\"></ion-icon></ion-button>\n          <ion-button (click)=\"actionKeypad('enter')\">OK</ion-button>\n          <ion-button (click)=\"actionKeypad('right')\"><ion-icon name=\"caret-forward\"></ion-icon></ion-button>\n        </ion-buttons>\n      </ion-item>\n\n      <ion-item lines=\"none\" class=\"dark controls\" *ngIf=\"showSlider && keypad\">\n        <ion-buttons class=\"keypad noborder\">\n          <span></span>\n          <ion-button (click)=\"actionKeypad('down')\"><ion-icon name=\"caret-down\"></ion-icon></ion-button>\n          <span></span>\n        </ion-buttons>\n    </ion-item>\n\n\n\n    <!-- ion-item lines=\"none\" class=\"choices\" *ngIf=\"showSlider\">\n     1) play stop rewind enz...\n     2) 0-9\n    </ion-item>\n    -->\n  ",
+      template: "\n    <ion-item lines=\"none\" class=\"media\" *ngIf=\"service.destinations.length\">\n      <ion-label tappable (click)=\"labelClick()\">{{service.getName()}}\n        <ion-icon [name]=\"arrow()\" class=\"media__chevron\"></ion-icon>\n        <span class=\"volume__value\">{{service.value}}%</span>\n      </ion-label>\n      <ion-toggle [(ngModel)]=\"service.status\" (ionChange)=\"onoff()\" (click)=\"click()\"></ion-toggle>\n    </ion-item>\n\n    <ion-item lines=\"none\" class=\"dark volume__slider\" *ngIf=\"showSlider && ! basic()\">\n      <ion-range min=\"1\" max=\"100\" debounce=\"400\" [(ngModel)]=\"service.value\" \n                 (ionChange)=\"change()\" (click)=\"click()\">\n        <ion-icon slot=\"start\" name=\"remove\" (click)=\"updown(false)\"></ion-icon>\n        <ion-icon slot=\"end\" name=\"add\" (click)=\"updown(true)\"></ion-icon>\n      </ion-range>\n    </ion-item>\n\n    <ion-item lines=\"none\" class=\"dark choices\" *ngIf=\"showSlider && ! basic()\">\n      <span class=\"source\">\n        <ion-icon name=\"musical-notes\" slot=\"start\"></ion-icon>\n        <ion-select [(ngModel)]=\"service.destination.source\" interface=\"popover\" slot=\"start\"\n                    [compareWith]=\"same\" (ionChange)=\"changeSrc()\">\n          <ion-select-option value=\"255\">{{\"Media.Off\" |_ }}</ion-select-option>\n          <ion-select-option *ngFor=\"let src of service.destination.sources\" value=\"{{src.id}}\">{{src.name}}</ion-select-option>\n        </ion-select>\n      </span>\n      <ion-icon slot=\"end\" name=\"volume-medium\" *ngIf=\"(service.destinations.length > 1)\" class=\"desticon\"></ion-icon>\n      <ion-select [(ngModel)]=\"service.destinationId\" interface=\"popover\" slot=\"end\"\n                  [compareWith]=\"same\" (ionChange)=\"changeDest()\" class=\"destination\"\n                  *ngIf=\"(service.destinations.length > 1)\">\n        <ion-select-option *ngFor=\"let dest of service.destinations\" value=\"{{dest.id}}\">{{dest.name}}</ion-select-option>\n      </ion-select>\n    </ion-item>\n\n    <ion-item lines=\"none\" class=\"dark choices basic\" *ngIf=\"showSlider && basic()\">\n      <span class=\"source\">\n        <ion-icon name=\"musical-notes\" slot=\"start\"></ion-icon>\n        <ion-select [(ngModel)]=\"service.destination.source\" interface=\"popover\" slot=\"start\"\n                    [compareWith]=\"same\" (ionChange)=\"changeSrc()\">\n          <ion-select-option value=\"255\">{{\"Media.Off\" |_ }}</ion-select-option>\n          <ion-select-option *ngFor=\"let src of service.destination.sources\" value=\"{{src.id}}\">{{src.name}}</ion-select-option>\n        </ion-select>\n      </span>\n      <ion-buttons slot=\"end\" >\n        <ion-icon *ngIf=\"basic()\" name=\"remove-circle\" (click)=\"updown(false)\"></ion-icon>\n        <ion-icon *ngIf=\"basic()\" name=\"add-circle\" (click)=\"updown(true)\"></ion-icon>\n      </ion-buttons>\n    </ion-item>\n\n\n    <ion-item lines=\"none\" class=\"dark controls player\" *ngIf=\"showSlider\">\n      <ion-buttons>\n        <ion-icon name=\"play-back\" (click)=\"action('back')\"></ion-icon>\n        <ion-icon name=\"play\" (click)=\"action('play')\"></ion-icon>\n        <ion-icon name=\"stop\" (click)=\"action('stop')\"></ion-icon>\n        <ion-icon name=\"pause\" (click)=\"action('pause')\"></ion-icon>\n        <ion-icon name=\"play-forward\" (click)=\"action('forward')\"></ion-icon>\n        <ion-icon name=\"keypad\" (click)=\"toggleKeypad()\" class=\"toggle\"></ion-icon>\n      </ion-buttons>\n    </ion-item>\n\n    <ion-item lines=\"none\" class=\"dark controls first\" *ngIf=\"showSlider && keypad\">\n      <ion-buttons class=\"keypad\">\n        <ion-button (click)=\"actionKeypad('1')\">1</ion-button>\n        <ion-button (click)=\"actionKeypad('2')\">2</ion-button>\n        <ion-button (click)=\"actionKeypad('3')\">3</ion-button>\n        <span></span>\n        <ion-icon name=\"caret-up-circle\" (click)=\"action('skipforward')\" class=\"side\"></ion-icon>\n      </ion-buttons>\n      </ion-item>\n\n      <ion-item lines=\"none\" class=\"dark controls\" *ngIf=\"showSlider && keypad\">\n        <ion-buttons class=\"keypad\">\n          <ion-button (click)=\"actionKeypad('4')\">4</ion-button>\n          <ion-button (click)=\"actionKeypad('5')\">5</ion-button>\n          <ion-button (click)=\"actionKeypad('6')\">6</ion-button>\n          <span></span>\n          <ion-icon name=\"caret-down-circle\" (click)=\"action('skipback')\" class=\"side\"></ion-icon>\n        </ion-buttons>\n      </ion-item>\n\n      <ion-item lines=\"none\" class=\"dark controls\" *ngIf=\"showSlider && keypad\">\n        <ion-buttons class=\"keypad\">\n          <ion-button (click)=\"actionKeypad('7')\">7</ion-button>\n          <ion-button (click)=\"actionKeypad('8')\">8</ion-button>\n          <ion-button (click)=\"actionKeypad('9')\">9</ion-button>\n          <span></span>\n          <ion-icon class=\"side\"></ion-icon>\n        </ion-buttons>\n      </ion-item>\n\n      <ion-item lines=\"none\" class=\"dark controls\" *ngIf=\"showSlider && keypad\">\n        <ion-buttons class=\"keypad\">\n          <ion-button (click)=\"actionKeypad('-')\">./..</ion-button>\n          <ion-button (click)=\"actionKeypad('0')\">0</ion-button>\n          <span></span>\n          <span></span>\n          <ion-icon name=\"menu\" (click)=\"action('menu')\" class=\"side\"></ion-icon>\n        </ion-buttons>\n      </ion-item>\n\n      <ion-item lines=\"none\" class=\"dark controls\" *ngIf=\"showSlider && keypad\">\n        <ion-buttons class=\"keypad noborder\">\n          <span></span>\n          <ion-button (click)=\"actionKeypad('up')\"><ion-icon name=\"caret-up\"></ion-icon></ion-button>\n          <span></span>\n          <span></span>\n          <ion-icon name=\"reader\" (click)=\"action('guide')\" class=\"side\"></ion-icon>\n        </ion-buttons>\n      </ion-item>\n\n      <ion-item lines=\"none\" class=\"dark controls\" *ngIf=\"showSlider && keypad\">\n        <ion-buttons class=\"keypad noborder\">\n          <ion-button (click)=\"actionKeypad('left')\"><ion-icon name=\"caret-back\"></ion-icon></ion-button>\n          <ion-button (click)=\"actionKeypad('enter')\">OK</ion-button>\n          <ion-button (click)=\"actionKeypad('right')\"><ion-icon name=\"caret-forward\"></ion-icon></ion-button>\n          <span></span>\n          <ion-icon name=\"information-circle\" (click)=\"action('info')\" class=\"side\"></ion-icon>\n        </ion-buttons>\n      </ion-item>\n\n      <ion-item lines=\"none\" class=\"dark controls\" *ngIf=\"showSlider && keypad\">\n        <ion-buttons class=\"keypad noborder\">\n          <span></span>\n          <ion-button (click)=\"actionKeypad('down')\"><ion-icon name=\"caret-down\"></ion-icon></ion-button>\n          <span></span>\n          <span></span>\n          <ion-icon name=\"exit\" (click)=\"action('exit')\" class=\"side\"></ion-icon>\n        </ion-buttons>\n    </ion-item>\n  ",
       styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(
       /*! ./media.scss */
       "./src/app/rendering/media.scss")).default]
-    }), tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_ionic_angular__WEBPACK_IMPORTED_MODULE_2__["ToastController"], _system_system__WEBPACK_IMPORTED_MODULE_5__["System"]])], MediaControl);
+    }), tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_ionic_angular__WEBPACK_IMPORTED_MODULE_2__["ToastController"], _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["AlertController"], _system_system__WEBPACK_IMPORTED_MODULE_5__["System"]])], MediaControl);
     /***/
   },
 
@@ -2457,16 +2503,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "down",
         value: function down(ev) {
-          var _this5 = this;
+          var _this7 = this;
 
           ev.preventDefault(); // send long event after 1Sec
 
           this.pressed = setTimeout(function () {
-            Object(_core_stdUX__WEBPACK_IMPORTED_MODULE_3__["doToast"])(_this5.toastCtrl, _this5.service.name + ' - long on');
+            Object(_core_stdUX__WEBPACK_IMPORTED_MODULE_3__["doToast"])(_this7.toastCtrl, _this7.service.name + ' - long on');
 
-            _this5.service.setState(1);
+            _this7.service.setState(1);
 
-            _this5.pressed = -1;
+            _this7.pressed = -1;
           }, 1000);
         }
       }, {
@@ -2570,13 +2616,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       _createClass(SceneControl, [{
         key: "click",
         value: function click() {
-          var _this6 = this;
+          var _this8 = this;
 
           Object(_core_stdUX__WEBPACK_IMPORTED_MODULE_3__["doToast"])(this.toastCtrl, this.scene.name + ": " + this.scene.units.map(function (u) {
             return u.name;
           }).join(", "));
           this.scene.units.forEach(function (unitDef) {
-            var unit = _this6.system.findUnit(unitDef.masterAddress, unitDef.masterPort, unitDef.logicalNodeAddress, unitDef.logicalAddress); //console.log(" -> calling " + unitDef.name + " (" + ((unit) ? "found" : "not-found") + ") <- " + unitDef.value);
+            var unit = _this8.system.findUnit(unitDef.masterAddress, unitDef.masterPort, unitDef.logicalNodeAddress, unitDef.logicalAddress); //console.log(" -> calling " + unitDef.name + " (" + ((unit) ? "found" : "not-found") + ") <- " + unitDef.value);
 
 
             if (unit) unit.setState(unitDef.value);
@@ -3053,15 +3099,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "startWaiter",
         value: function startWaiter() {
-          var _this7 = this;
+          var _this9 = this;
 
           var mSecs = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1000;
           this.endWaiter(); // this.logger("*Q* Waiter: starting timer for " + mSecs + " mSec");
 
           this.timer = setTimeout(function () {
-            _this7.logger('*Q* Waiter: timer finished, calling \'do\' because nobody else did');
+            _this9.logger('*Q* Waiter: timer finished, calling \'do\' because nobody else did');
 
-            _this7.do();
+            _this9.do();
           }, mSecs);
         }
       }, {
@@ -3321,31 +3367,31 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
        }
       */
       function Master(system, config, toastCtrl) {
-        var _this8;
+        var _this10;
 
         _classCallCheck(this, Master);
 
-        _this8 = _possibleConstructorReturn(this, _getPrototypeOf(Master).call(this, "master", system.debug));
-        _this8.toastCtrl = toastCtrl;
-        _this8.resolveLogin = null;
-        _this8.Q = new _Q__WEBPACK_IMPORTED_MODULE_4__["Q"](system.logger); // save my eco system
+        _this10 = _possibleConstructorReturn(this, _getPrototypeOf(Master).call(this, "master", system.debug));
+        _this10.toastCtrl = toastCtrl;
+        _this10.resolveLogin = null;
+        _this10.Q = new _Q__WEBPACK_IMPORTED_MODULE_4__["Q"](system.logger); // save my eco system
 
-        _this8.system = system; // save this masters config settings
+        _this10.system = system; // save this masters config settings
 
-        _this8.config = _types__WEBPACK_IMPORTED_MODULE_2__["Sanitizers"].masterConfig(config); // all nodes in this master
+        _this10.config = _types__WEBPACK_IMPORTED_MODULE_2__["Sanitizers"].masterConfig(config); // all nodes in this master
 
-        _this8.nodes = [];
-        _this8.nrNodes = 0;
-        _this8.schedule = 0;
-        _this8.date = null; // connection to an IP node / smartbox
+        _this10.nodes = [];
+        _this10.nrNodes = 0;
+        _this10.schedule = 0;
+        _this10.date = null; // connection to an IP node / smartbox
 
-        _this8.socket = null;
-        _this8.isOpen = false;
-        _this8.isLoggedIn = false;
-        _this8.closeRequested = false; // incoming data
+        _this10.socket = null;
+        _this10.isOpen = false;
+        _this10.isLoggedIn = false;
+        _this10.closeRequested = false; // incoming data
 
-        _this8.buffer = "";
-        return _this8;
+        _this10.buffer = "";
+        return _this10;
       }
 
       _createClass(Master, [{
@@ -3471,7 +3517,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
           regeneratorRuntime.mark(function _callee7() {
-            var _this9 = this;
+            var _this11 = this;
 
             return regeneratorRuntime.wrap(function _callee7$(_context7) {
               while (1) {
@@ -3481,55 +3527,55 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                       try {
                         ////////////////////////////////
                         // try to open the connection //
-                        _this9.log("opening connection to the SmartSocket Server");
+                        _this11.log("opening connection to the SmartSocket Server");
 
-                        var wsserver = _this9.system.config.socketserver + ":" + _this9.system.config.socketport;
-                        var tcpserver = _this9.config.address + ":" + _this9.config.port;
-                        _this9.socket = new WebSocket("ws://" + wsserver + "/" + tcpserver);
+                        var wsserver = _this11.system.config.socketserver + ":" + _this11.system.config.socketport;
+                        var tcpserver = _this11.config.address + ":" + _this11.config.port;
+                        _this11.socket = new WebSocket("ws://" + wsserver + "/" + tcpserver);
 
-                        if (!_this9.socket) {
-                          _this9.err("could create new web socket to " + wsserver + "/" + tcpserver);
+                        if (!_this11.socket) {
+                          _this11.err("could create new web socket to " + wsserver + "/" + tcpserver);
 
                           resolve(false);
                         } ///////////////////////
                         // set data listener //
 
 
-                        _this9.socket.onmessage = function (message) {
+                        _this11.socket.onmessage = function (message) {
                           // messages need to be buffered until "]" is received
-                          _this9.handleData(message.data);
+                          _this11.handleData(message.data);
                         }; ///////////////////////////
                         // set an error listener //
 
 
-                        _this9.socket.onerror = function (err) {
-                          _this9.err("Socket: " + err + " on " + wsserver + "/" + tcpserver);
+                        _this11.socket.onerror = function (err) {
+                          _this11.err("Socket: " + err + " on " + wsserver + "/" + tcpserver);
                         }; ///////////////////////////////////////////
                         // set end: the server closed the socket //
 
 
-                        _this9.socket.onclose = function () {
-                          _this9.isOpen = false;
-                          _this9.isLoggedIn = false;
+                        _this11.socket.onclose = function () {
+                          _this11.isOpen = false;
+                          _this11.isLoggedIn = false;
 
-                          _this9.log("end -> socket got disconnected");
+                          _this11.log("end -> socket got disconnected");
 
-                          if (!_this9.closeRequested) {
+                          if (!_this11.closeRequested) {
                             // unexpected close
-                            _this9.err("Socket: closed unexpectedly");
+                            _this11.err("Socket: closed unexpectedly");
                           }
                         };
 
-                        _this9.socket.onopen = function () {
-                          _this9.isOpen = true; // request a connection to the real socket
+                        _this11.socket.onopen = function () {
+                          _this11.isOpen = true; // request a connection to the real socket
 
-                          _this9.log("connection open on " + wsserver + "/" + tcpserver); // resolve our promise with the opened socket
+                          _this11.log("connection open on " + wsserver + "/" + tcpserver); // resolve our promise with the opened socket
 
 
                           resolve(true);
                         };
                       } catch (e) {
-                        _this9.err("Failed to open a connection on port " + _this9.getPort());
+                        _this11.err("Failed to open a connection on port " + _this11.getPort());
 
                         resolve(false);
                       }
@@ -3588,7 +3634,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
           regeneratorRuntime.mark(function _callee9() {
-            var _this10 = this;
+            var _this12 = this;
 
             return regeneratorRuntime.wrap(function _callee9$(_context9) {
               while (1) {
@@ -3596,16 +3642,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                   case 0:
                     return _context9.abrupt("return", new Promise(function (resolve, reject) {
                       try {
-                        var message = _protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildLogin(_this10.config.password);
+                        var message = _protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].buildLogin(_this12.config.password);
 
-                        _protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].write(_this10.socket, message); // to be called when logged in
+                        _protocol__WEBPACK_IMPORTED_MODULE_1__["Protocol"].write(_this12.socket, message); // to be called when logged in
 
 
-                        _this10.resolveLogin = resolve;
+                        _this12.resolveLogin = resolve;
                       } catch (err) {
-                        _this10.resolveLogin = null;
+                        _this12.resolveLogin = null;
 
-                        _this10.err("Login call failed: " + err);
+                        _this12.err("Login call failed: " + err);
 
                         reject(false);
                       }
@@ -3630,14 +3676,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
           regeneratorRuntime.mark(function _callee11() {
-            var _this11 = this;
+            var _this13 = this;
 
             return regeneratorRuntime.wrap(function _callee11$(_context11) {
               while (1) {
                 switch (_context11.prev = _context11.next) {
                   case 0:
                     return _context11.abrupt("return", this.Q.exec(function () {
-                      return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this11, void 0, void 0,
+                      return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this13, void 0, void 0,
                       /*#__PURE__*/
                       regeneratorRuntime.mark(function _callee10() {
                         return regeneratorRuntime.wrap(function _callee10$(_context10) {
@@ -3703,7 +3749,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           if (!next.cmd) {
             return false;
           } else {
-            if (next.cmd != _protocol__WEBPACK_IMPORTED_MODULE_1__["Rec"].Internal) this.log("incoming msg=" + Object(_protocol__WEBPACK_IMPORTED_MODULE_1__["recName"])(next.cmd) + ", status=" + next.isStatus + ", data=" + (next.message ? next.message.join(",") : "--"));else this.log("incoming msg=" + Object(_protocol__WEBPACK_IMPORTED_MODULE_1__["recName"])(next.cmd) + ", data=" + (next.raw ? next.raw.substr(0, 50) : "--"));
+            if (next.cmd != _protocol__WEBPACK_IMPORTED_MODULE_1__["Rec"].Internal) {
+              if (next.cmd != 7) // don't log temperature
+                this.log("incoming msg=" + Object(_protocol__WEBPACK_IMPORTED_MODULE_1__["recName"])(next.cmd) + ", status=" + next.isStatus + ", data=" + (next.message ? next.message.join(",") : "--"));
+            } else {
+              this.log("incoming msg=" + Object(_protocol__WEBPACK_IMPORTED_MODULE_1__["recName"])(next.cmd) + ", data=" + (next.raw ? next.raw.substr(0, 50) : "--"));
+            }
+
             this.Q.do();
 
             if (next.isStatus) {
@@ -3980,7 +4032,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0,
           /*#__PURE__*/
           regeneratorRuntime.mark(function _callee15() {
-            var _this12 = this;
+            var _this14 = this;
 
             var hasNames;
             return regeneratorRuntime.wrap(function _callee15$(_context15) {
@@ -3989,7 +4041,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                   case 0:
                     this.nodes = [];
                     hasNames = this.system.config.cunits.filter(function (u) {
-                      return _this12.same(u.masterAddress, u.masterPort);
+                      return _this14.same(u.masterAddress, u.masterPort);
                     }).some(function (u) {
                       return u.name;
                     });
@@ -4012,33 +4064,33 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     //  call: kind of receive-Node/Unit-Info
                     this.log("building db from config file");
                     this.system.config.cunits.filter(function (u) {
-                      return _this12.same(u.masterAddress, u.masterPort);
+                      return _this14.same(u.masterAddress, u.masterPort);
                     }).forEach(function (u) {
-                      var node = _this12.findNode(u.logicalNodeAddress);
+                      var node = _this14.findNode(u.logicalNodeAddress);
 
                       if (!node) {
-                        node = new _protocol__WEBPACK_IMPORTED_MODULE_1__["Node"](_this12, {
+                        node = new _protocol__WEBPACK_IMPORTED_MODULE_1__["Node"](_this14, {
                           logicalAddress: u.logicalNodeAddress,
                           name: "Node-" + u.logicalNodeAddress
                         });
 
-                        _this12.nodes.push(node);
+                        _this14.nodes.push(node);
 
-                        _this12.system.setActiveState(node);
+                        _this14.system.setActiveState(node);
 
-                        _this12.log("new node: " + node.getName());
+                        _this14.log("new node: " + node.getName());
                       }
 
-                      var unit = _this12.findUnit(u.logicalNodeAddress, u.logicalAddress);
+                      var unit = _this14.findUnit(u.logicalNodeAddress, u.logicalAddress);
 
                       if (!unit) {
                         unit = new _protocol__WEBPACK_IMPORTED_MODULE_1__["Unit"](node, u);
                         node.units.push(unit);
 
-                        _this12.log("new unit: " + unit.getName() + " -> " + u.logicalAddress);
+                        _this14.log("new unit: " + unit.getName() + " -> " + u.logicalAddress);
                       }
 
-                      _this12.system.setActiveState(unit);
+                      _this14.system.setActiveState(unit);
                     });
 
                   case 9:
@@ -4068,22 +4120,22 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "displayDatabase",
         value: function displayDatabase() {
-          var _this13 = this;
+          var _this15 = this;
 
           var onlyNodes = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
           this.log("Showing " + this.nodes.length + " nodes");
           this.nodes.forEach(function (node, nodeInx) {
             if (onlyNodes) {
-              _this13.log("===================================================================================");
+              _this15.log("===================================================================================");
             }
 
-            _this13.log(nodeInx + ". " + node.name + ", type = " + node.typeName() + ", nrUnits = " + node.nrUnits + ", logical address = " + node.logicalAddress);
+            _this15.log(nodeInx + ". " + node.name + ", type = " + node.typeName() + ", nrUnits = " + node.nrUnits + ", logical address = " + node.logicalAddress);
 
             if (onlyNodes) {
-              _this13.log("-----------------------------------------------------------------------------------");
+              _this15.log("-----------------------------------------------------------------------------------");
 
               node.units.forEach(function (unit, unitInx) {
-                _this13.log("> " + unitInx + ". '" + unit.name + "' => '" + unit.getName() + "', type = " + unit.typeName() + ", logical address: " + unit.logicalAddress + ", value: " + unit.value + (unit.status ? ", status = " + unit.status : ""));
+                _this15.log("> " + unitInx + ". '" + unit.name + "' => '" + unit.getName() + "', type = " + unit.typeName() + ", logical address: " + unit.logicalAddress + ", value: " + unit.value + (unit.status ? ", status = " + unit.status : ""));
               });
             }
           });
@@ -4168,7 +4220,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           });
 
           if (!node) {
-            this.err("status message " + next.cmd + " for unknown node = " + nodeLogical);
+            // this.err("status message " + next.cmd + " for unknown node = " + nodeLogical);
             return;
           } // find unit
 
@@ -5585,7 +5637,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 return {
                   cmd: Cmd.SetAVMatrix,
                   method: value == -1 ? 8 : 7,
-                  data: [unit.destinationId]
+                  data: [unit.destinationId, 1]
                 }; // volume inc/dec
               else return {
                   cmd: Cmd.SetAVMatrix,
@@ -5650,11 +5702,34 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       },
 
       /* Audio */
+      getAudioIds: function getAudioIds(unit, source, destination) {
+        var destNr = Math.max(0, Math.min(unit.destinations.length - 1, destination));
+        var srcNr = Math.max(0, Math.min(unit.destinations[destNr].sources.length, source));
+        var unitAdr = unit.destinations[destNr].unitaddress;
+        var nodeAdr = unit.destinations[destNr].nodeaddress;
+        return {
+          destNr: destNr,
+          srcNr: srcNr,
+          unitAdr: unitAdr,
+          nodeAdr: nodeAdr
+        };
+      },
       buildAudioSrcDest: function buildAudioSrcDest(node, unit, source, destination) {
         if (unit.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kAudio) {
           return [Cmd.SetBasicAudio, 1, node.logicalAddress, unit.logicalAddress, Math.max(0, Math.min(7, source))];
         } else if (unit.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kExtendedAudio) {
-          return [Cmd.SetExtendedAudio, 1, node.logicalAddress, unit.logicalAddress, Math.max(0, Math.min(3, destination)), Math.max(0, Math.min(7, source))];
+          if (!unit.destinations || !unit.destinations.length) {
+            console.log('set SrcDest ' + unit.displayName + ' has no destinations');
+            return null;
+          }
+
+          var _this$getAudioIds = this.getAudioIds(unit, source, destination),
+              destNr = _this$getAudioIds.destNr,
+              srcNr = _this$getAudioIds.srcNr,
+              unitAdr = _this$getAudioIds.unitAdr,
+              nodeAdr = _this$getAudioIds.nodeAdr;
+
+          return [Cmd.SetExtendedAudio, 1, nodeAdr, unitAdr, destNr, srcNr];
         } else {
           console.log('set SrcDest ' + unit.type + ' not yet implemented');
           return null;
@@ -5686,7 +5761,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             'left': 12,
             'right': 13,
             'enter': 14,
-            '-': 15
+            '-': 15,
+            'menu': 16,
+            'guide': 17,
+            'info': 18,
+            'exit': 19
           }
         },
         extended: {
@@ -5714,7 +5793,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             'left': 12,
             'right': 13,
             'enter': 14,
-            '-': 15
+            '-': 15,
+            'menu': 16,
+            'guide': 17,
+            'info': 18,
+            'exit': 19
           }
         }
       },
@@ -5728,13 +5811,18 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             msg.push(this.actions.basic.functions[fnc]);
           }
         } else if (unit.type === _types__WEBPACK_IMPORTED_MODULE_1__["UnitType"].kExtendedAudio) {
-          msg = [Cmd.SetExtendedAudio, this.actions.extended[action], node.logicalAddress, unit.logicalAddress, unit.destinationId];
+          var _this$getAudioIds2 = this.getAudioIds(unit, 0, unit.destinationId),
+              destNr = _this$getAudioIds2.destNr,
+              unitAdr = _this$getAudioIds2.unitAdr,
+              nodeAdr = _this$getAudioIds2.nodeAdr;
+
+          msg = [Cmd.SetExtendedAudio, this.actions.extended[action], nodeAdr, unitAdr, destNr];
 
           if (fnc) {
             msg.push(this.actions.extended.functions[fnc]);
           }
         } else {
-          console.log('send Action ' + unit.type + ' not yet implemented');
+          console.log('send Action to ' + unit.typeName() + ' not yet implemented');
         }
 
         return msg;
@@ -5758,8 +5846,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           unit.moon = next.message[15] * 256 + next.message[16]; // 10x temperature
 
           unit.hmoon = next.message[17] * 256 + next.message[18]; // 10x temperature
-
-          this.logger('received temperature = ' + unit.value / 10.0);
+          // this.logger('received temperature = ' + <number>unit.value / 10.0);
         } else if (next.cmd === Rec.Switch) {
           // switch -> boolean
           unit.status = next.message[6];
@@ -5788,9 +5875,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         this.emitter.emit('update', unit);
       },
       receiveAudioStatus: function receiveAudioStatus(unit, next) {
+        // extended
         // 70,0,252,102,5,0,0,255,255,255,255,0,14,0,0
         // 70,0,252,102,5,0,1,0,0,255,255,11,12,0,0
         // 70,0,252,101,5,0,0,255,255,255,255,10,0,0,0 -> off
+        //
+        // Basic
+        // 23,0=status,61=node,0=unit,10=rs232,3=type,255=src,28=vol,
+        //    255=disc,[9]255=track,[10]2=preset,[11]102=freq,[12]70=freq
         unit.destinationId = next.cmd === Rec.AudioExtendedStatus ? next.message[6] : 0;
 
         if (unit.destinations && next.cmd === Rec.AudioExtendedStatus) {
@@ -5803,7 +5895,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }
 
         if (unit.destinations && next.cmd === Rec.AudioStatus) {
-          unit.destination = unit.destination[0];
+          unit.destination = unit.destinations[0];
           unit.destination.volume = next.message[7];
           unit.destination.source = next.message[6];
           unit.destination.disc = next.message[8] != 255 ? next.message[8] + 1 : 0;
@@ -5818,7 +5910,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           unit.status = unit.destination.source == 255 ? 0 : 1;
         }
 
-        console.log("receiveAudioStatus: ", unit);
+        console.log(next.cmd === Rec.AudioExtendedStatus ? "receiveAudioExtendedStatus: " : "receiveAudioStatus: ", unit);
       },
       makeDBInfo: function makeDBInfo(res) {
         return {
@@ -5941,43 +6033,43 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       _inherits(System, _logger__WEBPACK_IMPO2);
 
       function System(toastCtrl) {
-        var _this14;
+        var _this16;
 
         _classCallCheck(this, System);
 
-        _this14 = _possibleConstructorReturn(this, _getPrototypeOf(System).call(this, "system", true));
-        _this14.toastCtrl = toastCtrl;
-        _this14.backup = null;
-        _this14.isBrowser = true;
-        _this14.isSplitted = false; // rebuild active services (units) and spread unit updates
+        _this16 = _possibleConstructorReturn(this, _getPrototypeOf(System).call(this, "system", true));
+        _this16.toastCtrl = toastCtrl;
+        _this16.backup = null;
+        _this16.isBrowser = true;
+        _this16.isSplitted = false; // rebuild active services (units) and spread unit updates
 
-        _this14.trigger = null;
-        _this14.moods = [];
-        _this14.controls = [];
-        _this14.temperatures = [];
-        _this14.stores = [];
-        _this14.media = [];
-        _this14.rooms = [];
-        _this14.trigger = null;
-        _this14.emitter = new events__WEBPACK_IMPORTED_MODULE_7__["EventEmitter"]();
+        _this16.trigger = null;
+        _this16.moods = [];
+        _this16.controls = [];
+        _this16.temperatures = [];
+        _this16.stores = [];
+        _this16.media = [];
+        _this16.rooms = [];
+        _this16.trigger = null;
+        _this16.emitter = new events__WEBPACK_IMPORTED_MODULE_7__["EventEmitter"]();
 
-        _protocol__WEBPACK_IMPORTED_MODULE_4__["Protocol"].setEmitter(_this14.emitter); //this.emitter.on('update', this.checkScenes.bind(this));
-
-
-        _this14.readConfig();
-
-        _this14.readGroups();
-
-        _this14.readScenes();
-
-        _this14.readAudio(); // open all masters listed in the config
+        _protocol__WEBPACK_IMPORTED_MODULE_4__["Protocol"].setEmitter(_this16.emitter); //this.emitter.on('update', this.checkScenes.bind(this));
 
 
-        _this14.masters = [];
+        _this16.readConfig();
 
-        _this14.openMasters();
+        _this16.readGroups();
 
-        return _this14;
+        _this16.readScenes();
+
+        _this16.readAudio(); // open all masters listed in the config
+
+
+        _this16.masters = [];
+
+        _this16.openMasters();
+
+        return _this16;
       }
 
       _createClass(System, [{
@@ -6395,12 +6487,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "findUnitByAddress",
         value: function findUnitByAddress(logicalNodeAddress, logicalAddress) {
-          var _this15 = this;
+          var _this17 = this;
 
           var unit = null;
           this.masters.forEach(function (m) {
             if (m) {
-              var node = _this15.findNode(m, logicalNodeAddress);
+              var node = _this17.findNode(m, logicalNodeAddress);
 
               if (node) {
                 unit = node.units.find(function (u) {
@@ -6474,7 +6566,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "triggerRebuild",
         value: function triggerRebuild() {
-          var _this16 = this;
+          var _this18 = this;
 
           var immediate = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
           this.log("triggerRebuild requested");
@@ -6489,17 +6581,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             this.rebuildServices();
           } else {
             this.trigger = setTimeout(function () {
-              _this16.trigger = null;
+              _this18.trigger = null;
 
-              _this16.rebuildServices();
+              _this18.rebuildServices();
             }, 1000);
           }
         }
       }, {
         key: "rebuildServices",
         value: function rebuildServices() {
-          var _this17 = this;
-
           function compare(a, b) {
             var an = a.getSort();
             var bn = b.getSort();
@@ -6543,20 +6633,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           });
           this.media = services.filter(function (s) {
             return s.isMedia();
-          }); // attach the rooms to the units
-
-          this.media.forEach(function (s) {
-            var room = _this17.rooms.find(function (room) {
-              return s.isUnit(room.master, room.port, room.nodeaddress, room.unitaddress);
-            });
-
-            console.log("attached to " + s.name, room);
-
-            if (room) {
-              s.destinations = room.destinations;
-              s.destination = null;
-            }
           });
+          console.log("media: ", this.media);
+          this.attachAudio(); //TODO -> IN OPEN MASTER ???
+
           this.emitter.emit('refresh');
         } ////////////
         // Scenes //
@@ -6565,7 +6645,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "checkScenes",
         value: function checkScenes(unit) {
-          var _this18 = this;
+          var _this19 = this;
 
           // do local scene implementation only if not handle by server
           if (this.config.remotescenes) return; // used when local-scenes = true.
@@ -6578,14 +6658,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             this.log("scene found -> " + scene.name + ", value = " + scene.trigger.value + " unit = " + unit.value); //if (unit.sameValue(scene.trigger.value)) {
 
             scene.units.forEach(function (u) {
-              var unit = _this18.findUnit(u.masterAddress, u.masterPort, u.logicalNodeAddress, u.logicalAddress);
+              var unit = _this19.findUnit(u.masterAddress, u.masterPort, u.logicalNodeAddress, u.logicalAddress);
 
               if (unit) {
-                _this18.log(" - unit: " + unit.getDisplayName() + " -> " + u.value);
+                _this19.log(" - unit: " + unit.getDisplayName() + " -> " + u.value);
 
                 unit.setState(u.value);
               } else {
-                _this18.log(" - !!! Didn't find unit: " + u.masterAddress + ", " + u.masterPort + ", " + u.logicalNodeAddress + ", " + u.logicalAddress);
+                _this19.log(" - !!! Didn't find unit: " + u.masterAddress + ", " + u.masterPort + ", " + u.logicalNodeAddress + ", " + u.logicalAddress);
               }
             }); //}
           }
@@ -6696,6 +6776,136 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         ///////////
 
       }, {
+        key: "attachAudio",
+        value: function attachAudio() {
+          var _this20 = this;
+
+          // attach the rooms to the units
+          this.media.forEach(function (s) {
+            var room = _this20.rooms.find(function (room) {
+              return s.isUnit(room.master, room.port, room.nodeaddress, room.unitaddress);
+            });
+
+            console.log("attached to " + s.name, room);
+
+            if (room) {
+              s.destinations = room.destinations;
+              s.destination = null;
+              s.destinationId = 255;
+            }
+          });
+          this.allActiveUnits().forEach(function (unit) {
+            if (unit.type == _types__WEBPACK_IMPORTED_MODULE_3__["UnitType"].kAudio) {
+              if (!unit.destinations) {
+                unit.destinations = [];
+              }
+
+              if (!unit.destinations.length) {
+                unit.destinations.push({
+                  id: 0,
+                  nr: 0,
+                  type: 0,
+                  nodeaddress: unit.node.logicalAddress,
+                  unitaddress: unit.logicalAddress,
+                  master: unit.node.master.getAddress(),
+                  port: unit.node.master.getPort(),
+                  name: "Audio",
+                  maxvolume: 100,
+                  volume: 0,
+                  source: 0,
+                  sources: [{
+                    id: 0,
+                    nr: 0,
+                    name: "Src 1"
+                  }, {
+                    id: 1,
+                    nr: 1,
+                    name: "Src 2"
+                  }, {
+                    id: 2,
+                    nr: 2,
+                    name: "Src 3"
+                  }, {
+                    id: 3,
+                    nr: 3,
+                    name: "Src 4"
+                  }, {
+                    id: 4,
+                    nr: 4,
+                    name: "Src 5"
+                  }, {
+                    id: 5,
+                    nr: 5,
+                    name: "Src 6"
+                  }, {
+                    id: 6,
+                    nr: 6,
+                    name: "Src 7"
+                  }, {
+                    id: 7,
+                    nr: 7,
+                    name: "Src 8"
+                  }],
+                  disc: 0,
+                  track: 0,
+                  frequency: "-",
+                  preset: 0
+                });
+              }
+
+              unit.destinationId = 0;
+              unit.destination = unit.destinations[0];
+              console.log("*****  Destinations for basic audio", unit);
+              console.log("*****  destination != null " + (unit.destination != null));
+            }
+          });
+        }
+      }, {
+        key: "neededVirtualUnits",
+        value: function neededVirtualUnits() {
+          var _this21 = this;
+
+          this.rooms.forEach(function (room) {
+            if (room.nodeaddress == 255) {
+              var master = _this21.findMaster(room.master, room.port);
+
+              if (master) {
+                var node = _this21.findNode(master, room.nodeaddress);
+
+                if (!node) {
+                  // add node to master
+                  node = new _protocol__WEBPACK_IMPORTED_MODULE_4__["Node"](master, {
+                    name: "Virtual Node",
+                    logicalReqNodeAddress: 255,
+                    nrUnits: 0,
+                    index: 0,
+                    logicalAddress: 255,
+                    physicalAddress: 255,
+                    type: _types__WEBPACK_IMPORTED_MODULE_3__["NodeType"].kNoNode
+                  });
+                  master.nodes.push(node);
+                }
+
+                if (!_this21.findUnit(master, room.nodeaddress, room.unitaddress)) {
+                  // add unit to node
+                  var unit = new _protocol__WEBPACK_IMPORTED_MODULE_4__["Unit"](node, {
+                    name: room.name,
+                    logicalReqNodeAddress: 255,
+                    logicalNodeAddress: 255,
+                    index: room.unitaddress,
+                    logicalAddress: room.unitaddress,
+                    physicalAddress: room.unitaddress,
+                    type: _types__WEBPACK_IMPORTED_MODULE_3__["UnitType"].kAV
+                  });
+                  unit.active = true;
+                  node.units.push(unit);
+                  node.nrUnits++; // we never get a database info for this unit, so increment ourself
+                }
+              }
+            }
+          });
+        }
+      }, {
         key: "doRequestAudio",
         value: function doRequestAudio(master) {
           // request audio config (will come in async)
@@ -6729,12 +6939,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 return {
                   id: destination.id,
                   nr: destination.destinationnr,
-                  nodeaddress: room.nodeaddress,
-                  unitaddress: room.unitaddress,
+                  nodeaddress: destination.nodeaddress,
+                  unitaddress: destination.unitaddress,
                   master: master.getAddress(),
                   port: master.getPort(),
                   name: destination.name,
                   maxvolume: destination.maxvolume,
+                  type: destination.type,
                   volume: 0,
                   source: 0,
                   sources: destination.sources.map(function (source) {
@@ -6751,6 +6962,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           console.log("made rooms: ", this.rooms);
           Object(_core_stdUX__WEBPACK_IMPORTED_MODULE_8__["doToast"])(this.toastCtrl, "Received " + this.rooms.length + " audio rooms");
           this.writeAudio();
+          this.neededVirtualUnits();
         }
       }, {
         key: "writeAudio",
@@ -7146,7 +7358,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         return config;
       },
       system: function system(config) {
-        var _this19 = this;
+        var _this22 = this;
 
         if (!config) {
           config = {};
@@ -7163,7 +7375,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         delete config["cnodes"];
         config.cunits = config.cunits || [];
         config.cunits.forEach(function (u) {
-          return _this19.unitDef(u);
+          return _this22.unitDef(u);
         }); // support old style groups, pre v1.1
 
         if (typeof config.cgroups != 'undefined') {
@@ -7196,14 +7408,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         return config;
       },
       groups: function groups(config) {
-        var _this20 = this;
+        var _this23 = this;
 
         if (!config) {
           return [this.group()];
         }
 
         config.forEach(function (g) {
-          return _this20.group(g);
+          return _this23.group(g);
         });
         return config;
       },
@@ -7285,7 +7497,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       ////////////
       // Scenes //
       sceneConfig: function sceneConfig(config) {
-        var _this21 = this;
+        var _this24 = this;
 
         // don't change -> create new clean record for writing to config files
         if (!config) {
@@ -7309,12 +7521,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         newConfig.trigger = this.unitScene(config.trigger);
         config.units = config.units || kEmptyScene.units;
         newConfig.units = config.units.map(function (u) {
-          return _this21.unitScene(u);
+          return _this24.unitScene(u);
         });
         return newConfig;
       },
       scenes: function scenes(config) {
-        var _this22 = this;
+        var _this25 = this;
 
         // if (!config) { return [this.sceneConfig()]; }
         if (!config) {
@@ -7322,7 +7534,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }
 
         config.forEach(function (s) {
-          return _this22.sceneConfig(s);
+          return _this25.sceneConfig(s);
         });
         return config;
       },
