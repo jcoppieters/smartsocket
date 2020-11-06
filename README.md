@@ -62,7 +62,6 @@ inherited versions of smartApp
 ### v5.1.1 - smappee rules
 - sorted and written to config file after delete
 
-
 ### v5.2.0 - 23 june 2020 - new type: Lock (and unlocker)
 - mood met * (is on/off) + $ = Lock met on/off
 - mood zonder * (is on-1sec-off) + $ = Unlocker met on-1sec-off
@@ -106,6 +105,11 @@ switch =>
 - (b3) new app build
 - (b4) read lowercase files for backup & audio + new app
 - (b5) new app version
+- (b6) Fixed error in homebridge config (no soc- and smart-app at the same time)
+
+### v5.6.0 - 06/11/2020 - External devices (http switches et al)
+- also respond to /tabs/control etc... from the ionic 5 app
+
 
 ### Todo
 - setup openstack server
@@ -158,14 +162,22 @@ http://[ip of Raspberry]:[port of Raspberry]/units/set?master=[ip of duotecno no
 
 Example: http://192.168.0.99:5002/units/set?master=192.168.0.98:5001&unit=0x3;0x1c&value=1
 
-## Giving switch url for http switches
+## The  url for http switches
 
 the url field contains 3 parts
  fixed url part | zero part | one part
  if the status of the unit = 0 we send "fixed"+"zero part", 
   if = 1 "fixed"+"one part"
-  
+
 Example: http://192.168.0.101/relay/0?turn=|off|on
+
+
+## The url for http dimmers
+
+the url field can contains a $
+this $ is replaced by the value of the attached unit
+  
+Example: http://192.168.0.101/relay/0?turn=on&brightness=$
 
 
 ## How to set up a Raspberry Pi
@@ -222,6 +234,15 @@ sudo raspi-config
   -> enable ssh
   -> boot to cmdline
 
+if you want a private key on the machine
+```
+mkdir ~/.ssh
+chmod 755 ~/.ssh
+cat ~/id_rsa.pub >>  ~/.ssh/authorized_keys
+chmod 644 ~/.ssh/authorized_keys
+rm ~/id_rsa.pub
+```
+
 ### other stuff
 if needed a wifi connection can be made too, add a file "wpa_supplicant.conf" to the boot partition of the sd card
 example content:
@@ -262,18 +283,17 @@ rm -f ~/node-v12.16.1-linux-armv7l.tar.xz
 sudo ln -s /opt/node-v12.16.1-linux-armv7l /opt/node
 sudo ln -s /opt/node/bin/node /usr/bin/node
 sudo ln -s /opt/node/bin/npm /usr/bin/npm
+sudo apt-get install -y git
 cd ~
 ```
 
 ### 1b - nodejs  - ARM8
 ```
-wget https://nodejs.org/dist/v12.16.1/node-v12.16.1-linux-arm64.tar.xz
-cd /opt
-sudo tar -xJvf ~/node-v12.16.1-linux-arm64.tar.xz
-rm -f ~/node-v12.16.1-linux-arm64.tar.xz
-sudo ln -s /opt/node-v12.16.1-linux-arm64 /opt/node
-sudo ln -s /opt/node/bin/node /usr/bin/node
-sudo ln -s /opt/node/bin/npm /usr/bin/npm
+sudo rm -f /opt/node
+curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+sudo apt-get install -y nodejs
+sudo npm install -g npm
+sudo apt-get install -y git
 cd ~
 ```
 
@@ -289,14 +309,18 @@ sudo rm -f /usr/bin/homebridge
 sudo npm -g remove mqtt
 sudo rm -f /usr/bin/mqtt
 
+## clean up
+sudo apt autoremove
+
 
 ## start intstall: node, npm, git
 cd ~
 sudo rm -f /opt/node
-curl -sL https://deb.nodesource.com/setup_12.x | sudo bash -
-sudo apt-get install -y nodejs  # for dev tools add: gcc g++ make python
+curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+sudo apt-get install -y nodejs
 sudo npm install -g npm
 sudo apt-get install -y git
+
 
 ### install: homebridge
 sudo npm install -g --force --unsafe-perm homebridge
@@ -304,12 +328,14 @@ sudo npm install -g --force --unsafe-perm homebridge
 sudo npm install -g --force mqtt
 
 ### install: smartsystem
+rm -rf smartsocket
 git clone https://github.com/jcoppieters/smartsocket.git
 cd smartsocket
 git checkout v2.0
 npm install
 
 ### config smartsystem
+rm -rf /home/pi/.homebridge
 mkdir -p /home/pi/.homebridge
 cp ~/smartsocket/config.homebridge.json ~/.homebridge/config.json
 cd ~/smartsocket

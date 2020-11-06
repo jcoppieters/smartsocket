@@ -1,11 +1,11 @@
-import * as net from 'net';
-import { Server as WSServer } from 'ws';
 import * as fs from 'fs';
 import * as mime from 'mime-types';
-import { WebApp, HttpResponse, Context} from "./webapp";
+import * as net from 'net';
+import { Server as WSServer } from 'ws';
+import { System } from '../duotecno/system';
 import { LogFunction } from '../duotecno/types';
 import { Support } from './support';
-import { System } from '../duotecno/system';
+import { Context, HttpResponse, WebApp } from "./webapp";
 
 
 ////////////////
@@ -45,7 +45,8 @@ export class SocApp extends WebApp {
 
       } catch(err) {
         this.err("Error serving URL: " + context.req.url);
-        return this.notFound(context.req.url);
+        return this.serveFile("/index.html");
+        // return this.notFound(context.req.url);
       }
     }
   }
@@ -58,7 +59,7 @@ export class SocApp extends WebApp {
     });
   }
 
-  async serveFile(fn: string): Promise<HttpResponse> {
+  serveFile(fn: string): HttpResponse {
     const data = fs.readFileSync("www"+fn);
     const type = mime.lookup(fn) || "application/text";
     this.log("Serving file: " + fn + " - " + type);
@@ -73,7 +74,7 @@ export class SocApp extends WebApp {
     const sList = clientKeys.filter(k => !this.clients[k].connected).map(k => `<li>${k}: ${this.clients[k].lastseen}</li>`).join("");
 
     return { status: 200, type: "text/html", data: `
-      <html><head><title>Akiworks SmartServer status</title></head>
+      <html><header><title>Akiworks SmartServer status</title></header>
        <body>
         <h1>Connections: ${seen}</h1>
         <h2>Open: ${connected}</h2>
@@ -81,7 +82,7 @@ export class SocApp extends WebApp {
         <h2>closed: ${seen-connected}</h2>
         <ul>${sList}</ul>
        </body>
-      </html>
+      <footer><hr /><small>© Duotechno & Johan Coppieters</small></footer></html>
     `};
   }
 

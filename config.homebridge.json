@@ -13,7 +13,7 @@
       "smappee": true,
       "smartapp": true,
       "system": true,
-      "socapp": true
+      "socapp": false
     }
   ],
   "accessories": []

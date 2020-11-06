@@ -31,7 +31,7 @@
           <tbody>
           <% for (let master of masters) { if (master) { %>
             <tr>
-              <td><a href="/masters/edit/<%= master.config.address %>:<%= master.config.port %>"><%= master.config.name %></a></td>
+              <td><a href="/masters/edit/<%= master.config.address %>:<%= master.config.port %>"><%= master.config.name %></a><br><%= datetime(master.date) %></td>
               <td><a href="/masters/edit/<%= master.config.address %>:<%= master.config.port %>"><%= master.config.address %></a></td>
               <td><a href="/masters/edit/<%= master.config.address %>:<%= master.config.port %>"><%= master.nodes.length %></a></td>
             </tr>

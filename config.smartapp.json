@@ -1,6 +1,45 @@
 {
   "port": 5002,
   "switches": [
+    {
+      "name": "Vintage",
+      "unitName": "Vintage",
+      "masterAddress": "gm.coppieters.be",
+      "masterPort": 5005,
+      "logicalAddress": 33,
+      "logicalNodeAddress": 6,
+      "type": "httpdim",
+      "plug": "http://192.168.0.201/light/0?brightness=$&turn=|off|on",
+      "data": "",
+      "method": "GET",
+      "value": 0
+    },
+    {
+      "name": "Hue - Hue",
+      "unitName": "rgb Hue1",
+      "masterAddress": "gm.coppieters.be",
+      "masterPort": 5005,
+      "logicalAddress": 38,
+      "logicalNodeAddress": 6,
+      "type": "httpdim",
+      "plug": "http://192.168.0.197/api/bX0nLiu4iVhclnpTVdkSWMo6LfhepAn3LIMwar-N/lights/1/state",
+      "data": "{\"hue\": $65535, \"effect\": \"none\", \"on\": #B, \"transitiontime\": 10 }",
+      "method": "PUT",
+      "value": 0
+    },
+    {
+      "name": "Hue - Brightness",
+      "unitName": "rgB Hue1",
+      "masterAddress": "gm.coppieters.be",
+      "masterPort": 5005,
+      "logicalAddress": 37,
+      "logicalNodeAddress": 6,
+      "type": "httpdim",
+      "plug": "http://192.168.0.197/api/bX0nLiu4iVhclnpTVdkSWMo6LfhepAn3LIMwar-N/lights/1/state",
+      "data": "{\"effect\": \"none\", \"on\": #B, \"bri\": $255, \"transitiontime\": 10 }",
+      "method": "PUT",
+      "value": 0
+    }
   ],
   "debug": true
 }

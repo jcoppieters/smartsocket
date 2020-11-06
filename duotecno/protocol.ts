@@ -71,6 +71,9 @@ export enum Rec {
 
   ErrorMessage = 17,
   ConnectStatus = 67,
+  AudioStatus = 23,
+  AudioExtendedStatus = 70,
+  TimeDateStatus = 71,
   ScheduleStatus = 73,
 
   // return info from recDBInfo
@@ -787,6 +790,10 @@ export const Protocol = {
       unit.hmoon  = next.message[17]*256 +  next.message[18];   // 10x temperature
       this.debugger("received temperature = " + <number>unit.value / 10.0);
   
+
+    // Dimmers, switches and moods have 
+    //  - status (0=off,1=on,2=pir-on)
+    //  = value (true/false for switches and moods, 1-99 for dimmers)
     } else if (next.cmd === Rec.Switch) { 
       // switch -> boolean
       unit.status = next.message[6];
@@ -812,14 +819,13 @@ export const Protocol = {
       unit.value = next.message[6];
       this.debugger("received motor = " + unit.value);
 
-    } else if (next.cmd = Rec.Macro) {
+    } else if (next.cmd === Rec.Macro) {
       // = EV_UNITMACROCOMMANDO
-      // example: On 50%: [69,0,NodeAddress,UnitAddress,6,1,50]
-      //          Off:    [69,0,NodeAddress,UnitAddress,6,0,0]
+      // example: On 50%: [69,0,NodeAddress,UnitAddress,6,1,0,50]
+      //          Off:    [69,0,NodeAddress,UnitAddress,6,0,0,0]
       unit.status = next.message[5];
-      unit.value = next.message[6];
+      unit.value = next.message[6]*256 + next.message[7];
       this.debugger("received macro -> value=" + unit.value + " / status=" + unit.status);
-
     }
 
     // clear the timer to turn the mood off again.

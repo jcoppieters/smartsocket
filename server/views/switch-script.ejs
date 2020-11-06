@@ -1,8 +1,8 @@
 
 <script>
-  function setStatus(state, plug) {
+  function setStatus(inx, state, value) {
     if (typeof state === "boolean") state = (state) ? "Y" : "N";
-    ajax("http://<%= req.headers.host %>/switches/set/" + plug + "?state="+state, function(data){ 
+    ajax("http://<%= req.headers.host %>/switches/set/" + inx + "?state="+state+"&value="+value, function(data){ 
     });
   }
 </script>

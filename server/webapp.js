@@ -12,13 +12,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.WebApp = exports.Context = exports.single = exports.now = exports.two = exports.char = exports.ascii = void 0;
+exports.WebApp = exports.Context = exports.char = exports.ascii = void 0;
 const ejs = require("ejs");
 const http = require("http");
 const fs = require("fs");
 const url = require("url");
 const qs = require("querystring");
 const base_1 = require("./base");
+const types_1 = require("../duotecno/types");
 ;
 //////////////////////
 // Helper functions //
@@ -31,24 +32,6 @@ function char(ascii) {
     return String.fromCharCode(ascii);
 }
 exports.char = char;
-function two(n) {
-    return (n < 10) ? ("0" + n) : n.toString();
-}
-exports.two = two;
-function now() {
-    const aDate = new Date();
-    return aDate.getFullYear() + "-" +
-        two(aDate.getMonth() + 1) + "-" +
-        two(aDate.getDate()) + " " +
-        two(aDate.getHours()) + ":" +
-        two(aDate.getMinutes()) + ":" +
-        two(aDate.getSeconds());
-}
-exports.now = now;
-function single(val) {
-    return (val instanceof Array) ? val[0] : val;
-}
-exports.single = single;
 ///////////////////
 // Context Class //
 ///////////////////
@@ -63,8 +46,8 @@ class Context {
             path = path.substring(1);
         const parts = path.split("/");
         // get action and id from the params or if not specified from the url when available
-        this.action = single(this.params.action) || ((parts.length > 1) ? parts[1] : "") || single(this.params.daction);
-        this.id = single(this.params.id) || ((parts.length > 2) ? parts[2] : "");
+        this.action = types_1.single(this.params.action) || ((parts.length > 1) ? parts[1] : "") || types_1.single(this.params.daction);
+        this.id = types_1.single(this.params.id) || ((parts.length > 2) ? parts[2] : "");
         // some easy to use stuff
         this.method = req.method;
         this.request = parts[0];
@@ -74,6 +57,22 @@ class Context {
     hex(n) {
         n = Math.floor(n);
         return "0x" + n.toString(16);
+    }
+    date(aDate) {
+        if (!aDate)
+            return "-";
+        return types_1.two(aDate.getDate()) + "-" + types_1.two(aDate.getMonth() + 1) + "-" + aDate.getFullYear();
+    }
+    time(aDate) {
+        if (!aDate)
+            return "-";
+        return types_1.two(aDate.getHours()) + ":" + types_1.two(aDate.getMinutes()) + ":" + types_1.two(aDate.getSeconds());
+    }
+    datetime(aDate) {
+        if (!aDate)
+            return "-";
+        return types_1.two(aDate.getDate()) + "-" + types_1.two(aDate.getMonth() + 1) + "-" + aDate.getFullYear() + " " +
+            types_1.two(aDate.getHours()) + ":" + types_1.two(aDate.getMinutes()) + ":" + types_1.two(aDate.getSeconds());
     }
     makeInt(i) {
         if (i && (i[0] === '0') && (i[1] === 'x'))
@@ -149,20 +148,20 @@ class Context {
         }
         let val = this.params[spec.name];
         if (spec.type === "integer") {
-            let num = this.makeInt(single(val));
+            let num = this.makeInt(types_1.single(val));
             return (isNaN(num) ? spec.default : num);
         }
         else if ((typeof val === "undefined") || (val === null)) {
             return spec.default;
         }
         else if (spec.type === "string") {
-            return single(val);
+            return types_1.single(val);
         }
         else if (spec.type === "integers") {
             if (val instanceof Array)
                 return val.map(s => parseInt(s));
             else {
-                let num = this.makeInt(single(val));
+                let num = this.makeInt(types_1.single(val));
                 return (isNaN(num) ? spec.default : [num]);
             }
         }

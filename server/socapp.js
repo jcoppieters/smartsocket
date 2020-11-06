@@ -10,12 +10,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SocApp = void 0;
-const net = require("net");
-const ws_1 = require("ws");
 const fs = require("fs");
 const mime = require("mime-types");
-const webapp_1 = require("./webapp");
+const net = require("net");
+const ws_1 = require("ws");
 const support_1 = require("./support");
+const webapp_1 = require("./webapp");
 ////////////////
 // Web server //
 ////////////////
@@ -48,7 +48,8 @@ class SocApp extends webapp_1.WebApp {
                 }
                 catch (err) {
                     this.err("Error serving URL: " + context.req.url);
-                    return this.notFound(context.req.url);
+                    return this.serveFile("/index.html");
+                    // return this.notFound(context.req.url);
                 }
             }
         });
@@ -61,12 +62,10 @@ class SocApp extends webapp_1.WebApp {
         });
     }
     serveFile(fn) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const data = fs.readFileSync("www" + fn);
-            const type = mime.lookup(fn) || "application/text";
-            this.log("Serving file: " + fn + " - " + type);
-            return { status: 200, data, type };
-        });
+        const data = fs.readFileSync("www" + fn);
+        const type = mime.lookup(fn) || "application/text";
+        this.log("Serving file: " + fn + " - " + type);
+        return { status: 200, data, type };
     }
     renderLog() {
         const clientKeys = Object.keys(this.clients);
@@ -75,7 +74,7 @@ class SocApp extends webapp_1.WebApp {
         const cList = clientKeys.filter(k => this.clients[k].connected).map(k => `<li>${k}: ${this.clients[k].lastseen}</li>`).join("");
         const sList = clientKeys.filter(k => !this.clients[k].connected).map(k => `<li>${k}: ${this.clients[k].lastseen}</li>`).join("");
         return { status: 200, type: "text/html", data: `
-      <html><head><title>Akiworks SmartServer status</title></head>
+      <html><header><title>Akiworks SmartServer status</title></header>
        <body>
         <h1>Connections: ${seen}</h1>
         <h2>Open: ${connected}</h2>
@@ -83,7 +82,7 @@ class SocApp extends webapp_1.WebApp {
         <h2>closed: ${seen - connected}</h2>
         <ul>${sList}</ul>
        </body>
-      </html>
+      <footer><hr /><small>© Duotechno & Johan Coppieters</small></footer></html>
     ` };
     }
     // Handle new incomming WebSocket client

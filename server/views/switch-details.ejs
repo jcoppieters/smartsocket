@@ -65,18 +65,45 @@
           <div class="switch input-field col s4">
             <label>Off
               <input name="status_<%= swtch.name %>" <%= (swtch.value) ? 'checked' : '' %>
-                     type="checkbox" onchange="setStatus(this.checked, <%= id %>)">
+                     type="checkbox" onchange="setStatus(<%= id %>, this.checked, 50)">
               <span class="lever"></span>On
             </label>
           </div>
+        </div>
+
+        <div class="row">
+          <div class="input-field col s8">
+            <select name="method" id="method">
+              <option value="" <%= (swtch.method == '') ? 'selected' : '' %>>Select method</option>
+              <option value="GET" <%= (swtch.method == 'GET') ? 'selected' : '' %>>HTTP GET</option>
+              <option value="POST" <%= (swtch.method == 'POST') ? 'selected' : '' %>>HTTP POST</option>
+              <option value="PUT" <%= (swtch.method == 'PUT') ? 'selected' : '' %>>HTTP PUT</option>
+              <option value="DELETE" <%= (swtch.method == 'DELETE') ? 'selected' : '' %>>HTTP DELETE</option>
+            </select>
+            <label for="type">HTPP Method</label>
+          </div>
+          <div class="switch input-field col s4">
+            <label for="value_<%= swtch.name %>">Value</label>
+              <input name="value_<%= swtch.name %>" id="value_<%= swtch.name %>" value="50"
+                     type="number" onxxxxxxchange="setStatus(<%= id %>, 'Y', this.value)">            
+          </div>
 
         </div>
+
 
         <div class="row">
           <div class="input-field col s12">
             <input placeholder="0" id="plug" name="plug" type="text" 
                    value="<%= swtch.plug %>">
             <label for="plug">Plug / URL</label>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="input-field col s12">
+            <input placeholder="0" id="data" name="data" type="text" 
+                   value="<%= swtch.data %>">
+            <label for="data">Data</label>
           </div>
         </div>
 

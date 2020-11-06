@@ -63,6 +63,9 @@ var Rec;
     Rec[Rec["Internal"] = 9] = "Internal";
     Rec[Rec["ErrorMessage"] = 17] = "ErrorMessage";
     Rec[Rec["ConnectStatus"] = 67] = "ConnectStatus";
+    Rec[Rec["AudioStatus"] = 23] = "AudioStatus";
+    Rec[Rec["AudioExtendedStatus"] = 70] = "AudioExtendedStatus";
+    Rec[Rec["TimeDateStatus"] = 71] = "TimeDateStatus";
     Rec[Rec["ScheduleStatus"] = 73] = "ScheduleStatus";
     // return info from recDBInfo
     Rec[Rec["Info"] = 64] = "Info";
@@ -713,6 +716,9 @@ exports.Protocol = {
             unit.moon = next.message[15] * 256 + next.message[16]; // 10x temperature
             unit.hmoon = next.message[17] * 256 + next.message[18]; // 10x temperature
             this.debugger("received temperature = " + unit.value / 10.0);
+            // Dimmers, switches and moods have 
+            //  - status (0=off,1=on,2=pir-on)
+            //  = value (true/false for switches and moods, 1-99 for dimmers)
         }
         else if (next.cmd === Rec.Switch) {
             // switch -> boolean
@@ -739,12 +745,12 @@ exports.Protocol = {
             unit.value = next.message[6];
             this.debugger("received motor = " + unit.value);
         }
-        else if (next.cmd = Rec.Macro) {
+        else if (next.cmd === Rec.Macro) {
             // = EV_UNITMACROCOMMANDO
-            // example: On 50%: [69,0,NodeAddress,UnitAddress,6,1,50]
-            //          Off:    [69,0,NodeAddress,UnitAddress,6,0,0]
+            // example: On 50%: [69,0,NodeAddress,UnitAddress,6,1,0,50]
+            //          Off:    [69,0,NodeAddress,UnitAddress,6,0,0,0]
             unit.status = next.message[5];
-            unit.value = next.message[6];
+            unit.value = next.message[6] * 256 + next.message[7];
             this.debugger("received macro -> value=" + unit.value + " / status=" + unit.status);
         }
         // clear the timer to turn the mood off again.

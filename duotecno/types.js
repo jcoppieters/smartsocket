@@ -56,6 +56,7 @@ var RuleType;
     RuleType["kCurrent"] = "current";
     RuleType["kWater"] = "water";
 })(RuleType = exports.RuleType || (exports.RuleType = {}));
+;
 var SwitchType;
 (function (SwitchType) {
     SwitchType["kNoType"] = "";
@@ -64,6 +65,7 @@ var SwitchType;
     SwitchType["kHTTPSwitch"] = "http";
     SwitchType["kHTTPDimmer"] = "httpdim";
 })(SwitchType = exports.SwitchType || (exports.SwitchType = {}));
+;
 exports.kEmptyAction = Object.assign(Object.assign({}, exports.kEmptyUnit), { value: false });
 ;
 exports.kEmptyRule = {
@@ -71,7 +73,7 @@ exports.kEmptyRule = {
     actions: [Object.assign(Object.assign({}, exports.kEmptyUnit), { value: false }), Object.assign(Object.assign({}, exports.kEmptyUnit), { value: 50 }), Object.assign(Object.assign({}, exports.kEmptyUnit), { value: true })]
 };
 ;
-exports.kEmptySwitch = Object.assign(Object.assign({}, exports.kEmptyUnit), { plug: 0, type: SwitchType.kNoType, unitName: "", name: "" });
+exports.kEmptySwitch = Object.assign(Object.assign({}, exports.kEmptyUnit), { plug: 0, type: SwitchType.kNoType, unitName: "", name: "", data: "", method: "GET" });
 ;
 ;
 ;
@@ -147,8 +149,8 @@ exports.Sanitizers = {
     },
     server: function (config) {
         if (!config)
-            return { debug: true, port: 9998 };
-        config.port = config.port || 9998;
+            return { debug: true, port: 9999 };
+        config.port = config.port || 9999;
         if (typeof config.port === "string")
             config.port = parseInt(config.port);
         if (typeof config.debug === "undefined")
@@ -179,6 +181,8 @@ exports.Sanitizers = {
         aSwitch.name = aSwitch.name || "--";
         aSwitch.unitName = aSwitch.unitName || "";
         aSwitch.value = aSwitch.value || 0;
+        aSwitch.data = aSwitch.data || "";
+        aSwitch.method = aSwitch.method || "GET";
         aSwitch.type = aSwitch.type || SwitchType.kNoType;
         // don't destroy 0 plug
         if (typeof aSwitch.plug === "string")
@@ -189,7 +193,7 @@ exports.Sanitizers = {
         return this.switchConfig({ name: aSwitch.name, unitName: aSwitch.unitName,
             masterAddress: aSwitch.masterAddress, masterPort: aSwitch.masterPort,
             logicalAddress: aSwitch.logicalAddress, logicalNodeAddress: aSwitch.logicalNodeAddress,
-            type: aSwitch.type, plug: aSwitch.plug });
+            type: aSwitch.type, plug: aSwitch.plug, data: aSwitch.data, method: aSwitch.method });
     },
     ruleConfig(rule) {
         rule.channel = makeInt(rule.channel);

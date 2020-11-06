@@ -23,7 +23,7 @@ const os_1 = require("os");
 const types_1 = require("../duotecno/types");
 const protocol_1 = require("../duotecno/protocol");
 const socapp_1 = require("./socapp");
-const fetch = require("node-fetch");
+const http = require("http");
 const kMaster = { name: "master", type: "string", default: "0.0.0.0:5001" };
 const kAddress = { name: "address", type: "string", default: "0.0.0.0" };
 const kPort = { name: "port", type: "integer", default: 80 };
@@ -290,7 +290,8 @@ class SmartApp extends socapp_1.SocApp {
                 }
                 else if (context.action === "set") {
                     const state = context.getParam({ name: "state", type: "string", default: "N" });
-                    this.setSwitch(inx, (state === "Y"));
+                    const value = context.getParam({ name: "value", type: "integer", default: 0 });
+                    this.setSwitch(inx, (state === "Y"), value);
                 }
                 else {
                     // possible new IP Nodes, hence Units could be online
@@ -306,7 +307,7 @@ class SmartApp extends socapp_1.SocApp {
     informChange(u) {
         this.switches.forEach(swtch => {
             if (u.isUnit(swtch.masterAddress, swtch.masterPort, swtch.logicalNodeAddress, swtch.logicalAddress)) {
-                this.setSwitch(swtch, !!u.status, +u.value);
+                this.setSwitch(swtch);
             }
         });
     }
@@ -315,22 +316,26 @@ class SmartApp extends socapp_1.SocApp {
         const plug = context.getParam({ name: "plug", type: "string", default: "0" });
         const stype = context.getParam({ name: "type", type: "string", default: types_1.SwitchType.kNoType });
         const name = context.getParam({ name: "name", type: "string", default: "--" });
-        return { name, unitName, masterAddress, masterPort, logicalAddress, logicalNodeAddress, type: stype, plug };
+        const data = context.getParam({ name: "data", type: "string", default: "" });
+        const method = context.getParam({ name: "method", type: "string", default: "GET" });
+        return { name, unitName, masterAddress, masterPort, logicalAddress, logicalNodeAddress, type: stype, plug, data, method };
     }
     updateSwitch(inx, swtch) {
         if ((inx >= 0) && (inx < this.switches.length)) {
             this.switches[inx] = swtch;
+            this.initSwitchUnits();
             this.writeConfig();
         }
     }
     deleteSwitch(inx) {
         if ((inx >= 0) && (inx < this.switches.length)) {
             this.switches.splice(inx, 1);
+            this.initSwitchUnits();
             this.writeConfig();
         }
     }
-    setSwitch(inx, state, value) {
-        // find the switch
+    setSwitch(inx, newstate, newvalue) {
+        // find the switch if an index is given
         let swtch = null;
         if (typeof inx === "number") {
             if ((inx >= 0) && (inx < this.switches.length)) {
@@ -341,18 +346,28 @@ class SmartApp extends socapp_1.SocApp {
             // a Switch was passed as first param
             swtch = inx;
         }
+        // check if state is given
+        if (typeof newstate != "undefined") {
+            swtch.unit.status = !!newstate;
+        }
+        if (typeof newvalue != "undefined") {
+            swtch.unit.value = +newvalue;
+        }
         if (!swtch) {
             this.err("Didn't find switch with inx: " + inx);
         }
+        else if (!swtch.unit) {
+            this.err("Don't have unit for switch: " + swtch.unitname);
+        }
         else {
             if ((swtch.type === types_1.SwitchType.kSmappee) && (this.smappee)) {
-                this.smappee.setPlug(parseInt(swtch.plug), state);
+                this.smappee.setPlug(parseInt(swtch.plug), swtch.unit.state);
             }
             else if (swtch.type === types_1.SwitchType.kHTTPSwitch) {
-                this.httpSwitch(swtch.plug, state);
+                this.httpSwitch(swtch);
             }
             else if (swtch.type === types_1.SwitchType.kHTTPDimmer) {
-                this.httpDimmer(swtch.plug, state, value);
+                this.httpDimmer(swtch);
             }
             else {
                 this.err("Don't know how to set a switch of type " + swtch.type);
@@ -362,30 +377,74 @@ class SmartApp extends socapp_1.SocApp {
     //////////////////////////
     // http driven switches //
     //////////////////////////
-    httpSwitch(url, state) {
+    makeOnOffURL(url, state, value) {
+        // support legacy on/off
         const parts = url.split("|");
         let base = parts[0];
         if (parts.length > 2) {
             base += parts[state ? 2 : 1];
         }
-        this.log("Switch: " + state + " -> " + base);
-        this.wget(base);
+        // do the dimmer value and on/off
+        return base
+            .replace("#B", state ? "true" : "false")
+            .replace("#O", state ? '"on"' : '"off"')
+            .replace("#", state ? "on" : "off")
+            .replace("$255", "" + Math.round(value / 100 * 256))
+            .replace("$65535", "" + Math.round(value / 100 * 256 * 256))
+            .replace("$1", "" + (value / 100))
+            .replace("$", "" + value);
     }
-    httpDimmer(url, state, value) {
-        if (!state)
-            value = 0;
-        url = url.replace("$", value);
-        this.log("Dimmer: " + state + " -> " + url);
-        this.wget(url);
+    httpSwitch(swtch) {
+        const req = this.makeOnOffURL(swtch.plug, !!swtch.unit.status, +swtch.unit.value);
+        this.log("Switch(" + !!swtch.unit.status + ") -> " + req);
+        this.wrequest(req);
     }
-    wget(url) {
-        try {
-            fetch(url).then(r => this.log("http switch OK -> " + JSON.stringify(r)))
-                .catch(e => this.log("http switch NOK -> " + JSON.stringify(e)));
+    httpDimmer(swtch) {
+        // do the possible on/off + value part
+        let req = this.makeOnOffURL(swtch.plug, !!swtch.unit.status, +swtch.unit.value);
+        let data = "";
+        if (swtch.data) {
+            // we have body data
+            data = this.makeOnOffURL(swtch.data, !!swtch.unit.status, +swtch.unit.value);
         }
-        catch (e) {
-            this.log("Error " + e.message + ", calling url: " + url);
+        this.log("Dimmer(" + !!swtch.unit.status + "," + swtch.unit.value + ") -> " + req + " + " + data);
+        this.wrequest(req, swtch.method, data);
+    }
+    wrequest(url, method = "GET", formdata) {
+        // const data = querystring.stringify(formdata);
+        const options = { method };
+        if (formdata) {
+            //formdata = JSON.stringify(formdata);
+            options["headers"] = {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Content-Length': Buffer.byteLength(formdata)
+            };
         }
+        ;
+        const req = http.request(url, options, res => {
+            let resp = "";
+            // res.setEncoding('utf8');
+            res.on('data', chunk => {
+                resp += chunk;
+            });
+            res.on('end', () => {
+                // try to make something out of it...
+                try {
+                    const x = JSON.parse(resp);
+                    if ((x.type === "Buffer") && x.data)
+                        x.data = x.data.toString();
+                    this.log("http " + method + " -> " + res.statusCode + ": " + url + " = " + JSON.stringify(x));
+                }
+                catch (e) {
+                    this.log("http " + method + " -> " + res.statusCode + ": " + url + " = " + resp);
+                }
+                ;
+            });
+        });
+        if (formdata) {
+            req.write(formdata);
+        }
+        req.end();
     }
     //////////////////////////////
     // Services                 //

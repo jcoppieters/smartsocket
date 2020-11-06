@@ -12,6 +12,7 @@ export class Master extends Base {
   public nodes: Array<Node>;
   public nrNodes: number;
   public schedule: number;
+  public date: Date;
 
   public isOpen: boolean;
   public isLoggedIn: boolean;
@@ -71,6 +72,7 @@ export class Master extends Base {
     this.nodes = [];
     this.nrNodes = 0;
     this.schedule = 0;
+    this.date = null;
 
     // connection to an IP node / smartbox
     this.socket = null;
@@ -219,15 +221,19 @@ export class Master extends Base {
       return false;
 
     } else {
-      this.log("incoming msg=" + recName(next.cmd) + ", status="+next.isStatus + 
-      ", data=" + ((!next.message) ? 
+      if (next.cmd != Rec.TimeDateStatus)
+      this.log("incoming msg=" + recName(next.cmd) + ", data=" + ((!next.message) ? 
           "--" : ((next.message instanceof Array) ? next.message.join(",") : next.message)));
 
       this.Q.do();
 
       if (next.isStatus) {
         this.receiveStatus(next);
-      
+
+      // non-unit specific info
+      } else if (next.cmd === Rec.TimeDateStatus) {
+        this.receiveDateTime(next.message);
+    
       } else if (next.cmd === Rec.Info) {
         this.receiveInfo(next);
 
@@ -283,6 +289,13 @@ export class Master extends Base {
   receiveSchedule(message: Message) {
     this.schedule = message[2];
     this.info("received week schedule = " + this.schedule);
+  }
+
+  receiveDateTime(message: Message) {
+    // 71,0,9,37,3,3,4,3,21,20 -> 09:37:03 Wednesday(3) 4 march 2120
+    this.date = new Date( (message[8]-1) * 100 + message[9], message[7]-1, message[6], 
+      message[2], message[3], message[4]);
+    // this.log("Received date/time: " + this.date);
   }
 
   receiveDBInfo(message: Message) {

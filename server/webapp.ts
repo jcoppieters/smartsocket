@@ -8,7 +8,7 @@ import * as fs from "fs";
 import * as url from "url";
 import * as qs from "querystring";
 import { Base } from './base';
-import { LogFunction } from '../duotecno/types';
+import { LogFunction, single, two } from '../duotecno/types';
 
 
 export interface Params {[key: string]: string | Array<string>};
@@ -54,23 +54,6 @@ export function char(ascii:  number): string {
   return String.fromCharCode(ascii)
 }
 
-export function two(n: number | string) { 
-  return (n < 10) ? ("0" + n) : n.toString();
-}
-
-export function now(): string {
-  const aDate = new Date();
-  return aDate.getFullYear() + "-" + 
-         two(aDate.getMonth() + 1) + "-" + 
-         two(aDate.getDate()) + " " +
-         two(aDate.getHours()) + ":" + 
-         two(aDate.getMinutes()) + ":" + 
-         two(aDate.getSeconds());
-}
-
-export function single(val: string | Array<string>): string {
-  return (val instanceof Array) ? val[0] : val;
-}
 
 ///////////////////
 // Context Class //
@@ -111,6 +94,19 @@ export class Context {
     return "0x" + n.toString(16);
   }
 
+  date(aDate: Date) {
+    if (! aDate) return "-";
+    return two(aDate.getDate()) + "-" + two(aDate.getMonth() + 1) + "-" + aDate.getFullYear();
+  }
+  time(aDate: Date) {
+    if (! aDate) return "-";
+    return two(aDate.getHours()) + ":" + two(aDate.getMinutes()) + ":" + two(aDate.getSeconds());
+  }
+  datetime(aDate: Date) {
+    if (! aDate) return "-";
+    return two(aDate.getDate()) + "-" + two(aDate.getMonth() + 1) + "-" + aDate.getFullYear() + " " +
+           two(aDate.getHours()) + ":" + two(aDate.getMinutes()) + ":" + two(aDate.getSeconds());
+  }
   makeInt(i: string): number {
     if (i && (i[0]==='0') && (i[1]==='x'))
       return parseInt(i.substr(2), 16)

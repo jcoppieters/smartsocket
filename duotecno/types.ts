@@ -146,8 +146,15 @@ export const kEmptyCommRecord = { status: false, cmd: -1, message: [-1,0,0], res
 //////////////
 
 export enum Boundaries {kLow = 0, kMid = 1, kHigh = 2};
-export enum RuleType {kPower = "power", kCurrent = "current", kWater = "water"}
-export enum SwitchType {kNoType = "", kSmappee = "smappee", kRF = "RF", kHTTPSwitch = "http", kHTTPDimmer = "httpdim"}
+export enum RuleType {kPower = "power", kCurrent = "current", kWater = "water"};
+
+export enum SwitchType {
+  kNoType = "", 
+  kSmappee = "smappee", 
+  kRF = "RF", 
+  kHTTPSwitch = "http", 
+  kHTTPDimmer = "httpdim"
+};
 
 
 export interface Action extends UnitDef {
@@ -174,9 +181,11 @@ export interface Switch extends UnitDef {
   unitName: string,
   type: SwitchType,
   plug: number | string,
+  data: string,
+  method: string,
   value?: number | boolean | string
 };
-export const kEmptySwitch: Switch = { ...kEmptyUnit, plug: 0, type: SwitchType.kNoType, unitName: "", name: ""};
+export const kEmptySwitch: Switch = { ...kEmptyUnit, plug: 0, type: SwitchType.kNoType, unitName: "", name: "", data: "", method: "GET"};
 
 
 export interface SmartAppConfig extends BaseConfig {
@@ -343,6 +352,8 @@ export const Sanitizers = {
     aSwitch.name = aSwitch.name || "--";
     aSwitch.unitName = aSwitch.unitName || "";
     aSwitch.value = aSwitch.value || 0;
+    aSwitch.data = aSwitch.data || "";
+    aSwitch.method = aSwitch.method || "GET";
     aSwitch.type = aSwitch.type || SwitchType.kNoType;
     // don't destroy 0 plug
     if (typeof aSwitch.plug === "string")
@@ -355,7 +366,7 @@ export const Sanitizers = {
     return this.switchConfig({ name: aSwitch.name, unitName: aSwitch.unitName,
       masterAddress: aSwitch.masterAddress, masterPort: aSwitch.masterPort, 
       logicalAddress: aSwitch.logicalAddress, logicalNodeAddress: aSwitch.logicalNodeAddress, 
-      type: aSwitch.type, plug: aSwitch.plug });
+      type: aSwitch.type, plug: aSwitch.plug, data: aSwitch.data, method: aSwitch.method });
   },
 
   ruleConfig(rule): Rule {
