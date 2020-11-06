@@ -15,28 +15,28 @@
       "value": 0
     },
     {
-      "name": "Hue - Hue",
-      "unitName": "rgb Hue1",
+      "name": "Hue - Brightness",
+      "unitName": "Lamp - Brightness",
       "masterAddress": "gm.coppieters.be",
       "masterPort": 5005,
       "logicalAddress": 38,
       "logicalNodeAddress": 6,
       "type": "httpdim",
       "plug": "http://192.168.0.197/api/bX0nLiu4iVhclnpTVdkSWMo6LfhepAn3LIMwar-N/lights/1/state",
-      "data": "{\"hue\": $65535, \"effect\": \"none\", \"on\": #B, \"transitiontime\": 10 }",
+      "data": "{\"bri\": $255, \"on\": #B, \"transitiontime\": 10 }",
       "method": "PUT",
       "value": 0
     },
     {
       "name": "Hue - Brightness",
-      "unitName": "rgB Hue1",
+      "unitName": "Lamp - Hue",
       "masterAddress": "gm.coppieters.be",
       "masterPort": 5005,
       "logicalAddress": 37,
       "logicalNodeAddress": 6,
       "type": "httpdim",
       "plug": "http://192.168.0.197/api/bX0nLiu4iVhclnpTVdkSWMo6LfhepAn3LIMwar-N/lights/1/state",
-      "data": "{\"effect\": \"none\", \"on\": #B, \"bri\": $255, \"transitiontime\": 10 }",
+      "data": "{\"hue\": $65535, \"transitiontime\": 10, \"effect\": |\"none\" }|\"colorloop\" }",
       "method": "PUT",
       "value": 0
     }

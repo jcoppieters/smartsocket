@@ -377,7 +377,7 @@ class SmartApp extends socapp_1.SocApp {
     //////////////////////////
     // http driven switches //
     //////////////////////////
-    makeOnOffURL(url, state, value) {
+    makeVariableURL(url, state, value) {
         // support legacy on/off
         const parts = url.split("|");
         let base = parts[0];
@@ -388,6 +388,7 @@ class SmartApp extends socapp_1.SocApp {
         return base
             .replace("#B", state ? "true" : "false")
             .replace("#O", state ? '"on"' : '"off"')
+            .replace("#1", state ? '1' : '0')
             .replace("#", state ? "on" : "off")
             .replace("$255", "" + Math.round(value / 100 * 256))
             .replace("$65535", "" + Math.round(value / 100 * 256 * 256))
@@ -395,17 +396,17 @@ class SmartApp extends socapp_1.SocApp {
             .replace("$", "" + value);
     }
     httpSwitch(swtch) {
-        const req = this.makeOnOffURL(swtch.plug, !!swtch.unit.status, +swtch.unit.value);
+        const req = this.makeVariableURL(swtch.plug, !!swtch.unit.status, +swtch.unit.value);
         this.log("Switch(" + !!swtch.unit.status + ") -> " + req);
         this.wrequest(req);
     }
     httpDimmer(swtch) {
         // do the possible on/off + value part
-        let req = this.makeOnOffURL(swtch.plug, !!swtch.unit.status, +swtch.unit.value);
+        let req = this.makeVariableURL(swtch.plug, !!swtch.unit.status, +swtch.unit.value);
         let data = "";
         if (swtch.data) {
             // we have body data
-            data = this.makeOnOffURL(swtch.data, !!swtch.unit.status, +swtch.unit.value);
+            data = this.makeVariableURL(swtch.data, !!swtch.unit.status, +swtch.unit.value);
         }
         this.log("Dimmer(" + !!swtch.unit.status + "," + swtch.unit.value + ") -> " + req + " + " + data);
         this.wrequest(req, swtch.method, data);
