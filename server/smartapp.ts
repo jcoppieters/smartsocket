@@ -420,11 +420,11 @@ export class SmartApp extends SocApp {
     // do the dimmer value and on/off
     return base
         .replace("#B", state ? "true" : "false")
-        .replace("#O", state ? '"on"' : '"off"')
+        .replace("#O", state ? "on" : "off")
         .replace("#1", state ? '1' : '0')
         .replace("#", state ? "on" : "off")
-        .replace("$255", "" + Math.round(value / 100 * 256))
-        .replace("$65535", "" + Math.round(value / 100 * 256 * 256))
+        .replace("$B", "" + Math.round(value / 100 * 256))
+        .replace("$W", "" + Math.round(value / 100 * 256 * 256))
         .replace("$1", "" + (value / 100))
         .replace("$", "" + value);
   }
