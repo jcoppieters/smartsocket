@@ -1,5 +1,5 @@
+import { UnitExtendedType } from "../duotecno/types";
 import { Accessory } from "./accessory";
-import { UnitExtendedType } from "../duotecno/protocol";
 
 // Johan Coppieters Jun 2020
 //

@@ -18,35 +18,121 @@ const smartsocket_1 = require("./smartsocket");
 class Master extends base_1.Base {
     // command was sent, no response received yet
     /* system.config: {
-      "socketserver": "akiworks.be",
-      "socketport": 9999,
-      "language": "EN",
-      "stores": true,
-      "multiple": true,
-      "cmasters": [
-        { "name": "Roos",
-          "address": "141.135.240.51",
-          "port": 5001,
-          "password": "duotecno",
-          "debug": true,
-          "active": true
-        }, ...],
-      "cnodes": [
-        { "active": "Y",
-          "masterAddress": "141.135.240.51",
-          "masterPort": 5001,
-          "logicalAddress": 7
-        }, ...],
-      "cunits": [
-        { "active": "Y",
-          "group": "1",
-          "masterAddress": "141.135.240.51",
-          "masterPort": 5001,
-          "logicalNodeAddress": 7,
-          "logicalAddress": 0
-        }, ...
-      ]
-    }
+    "language": "EN",
+    "stores": false,
+    "multiple": false,
+    "socketserver": "akiworks.be",
+    "socketport": 9999,
+    "mood": "sfeer",
+    "cmasters": [
+      {
+        "address": "192.168.0.98",
+        "port": 5001,
+        "password": "duotecno",
+        "name": "Smartbox",
+        "active": false,
+        "debug": false
+      },
+      {
+        "address": "gm.coppieters.be",
+        "port": 5005,
+        "password": "duotecno",
+        "name": "IP Master GM",
+        "active": true,
+        "debug": false
+      }
+    ],
+    "cunits": [
+      {
+        "active": "Y",
+        "group": 0,
+        "name": "rgb|Hue1",
+        "displayName": "Lamp - Brightness",
+        "type": 1,
+        "masterAddress": "gm.coppieters.be",
+        "masterPort": 5005,
+        "logicalNodeAddress": 6,
+        "logicalAddress": 38
+      },
+      {
+        "active": "Y",
+        "group": 0,
+        "name": "rgB|Hue1",
+        "displayName": "Lamp - Hue",
+        "type": 1,
+        "masterAddress": "gm.coppieters.be",
+        "masterPort": 5005,
+        "logicalNodeAddress": 6,
+        "logicalAddress": 37
+      },
+      {
+        "active": "Y",
+        "group": 0,
+        "name": "rGb|Hue1",
+        "displayName": "rGb Hue1",
+        "type": 1,
+        "masterAddress": "gm.coppieters.be",
+        "masterPort": 5005,
+        "logicalNodeAddress": 6,
+        "logicalAddress": 36
+      },
+      {
+        "active": "Y",
+        "group": 0,
+        "name": "Rgb|Hue1",
+        "displayName": "Rgb Hue1",
+        "type": 1,
+        "masterAddress": "gm.coppieters.be",
+        "masterPort": 5005,
+        "logicalNodeAddress": 6,
+        "logicalAddress": 35
+      },
+      {
+        "active": "Y",
+        "group": 0,
+        "name": "Sticks",
+        "displayName": "Sticks",
+        "type": 1,
+        "masterAddress": "gm.coppieters.be",
+        "masterPort": 5005,
+        "logicalNodeAddress": 6,
+        "logicalAddress": 34
+      },
+      {
+        "active": "Y",
+        "group": 0,
+        "name": "Vintage",
+        "displayName": "Vintage",
+        "type": 1,
+        "masterAddress": "gm.coppieters.be",
+        "masterPort": 5005,
+        "logicalNodeAddress": 6,
+        "logicalAddress": 33
+      },
+      {
+        "active": "Y",
+        "group": 0,
+        "name": "Driveway",
+        "displayName": "Driveway",
+        "type": 2,
+        "masterAddress": "gm.coppieters.be",
+        "masterPort": 5005,
+        "logicalNodeAddress": 6,
+        "logicalAddress": 40
+      },
+      {
+        "active": "Y",
+        "group": 0,
+        "name": "Trees",
+        "displayName": "Trees",
+        "type": 2,
+        "masterAddress": "gm.coppieters.be",
+        "masterPort": 5005,
+        "logicalNodeAddress": 6,
+        "logicalAddress": 39
+      }
+    ]
+  }
     */
     constructor(system, config) {
         super("master", config.debug, system.logger);
@@ -194,7 +280,7 @@ class Master extends base_1.Base {
             return false;
         }
         else {
-            if (next.cmd != protocol_1.Rec.TimeDateStatus)
+            if ((next.cmd != protocol_1.Rec.TimeDateStatus) && (next.cmd != protocol_1.Rec.Sensor))
                 this.log("incoming msg=" + protocol_1.recName(next.cmd) + ", data=" + ((!next.message) ?
                     "--" : ((next.message instanceof Array) ? next.message.join(",") : next.message)));
             this.Q.do();
@@ -278,6 +364,8 @@ class Master extends base_1.Base {
             types_1.Sanitizers.nodeInfo(nodeInfo, node);
         }
         this.system.setActiveState(node);
+        this.config.nodenames[node.logicalAddress] = node.name;
+        this.system.updateMasterConfig(this);
         if (node.active && (node.nrUnits !== node.units.length)) {
             this.fetchAllUnits(node);
         }
@@ -365,7 +453,10 @@ class Master extends base_1.Base {
                     .forEach(u => {
                     let node = this.findNode(u.logicalNodeAddress);
                     if (!node) {
-                        node = new protocol_1.Node(this, { logicalAddress: u.logicalNodeAddress, name: "Node-" + u.logicalNodeAddress });
+                        let name = this.config.nodenames[u.logicalNodeAddress] ||
+                            ((u.logicalNodeAddress == 255) ? "Virtual Node" :
+                                ("Node-" + ((u.logicalNodeAddress < 16) ? '0' : '') + u.logicalNodeAddress.toString(16)));
+                        node = new protocol_1.Node(this, { logicalAddress: u.logicalNodeAddress, name });
                         this.nodes.push(node);
                         this.system.setActiveState(node);
                         this.log("new node: " + node.getName());

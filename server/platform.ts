@@ -1,9 +1,9 @@
-import { LogFunction, PlatformConfig } from "../duotecno/types";
+import { LogFunction, PlatformConfig, UnitExtendedType } from "../duotecno/types";
 import { System } from "../duotecno/system";
 import { Smappee } from "./smappee";
 import { SmartApp } from "./smartapp";
 import { Dimmer } from "../accessories/dimmer";
-import { Unit, Protocol, UnitExtendedType } from "../duotecno/protocol";
+import { Unit } from "../duotecno/protocol";
 import { Switch } from "../accessories/switch";
 import { Bulb } from "../accessories/bulb";
 import { WindowCovering } from "../accessories/windowcovering";

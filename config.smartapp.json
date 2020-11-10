@@ -23,7 +23,7 @@
       "logicalNodeAddress": 6,
       "type": "httpdim",
       "plug": "http://192.168.0.197/api/bX0nLiu4iVhclnpTVdkSWMo6LfhepAn3LIMwar-N/lights/1/state",
-      "data": "{\"bri\": $255, \"on\": #B, \"transitiontime\": 10 }",
+      "data": "{\"bri\": $B, \"on\": #B, \"transitiontime\": 10 }",
       "method": "PUT",
       "value": 0
     },
@@ -36,7 +36,7 @@
       "logicalNodeAddress": 6,
       "type": "httpdim",
       "plug": "http://192.168.0.197/api/bX0nLiu4iVhclnpTVdkSWMo6LfhepAn3LIMwar-N/lights/1/state",
-      "data": "{\"hue\": $65535, \"transitiontime\": 10, \"effect\": |\"none\" }|\"colorloop\" }",
+      "data": "{\"hue\": $W, \"transitiontime\": 10, \"effect\": |\"none\" }|\"colorloop\" }",
       "method": "PUT",
       "value": 0
     }

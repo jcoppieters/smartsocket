@@ -2,7 +2,7 @@
   "language": "EN",
   "stores": false,
   "multiple": false,
-  "socketserver": "akiworks.be",
+  "socketserver": "gateway.duotecno.com",
   "socketport": 9999,
   "mood": "sfeer",
   "cmasters": [
@@ -20,7 +20,15 @@
       "password": "duotecno",
       "name": "IP Master GM",
       "active": true,
-      "debug": false
+      "debug": false,
+      "nodenames": {
+        "4": "Up/Down",
+        "5": "Sonos",
+        "6": "TCPIP node",
+        "16": "Smartbox Living",
+        "17": "Switch Living",
+        "252": " 20201107"
+      }
     }
   ],
   "cunits": [

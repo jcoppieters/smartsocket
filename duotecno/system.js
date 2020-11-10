@@ -153,6 +153,13 @@ class System extends base_1.Base {
             }
         });
     }
+    updateMasterConfig(master) {
+        let inx = this.findCMasterInx(master.getAddress(), master.getPort());
+        if (inx >= 0) {
+            this.config.cmasters[inx] = master.getConfig();
+        }
+        this.writeConfig();
+    }
     setActiveState(item) {
         if (item instanceof protocol_1.Node) {
             const masterAddress = item.master.getAddress();

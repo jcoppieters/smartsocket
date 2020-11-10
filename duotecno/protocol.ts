@@ -1,4 +1,4 @@
-import { CommRecord, Message, Sanitizers, NodeInfo, UnitInfo, DBInfo, WriteError, LogFunction, hex } from "./types";
+import { CommRecord, Message, Sanitizers, NodeInfo, UnitInfo, DBInfo, WriteError, LogFunction, hex, NodeType, UnitType, UnitExtendedType, UnitState } from "./types";
 import { Master } from "./master";
 import { SmartSocket } from "./smartsocket";
 import { EventEmitter } from "events";
@@ -93,34 +93,6 @@ export function recName(rec: number) {
 }
 
 
-// Node types
-export enum NodeType { kNoNode = 0, kStandardNode = 1, kGatewayNode = 4, kModemNode = 8, kGUINode = 32 };
-
-// States
-export enum UnitState { kOpening = 4, kClosing = 3, kOpen = 2, kClosed = 1, kStopped = 0 };
-export enum UnitMotorCmd { kClose = 5, kOpen = 4, kStop = 3};
-
-export enum UnitType { 
-  kNoType = 0, kDimmer = 1, kSwitch = 2, kInput = 3, 
-  kTemperature = 4, kExtendedAudio = 5, kMood = 7, kSwitchingMotor = 8, 
-  kAudio = 10, kAV = 11, kIRTX = 12, kVideo = 14
-};
-export enum UnitExtendedType /* extends UnitType */ { 
-  kNoType = 0, kDimmer = 1, kSwitch = 2, kInput = 3, 
-  kTemperature = 4, kExtendedAudio = 5, kMood = 7, kSwitchingMotor = 8, 
-  kAudio = 10, kAV = 11, kIRTX = 12, kVideo = 14,
-
-  kLightbulb = 101, kCondition = 102, 
-  kGarageDoor = 201, kDoor = 202, kLock = 203, kUnlocker = 204
-};
-
-
-// kLightbulb  == kSwitch with no "*" or "$" in the name
-// kDoor == kSwitchingMotor with "*" in the name
-// kGarageDoor == kSwitchingMotor with "$" in the name
-// kCondition  == kMood with "*" in the name
-// kLock == kMood with $ in the name
-// kUnlocker = kMood with $ in the name
 
 /////////////////////////
 // Node in the network //
@@ -821,10 +793,22 @@ export const Protocol = {
 
     } else if (next.cmd === Rec.Macro) {
       // = EV_UNITMACROCOMMANDO
-      // example: On 50%: [69,0,NodeAddress,UnitAddress,6,1,0,50]
-      //          Off:    [69,0,NodeAddress,UnitAddress,6,0,0,0]
-      unit.status = next.message[5];
-      unit.value = next.message[6]*256 + next.message[7];
+      // examples: On 50%: [69,0,NodeAddress,UnitAddress,6,1,0,50]
+      //           Off:    [69,0,NodeAddress,UnitAddress,6,0,0,0] -> don't touch dimmer value
+
+      if (next.message[4] == 6) {
+        // ON/OFF
+        unit.status = next.message[5];
+
+      } else if ((next.message[4] == 7) && (next.message[5] == 1)) {
+        // PIR ON
+        unit.status = 2;
+      }
+
+      // only change dim value when state = 1 (ON, PIR ON, DIM STOP)
+      if (next.message[5] === 1) {
+        unit.value = next.message[6]*256 + next.message[7];
+      }
       this.debugger("received macro -> value=" + unit.value + " / status=" + unit.status);
     }
 

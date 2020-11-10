@@ -274,6 +274,9 @@ export class SmartApp extends SocApp {
           if (k === p) 
             swtch.value = this.smappee.plugs[key];
         };
+      } else if ((swtch.type === SwitchType.kHTTPDimmer) || (swtch.type === SwitchType.kHTTPSwitch)) {
+        swtch.value = swtch.unit.value;
+        swtch.status = swtch.unit.status;
       }
     });
   }
@@ -315,6 +318,7 @@ export class SmartApp extends SocApp {
         const state = context.getParam({name: "state", type: "string", default: "N"})
         const value = context.getParam({name: "value", type: "integer", default: 0})
         this.setSwitch( inx, (state === "Y"), value );
+        return this.json({switch: inx, state, value});
 
       } else {
         // possible new IP Nodes, hence Units could be online
@@ -524,7 +528,7 @@ export class SmartApp extends SocApp {
       } else if (context.action === "save") {
         const master = await this.system.addMaster({ address: context.getParam(kAddress), port: context.getParam(kPort), 
                                                      password: context.getParam(kPassword), name: context.getParam(kName),
-                                                     active: context.getParam(kActive) != "N" });
+                                                     active: context.getParam(kActive) != "N", nodenames: {} });
         this.updateNodes(master, context.params.nodes || "", context.params);
         this.system.writeConfig();
       }

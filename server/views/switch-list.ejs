@@ -36,8 +36,8 @@
                 <td>
                   <div class="switch">
                     <label>Off
-                      <input name="status_<%= swtch.name %>" <%= (swtch.value) ? 'checked' : '' %>
-                             type="checkbox" onchange="setStatus(this.checked, <%= inx %>)">
+                      <input name="status_<%= swtch.name %>" <%= (swtch.status) ? 'checked' : '' %>
+                             type="checkbox" onchange="setStatus(<%= inx %>, this.checked)">
                       <span class="lever"></span>On
                     </label>
                   </div>

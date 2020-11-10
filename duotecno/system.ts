@@ -158,7 +158,14 @@ export class System extends Base {
     } else {
       this.err("didn't find the master " + master.getAddress() + ":" + master.getConfig().port + " in the config");
     }
+  }
 
+  updateMasterConfig(master: Master) {
+    let inx = this.findCMasterInx(master.getAddress(), master.getPort());
+    if (inx >= 0) {
+      this.config.cmasters[inx] = master.getConfig();
+    }
+    this.writeConfig();
   }
 
   setActiveState(item: Node | Unit) {

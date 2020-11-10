@@ -11,7 +11,7 @@ function adder(plugin, platform, list) {
 const platform = new platform_1.Platform(console.log, { debug: true, smappee: true, smartapp: true, socapp: false, system: true,
     manufacturer: "Duotecno", platform: "ssoc" }, { registerPlatformAccessories: adder });
 // testing
-let m = new master_1.Master(platform.system, types_1.Sanitizers.masterConfig({ name: "master1", address: "12", port: 21, password: "x", active: true }));
+let m = new master_1.Master(platform.system, types_1.Sanitizers.masterConfig({ name: "master1", address: "12", port: 21, password: "x", active: true, nodenames: {} }));
 let n = new protocol_1.Node(m, types_1.Sanitizers.nodeInfo({ name: "node1" }));
 let u = new protocol_1.Unit(n, types_1.Sanitizers.unitInfo({ name: "unit|123 $", type: 7 }));
 console.log("Testing names -> getName = " + u.getName() + ", getDisplayname = " + u.getDisplayName() + ", type " + u.type + ", extType = " + u.extendedType + ", getTypeName = " + u.typeName());

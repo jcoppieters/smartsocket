@@ -1,5 +1,5 @@
 import { Platform } from "./server/platform";
-import { Unit, Node, UnitExtendedType } from "./duotecno/protocol";
+import { Unit, Node } from "./duotecno/protocol";
 import { Sanitizers } from "./duotecno/types";
 import { Master } from "./duotecno/master";
 
@@ -14,7 +14,7 @@ const platform = new Platform(console.log, {debug: true, smappee: true, smartapp
                               manufacturer: "Duotecno", platform: "ssoc"}, {registerPlatformAccessories: adder});
 
 // testing
-let m = new Master(platform.system, Sanitizers.masterConfig({name: "master1", address: "12", port: 21, password:"x", active: true}));
+let m = new Master(platform.system, Sanitizers.masterConfig({name: "master1", address: "12", port: 21, password:"x", active: true, nodenames: {}}));
 let n = new Node(m, Sanitizers.nodeInfo({name: "node1"}));
 let u = new Unit(n, Sanitizers.unitInfo({name: "unit|123 $", type: 7}));
 console.log("Testing names -> getName = " + u.getName() + ", getDisplayname = " + u.getDisplayName() + ", type " + u.type + ", extType = " + u.extendedType + ", getTypeName = " + u.typeName());

@@ -1,5 +1,5 @@
 import { Accessory } from "./accessory";
-import { UnitMotorCmd, UnitState } from "../duotecno/protocol";
+import { UnitMotorCmd, UnitState } from "../duotecno/types";
 import { WindowCovering } from "./windowcovering";
 
 // Johan Coppieters Jun 2020

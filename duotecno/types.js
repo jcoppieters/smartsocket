@@ -14,8 +14,72 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.single = exports.now = exports.two = exports.hex = exports.char = exports.ascii = exports.wait = exports.Sanitizers = exports.makeInt = exports.actionValueStr = exports.actionValue = exports.kEmptySwitch = exports.kEmptyRule = exports.kEmptyAction = exports.SwitchType = exports.RuleType = exports.Boundaries = exports.kEmptyCommRecord = exports.WriteError = exports.kEmptyGroup = exports.kEmptyScene = exports.kEmptyUnitScene = exports.kEmptyUnit = void 0;
-const protocol_1 = require("./protocol");
+exports.single = exports.now = exports.two = exports.hex = exports.char = exports.ascii = exports.wait = exports.Sanitizers = exports.makeInt = exports.actionValueStr = exports.actionValue = exports.kEmptySwitch = exports.kEmptyRule = exports.kEmptyAction = exports.SwitchType = exports.RuleType = exports.Boundaries = exports.kEmptyCommRecord = exports.WriteError = exports.kEmptyGroup = exports.kEmptyScene = exports.kEmptyUnitScene = exports.kEmptyUnit = exports.UnitExtendedType = exports.UnitType = exports.UnitMotorCmd = exports.UnitState = exports.NodeType = void 0;
+// Node types
+var NodeType;
+(function (NodeType) {
+    NodeType[NodeType["kNoNode"] = 0] = "kNoNode";
+    NodeType[NodeType["kStandardNode"] = 1] = "kStandardNode";
+    NodeType[NodeType["kGatewayNode"] = 4] = "kGatewayNode";
+    NodeType[NodeType["kModemNode"] = 8] = "kModemNode";
+    NodeType[NodeType["kGUINode"] = 32] = "kGUINode";
+})(NodeType = exports.NodeType || (exports.NodeType = {}));
+;
+// States
+var UnitState;
+(function (UnitState) {
+    UnitState[UnitState["kOpening"] = 4] = "kOpening";
+    UnitState[UnitState["kClosing"] = 3] = "kClosing";
+    UnitState[UnitState["kOpen"] = 2] = "kOpen";
+    UnitState[UnitState["kClosed"] = 1] = "kClosed";
+    UnitState[UnitState["kStopped"] = 0] = "kStopped";
+})(UnitState = exports.UnitState || (exports.UnitState = {}));
+;
+var UnitMotorCmd;
+(function (UnitMotorCmd) {
+    UnitMotorCmd[UnitMotorCmd["kClose"] = 5] = "kClose";
+    UnitMotorCmd[UnitMotorCmd["kOpen"] = 4] = "kOpen";
+    UnitMotorCmd[UnitMotorCmd["kStop"] = 3] = "kStop";
+})(UnitMotorCmd = exports.UnitMotorCmd || (exports.UnitMotorCmd = {}));
+;
+var UnitType;
+(function (UnitType) {
+    UnitType[UnitType["kNoType"] = 0] = "kNoType";
+    UnitType[UnitType["kDimmer"] = 1] = "kDimmer";
+    UnitType[UnitType["kSwitch"] = 2] = "kSwitch";
+    UnitType[UnitType["kInput"] = 3] = "kInput";
+    UnitType[UnitType["kTemperature"] = 4] = "kTemperature";
+    UnitType[UnitType["kExtendedAudio"] = 5] = "kExtendedAudio";
+    UnitType[UnitType["kMood"] = 7] = "kMood";
+    UnitType[UnitType["kSwitchingMotor"] = 8] = "kSwitchingMotor";
+    UnitType[UnitType["kAudio"] = 10] = "kAudio";
+    UnitType[UnitType["kAV"] = 11] = "kAV";
+    UnitType[UnitType["kIRTX"] = 12] = "kIRTX";
+    UnitType[UnitType["kVideo"] = 14] = "kVideo";
+})(UnitType = exports.UnitType || (exports.UnitType = {}));
+;
+var UnitExtendedType;
+(function (UnitExtendedType) {
+    UnitExtendedType[UnitExtendedType["kNoType"] = 0] = "kNoType";
+    UnitExtendedType[UnitExtendedType["kDimmer"] = 1] = "kDimmer";
+    UnitExtendedType[UnitExtendedType["kSwitch"] = 2] = "kSwitch";
+    UnitExtendedType[UnitExtendedType["kInput"] = 3] = "kInput";
+    UnitExtendedType[UnitExtendedType["kTemperature"] = 4] = "kTemperature";
+    UnitExtendedType[UnitExtendedType["kExtendedAudio"] = 5] = "kExtendedAudio";
+    UnitExtendedType[UnitExtendedType["kMood"] = 7] = "kMood";
+    UnitExtendedType[UnitExtendedType["kSwitchingMotor"] = 8] = "kSwitchingMotor";
+    UnitExtendedType[UnitExtendedType["kAudio"] = 10] = "kAudio";
+    UnitExtendedType[UnitExtendedType["kAV"] = 11] = "kAV";
+    UnitExtendedType[UnitExtendedType["kIRTX"] = 12] = "kIRTX";
+    UnitExtendedType[UnitExtendedType["kVideo"] = 14] = "kVideo";
+    UnitExtendedType[UnitExtendedType["kLightbulb"] = 101] = "kLightbulb";
+    UnitExtendedType[UnitExtendedType["kCondition"] = 102] = "kCondition";
+    UnitExtendedType[UnitExtendedType["kGarageDoor"] = 201] = "kGarageDoor";
+    UnitExtendedType[UnitExtendedType["kDoor"] = 202] = "kDoor";
+    UnitExtendedType[UnitExtendedType["kLock"] = 203] = "kLock";
+    UnitExtendedType[UnitExtendedType["kUnlocker"] = 204] = "kUnlocker";
+})(UnitExtendedType = exports.UnitExtendedType /* extends UnitType */ || (exports.UnitExtendedType /* extends UnitType */ = {}));
+;
 ;
 ;
 ;
@@ -215,7 +279,7 @@ exports.Sanitizers = {
     masterConfig: function (config) {
         if (!config)
             config = {};
-        config.name = config.name || "Smartbox";
+        config.name = config.name || "IP Master";
         config.address = config.address || "";
         config.port = config.port || 0;
         if (typeof config.port === "string")
@@ -225,6 +289,7 @@ exports.Sanitizers = {
         if (typeof config.active === "undefined")
             config.active = true;
         config.active = !!config.active;
+        config.nodenames = config.nodenames || {};
         return config;
     },
     system: function (config) {
@@ -235,6 +300,9 @@ exports.Sanitizers = {
         config.stores = config.stores || false;
         config.multiple = config.multiple || false;
         config.socketserver = config.socketserver || "akiworks.be";
+        config.socketserver = config.socketserver || 'gateway.duotecno.com';
+        if (config.socketserver == 'akiworks.be')
+            config.socketserver = 'gateway.duotecno.com';
         config.socketport = config.socketport || 9999;
         config.cmasters = config.cmasters || [];
         config.cunits = config.cunits || [];
@@ -337,7 +405,7 @@ exports.Sanitizers = {
         info.index = info.index || -1;
         info.logicalAddress = info.logicalAddress || 0;
         info.physicalAddress = info.physicalAddress || 0;
-        info.type = info.type || protocol_1.NodeType.kNoNode;
+        info.type = info.type || NodeType.kNoNode;
         info.flags = info.flags || 0;
         info.nrUnits = info.nrUnits || 0;
         if (into) {
@@ -352,7 +420,7 @@ exports.Sanitizers = {
         info.index = info.index || -1;
         info.logicalNodeAddress = info.logicalNodeAddress || 0;
         info.logicalAddress = info.logicalAddress || 0;
-        info.type = info.type || protocol_1.UnitType.kNoType;
+        info.type = info.type || UnitType.kNoType;
         info.flags = info.flags || 0;
         if (into) {
             Object.keys(info).forEach(prop => into[prop] = info[prop]);

@@ -64,7 +64,7 @@
           </div>
           <div class="switch input-field col s4">
             <label>Off
-              <input name="status_<%= swtch.name %>" <%= (swtch.value) ? 'checked' : '' %>
+              <input name="status_<%= swtch.name %>" <%= (swtch.status) ? 'checked' : '' %>
                      type="checkbox" onchange="setStatus(<%= id %>, this.checked, 50)">
               <span class="lever"></span>On
             </label>
@@ -84,8 +84,8 @@
           </div>
           <div class="switch input-field col s4">
             <label for="value_<%= swtch.name %>">Value</label>
-              <input name="value_<%= swtch.name %>" id="value_<%= swtch.name %>" value="50"
-                     type="number" onxxxxxxchange="setStatus(<%= id %>, 'Y', this.value)">            
+              <input name="value_<%= swtch.name %>" id="value_<%= swtch.name %>" value="<%= swtch.value %>"
+                     type="number" onchange="setStatus(<%= id %>, 'Y', this.value)">            
           </div>
 
         </div>

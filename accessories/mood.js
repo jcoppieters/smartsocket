@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Mood = void 0;
 const accessory_1 = require("./accessory");
-const protocol_1 = require("../duotecno/protocol");
+const types_1 = require("../duotecno/types");
 // Johan Coppieters Jan 2019
 //
 // Mood
@@ -32,7 +32,7 @@ class Mood extends accessory_1.Accessory {
                 //bypass ip node update mechanism of Duotecno
                 this.unit.status = value;
                 this.updateState();
-                if (this.unit.getType() === protocol_1.UnitExtendedType.kMood) {
+                if (this.unit.getType() === types_1.UnitExtendedType.kMood) {
                     // always set to "off" after sending the request.
                     this.unit.resetTimer = setTimeout(() => {
                         this.unit.value = false;

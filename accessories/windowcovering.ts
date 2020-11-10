@@ -1,6 +1,6 @@
 import { Accessory } from "./accessory";
-import { LogFunction } from "../duotecno/types";
-import { Unit, UnitState, UnitMotorCmd } from "../duotecno/protocol";
+import { LogFunction, UnitMotorCmd, UnitState } from "../duotecno/types";
+import { Unit } from "../duotecno/protocol";
 
 // Johan Coppieters v1: Jan 2019, v2: Jun 2020
 //

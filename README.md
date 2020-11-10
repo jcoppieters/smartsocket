@@ -107,8 +107,13 @@ switch =>
 - (b5) new app version
 - (b6) Fixed error in homebridge config (no soc- and smart-app at the same time)
 
-### v5.6.0 - 06/11/2020 - External devices (http switches et al)
+### v5.5.3 - 06/11/2020 - External devices (http switches et al)
 - also respond to /tabs/control etc... from the ionic 5 app
+
+### v5.5.4 - 10/11/2020 - External devices v2
+- added run9998/9999.ts files for server runs
+- added stored nodenames in master config
+- better support for status/value in ejs files
 
 
 ### Todo

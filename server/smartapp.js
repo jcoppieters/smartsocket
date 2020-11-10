@@ -254,6 +254,10 @@ class SmartApp extends socapp_1.SocApp {
                 }
                 ;
             }
+            else if ((swtch.type === types_1.SwitchType.kHTTPDimmer) || (swtch.type === types_1.SwitchType.kHTTPSwitch)) {
+                swtch.value = swtch.unit.value;
+                swtch.status = swtch.unit.status;
+            }
         });
     }
     alertSwitch(type, plugNr, value) {
@@ -292,6 +296,7 @@ class SmartApp extends socapp_1.SocApp {
                     const state = context.getParam({ name: "state", type: "string", default: "N" });
                     const value = context.getParam({ name: "value", type: "integer", default: 0 });
                     this.setSwitch(inx, (state === "Y"), value);
+                    return this.json({ switch: inx, state, value });
                 }
                 else {
                     // possible new IP Nodes, hence Units could be online
@@ -387,11 +392,11 @@ class SmartApp extends socapp_1.SocApp {
         // do the dimmer value and on/off
         return base
             .replace("#B", state ? "true" : "false")
-            .replace("#O", state ? '"on"' : '"off"')
+            .replace("#O", state ? "on" : "off")
             .replace("#1", state ? '1' : '0')
             .replace("#", state ? "on" : "off")
-            .replace("$255", "" + Math.round(value / 100 * 256))
-            .replace("$65535", "" + Math.round(value / 100 * 256 * 256))
+            .replace("$B", "" + Math.round(value / 100 * 256))
+            .replace("$W", "" + Math.round(value / 100 * 256 * 256))
             .replace("$1", "" + (value / 100))
             .replace("$", "" + value);
     }
@@ -488,7 +493,7 @@ class SmartApp extends socapp_1.SocApp {
                 else if (context.action === "save") {
                     const master = yield this.system.addMaster({ address: context.getParam(kAddress), port: context.getParam(kPort),
                         password: context.getParam(kPassword), name: context.getParam(kName),
-                        active: context.getParam(kActive) != "N" });
+                        active: context.getParam(kActive) != "N", nodenames: {} });
                     this.updateNodes(master, context.params.nodes || "", context.params);
                     this.system.writeConfig();
                 }

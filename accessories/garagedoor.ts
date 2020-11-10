@@ -1,4 +1,4 @@
-import { UnitMotorCmd, UnitState } from "../duotecno/protocol";
+import { UnitMotorCmd, UnitState } from "../duotecno/types";
 import { Accessory } from "./accessory";
 
 // Johan Coppieters Jun 2020

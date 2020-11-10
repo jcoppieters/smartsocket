@@ -10,11 +10,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Platform = void 0;
+const types_1 = require("../duotecno/types");
 const system_1 = require("../duotecno/system");
 const smappee_1 = require("./smappee");
 const smartapp_1 = require("./smartapp");
 const dimmer_1 = require("../accessories/dimmer");
-const protocol_1 = require("../duotecno/protocol");
 const switch_1 = require("../accessories/switch");
 const bulb_1 = require("../accessories/bulb");
 const windowcovering_1 = require("../accessories/windowcovering");
@@ -169,34 +169,34 @@ class Platform extends base_1.Base {
             this.system.allActiveUnits().forEach(unit => {
                 this.log("adding accessory: " + unit.getDescription());
                 switch (unit.getType()) {
-                    case protocol_1.UnitExtendedType.kDimmer:
+                    case types_1.UnitExtendedType.kDimmer:
                         this.accessoryList.push(new dimmer_1.Dimmer(logger, this.homebridge, unit));
                         break;
-                    case protocol_1.UnitExtendedType.kSwitch:
+                    case types_1.UnitExtendedType.kSwitch:
                         this.accessoryList.push(new switch_1.Switch(logger, this.homebridge, unit));
                         break;
-                    case protocol_1.UnitExtendedType.kLightbulb:
+                    case types_1.UnitExtendedType.kLightbulb:
                         this.accessoryList.push(new bulb_1.Bulb(logger, this.homebridge, unit));
                         break;
-                    case protocol_1.UnitExtendedType.kSwitchingMotor:
+                    case types_1.UnitExtendedType.kSwitchingMotor:
                         this.accessoryList.push(new windowcovering_1.WindowCovering(logger, this.homebridge, unit));
                         break;
-                    case protocol_1.UnitExtendedType.kGarageDoor:
+                    case types_1.UnitExtendedType.kGarageDoor:
                         this.accessoryList.push(new garagedoor_1.GarageDoor(logger, this.homebridge, unit));
                         break;
-                    case protocol_1.UnitExtendedType.kDoor:
+                    case types_1.UnitExtendedType.kDoor:
                         this.accessoryList.push(new door_1.Door(logger, this.homebridge, unit));
                         break;
-                    case protocol_1.UnitExtendedType.kLock:
-                    case protocol_1.UnitExtendedType.kUnlocker:
+                    case types_1.UnitExtendedType.kLock:
+                    case types_1.UnitExtendedType.kUnlocker:
                         this.accessoryList.push(new lock_1.Lock(logger, this.homebridge, unit));
                         break;
-                    case protocol_1.UnitExtendedType.kMood:
-                    case protocol_1.UnitExtendedType.kCondition:
-                    case protocol_1.UnitExtendedType.kInput:
+                    case types_1.UnitExtendedType.kMood:
+                    case types_1.UnitExtendedType.kCondition:
+                    case types_1.UnitExtendedType.kInput:
                         this.accessoryList.push(new mood_1.Mood(logger, this.homebridge, unit));
                         break;
-                    case protocol_1.UnitExtendedType.kTemperature:
+                    case types_1.UnitExtendedType.kTemperature:
                         this.accessoryList.push(new temperature_1.Temperature(logger, this.homebridge, unit));
                         break;
                     default:

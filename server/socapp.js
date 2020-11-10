@@ -20,12 +20,12 @@ const webapp_1 = require("./webapp");
 // Web server //
 ////////////////
 class SocApp extends webapp_1.WebApp {
-    constructor(system, type, log) {
+    constructor(system, type, log, port) {
         super(type, log);
         // hashmap with all connected clients
         this.clients = {};
         this.readConfig();
-        this.port = this.config.port || this.port || 80;
+        this.port = port || this.config.port || this.port || 80;
         this.system = system;
         this.support = new support_1.Support(system, log);
     }

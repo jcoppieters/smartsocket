@@ -18,10 +18,10 @@ export class SocApp extends WebApp {
   // hashmap with all connected clients
   clients: { [url:string]: { connected: boolean, lastseen: Date} } = {}; 
 
-  constructor(system: System, type: string, log: LogFunction) {
+  constructor(system: System, type: string, log: LogFunction, port?: number) {
     super(type, log);
     this.readConfig();
-    this.port = this.config.port || this.port || 80;
+    this.port = port || this.config.port || this.port || 80;
 
     this.system = system;
     this.support = new Support(system, log);

@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GarageDoor = void 0;
-const protocol_1 = require("../duotecno/protocol");
+const types_1 = require("../duotecno/types");
 const accessory_1 = require("./accessory");
 // Johan Coppieters Jun 2020
 //
@@ -28,26 +28,26 @@ class GarageDoor extends accessory_1.Accessory {
             .on('get', this.getDoorState.bind(this));
     }
     DT2HB(status) {
-        if (status == protocol_1.UnitState.kOpen)
+        if (status == types_1.UnitState.kOpen)
             return this.homebridge.Characteristic.CurrentDoorState.OPEN;
-        else if (status == protocol_1.UnitState.kClosing)
+        else if (status == types_1.UnitState.kClosing)
             return this.homebridge.Characteristic.CurrentDoorState.CLOSING;
-        else if (status == protocol_1.UnitState.kClosed)
+        else if (status == types_1.UnitState.kClosed)
             return this.homebridge.Characteristic.CurrentDoorState.CLOSED;
-        else if (status == protocol_1.UnitState.kOpening)
+        else if (status == types_1.UnitState.kOpening)
             return this.homebridge.Characteristic.CurrentDoorState.OPENING;
-        else if (status == protocol_1.UnitState.kStopped)
+        else if (status == types_1.UnitState.kStopped)
             return this.homebridge.Characteristic.CurrentDoorState.STOPPED;
         else
             return this.homebridge.Characteristic.CurrentDoorState.STOPPED; // ????
     }
     HB2DT(state) {
         if (state == this.homebridge.Characteristic.CurrentDoorState.OPEN)
-            return protocol_1.UnitMotorCmd.kOpen;
+            return types_1.UnitMotorCmd.kOpen;
         else if (state == this.homebridge.Characteristic.CurrentDoorState.CLOSED)
-            return protocol_1.UnitMotorCmd.kClose;
+            return types_1.UnitMotorCmd.kClose;
         else if (state == this.homebridge.Characteristic.CurrentDoorState.STOPPED)
-            return protocol_1.UnitMotorCmd.kStop;
+            return types_1.UnitMotorCmd.kStop;
         else
             return 0;
     }

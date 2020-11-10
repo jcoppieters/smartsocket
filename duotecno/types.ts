@@ -4,11 +4,41 @@
 // v3 - smart server version, Mar 2020
 // v3.1 - added scenes from app version, May 2020
 
-import { NodeType, UnitType, Unit } from "./protocol";
+import { Unit } from "./protocol";
 
 // for Active=Y/N or New=X
 export type YNX =  "Y" | "N" | "X";
 export type YN =  "Y" | "N";
+
+
+// Node types
+export enum NodeType { kNoNode = 0, kStandardNode = 1, kGatewayNode = 4, kModemNode = 8, kGUINode = 32 };
+
+// States
+export enum UnitState { kOpening = 4, kClosing = 3, kOpen = 2, kClosed = 1, kStopped = 0 };
+export enum UnitMotorCmd { kClose = 5, kOpen = 4, kStop = 3};
+
+export enum UnitType { 
+  kNoType = 0, kDimmer = 1, kSwitch = 2, kInput = 3, 
+  kTemperature = 4, kExtendedAudio = 5, kMood = 7, kSwitchingMotor = 8, 
+  kAudio = 10, kAV = 11, kIRTX = 12, kVideo = 14
+};
+export enum UnitExtendedType /* extends UnitType */ { 
+  kNoType = 0, kDimmer = 1, kSwitch = 2, kInput = 3, 
+  kTemperature = 4, kExtendedAudio = 5, kMood = 7, kSwitchingMotor = 8, 
+  kAudio = 10, kAV = 11, kIRTX = 12, kVideo = 14,
+
+  kLightbulb = 101, kCondition = 102, 
+  kGarageDoor = 201, kDoor = 202, kLock = 203, kUnlocker = 204
+};
+
+
+// kLightbulb  == kSwitch with no "*" or "$" in the name
+// kDoor == kSwitchingMotor with "*" in the name
+// kGarageDoor == kSwitchingMotor with "$" in the name
+// kCondition  == kMood with "*" in the name
+// kLock == kMood with $ in the name
+// kUnlocker = kMood with $ in the name
 
 
 //////////////
@@ -34,6 +64,7 @@ export interface MasterConfig {
   password: string;
   debug?: boolean;
   active: boolean;
+  nodenames: { [node: number]: string };
 };
 
 export interface NodeConfig {
@@ -83,7 +114,6 @@ export interface GroupConfig {
   name: string;
   id: number;
   visible: boolean;
-  used?: boolean;
   order: number;
 };
 export const kEmptyGroup: GroupConfig = {name: "Home", id: 0, order: 0, visible: true};
@@ -183,6 +213,7 @@ export interface Switch extends UnitDef {
   plug: number | string,
   data: string,
   method: string,
+  status?: number | boolean,
   value?: number | boolean | string
 };
 export const kEmptySwitch: Switch = { ...kEmptyUnit, plug: 0, type: SwitchType.kNoType, unitName: "", name: "", data: "", method: "GET"};
@@ -387,7 +418,7 @@ export const Sanitizers = {
 
   masterConfig: function(config?: MasterConfig): MasterConfig {
     if (!config) config = <MasterConfig>{};
-    config.name = config.name || "Smartbox";
+    config.name = config.name || "IP Master";
     config.address = config.address || "";
     config.port = config.port || 0;
     if (typeof config.port === "string") config.port = parseInt(config.port);
@@ -395,6 +426,7 @@ export const Sanitizers = {
     config.debug = config.debug || false;
     if (typeof config.active === "undefined") config.active = true;
     config.active = !!config.active;
+    config.nodenames = config.nodenames || {};
     return config;
   },
 
@@ -405,6 +437,8 @@ export const Sanitizers = {
     config.stores = config.stores || false;
     config.multiple = config.multiple || false;
     config.socketserver = config.socketserver || "akiworks.be";
+    config.socketserver = config.socketserver || 'gateway.duotecno.com';
+    if (config.socketserver == 'akiworks.be') config.socketserver = 'gateway.duotecno.com';
     config.socketport = config.socketport || 9999;
     config.cmasters = config.cmasters || [];
     config.cunits = config.cunits || [];

@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Lock = void 0;
+const types_1 = require("../duotecno/types");
 const accessory_1 = require("./accessory");
-const protocol_1 = require("../duotecno/protocol");
 // Johan Coppieters Jun 2020
 //
 // Lock
@@ -15,7 +15,7 @@ class Lock extends accessory_1.Accessory {
         super(log, homebridge, unit);
         this.log("created Lock -> " + unit.getDescription());
         // set default for Unlocked to Locked
-        if (this.unit.getType() === protocol_1.UnitExtendedType.kUnlocker)
+        if (this.unit.getType() === types_1.UnitExtendedType.kUnlocker)
             unit.setState(1);
     }
     getAccessoryServices() {
@@ -34,14 +34,14 @@ class Lock extends accessory_1.Accessory {
     setTarget(value, next) {
         this.targetState = value;
         // unlocker is a mood, a lock is a switch
-        const dtVal = (this.unit.getType() === protocol_1.UnitExtendedType.kUnlocker) ? -1 : value;
+        const dtVal = (this.unit.getType() === types_1.UnitExtendedType.kUnlocker) ? -1 : value;
         this.log("HB setting target state of lock: to " + value + " of " + this.unit.getDescription() + " (duotecno: " + dtVal + ")");
         this.unit.setState(dtVal)
             .then(() => {
             //bypass ip node update mechanism of Duotecno
             this.unit.status = value;
             this.updateState();
-            if (this.unit.getType() === protocol_1.UnitExtendedType.kUnlocker) {
+            if (this.unit.getType() === types_1.UnitExtendedType.kUnlocker) {
                 // always set to "locked" after sending the request.
                 this.unit.resetTimer = setTimeout(() => {
                     this.log("Autolock for an unlocker after 2 secs of " + this.unit.getDescription());

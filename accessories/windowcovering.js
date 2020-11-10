@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.WindowCovering = void 0;
 const accessory_1 = require("./accessory");
-const protocol_1 = require("../duotecno/protocol");
+const types_1 = require("../duotecno/types");
 // Johan Coppieters v1: Jan 2019, v2: Jun 2020
 //
 // WindowCovering
@@ -67,13 +67,13 @@ class WindowCovering extends accessory_1.Accessory {
             .on('get', this.getPositionState.bind(this));
     }
     DT2HB(val) {
-        if (val == protocol_1.UnitState.kClosed)
+        if (val == types_1.UnitState.kClosed)
             return 0;
-        else if (val == protocol_1.UnitState.kOpen)
+        else if (val == types_1.UnitState.kOpen)
             return 100;
-        else if (val == protocol_1.UnitState.kClosing)
+        else if (val == types_1.UnitState.kClosing)
             return 50;
-        else if (val == protocol_1.UnitState.kOpening)
+        else if (val == types_1.UnitState.kOpening)
             return 50;
         else // don't know
             return 50;
@@ -85,9 +85,9 @@ class WindowCovering extends accessory_1.Accessory {
     getCurrentPosition(next) {
         this.log("get CurrentPosition was called of " + this.name);
         this.unit.reqState(unit => {
-            if (unit.status == protocol_1.UnitState.kOpen)
+            if (unit.status == types_1.UnitState.kOpen)
                 next(null, 100);
-            else if (unit.status == protocol_1.UnitState.kClosed)
+            else if (unit.status == types_1.UnitState.kClosed)
                 next(null, 0);
             else
                 next(null, 50); // ????
@@ -99,13 +99,13 @@ class WindowCovering extends accessory_1.Accessory {
         this.log("set Characteristic.TargetPosition was called with value = " + value);
         let cmd = 0;
         if (value == 100) {
-            cmd = protocol_1.UnitMotorCmd.kOpen;
+            cmd = types_1.UnitMotorCmd.kOpen;
         }
         else if (value == 0) {
-            cmd = protocol_1.UnitMotorCmd.kClose;
+            cmd = types_1.UnitMotorCmd.kClose;
         }
         else {
-            cmd = protocol_1.UnitMotorCmd.kStop;
+            cmd = types_1.UnitMotorCmd.kStop;
         }
         this.log("setUpDown, value =" + value + " -> cmd=" + cmd);
         this.unit.setState(cmd)
@@ -115,9 +115,9 @@ class WindowCovering extends accessory_1.Accessory {
     getTargetPosition(next) {
         this.log("get Characteristic.TargetPosition was called");
         this.unit.reqState(unit => {
-            if (this.unit.status == protocol_1.UnitState.kOpen)
+            if (this.unit.status == types_1.UnitState.kOpen)
                 next(null, 100);
-            else if (this.unit.status == protocol_1.UnitState.kClosed)
+            else if (this.unit.status == types_1.UnitState.kClosed)
                 next(null, 0);
             else
                 next(null, 50); // ????
