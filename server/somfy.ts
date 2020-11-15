@@ -17,6 +17,8 @@ const sScreen4     = 22;  // pin 15
 const kWaitPush    = 250;
 const kWaitStable  = 250;
 
+let init: boolean;
+
 async function mS(nr: number) {
   return new Promise(resolve => setTimeout(resolve, nr));
 }
@@ -78,7 +80,8 @@ async function select(screen: number): Promise<boolean> {
 }
 
 export async function down(screen: number): Promise<boolean> {
-  console.log("down " + screen);
+  console.log("down " + screen + ((init) ? "" : " - test mode"));
+  if (!init) return;
   if (await select(screen)) {
     await toggle(sDown);
     return true;
@@ -87,7 +90,8 @@ export async function down(screen: number): Promise<boolean> {
 }
 
 export async function up(screen: number): Promise<boolean> {
-  console.log("up " + screen);
+  console.log("up " + screen + ((init) ? "" : " - test mode"));
+  if (!init) return;
   if (await select(screen)) {
     await toggle(sUp);
     return true;
@@ -104,7 +108,9 @@ export async function up(screen: number): Promise<boolean> {
 
 setup().then(() => {
   console.log("gpio package initialized");
-
+  init = true;
 }).catch((e) => {
-  console.log("error setting up gpio package", e);
+  console.log("error setting up gpio package - running test mode");
+  console.log(e);
+  init = false;
 });

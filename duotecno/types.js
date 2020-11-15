@@ -128,6 +128,7 @@ var SwitchType;
     SwitchType["kRF"] = "RF";
     SwitchType["kHTTPSwitch"] = "http";
     SwitchType["kHTTPDimmer"] = "httpdim";
+    SwitchType["kSomfy"] = "somfy";
 })(SwitchType = exports.SwitchType || (exports.SwitchType = {}));
 ;
 exports.kEmptyAction = Object.assign(Object.assign({}, exports.kEmptyUnit), { value: false });

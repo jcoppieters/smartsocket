@@ -20,10 +20,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SmartApp = void 0;
 const os_1 = require("os");
+const webapp_1 = require("./webapp");
 const types_1 = require("../duotecno/types");
 const protocol_1 = require("../duotecno/protocol");
-const socapp_1 = require("./socapp");
 const http = require("http");
+const somfy = require("./somfy");
 const kMaster = { name: "master", type: "string", default: "0.0.0.0:5001" };
 const kAddress = { name: "address", type: "string", default: "0.0.0.0" };
 const kPort = { name: "port", type: "integer", default: 80 };
@@ -48,9 +49,11 @@ const kAccessoryPins = {
     "577-03-009": "CC:22:3D:E3:A1:09",
     "577-03-010": "CC:22:3D:E3:A1:0A"
 };
-class SmartApp extends socapp_1.SocApp {
+class SmartApp extends webapp_1.WebApp {
     constructor(system, smappee, platform, log) {
-        super(system, "smartapp", log);
+        super("smartapp", log);
+        this.readConfig();
+        this.system = system;
         // get status change updates
         this.system.emitter.on('update', this.informChange.bind(this));
         this.system.emitter.on('switch', this.alertSwitch.bind(this));
@@ -374,9 +377,23 @@ class SmartApp extends socapp_1.SocApp {
             else if (swtch.type === types_1.SwitchType.kHTTPDimmer) {
                 this.httpDimmer(swtch);
             }
+            else if (swtch.type === types_1.SwitchType.kSomfy) {
+                this.somfy(swtch);
+            }
             else {
                 this.err("Don't know how to set a switch of type " + swtch.type);
             }
+        }
+    }
+    ///////////
+    // Somfy //
+    ///////////
+    somfy(swtch) {
+        if (swtch.unit) {
+            if (swtch.unit.status === 3)
+                somfy.down(Math.min(0, Math.max(4, parseInt(swtch.plug))));
+            if (swtch.unit.status === 4)
+                somfy.up(Math.min(0, Math.max(4, parseInt(swtch.plug))));
         }
     }
     //////////////////////////

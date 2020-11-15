@@ -39,6 +39,32 @@
       "data": "{\"hue\": $W, \"transitiontime\": 10, \"effect\": |\"none\" }|\"colorloop\" }",
       "method": "PUT",
       "value": 0
+    },
+    {
+      "name": "Screen Salon Top",
+      "unitName": "screen salon bo",
+      "masterAddress": "gm.coppieters.be",
+      "masterPort": 5005,
+      "logicalAddress": 0,
+      "logicalNodeAddress": 4,
+      "type": "somfy",
+      "plug": "1",
+      "data": "",
+      "method": "GET",
+      "value": 0
+    },
+    {
+      "name": "Screen Tim small",
+      "unitName": "screen tim re",
+      "masterAddress": "gm.coppieters.be",
+      "masterPort": 5005,
+      "logicalAddress": 2,
+      "logicalNodeAddress": 4,
+      "type": "somfy",
+      "plug": "2",
+      "data": "",
+      "method": "GET",
+      "value": 0
     }
   ],
   "debug": true

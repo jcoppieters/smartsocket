@@ -35,13 +35,24 @@
     {
       "active": "Y",
       "group": 0,
-      "name": "rgb|Hue1",
-      "displayName": "Lamp - Brightness",
+      "name": "Brightness",
+      "displayName": "Rgb Hue1",
       "type": 1,
       "masterAddress": "gm.coppieters.be",
       "masterPort": 5005,
       "logicalNodeAddress": 6,
-      "logicalAddress": 38
+      "logicalAddress": 35
+    },
+    {
+      "active": "Y",
+      "group": 0,
+      "name": "Hue",
+      "displayName": "rGb Hue1",
+      "type": 1,
+      "masterAddress": "gm.coppieters.be",
+      "masterPort": 5005,
+      "logicalNodeAddress": 6,
+      "logicalAddress": 36
     },
     {
       "active": "Y",
@@ -57,24 +68,13 @@
     {
       "active": "Y",
       "group": 0,
-      "name": "rGb|Hue1",
-      "displayName": "rGb Hue1",
+      "name": "rgb|Hue1",
+      "displayName": "Lamp - Brightness",
       "type": 1,
       "masterAddress": "gm.coppieters.be",
       "masterPort": 5005,
       "logicalNodeAddress": 6,
-      "logicalAddress": 36
-    },
-    {
-      "active": "Y",
-      "group": 0,
-      "name": "Rgb|Hue1",
-      "displayName": "Rgb Hue1",
-      "type": 1,
-      "masterAddress": "gm.coppieters.be",
-      "masterPort": 5005,
-      "logicalNodeAddress": 6,
-      "logicalAddress": 35
+      "logicalAddress": 38
     },
     {
       "active": "Y",
@@ -119,6 +119,50 @@
       "masterPort": 5005,
       "logicalNodeAddress": 6,
       "logicalAddress": 39
+    },
+    {
+      "active": "Y",
+      "group": 0,
+      "name": "screen keuken",
+      "displayName": "screen keuken",
+      "type": 8,
+      "masterAddress": "gm.coppieters.be",
+      "masterPort": 5005,
+      "logicalNodeAddress": 4,
+      "logicalAddress": 4
+    },
+    {
+      "active": "Y",
+      "group": 0,
+      "name": "screen salon on",
+      "displayName": "screen salon on",
+      "type": 8,
+      "masterAddress": "gm.coppieters.be",
+      "masterPort": 5005,
+      "logicalNodeAddress": 4,
+      "logicalAddress": 1
+    },
+    {
+      "active": "Y",
+      "group": 0,
+      "name": "screen tim li",
+      "displayName": "screen tim li",
+      "type": 8,
+      "masterAddress": "gm.coppieters.be",
+      "masterPort": 5005,
+      "logicalNodeAddress": 4,
+      "logicalAddress": 3
+    },
+    {
+      "active": "Y",
+      "group": 0,
+      "name": "screen tim re",
+      "displayName": "screen tim re",
+      "type": 8,
+      "masterAddress": "gm.coppieters.be",
+      "masterPort": 5005,
+      "logicalNodeAddress": 4,
+      "logicalAddress": 2
     }
   ]
 }

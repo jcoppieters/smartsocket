@@ -9,7 +9,7 @@
 // v2.0: mar/apr 2020
 
 import { homedir } from 'os';
-import { Context, HttpResponse } from "./webapp";
+import { Context, HttpResponse, WebApp } from "./webapp";
 import { LogFunction, Sanitizers, Rule, kEmptyRule, actionValue, Action, kEmptySwitch, Switch, SwitchType, HomebridgeConfig, YN } from "../duotecno/types";
 import { System } from "../duotecno/system";
 import { Node, Unit } from "../duotecno/protocol";
@@ -46,7 +46,7 @@ const kAccessoryPins = {
   "577-03-010": "CC:22:3D:E3:A1:0A"
 };
 
-export class SmartApp extends SocApp {
+export class SmartApp extends WebApp {
   system: System;
   smappee: Smappee;
   platform: Platform;
@@ -54,7 +54,9 @@ export class SmartApp extends SocApp {
 
 
   constructor(system: System, smappee: Smappee, platform: Platform, log?: LogFunction) {
-    super(system, "smartapp", log);
+    super("smartapp", log);
+    this.readConfig();
+    this.system = system;
 
     // get status change updates
     this.system.emitter.on('update', this.informChange.bind(this));
@@ -417,8 +419,8 @@ export class SmartApp extends SocApp {
   ///////////
 somfy(swtch: Switch) {
   if (swtch.unit) {
-    if (swtch.unit.status === 3) somfy.down(parseint(swtch.plug);
-    if (swtch.unit.status === 4) somfy.up(parseint(swtch.plug);
+    if (swtch.unit.status === 3) somfy.down(Math.min(0, Math.max(4,parseInt(<string>swtch.plug))));
+    if (swtch.unit.status === 4) somfy.up(Math.min(0, Math.max(4,parseInt(<string>swtch.plug))));
   }
 }
 

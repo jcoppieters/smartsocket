@@ -8,7 +8,8 @@
   "license": "ISC",
   "private": true,
   "scripts": {
-    "start": "DEBUG=* homebridge -D -P '/Users/johan/Library/Mobile Documents/com~apple~CloudDocs/Projects/Duotecno/ssoc'"
+    "start": "DEBUG=* homebridge -D -P '/Users/johan/Library/Mobile Documents/com~apple~CloudDocs/Projects/Duotecno/ssoc'",
+    "watch": "npx tsc --build . --watch"
   },
   "engines": {
     "node": ">=8.0.0",
@@ -33,6 +34,7 @@
     "mqtt": "^4.1.0",
     "node-fetch": "^2.6.0",
     "rpi-gpio": "^2.1.7",
+    "typescript": "^4.0.5",
     "ws": "^7.2.1"
   },
   "devDependencies": {

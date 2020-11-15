@@ -42,6 +42,9 @@ class SocApp extends webapp_1.WebApp {
                 // but ofcourse, someone needs to restart the server...
                 return this.renderRestart();
             }
+            else if (context.req.url === "/apple-touch-icon-precomposed.png") {
+                return this.serveFile("/assets/imgs/apple-touch-icon-precomposed.png");
+            }
             else {
                 try {
                     return this.serveFile(context.path);
