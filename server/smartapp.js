@@ -394,9 +394,9 @@ class SmartApp extends webapp_1.WebApp {
             nr = parseInt(nr);
         if (swtch.unit) {
             if (swtch.unit.status === 3)
-                somfy.down(Math.min(0, Math.max(4, nr)));
+                somfy.down(Math.max(0, Math.min(4, nr)));
             if (swtch.unit.status === 4)
-                somfy.up(Math.min(0, Math.max(4, nr)));
+                somfy.up(Math.max(0, Math.min(4, nr)));
         }
     }
     //////////////////////////
