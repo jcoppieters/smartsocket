@@ -258,8 +258,13 @@ class SmartApp extends webapp_1.WebApp {
                 ;
             }
             else if ((swtch.type === types_1.SwitchType.kHTTPDimmer) || (swtch.type === types_1.SwitchType.kHTTPSwitch)) {
-                swtch.value = swtch.unit.value;
-                swtch.status = swtch.unit.status;
+                if (swtch.unit) {
+                    swtch.value = swtch.unit.value;
+                    swtch.status = swtch.unit.status;
+                }
+                else {
+                    this.log("** error ** missing unit: " + types_1.hex(swtch.logicalNodeAddress) + "/" + types_1.hex(swtch.logicalAddress) + " **");
+                }
             }
         });
     }
@@ -377,6 +382,9 @@ class SmartApp extends webapp_1.WebApp {
             else if (swtch.type === types_1.SwitchType.kHTTPDimmer) {
                 this.httpDimmer(swtch);
             }
+            else if (swtch.type === types_1.SwitchType.kHTTPUpDown) {
+                this.httpUpDown(swtch);
+            }
             else if (swtch.type === types_1.SwitchType.kSomfy) {
                 this.somfy(swtch);
             }
@@ -425,6 +433,18 @@ class SmartApp extends webapp_1.WebApp {
         this.log("Switch(" + !!swtch.unit.status + ") -> " + req);
         this.wrequest(req);
     }
+    httpUpDown(swtch) {
+        let url = swtch.plug + "";
+        // support legacy on/off
+        const parts = url.split("|");
+        let base = parts[0];
+        const val = 1 + swtch.unit.value;
+        if (val < parts.length) {
+            base += parts[val];
+        }
+        this.log("UpDown(" + val + ") -> " + base);
+        this.wrequest(base);
+    }
     httpDimmer(swtch) {
         // do the possible on/off + value part
         let req = this.makeVariableURL(swtch.plug, !!swtch.unit.status, +swtch.unit.value);
@@ -437,40 +457,45 @@ class SmartApp extends webapp_1.WebApp {
         this.wrequest(req, swtch.method, data);
     }
     wrequest(url, method = "GET", formdata) {
-        // const data = querystring.stringify(formdata);
-        const options = { method };
-        if (formdata) {
-            //formdata = JSON.stringify(formdata);
-            options["headers"] = {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Content-Length': Buffer.byteLength(formdata)
-            };
-        }
-        ;
-        const req = http.request(url, options, res => {
-            let resp = "";
-            // res.setEncoding('utf8');
-            res.on('data', chunk => {
-                resp += chunk;
+        try {
+            // const data = querystring.stringify(formdata);
+            const options = { method };
+            if (formdata) {
+                //formdata = JSON.stringify(formdata);
+                options["headers"] = {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Content-Length': Buffer.byteLength(formdata)
+                };
+            }
+            ;
+            const req = http.request(url, options, res => {
+                let resp = "";
+                // res.setEncoding('utf8');
+                res.on('data', chunk => {
+                    resp += chunk;
+                });
+                res.on('end', () => {
+                    // try to make something out of it...
+                    try {
+                        const x = JSON.parse(resp);
+                        if ((x.type === "Buffer") && x.data)
+                            x.data = x.data.toString();
+                        this.log("http " + method + " -> " + res.statusCode + ": " + url + " = " + JSON.stringify(x));
+                    }
+                    catch (e) {
+                        this.log("http " + method + " -> " + res.statusCode + ": " + url + " = " + resp);
+                    }
+                    ;
+                });
             });
-            res.on('end', () => {
-                // try to make something out of it...
-                try {
-                    const x = JSON.parse(resp);
-                    if ((x.type === "Buffer") && x.data)
-                        x.data = x.data.toString();
-                    this.log("http " + method + " -> " + res.statusCode + ": " + url + " = " + JSON.stringify(x));
-                }
-                catch (e) {
-                    this.log("http " + method + " -> " + res.statusCode + ": " + url + " = " + resp);
-                }
-                ;
-            });
-        });
-        if (formdata) {
-            req.write(formdata);
+            if (formdata) {
+                req.write(formdata);
+            }
+            req.end();
         }
-        req.end();
+        catch (e) {
+            this.log("** http error ** " + e.message + " **");
+        }
     }
     //////////////////////////////
     // Services                 //

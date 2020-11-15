@@ -10,7 +10,7 @@
 
 import { homedir } from 'os';
 import { Context, HttpResponse, WebApp } from "./webapp";
-import { LogFunction, Sanitizers, Rule, kEmptyRule, actionValue, Action, kEmptySwitch, Switch, SwitchType, HomebridgeConfig, YN } from "../duotecno/types";
+import { LogFunction, Sanitizers, Rule, kEmptyRule, actionValue, Action, kEmptySwitch, Switch, SwitchType, HomebridgeConfig, YN, hex } from "../duotecno/types";
 import { System } from "../duotecno/system";
 import { Node, Unit } from "../duotecno/protocol";
 import { Smappee } from "./smappee";
@@ -276,8 +276,12 @@ export class SmartApp extends WebApp {
             swtch.value = this.smappee.plugs[key];
         };
       } else if ((swtch.type === SwitchType.kHTTPDimmer) || (swtch.type === SwitchType.kHTTPSwitch)) {
-        swtch.value = swtch.unit.value;
-        swtch.status = swtch.unit.status;
+        if (swtch.unit) {
+          swtch.value = swtch.unit.value;
+          swtch.status = swtch.unit.status;
+        } else {
+          this.log("** error ** missing unit: " + hex(swtch.logicalNodeAddress)+"/"+hex(swtch.logicalAddress) + " **");
+        }
       }
     });
   }
@@ -405,6 +409,9 @@ export class SmartApp extends WebApp {
       } else if (swtch.type === SwitchType.kHTTPDimmer) {
         this.httpDimmer(swtch);
 
+      } else if (swtch.type === SwitchType.kHTTPUpDown) {
+        this.httpUpDown(swtch);
+
       } else if (swtch.type === SwitchType.kSomfy) {
         this.somfy(swtch);
 
@@ -417,14 +424,14 @@ export class SmartApp extends WebApp {
   ///////////
   // Somfy //
   ///////////
-somfy(swtch: Switch) {
-  let nr = swtch.plug;
-  if (typeof nr === "string") nr = parseInt(nr);
-  if (swtch.unit) {
-    if (swtch.unit.status === 3) somfy.down(Math.max(0, Math.min(4,nr)));
-    if (swtch.unit.status === 4) somfy.up(Math.max(0, Math.min(4,nr)));
+  somfy(swtch: Switch) {
+    let nr = swtch.plug;
+    if (typeof nr === "string") nr = parseInt(nr);
+    if (swtch.unit) {
+      if (swtch.unit.status === 3) somfy.down(Math.max(0, Math.min(4,nr)));
+      if (swtch.unit.status === 4) somfy.up(Math.max(0, Math.min(4,nr)));
+    }
   }
-}
 
   //////////////////////////
   // http driven switches //
@@ -455,6 +462,20 @@ somfy(swtch: Switch) {
     this.wrequest(req);
   }
 
+  httpUpDown(swtch: Switch) {
+    let url = swtch.plug + "";
+    // support legacy on/off
+    const parts = url.split("|");
+    let base = parts[0];
+    const val = 1 + <number>swtch.unit.value;
+    if (val < parts.length) {
+      base += parts[val];
+    }
+    
+    this.log("UpDown(" + val + ") -> " + base);
+    this.wrequest(base);
+  }
+
   httpDimmer(swtch: Switch) {
     // do the possible on/off + value part
     let req = this.makeVariableURL(swtch.plug, !!swtch.unit.status, +swtch.unit.value);
@@ -469,37 +490,42 @@ somfy(swtch: Switch) {
   }
 
   wrequest(url: string, method = "GET", formdata?) {
-    // const data = querystring.stringify(formdata);
-    const options = { method };
+    try {
+      // const data = querystring.stringify(formdata);
+      const options = { method };
 
-    if (formdata) {
-      //formdata = JSON.stringify(formdata);
-      options["headers"] = {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Content-Length': Buffer.byteLength(formdata)
+      if (formdata) {
+        //formdata = JSON.stringify(formdata);
+        options["headers"] = {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Length': Buffer.byteLength(formdata)
+        }
+      };
+      const req = http.request(url, options, res => {
+        let resp = "";
+        // res.setEncoding('utf8');
+        res.on('data', chunk => {
+          resp += chunk;
+        });
+        res.on('end', () => {
+          // try to make something out of it...
+          try { 
+            const x = JSON.parse(resp); 
+            if ((x.type === "Buffer") && x.data) x.data = x.data.toString();
+            this.log("http " + method + " -> " + res.statusCode + ": " + url + " = " + JSON.stringify(x));
+          } catch(e) {
+            this.log("http " + method + " -> " + res.statusCode + ": " + url + " = " + resp);
+          };
+        });
+      });
+      if (formdata) {
+        req.write(formdata);
       }
-    };
-    const req = http.request(url, options, res => {
-      let resp = "";
-      // res.setEncoding('utf8');
-      res.on('data', chunk => {
-        resp += chunk;
-      });
-      res.on('end', () => {
-        // try to make something out of it...
-        try { 
-          const x = JSON.parse(resp); 
-          if ((x.type === "Buffer") && x.data) x.data = x.data.toString();
-          this.log("http " + method + " -> " + res.statusCode + ": " + url + " = " + JSON.stringify(x));
-        } catch(e) {
-          this.log("http " + method + " -> " + res.statusCode + ": " + url + " = " + resp);
-        };
-      });
-    });
-    if (formdata) {
-      req.write(formdata);
+      req.end();
+
+    } catch(e) {
+      this.log("** http error ** " + e.message + " **");
     }
-    req.end();
   }
 
 

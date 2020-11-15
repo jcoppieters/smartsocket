@@ -128,6 +128,7 @@ var SwitchType;
     SwitchType["kRF"] = "RF";
     SwitchType["kHTTPSwitch"] = "http";
     SwitchType["kHTTPDimmer"] = "httpdim";
+    SwitchType["kHTTPUpDown"] = "httpupdown";
     SwitchType["kSomfy"] = "somfy";
 })(SwitchType = exports.SwitchType || (exports.SwitchType = {}));
 ;

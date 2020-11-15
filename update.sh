@@ -10,4 +10,5 @@ cp -f backup/temp/config.*.json .
 mv backup/temp backup/backup_`date +"%Y-%m-%d_%H:%M"`
 npm install
 #
+pm2 flush
 pm2 restart homebridge

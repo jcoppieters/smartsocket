@@ -134,6 +134,17 @@
     {
       "active": "Y",
       "group": 0,
+      "name": "screen salon bo",
+      "displayName": "screen salon bo",
+      "type": 8,
+      "masterAddress": "gm.coppieters.be",
+      "masterPort": 5005,
+      "logicalNodeAddress": 4,
+      "logicalAddress": 0
+    },
+    {
+      "active": "Y",
+      "group": 0,
       "name": "screen salon on",
       "displayName": "screen salon on",
       "type": 8,

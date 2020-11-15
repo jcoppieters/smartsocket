@@ -116,7 +116,10 @@ switch =>
 - better support for status/value in ejs files
 
 ### v5.6.0 - 15/11/2020 - Somfy Screens
-- experimental up/down
+- experimental up/down for Somfy
+
+### v5.6.1 - 15/11/2020
+- http up/down added
 
 ### Todo
 - setup openstack server
