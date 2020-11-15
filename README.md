@@ -119,7 +119,9 @@ switch =>
 - experimental up/down for Somfy
 
 ### v5.6.1 - 15/11/2020
-- http up/down added
+- added http up/down
+- don't crash if the unit is not found
+- added a "pm2 flush" in the update script
 
 ### Todo
 - setup openstack server
