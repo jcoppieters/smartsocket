@@ -183,7 +183,8 @@ export enum SwitchType {
   kSmappee = "smappee", 
   kRF = "RF", 
   kHTTPSwitch = "http", 
-  kHTTPDimmer = "httpdim"
+  kHTTPDimmer = "httpdim",
+  kSomfy = "somfy"
 };
 
 

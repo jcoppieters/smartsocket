@@ -1,6 +1,6 @@
 {
   "name": "homebridge-smartsystem",
-  "version": "5.5.3",
+  "version": "5.6.0",
   "description": "SmartServer (Proxy Websockets to TCP sockets, Smappee MQTT, Duotecno IP Nodes, Homekit interface)",
   "main": "index.js",
   "author": "Johan Coppieters",
@@ -28,16 +28,17 @@
     "url": "https://github.com/jcoppieters/smartsocket.git"
   },
   "dependencies": {
-    "mime-types": "^2.1.25",
-    "@types/mime-types": "^2.1.0",
-    "node-fetch": "^2.6.0",
-    "@types/node-fetch": "^2.5.7",
-    "ws": "^7.2.1",
-    "@types/ws": "^6.0.4",
     "ejs": "^3.1.2",
-    "mqtt": "^4.1.0"
+    "mime-types": "^2.1.25",
+    "mqtt": "^4.1.0",
+    "node-fetch": "^2.6.0",
+    "rpi-gpio": "^2.1.7",
+    "ws": "^7.2.1"
   },
   "devDependencies": {
-    "@types/node": "^11.15.3"
+    "@types/node": "^11.15.3",
+    "@types/ws": "^6.0.4",
+    "@types/mime-types": "^2.1.0",
+    "@types/node-fetch": "^2.5.7"
   }
 }

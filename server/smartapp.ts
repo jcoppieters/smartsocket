@@ -18,8 +18,7 @@ import { Master } from "../duotecno/master";
 import { Platform } from "./platform";
 import { SocApp } from "./socapp";
 import * as http from "http";
-import * as querystring from "querystring";
-import { createCipher } from 'crypto';
+import * as somfy  from "./somfy";
 
 const kMaster = {name: "master", type: "string", default: "0.0.0.0:5001"} as const;
 const kAddress = {name: "address", type: "string", default: "0.0.0.0"} as const;
@@ -404,11 +403,24 @@ export class SmartApp extends SocApp {
       } else if (swtch.type === SwitchType.kHTTPDimmer) {
         this.httpDimmer(swtch);
 
+      } else if (swtch.type === SwitchType.kSomfy) {
+        this.somfy(swtch);
+
       } else {
         this.err("Don't know how to set a switch of type " + swtch.type);
       }
     }
   }
+
+  ///////////
+  // Somfy //
+  ///////////
+somfy(swtch: Switch) {
+  if (swtch.unit) {
+    if (swtch.unit.status === 3) somfy.down(parseint(swtch.plug);
+    if (swtch.unit.status === 4) somfy.up(parseint(swtch.plug);
+  }
+}
 
   //////////////////////////
   // http driven switches //

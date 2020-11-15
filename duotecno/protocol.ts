@@ -786,7 +786,7 @@ export const Protocol = {
 
     } else if (next.cmd === Rec.Motor) {
       // motor -> boolean/status
-      // 0 = stopped, 1 stopped/down, 2 = stopped/up, busy/down, busy/up
+      // 0 = stopped, 1 stopped/down, 2 = stopped/up, 3 = busy/down, 4 = busy/up
       unit.status = next.message[6];
       unit.value = next.message[6];
       this.debugger("received motor = " + unit.value);

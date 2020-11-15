@@ -38,6 +38,9 @@ export class SocApp extends WebApp {
       setTimeout(() => { process.exit(-1) }, 500);
       // but ofcourse, someone needs to restart the server...
       return this.renderRestart();
+
+    } else if (context.req.url === "/apple-touch-icon-precomposed.png") {
+      return this.serveFile("/assets/imgs/apple-touch-icon-precomposed.png");
       
     } else {
       try {

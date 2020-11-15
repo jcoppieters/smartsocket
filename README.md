@@ -115,6 +115,8 @@ switch =>
 - added stored nodenames in master config
 - better support for status/value in ejs files
 
+### v5.6.0 - 15/11/2020 - Somfy Screens
+- experimental up/down
 
 ### Todo
 - setup openstack server
