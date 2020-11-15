@@ -389,11 +389,14 @@ class SmartApp extends webapp_1.WebApp {
     // Somfy //
     ///////////
     somfy(swtch) {
+        let nr = swtch.plug;
+        if (typeof nr === "string")
+            nr = parseInt(nr);
         if (swtch.unit) {
             if (swtch.unit.status === 3)
-                somfy.down(Math.min(0, Math.max(4, parseInt(swtch.plug))));
+                somfy.down(Math.min(0, Math.max(4, nr)));
             if (swtch.unit.status === 4)
-                somfy.up(Math.min(0, Math.max(4, parseInt(swtch.plug))));
+                somfy.up(Math.min(0, Math.max(4, nr)));
         }
     }
     //////////////////////////
