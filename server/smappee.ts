@@ -4,7 +4,6 @@ import { MqttClient } from "mqtt";
 import { System } from "../duotecno/system";
 import { LogFunction, SmappeeConfig, Rule, Sanitizers, Boundaries, Action, SwitchType } from "../duotecno/types";
 import { Base } from "./base";
-import { throws } from "assert";
 
 // Smappee MQTT implementation
 // Johan Coppieters, Jan 2019.
@@ -43,8 +42,18 @@ export class Smappee extends Base {
   config: SmappeeConfig;
   rules: Array<Rule>;
   client: MqttClient;
-  plugs: { [key: number]: boolean };
-  alertSwitch;
+  realtimeCounter: number;
+  voltages: { [phaseId: number]: number };
+  plugs: { [nodeId: number]: { value: boolean, name: string } };
+  switches: { [nodeId: number]: { value: boolean, name: string } };
+  realtime: { totalPower: number, totalReactivePower: number, 
+              totalExportEnergy: number, totalImportEnergy: number,
+              monitorStatus: number, utcTimeStamp: number }
+  channels: { [publishIndex: number]: {
+    name: string, type: string, flow: string,
+    power: number, exportEnergy: number, importEnergy: number, phaseId: number,
+    current: number,apparentPower: number, cosPhi: number, formula: string} };
+  alertSwitch: (type: SwitchType, plugNr: number) => void;
 
 
   constructor(system: System, debug: boolean, log: LogFunction, alertSwitch?: (type: SwitchType, plugNr: number) => void) {
@@ -54,7 +63,14 @@ export class Smappee extends Base {
     this.system = system;
     this.alertSwitch = alertSwitch;
 
-    this.plugs = {};  // will grow when we encounter one in the mqtt stream.
+    // will grow when we encounter one in the mqtt stream or if we receive a config message
+    this.plugs = {};  
+    this.switches = {};
+    this.channels = {};
+    this.voltages = {};
+    this.realtime = <any>{};
+    this.realtimeCounter = 0;
+    
     this.copyAndSanitizeRules(this.config.rules);
     
     if (this.config.address)
@@ -69,20 +85,28 @@ export class Smappee extends Base {
     let client = mqtt.connect('mqtt:' + address);
  
     client.on('connect', () => {
-      client.subscribe('servicelocation/' + uid + '/realtime', (err) => {
+      client.subscribe('servicelocation/' + uid + '/#', (err) => {
         if (err) {
           this.err(err.message);
         } else {
-          this.log("subscribed to " + 'servicelocation/' + uid + "/realtime");
+          this.log("subscribed to " + 'servicelocation/' + uid + "/# -- all messages");
         }
       });
-      client.subscribe('servicelocation/' + uid + '/plug/#', (err) => {
-        if (err) {
-          this.err(err.message);
-        } else {
-          this.log("subscribed to " + 'servicelocation/' + uid + "/plug/#");
-        }
-      })
+
+      // client.subscribe('servicelocation/' + uid + '/realtime', (err) => {
+      //   if (err) {
+      //     this.err(err.message);
+      //   } else {
+      //     this.log("subscribed to " + 'servicelocation/' + uid + "/realtime");
+      //   }
+      // });
+      // client.subscribe('servicelocation/' + uid + '/plug/#', (err) => {
+      //   if (err) {
+      //     this.err(err.message);
+      //   } else {
+      //     this.log("subscribed to " + 'servicelocation/' + uid + "/plug/#");
+      //   }
+      // });
     });
     
     client.on('message', (topic, buffer) => {
@@ -94,11 +118,17 @@ export class Smappee extends Base {
         const parts = topic.split("/");
         if (parts.length > 2) {
 
-          if ((this.isRealTime(parts)) && (message.utcTimeStamp % 5000 === 0))
+          if (this.isRealTime(parts))   // && (message.utcTimeStamp % 5000 === 0))
             this.processRealTime(message);
             
           else if (this.isPlug(parts))
-            this.processPlug(this.getPlugNr(parts), message)
+            this.processPlug(this.getPlugNr(parts), message);
+
+          else if (this.isHomeControl(parts))
+            this.processHomeControl(message);
+
+          else if (this.isChannelConfig(parts))
+            this.processChannelConfig(message);
         }
 
       } catch(err) {
@@ -118,34 +148,108 @@ export class Smappee extends Base {
   isPlug(parts) {
     return (parts.length >= 3) && (parts[2] === "plug");
   }
-  getPlugNr(parts) {
+  isHomeControl(parts) {
+    return (parts.length >= 3) && (parts[2] === "homeControlConfig");
+  }
+  isChannelConfig(parts) {
+    return (parts.length >= 3) && (parts[2] === "channelConfigV2");
+  }
+  getPlugNr(parts): number {
     return (parts.length >= 3) ? parseInt(parts[3]) : 0;
   }
 
+  processChannelConfig(message) {
+    // console.log("ChannelConfig", message.dataProcessingSpecification.measurements);
+    this.channels = {};
+    message.dataProcessingSpecification.measurements.forEach(m => {
+      const inx = m.publishIndex;
+      if (inx >= 0) {
+        if (!this.channels[inx]) this.channels[inx] = <any>{};
+        this.channels[inx].name = m.name;
+        this.channels[inx].type = m.type;
+        this.channels[inx].flow = m.flow;
+      }
+    });
+  }
+  processHomeControl(message) {
+    message.switchActuators.forEach(s => {
+      const id = parseInt(s.nodeId);
+      if (! this.switches[id]) 
+        this.switches[id] = {value: false, name: s.name};
+      else
+        this.switches[id].name = s.name;
+    });
+    message.smartplugActuators.forEach(s => {
+      const id = parseInt(s.nodeId);
+      if (! this.plugs[id]) 
+        this.plugs[id] = {value: false, name: s.name};
+      else
+        this.plugs[id].name = s.name;
+    });
+  }
+
   processRealTime(message) {
-    try {
-      if (this.debug) this.log("processRealTime, totalPower = " + message.totalPower);
-      this.applyRules(message);
-    } catch(err) {
-      this.err("Error: " + err + " -> " + message);
+    this.realtimeCounter++;
+
+    // update every 5 messages
+    if (this.realtimeCounter % 5 === 0) {
+      this.realtime = { totalPower: message.totalPower, totalReactivePower: message.totalReactivePower, 
+        totalExportEnergy: message.totalExportEnergy, totalImportEnergy: message.totalImportEnergy,
+        monitorStatus: message.monitorStatus, utcTimeStamp: message.utcTimeStamp };
+
+      message.channelPowers.forEach(p => {
+        const inx = p.publishIndex;
+        if (! this.channels[inx]) {
+          // if we didn't receive a config message, give fake names and type.
+          this.channels[inx] = <any> {name: "CH-"+inx, flow: "-", type: "-"};
+        }
+        this.channels[inx].power = p.power;
+        this.channels[inx].exportEnergy = p.exportEnergy;
+        this.channels[inx].importEnergy = p.importEnergy;
+        this.channels[inx].phaseId = p.phaseId;
+        this.channels[inx].current = p.current;
+        this.channels[inx].apparentPower = p.apparentPower;
+        this.channels[inx].cosPhi = p.cosPhi;
+        this.channels[inx].formula = p.formula;
+      });
+      message.voltages.forEach(v => {
+        this.voltages[v.phaseId] = v.voltage;
+      });
+    }
+
+    // check rules every 5 messages
+    if (this.realtimeCounter % 5 === 0) {
+      try {
+        if (this.debug && (message.utcTimeStamp % 30000 === 0)) 
+          this.log("processRealTime, totalPower = " + message.totalPower);
+        this.applyRules(message);
+      } catch(err) {
+        this.err("Error: " + err + " -> " + message);
+      }
     }
   }
-  processPlug(plugNr, message) {
+  processPlug(plugNr: number, message) {
     const newState = (message.value == "ON");
     
-    if (this.plugs[plugNr] != newState) {
-      if (this.debug)
-        this.log("doPlug, plugNr = " + plugNr + ", received: " + message.value + ", current: " + this.plugs[plugNr]);
+    if (!this.plugs[plugNr]) 
+      this.plugs[plugNr] = {value: false, name: "P-"+plugNr};
 
-      this.plugs[plugNr] = newState;
+    if (this.plugs[plugNr].value != newState) {
+      if (this.debug)
+        this.log("doPlug, plugNr = " + plugNr + ", received: " + message.value + ", current: " + this.plugs[plugNr].value);
+
+      this.plugs[plugNr].value = newState;
       // send status change to system
       this.system.emitter.emit('switch', SwitchType.kSmappee, plugNr, newState);
     }
   }
 
-  setPlug(plugNr, state: boolean) {
-    const currState = this.plugs[plugNr];
+  setPlug(plugNr: number, state: boolean) {
+    const currState = this.plugs[plugNr].value;
     if ((typeof currState === "boolean") && (state != currState)) {
+      // do we need to do this?  do we get an mqtt status message ??
+      this.plugs[plugNr].value = currState; 
+
       const topic = 'servicelocation/' + this.config.uid + '/plug/' + plugNr + '/setstate';
       const payload = '{"value": "' + ((state) ? "ON" : "OFF") + '", "since": "' + (new Date().getTime()) + '"}';
       this.client.publish(topic, payload);

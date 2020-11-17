@@ -4,6 +4,7 @@ import { Sanitizers } from "./duotecno/types";
 import { Master } from "./duotecno/master";
 import { System } from "./duotecno/system";
 import { SmartApp } from "./server/smartapp";
+import { Smappee } from "./server/smappee";
 
 console.log("running in directory: " + process.cwd());
 
@@ -24,7 +25,9 @@ function tester() {
   u = new Unit(n, Sanitizers.unitInfo({name: "unit|20", type: 1}));
   console.log("Testing names -> getName = " + u.getName() + ", getDisplayname = " + u.getDisplayName() + ", type " + u.type + ", extType = " + u.extendedType + ", getTypeName = " + u.typeName());
 }
-
+function alertS(a, b) {
+  console.log(a,b);
+}
 
 let system;
 try {
@@ -32,7 +35,8 @@ try {
   system.openMasters(true);      
 
   try {
-    const smartapp = new SmartApp(system, null, null, console.log);
+    const smappee = new Smappee(system, true, console.log, alertS);
+    const smartapp = new SmartApp(system, smappee, null, console.log);
     smartapp.serve();
   } catch(err) {
     console.log(err);

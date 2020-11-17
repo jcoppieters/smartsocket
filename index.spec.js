@@ -6,6 +6,7 @@ const types_1 = require("./duotecno/types");
 const master_1 = require("./duotecno/master");
 const system_1 = require("./duotecno/system");
 const smartapp_1 = require("./server/smartapp");
+const smappee_1 = require("./server/smappee");
 console.log("running in directory: " + process.cwd());
 function adder(plugin, platform, list) {
     console.log("************* plugin: " + plugin + ", platform: " + platform, list);
@@ -21,12 +22,16 @@ function tester() {
     u = new protocol_1.Unit(n, types_1.Sanitizers.unitInfo({ name: "unit|20", type: 1 }));
     console.log("Testing names -> getName = " + u.getName() + ", getDisplayname = " + u.getDisplayName() + ", type " + u.type + ", extType = " + u.extendedType + ", getTypeName = " + u.typeName());
 }
+function alertS(a, b) {
+    console.log(a, b);
+}
 let system;
 try {
     system = new system_1.System(true, console.log);
     system.openMasters(true);
     try {
-        const smartapp = new smartapp_1.SmartApp(system, null, null, console.log);
+        const smappee = new smappee_1.Smappee(system, true, console.log, alertS);
+        const smartapp = new smartapp_1.SmartApp(system, smappee, null, console.log);
         smartapp.serve();
     }
     catch (err) {

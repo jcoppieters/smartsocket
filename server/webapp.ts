@@ -94,6 +94,12 @@ export class Context {
     return "0x" + n.toString(16);
   }
 
+  watt(w: number) {
+    if (w < 1000) return w + "W";
+    if (w < 1000000) return Math.floor(w/1000) + "." + (Math.round(w/100) % 10) + "KW";
+    if (w < 1000000000) return Math.floor(w/1000000) + "." + (Math.round(w/100000) % 10) + "MW";
+    return Math.floor(w/1000000000) + "." + (Math.round(w/100000000) % 10) + "GW";
+  }
   date(aDate: Date) {
     if (! aDate) return "-";
     return two(aDate.getDate()) + "-" + two(aDate.getMonth() + 1) + "-" + aDate.getFullYear();

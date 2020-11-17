@@ -16,7 +16,7 @@ export class Base {
   constructor(type: string, debug: boolean = false, logger?: LogFunction) {
     this.debug = debug || false;
     this.logger = logger || console.log;
-    if (debug)
+    if (this.debug)
       Protocol.setLogger(this.logger, this.logger);
     else
       Protocol.setLogger(this.logger);

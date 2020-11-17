@@ -281,7 +281,7 @@ class Master extends base_1.Base {
         }
         else {
             if ((next.cmd != protocol_1.Rec.TimeDateStatus) && (next.cmd != protocol_1.Rec.Sensor))
-                this.log("incoming msg=" + protocol_1.recName(next.cmd) + ", data=" + ((!next.message) ?
+                this.log(protocol_1.recName(next.cmd) + " -> " + ((!next.message) ?
                     "--" : ((next.message instanceof Array) ? next.message.join(",") : next.message)));
             this.Q.do();
             if (next.isStatus) {

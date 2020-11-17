@@ -308,7 +308,7 @@ export class Master extends Base {
 
     } else {
       if ((next.cmd != Rec.TimeDateStatus) && (next.cmd != Rec.Sensor))
-        this.log("incoming msg=" + recName(next.cmd) + ", data=" + ((!next.message) ? 
+        this.log(recName(next.cmd) + " -> " + ((!next.message) ? 
           "--" : ((next.message instanceof Array) ? next.message.join(",") : next.message)));
 
       this.Q.do();

@@ -11,7 +11,7 @@ class Base {
     constructor(type, debug = false, logger) {
         this.debug = debug || false;
         this.logger = logger || console.log;
-        if (debug)
+        if (this.debug)
             protocol_1.Protocol.setLogger(this.logger, this.logger);
         else
             protocol_1.Protocol.setLogger(this.logger);

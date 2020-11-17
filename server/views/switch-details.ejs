@@ -84,10 +84,10 @@
             </select>
             <label for="type">HTPP Method</label>
           </div>
-          <div class="switch input-field col s4">
+          <div class="input-field col s4">
+            <input name="value_<%= swtch.name %>" id="value_<%= swtch.name %>" value="<%= swtch.value %>"
+                   type="number" onblur="setStatus(<%= id %>, true, this.value)">
             <label for="value_<%= swtch.name %>">Value</label>
-              <input name="value_<%= swtch.name %>" id="value_<%= swtch.name %>" value="<%= swtch.value %>"
-                     type="number" onchange="setStatus(<%= id %>, 'Y', this.value)">            
           </div>
 
         </div>
@@ -104,7 +104,7 @@
         <div class="row">
           <div class="input-field col s12">
             <input placeholder="0" id="data" name="data" type="text" 
-                   value="<%= swtch.data %>">
+                   value="<%= swtch.data %>" onchange="setStatus(<%= id %>, 'Y', this.value)">
             <label for="data">Data</label>
           </div>
         </div>
@@ -113,7 +113,7 @@
           <div class="input-field col s6">
             <b>dimmer state</b>
             <ul><li># -> on / off</li><li>#B -> true / false</li><li>#O -> on / off</li><li>#1 -> 1 / 0</li>
-                <li>basis url | "off" stuk | "on" stuk</li></ul>
+                <li>basis url | "off" part | "on" part</li></ul>
           </div>
 
           <div class="input-field col s6">

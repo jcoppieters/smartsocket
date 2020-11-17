@@ -229,7 +229,9 @@ export class SmartApp extends WebApp {
       message = e.toString();
     }
 
-    return this.ejs("smappee", context, { config: this.smappee.config, rules: this.smappee.rules, message });
+    return this.ejs("smappee", context, { config: this.smappee.config, 
+      rules: this.smappee.rules, message, realtime: this.smappee.realtime, voltages: this.smappee.voltages,
+      switches: this.smappee.switches, plugs: this.smappee.plugs, channels: this.smappee.channels });
   }
 
 
@@ -266,16 +268,22 @@ export class SmartApp extends WebApp {
     this.log("Init " + this.switches.length + " Switches -> add units");
 
     this.switches.forEach(swtch => {
-      swtch.unit = swtch.unit || this.system.findUnit(this.system.findMaster(swtch.masterAddress, swtch.masterPort), swtch.logicalNodeAddress, swtch.logicalAddress);
+      swtch.unit = swtch.unit || 
+        this.system.findUnit(this.system.findMaster(swtch.masterAddress, swtch.masterPort), 
+                             swtch.logicalNodeAddress, swtch.logicalAddress);
+
       if ((this.smappee) && (swtch.type === SwitchType.kSmappee)) {
         for (let key in this.smappee.plugs) {
           // convert to numbers, better be safe then missing one...
           const p = (typeof swtch.plug === "string") ? parseInt(swtch.plug) : swtch.plug;
           const k = (typeof key === "string") ? parseInt(key) : key;
           if (k === p) 
-            swtch.value = this.smappee.plugs[key];
+            swtch.value = this.smappee.plugs[key].value;
         };
-      } else if ((swtch.type === SwitchType.kHTTPDimmer) || (swtch.type === SwitchType.kHTTPSwitch)) {
+
+      } else if ((swtch.type === SwitchType.kHTTPDimmer) || 
+                 (swtch.type === SwitchType.kHTTPSwitch) || 
+                 (swtch.type === SwitchType.kHTTPUpDown)) {
         if (swtch.unit) {
           swtch.value = swtch.unit.value;
           swtch.status = swtch.unit.status;
@@ -521,6 +529,12 @@ export class SmartApp extends WebApp {
       if (formdata) {
         req.write(formdata);
       }
+      req.on("error", (e) => {
+        this.log("The request to " + url + ", error: " + e.message);
+      });
+      req.on("timeout", (e) => {
+        this.log("The request to " + url + ", timeout: " + e.message);
+      });
       req.end();
 
     } catch(e) {

@@ -123,6 +123,9 @@ switch =>
 - don't crash if the unit is not found
 - added a "pm2 flush" in the update script
 
+### v5.6.2 - 17/11/2020
+- added smappee info (channels, plugs, switches, config)
+
 ### Todo
 - setup openstack server
 
