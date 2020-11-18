@@ -228,11 +228,15 @@ export class Smappee extends Base {
       }
     }
   }
+
+  emptyPlug(nr: number) {
+    return {value: false, name: "P-"+nr};
+  }
   processPlug(plugNr: number, message) {
     const newState = (message.value == "ON");
     
     if (!this.plugs[plugNr]) 
-      this.plugs[plugNr] = {value: false, name: "P-"+plugNr};
+      this.plugs[plugNr] = this.emptyPlug(plugNr);
 
     if (this.plugs[plugNr].value != newState) {
       if (this.debug)
@@ -245,6 +249,8 @@ export class Smappee extends Base {
   }
 
   setPlug(plugNr: number, state: boolean) {
+    if (!this.plugs[plugNr]) this.plugs[plugNr] = this.emptyPlug(plugNr);
+
     const currState = this.plugs[plugNr].value;
     if ((typeof currState === "boolean") && (state != currState)) {
       // do we need to do this?  do we get an mqtt status message ??
