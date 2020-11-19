@@ -7,15 +7,15 @@ const sGnd         = 3;   // pin 3
 const sUp          = 5;   // pin 29
 const sDown        = 6;   // pin 31
 const sSelect      = 16;  // pin 36
-const sStop        = 0;   // NC
+const sStop        = 26;  // pin 37 -- make 0 not to use "stop"
 
 const sScreen1     = 25;  // pin 22
 const sScreen2     = 24;  // pin 18
 const sScreen3     = 23;  // pin 16
 const sScreen4     = 22;  // pin 15
 
-const kWaitPush    = 250;
-const kWaitStable  = 250;
+const kWaitPush    = 150;
+const kWaitStable  = 200;
 
 let init: boolean;
 
@@ -34,8 +34,10 @@ async function setup() {
   await gpio.write(sUp, true);
   await gpio.setup(sDown, gpio.DIR_OUT);
   await gpio.write(sDown, true);
-  // await gpio.setup(sStop, gpio.DIR_OUT);
-  // await gpio.write(sStop, true);
+  if (sStop) {
+    await gpio.setup(sStop, gpio.DIR_OUT);
+    await gpio.write(sStop, true);
+  }
 
   // set for input active low
   await gpio.setup(sScreen1, gpio.DIR_IN);
@@ -105,7 +107,7 @@ export async function stop(screen: number): Promise<boolean> {
   console.log("stop " + screen + ((init) ? "" : " - test mode"));
   if (!init) return true;
 
-  if (sStop != 0) {
+  if (sStop) {
     if (await select(screen)) {
       await toggle(sStop);
       return true;

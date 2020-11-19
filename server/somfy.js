@@ -17,13 +17,13 @@ const sGnd = 3; // pin 3
 const sUp = 5; // pin 29
 const sDown = 6; // pin 31
 const sSelect = 16; // pin 36
-const sStop = 0; // NC
+const sStop = 26; // pin 37 -- make 0 not to use "stop"
 const sScreen1 = 25; // pin 22
 const sScreen2 = 24; // pin 18
 const sScreen3 = 23; // pin 16
 const sScreen4 = 22; // pin 15
-const kWaitPush = 250;
-const kWaitStable = 250;
+const kWaitPush = 150;
+const kWaitStable = 200;
 let init;
 function mS(nr) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -41,8 +41,10 @@ function setup() {
         yield gpio.write(sUp, true);
         yield gpio.setup(sDown, gpio.DIR_OUT);
         yield gpio.write(sDown, true);
-        // await gpio.setup(sStop, gpio.DIR_OUT);
-        // await gpio.write(sStop, true);
+        if (sStop) {
+            yield gpio.setup(sStop, gpio.DIR_OUT);
+            yield gpio.write(sStop, true);
+        }
         // set for input active low
         yield gpio.setup(sScreen1, gpio.DIR_IN);
         yield gpio.setup(sScreen2, gpio.DIR_IN);
@@ -118,7 +120,7 @@ function stop(screen) {
         console.log("stop " + screen + ((init) ? "" : " - test mode"));
         if (!init)
             return true;
-        if (sStop != 0) {
+        if (sStop) {
             if (yield select(screen)) {
                 yield toggle(sStop);
                 return true;
