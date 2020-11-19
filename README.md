@@ -126,6 +126,10 @@ switch =>
 ### v5.6.2 - 17/11/2020
 - added smappee info (channels, plugs, switches, config)
 
+### v5.6.3-5 - 19/11/2020
+- better smappee plug support
+- added stop to somfy controls
+
 ### Todo
 - setup openstack server
 

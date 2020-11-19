@@ -408,11 +408,11 @@ class SmartApp extends webapp_1.WebApp {
         nr = Math.max(0, Math.min(4, nr));
         if (swtch.unit) {
             if (swtch.unit.status === 3)
-                somfy.down(nr);
+                somfy.down(nr); // 3 = going down
             else if (swtch.unit.status === 4)
-                somfy.up(nr);
-            else
-                somfy.stop(nr);
+                somfy.up(nr); // 4 = going up
+            else if (swtch.unit.status != 0)
+                somfy.stop(nr); // 1 = stopped down, 2 = stopped up
         }
     }
     //////////////////////////
