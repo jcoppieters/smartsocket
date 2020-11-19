@@ -67,14 +67,14 @@
       "value": 0
     },
     {
-      "name": "test up/down",
-      "unitName": "screen salon on",
+      "name": "Test Plug",
+      "unitName": "Plug",
       "masterAddress": "gm.coppieters.be",
       "masterPort": 5005,
-      "logicalAddress": 1,
-      "logicalNodeAddress": 4,
-      "type": "httpupdown",
-      "plug": "xxx|stop0|stop1|stop2|down|up",
+      "logicalAddress": 35,
+      "logicalNodeAddress": 16,
+      "type": "smappee",
+      "plug": "1",
       "data": "",
       "method": "GET",
       "value": 0

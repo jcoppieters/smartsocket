@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.up = exports.down = void 0;
+exports.stop = exports.up = exports.down = void 0;
 const sgpio = require("rpi-gpio");
 const gpio = sgpio.promise;
 const s3v3 = 1; // pin 1
@@ -91,7 +91,7 @@ function down(screen) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log("down " + screen + ((init) ? "" : " - test mode"));
         if (!init)
-            return;
+            return true;
         if (yield select(screen)) {
             yield toggle(sDown);
             return true;
@@ -104,7 +104,7 @@ function up(screen) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log("up " + screen + ((init) ? "" : " - test mode"));
         if (!init)
-            return;
+            return true;
         if (yield select(screen)) {
             yield toggle(sUp);
             return true;
@@ -113,6 +113,24 @@ function up(screen) {
     });
 }
 exports.up = up;
+function stop(screen) {
+    return __awaiter(this, void 0, void 0, function* () {
+        console.log("stop " + screen + ((init) ? "" : " - test mode"));
+        if (!init)
+            return true;
+        if (sStop != 0) {
+            if (yield select(screen)) {
+                yield toggle(sStop);
+                return true;
+            }
+            return false;
+        }
+        else {
+            return true;
+        }
+    });
+}
+exports.stop = stop;
 // async function testing() {
 //   await setup();
 //   await down(3);

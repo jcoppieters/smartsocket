@@ -379,7 +379,7 @@ class SmartApp extends webapp_1.WebApp {
         }
         else {
             if ((swtch.type === types_1.SwitchType.kSmappee) && (this.smappee)) {
-                this.smappee.setPlug(parseInt(swtch.plug), swtch.unit.state);
+                this.smappee.setPlug(parseInt(swtch.plug), swtch.unit.value);
             }
             else if (swtch.type === types_1.SwitchType.kHTTPSwitch) {
                 this.httpSwitch(swtch);
@@ -405,11 +405,14 @@ class SmartApp extends webapp_1.WebApp {
         let nr = swtch.plug;
         if (typeof nr === "string")
             nr = parseInt(nr);
+        nr = Math.max(0, Math.min(4, nr));
         if (swtch.unit) {
             if (swtch.unit.status === 3)
-                somfy.down(Math.max(0, Math.min(4, nr)));
-            if (swtch.unit.status === 4)
-                somfy.up(Math.max(0, Math.min(4, nr)));
+                somfy.down(nr);
+            else if (swtch.unit.status === 4)
+                somfy.up(nr);
+            else
+                somfy.stop(nr);
         }
     }
     //////////////////////////
@@ -435,7 +438,7 @@ class SmartApp extends webapp_1.WebApp {
     }
     httpSwitch(swtch) {
         const req = this.makeVariableURL(swtch.plug, !!swtch.unit.status, +swtch.unit.value);
-        this.log("Switch(" + !!swtch.unit.status + ") -> " + req);
+        this.log("HTTP-Switch(" + !!swtch.unit.status + ") -> " + req);
         this.wrequest(req);
     }
     httpUpDown(swtch) {

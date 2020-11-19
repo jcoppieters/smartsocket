@@ -199,7 +199,7 @@ class Smappee extends base_1.Base {
         }
     }
     emptyPlug(nr) {
-        return { value: false, name: "P-" + nr };
+        return { value: null, name: "New plug - " + nr };
     }
     processPlug(plugNr, message) {
         const newState = (message.value == "ON");

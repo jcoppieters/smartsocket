@@ -35,6 +35,17 @@
     {
       "active": "Y",
       "group": 0,
+      "name": "6|switch",
+      "displayName": "Plug",
+      "type": 2,
+      "masterAddress": "gm.coppieters.be",
+      "masterPort": 5005,
+      "logicalNodeAddress": 16,
+      "logicalAddress": 35
+    },
+    {
+      "active": "Y",
+      "group": 0,
       "name": "Brightness",
       "displayName": "Rgb Hue1",
       "type": 1,

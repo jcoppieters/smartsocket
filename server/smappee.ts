@@ -230,7 +230,7 @@ export class Smappee extends Base {
   }
 
   emptyPlug(nr: number) {
-    return {value: false, name: "P-"+nr};
+    return {value: null, name: "New plug - "+nr};
   }
   processPlug(plugNr: number, message) {
     const newState = (message.value == "ON");

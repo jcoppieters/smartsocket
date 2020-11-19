@@ -81,7 +81,8 @@ async function select(screen: number): Promise<boolean> {
 
 export async function down(screen: number): Promise<boolean> {
   console.log("down " + screen + ((init) ? "" : " - test mode"));
-  if (!init) return;
+  if (!init) return true;
+
   if (await select(screen)) {
     await toggle(sDown);
     return true;
@@ -91,13 +92,30 @@ export async function down(screen: number): Promise<boolean> {
 
 export async function up(screen: number): Promise<boolean> {
   console.log("up " + screen + ((init) ? "" : " - test mode"));
-  if (!init) return;
+  if (!init) return true;
+
   if (await select(screen)) {
     await toggle(sUp);
     return true;
   }
   return false;
 } 
+
+export async function stop(screen: number): Promise<boolean> {
+  console.log("stop " + screen + ((init) ? "" : " - test mode"));
+  if (!init) return true;
+
+  if (sStop != 0) {
+    if (await select(screen)) {
+      await toggle(sStop);
+      return true;
+    }
+    return false;
+    
+  } else {
+    return true;
+  }
+}
  
 // async function testing() {
 //   await setup();

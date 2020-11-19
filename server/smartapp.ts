@@ -16,7 +16,6 @@ import { Node, Unit } from "../duotecno/protocol";
 import { Smappee } from "./smappee";
 import { Master } from "../duotecno/master";
 import { Platform } from "./platform";
-import { SocApp } from "./socapp";
 import * as http from "http";
 import * as somfy  from "./somfy";
 
@@ -409,7 +408,7 @@ export class SmartApp extends WebApp {
 
     } else {
       if ((swtch.type === SwitchType.kSmappee) && (this.smappee)) {
-        this.smappee.setPlug(parseInt(swtch.plug), swtch.unit.state);
+        this.smappee.setPlug(parseInt(swtch.plug), swtch.unit.value);
 
       } else if (swtch.type === SwitchType.kHTTPSwitch) {
         this.httpSwitch(swtch);
@@ -435,9 +434,11 @@ export class SmartApp extends WebApp {
   somfy(swtch: Switch) {
     let nr = swtch.plug;
     if (typeof nr === "string") nr = parseInt(nr);
+    nr = Math.max(0, Math.min(4,nr));
     if (swtch.unit) {
-      if (swtch.unit.status === 3) somfy.down(Math.max(0, Math.min(4,nr)));
-      if (swtch.unit.status === 4) somfy.up(Math.max(0, Math.min(4,nr)));
+      if (swtch.unit.status === 3) somfy.down(nr);
+      else if (swtch.unit.status === 4) somfy.up(nr);
+      else somfy.stop(nr)
     }
   }
 
@@ -466,7 +467,7 @@ export class SmartApp extends WebApp {
 
   httpSwitch(swtch: Switch) {
     const req = this.makeVariableURL(swtch.plug, !!swtch.unit.status, +swtch.unit.value);
-    this.log("Switch(" + !!swtch.unit.status + ") -> " + req);
+    this.log("HTTP-Switch(" + !!swtch.unit.status + ") -> " + req);
     this.wrequest(req);
   }
 
