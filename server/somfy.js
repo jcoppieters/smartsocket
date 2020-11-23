@@ -29,7 +29,7 @@ let init;
 let busy;
 let curlog = myLogger;
 function log(msg) {
-    this.curlog("[somfy] " + msg);
+    curlog("[somfy] " + msg);
 }
 function setlogger(logF) {
     curlog = logF;

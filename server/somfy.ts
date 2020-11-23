@@ -24,15 +24,15 @@ let busy: boolean;
 let curlog = myLogger;
 
 function log (msg) {
-  this.curlog("[somfy] " + msg);
+  curlog("[somfy] " + msg);
 }
-
 export function setlogger(logF: LogFunction) {
   curlog = logF;
 }
 function myLogger(msg) {
   console.log("[" + now() + "] [somfy] " + msg);
 }
+
 async function mS(nr: number) {
   return new Promise(resolve => setTimeout(resolve, nr));
 }
