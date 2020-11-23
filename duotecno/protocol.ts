@@ -166,7 +166,6 @@ export class Unit {
   active: boolean;
   name: string;
   group: number = 0;
-  logicalReqNodeAddress: number;
   index: number;
   logicalNodeAddress: number;
   logicalAddress: number;
@@ -760,7 +759,7 @@ export const Protocol = {
       unit.hsun   = next.message[13]*256 +  next.message[14];   // 10x temperature
       unit.moon   = next.message[15]*256 +  next.message[16];   // 10x temperature
       unit.hmoon  = next.message[17]*256 +  next.message[18];   // 10x temperature
-      this.debugger("received temperature = " + <number>unit.value / 10.0);
+      this.debugger("received status - temperature = " + <number>unit.value / 10.0);
   
 
     // Dimmers, switches and moods have 
@@ -770,26 +769,26 @@ export const Protocol = {
       // switch -> boolean
       unit.status = next.message[6];
       unit.value = (next.message[6] > 0);
-      this.debugger("received switch = " + unit.value);
+      this.debugger("received status - switch = " + unit.value);
   
     } else if (next.cmd === Rec.Dimmer) {
       // dimmer -> 0 .. 99
       unit.status = next.message[6];
       unit.value = next.message[7];
-      this.debugger("received dimmer -> value=" + unit.value + " / status=" + unit.status);
+      this.debugger("received status - dimmer -> value=" + unit.value + " / status=" + unit.status);
   
     } else if (next.cmd === Rec.Mood) {
       // control -> boolean
       unit.status = next.message[6];
       unit.value = (next.message[6] != 0);
-      this.debugger("received mood = " + unit.value);
+      this.debugger("received status - mood = " + unit.value);
 
     } else if (next.cmd === Rec.Motor) {
       // motor -> boolean/status
       // 0 = stopped, 1 stopped/down, 2 = stopped/up, 3 = busy/down, 4 = busy/up
       unit.status = next.message[6];
       unit.value = next.message[6];
-      this.debugger("received motor = " + unit.value);
+      this.debugger("received status - motor = " + unit.value);
 
     } else if (next.cmd === Rec.Macro) {
       // = EV_UNITMACROCOMMANDO
@@ -809,7 +808,7 @@ export const Protocol = {
       if (next.message[5] === 1) {
         unit.value = next.message[6]*256 + next.message[7];
       }
-      this.debugger("received macro -> value=" + unit.value + " / status=" + unit.status);
+      this.debugger("received status - macro -> value=" + unit.value + " / status=" + unit.status);
     }
 
     // clear the timer to turn the mood off again.
@@ -846,9 +845,8 @@ export const Protocol = {
 
     return {
       name,
-      logicalReqNodeAddress: res[2],  // should be == node.logicalAddress ?
       index: res[3],                  // should be == unitInx
-      logicalNodeAddress: res[4],     // difference with res[2] ?
+      logicalNodeAddress: res[4],     // difference with res[2] / logicalReqNodeAddress ?
       logicalAddress: res[5],
       type: res[offset+7],
       flags: res[offset+8]

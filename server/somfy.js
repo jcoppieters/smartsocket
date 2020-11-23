@@ -9,8 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.stop = exports.up = exports.down = void 0;
+exports.stop = exports.up = exports.down = exports.setlogger = void 0;
 const sgpio = require("rpi-gpio");
+const types_1 = require("../duotecno/types");
 const gpio = sgpio.promise;
 const s3v3 = 1; // pin 1
 const sGnd = 3; // pin 3
@@ -25,6 +26,15 @@ const sScreen4 = 22; // pin 15
 const kWaitPush = 150;
 const kWaitStable = 200;
 let init;
+let busy;
+let log = myLogger;
+function setlogger(logF) {
+    log = logF;
+}
+exports.setlogger = setlogger;
+function myLogger(msg) {
+    console.log("[" + types_1.now() + "] [Somfy] gpio - " + msg);
+}
 function mS(nr) {
     return __awaiter(this, void 0, void 0, function* () {
         return new Promise(resolve => setTimeout(resolve, nr));
@@ -70,13 +80,13 @@ function selected(screen) {
         if (screens[0]) {
             screens[1] = screens[2] = screens[3] = screens[4] = false;
         }
-        console.log("selected screen: " + screens[0] + " " + screens[1] + " " + screens[2] + " " + screens[3] + " " + screens[4]);
+        log("selected screen: " + screens[0] + " " + screens[1] + " " + screens[2] + " " + screens[3] + " " + screens[4]);
         return screens[screen];
     });
 }
 function select(screen) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log("try to select screen " + screen);
+        log("try to select screen " + screen);
         let i = 0;
         do {
             yield toggle(sSelect);
@@ -85,13 +95,25 @@ function select(screen) {
             i++;
         } while (i < 5);
         // give up after 5 tries
-        console.log("Error: couldn't select screen " + screen);
+        log("Error: couldn't select screen " + screen);
         return false;
+    });
+}
+function waitBusy() {
+    return __awaiter(this, void 0, void 0, function* () {
+        // wait the average selection time
+        const kWaitingTime = (kWaitStable + kWaitPush) * 2.5;
+        let nr = 0;
+        while (busy) {
+            nr++;
+            log("waiting for busy flag - " + Math.round(nr * kWaitingTime) + "mSec");
+            yield mS(kWaitingTime);
+        }
     });
 }
 function down(screen) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log("down " + screen + ((init) ? "" : " - test mode"));
+        log("down " + screen + ((init) ? "" : " - test mode"));
         if (!init)
             return true;
         if (yield select(screen)) {
@@ -104,7 +126,7 @@ function down(screen) {
 exports.down = down;
 function up(screen) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log("up " + screen + ((init) ? "" : " - test mode"));
+        log("up " + screen + ((init) ? "" : " - test mode"));
         if (!init)
             return true;
         if (yield select(screen)) {
@@ -117,7 +139,7 @@ function up(screen) {
 exports.up = up;
 function stop(screen) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log("stop " + screen + ((init) ? "" : " - test mode"));
+        log("stop " + screen + ((init) ? "" : " - test mode"));
         if (!init)
             return true;
         if (sStop) {
@@ -138,12 +160,15 @@ exports.stop = stop;
 //   await down(3);
 //   await up(2);
 // }
+busy = true;
 setup().then(() => {
-    console.log("gpio package initialized");
+    log("gpio package initialized");
     init = true;
+    busy = false;
 }).catch((e) => {
-    console.log("error setting up gpio package - running test mode");
-    console.log(e);
+    log("error setting up gpio package - running test mode");
+    log(e);
     init = false;
+    busy = false;
 });
 //# sourceMappingURL=somfy.js.map

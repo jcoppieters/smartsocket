@@ -126,7 +126,6 @@ export interface DBInfo {
 };
 export interface NodeInfo {
   name?: string;
-  logicalReqNodeAddress?: number;
   index?: number;
   logicalAddress?: number;
   physicalAddress?: number;
@@ -137,7 +136,6 @@ export interface NodeInfo {
 export interface UnitInfo {
   name?: string;
   displayName?: string;
-  logicalReqNodeAddress?: number;
   logicalNodeAddress?: number;
   index?: number;
   logicalAddress?: number;
@@ -300,11 +298,6 @@ export function actionValueStr(val: boolean | number): string {
     return val.toString();
 }
 
-export function makeInt(val: string | number): number {
-  if (typeof val === "string") val = parseInt(val);
-  if (isNaN(val)) val = 0;
-  return val;
-}
 
 ////////////////
 // Sanitizers //
@@ -564,7 +557,6 @@ export const Sanitizers = {
   unitInfo: function(info: UnitInfo, into?: Unit) {
     info.name = info.name || "";
     info.displayName = info.displayName || "";
-    info.logicalReqNodeAddress = info.logicalReqNodeAddress || 0;
     info.index = info.index || -1;
     info.logicalNodeAddress = info.logicalNodeAddress || 0;
     info.logicalAddress = info.logicalAddress || 0;
@@ -593,25 +585,49 @@ export function char(ascii:  number): string {
   return String.fromCharCode(ascii)
 }
 
+
+export function two(n: number | string) { 
+  return (n < 10) ? ("0" + n) : n.toString();
+}
 export function hex(n: number): string {
   n = Math.floor(n);
   return "0x" + n.toString(16);
 }
 
-export function two(n: number | string) { 
-  return (n < 10) ? ("0" + n) : n.toString();
+export function watt(w: number) {
+  if (w < 1000) return w + "W";
+  if (w < 1000000) return Math.floor(w/1000) + "." + (Math.round(w/100) % 10) + "KW";
+  if (w < 1000000000) return Math.floor(w/1000000) + "." + (Math.round(w/100000) % 10) + "MW";
+  return Math.floor(w/1000000000) + "." + (Math.round(w/100000000) % 10) + "GW";
+}
+
+export function date(aDate: Date) {
+  if (! aDate) return "-";
+  return two(aDate.getDate()) + "-" + two(aDate.getMonth() + 1) + "-" + aDate.getFullYear();
+}
+
+export function time(aDate: Date) {
+  if (! aDate) return "-";
+  return two(aDate.getHours()) + ":" + two(aDate.getMinutes()) + ":" + two(aDate.getSeconds());
+}
+
+export function datetime(aDate: Date) {
+  if (! aDate) return "-";
+  return date(aDate) + " " + time(aDate);
 }
 
 export function now(): string {
-  const aDate = new Date();
-  return aDate.getFullYear() + "-" + 
-         two(aDate.getMonth() + 1) + "-" + 
-         two(aDate.getDate()) + " " +
-         two(aDate.getHours()) + ":" + 
-         two(aDate.getMinutes()) + ":" + 
-         two(aDate.getSeconds());
+  return datetime(new Date());
 }
 
-export function single(val: string | Array<string>): string {
-  return (val instanceof Array) ? val[0] : val;
+export function makeInt(val: string | number): number {
+  if (typeof val === "string") {
+    if ((val[0]==='0') && (val[1]==='x'))
+      val = parseInt(val.substr(2), 16);
+    else
+      val = parseInt(val, 10);
+  }
+
+  return isNaN(val) ? 0 : val;
 }
+

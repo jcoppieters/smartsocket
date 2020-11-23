@@ -54,6 +54,8 @@ export class SmartApp extends WebApp {
 
   constructor(system: System, smappee: Smappee, platform: Platform, log?: LogFunction) {
     super("smartapp", log);
+    somfy.setlogger(log);
+    
     this.readConfig();
     this.system = system;
 

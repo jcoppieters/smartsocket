@@ -52,6 +52,7 @@ const kAccessoryPins = {
 class SmartApp extends webapp_1.WebApp {
     constructor(system, smappee, platform, log) {
         super("smartapp", log);
+        somfy.setlogger(log);
         this.readConfig();
         this.system = system;
         // get status change updates

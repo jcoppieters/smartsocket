@@ -9,25 +9,24 @@ const types_1 = require("../duotecno/types");
 ///////////////
 class Base {
     constructor(type, debug = false, logger) {
+        this.type = type || "base";
         this.debug = debug || false;
         this.logger = logger || console.log;
         if (this.debug)
             protocol_1.Protocol.setLogger(this.logger, this.logger);
         else
             protocol_1.Protocol.setLogger(this.logger);
-        this.type = type || "base";
     }
     info(msg) {
         if (this.debug) {
-            this.logger(this.type + " - " + msg);
+            this.logger("[" + this.type + "] " + msg);
         }
     }
     log(msg) {
-        this.logger(this.type + " - " + msg);
+        this.logger("[" + this.type + "] " + msg);
     }
     err(msg) {
-        const now = new Date();
-        this.logger(this.type + " - *** " + now.toDateString() + ", " + now.toTimeString().substr(0, 17) + " *** " + msg + " ***");
+        this.logger("[" + this.type + "] *** " + types_1.now() + " *** " + msg + " ***");
     }
     //////////////////
     // Config stuff //

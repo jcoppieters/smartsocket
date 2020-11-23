@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import { Protocol } from "../duotecno/protocol";
-import { LogFunction, Sanitizers } from "../duotecno/types";
+import { LogFunction, now, Sanitizers } from "../duotecno/types";
 
 
 ///////////////
@@ -14,27 +14,26 @@ export class Base {
   config: any;
 
   constructor(type: string, debug: boolean = false, logger?: LogFunction) {
+    this.type = type || "base";
     this.debug = debug || false;
+
     this.logger = logger || console.log;
     if (this.debug)
       Protocol.setLogger(this.logger, this.logger);
     else
       Protocol.setLogger(this.logger);
-
-    this.type = type || "base";
   }
 
   info(msg: string) {
     if (this.debug) {
-      this.logger(this.type + " - " + msg);
+      this.logger("[" + this.type + "] " + msg);
     }
   }
   log(msg: string) {
-    this.logger(this.type + " - " + msg);
+    this.logger("[" + this.type + "] " + msg);
   }
   err(msg: string) {
-    const now = new Date();
-    this.logger(this.type + " - *** " + now.toDateString() + ", " + now.toTimeString().substr(0,17) + " *** " + msg + " ***");
+    this.logger("[" + this.type + "] *** " + now() + " *** " + msg + " ***");
   }
 
   //////////////////

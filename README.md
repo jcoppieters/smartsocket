@@ -130,6 +130,11 @@ switch =>
 - better smappee plug support
 - added stop to somfy controls
 
+### v5.6.7 - 23/11/2020
+- added wait/busy in somfy gpio access
+- moved a number of helper functions to types.ts
+- removed: logicalReqNodeAddress (never used)
+
 ### Todo
 - setup openstack server
 

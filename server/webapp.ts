@@ -8,8 +8,8 @@ import * as fs from "fs";
 import * as url from "url";
 import * as qs from "querystring";
 import { Base } from './base';
-import { LogFunction, single, two } from '../duotecno/types';
-
+import { LogFunction } from '../duotecno/types';
+import * as types from "../duotecno/types";
 
 export interface Params {[key: string]: string | Array<string>};
 
@@ -47,11 +47,10 @@ export interface WebAppFile {
 //////////////////////
 // Helper functions //
 //////////////////////
-export function ascii(char: string): number {
-  return char.charCodeAt(0);
-}
-export function char(ascii:  number): string {
-  return String.fromCharCode(ascii)
+
+// move most of them to types.ts
+export function single(val: string | Array<string>): string {
+  return (val instanceof Array) ? val[0] : val;
 }
 
 
@@ -67,6 +66,13 @@ export class Context {
   path: string;                     // the url path part
   req: http.IncomingMessage;        // from http request
   res: http.ServerResponse;         // from http request
+
+  time = types.time;
+  hex = types.hex;
+  watt = types.watt;
+  date = types.date;
+  datetime = types.datetime;
+  makeInt = types.makeInt;
 
   constructor(body: string, req: http.IncomingMessage, res: http.ServerResponse) {
     const bodyParams = qs.parse(body)
@@ -87,37 +93,6 @@ export class Context {
     this.request = parts[0];
     this.req = req;
     this.res = res;
-  }
-
-  hex(n: number): string {
-    n = Math.floor(n);
-    return "0x" + n.toString(16);
-  }
-
-  watt(w: number) {
-    if (w < 1000) return w + "W";
-    if (w < 1000000) return Math.floor(w/1000) + "." + (Math.round(w/100) % 10) + "KW";
-    if (w < 1000000000) return Math.floor(w/1000000) + "." + (Math.round(w/100000) % 10) + "MW";
-    return Math.floor(w/1000000000) + "." + (Math.round(w/100000000) % 10) + "GW";
-  }
-  date(aDate: Date) {
-    if (! aDate) return "-";
-    return two(aDate.getDate()) + "-" + two(aDate.getMonth() + 1) + "-" + aDate.getFullYear();
-  }
-  time(aDate: Date) {
-    if (! aDate) return "-";
-    return two(aDate.getHours()) + ":" + two(aDate.getMinutes()) + ":" + two(aDate.getSeconds());
-  }
-  datetime(aDate: Date) {
-    if (! aDate) return "-";
-    return two(aDate.getDate()) + "-" + two(aDate.getMonth() + 1) + "-" + aDate.getFullYear() + " " +
-           two(aDate.getHours()) + ":" + two(aDate.getMinutes()) + ":" + two(aDate.getSeconds());
-  }
-  makeInt(i: string): number {
-    if (i && (i[0]==='0') && (i[1]==='x'))
-      return parseInt(i.substr(2), 16)
-    else
-      return parseInt(i);
   }
 
   addr(a: string): {logicalNodeAddress: number, logicalAddress: number } {

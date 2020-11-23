@@ -14,7 +14,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.single = exports.now = exports.two = exports.hex = exports.char = exports.ascii = exports.wait = exports.Sanitizers = exports.makeInt = exports.actionValueStr = exports.actionValue = exports.kEmptySwitch = exports.kEmptyRule = exports.kEmptyAction = exports.SwitchType = exports.RuleType = exports.Boundaries = exports.kEmptyCommRecord = exports.WriteError = exports.kEmptyGroup = exports.kEmptyScene = exports.kEmptyUnitScene = exports.kEmptyUnit = exports.UnitExtendedType = exports.UnitType = exports.UnitMotorCmd = exports.UnitState = exports.NodeType = void 0;
+exports.makeInt = exports.now = exports.datetime = exports.time = exports.date = exports.watt = exports.hex = exports.two = exports.char = exports.ascii = exports.wait = exports.Sanitizers = exports.actionValueStr = exports.actionValue = exports.kEmptySwitch = exports.kEmptyRule = exports.kEmptyAction = exports.SwitchType = exports.RuleType = exports.Boundaries = exports.kEmptyCommRecord = exports.WriteError = exports.kEmptyGroup = exports.kEmptyScene = exports.kEmptyUnitScene = exports.kEmptyUnit = exports.UnitExtendedType = exports.UnitType = exports.UnitMotorCmd = exports.UnitState = exports.NodeType = void 0;
 // Node types
 var NodeType;
 (function (NodeType) {
@@ -165,14 +165,6 @@ function actionValueStr(val) {
         return val.toString();
 }
 exports.actionValueStr = actionValueStr;
-function makeInt(val) {
-    if (typeof val === "string")
-        val = parseInt(val);
-    if (isNaN(val))
-        val = 0;
-    return val;
-}
-exports.makeInt = makeInt;
 ////////////////
 // Sanitizers //
 ////////////////
@@ -418,7 +410,6 @@ exports.Sanitizers = {
     unitInfo: function (info, into) {
         info.name = info.name || "";
         info.displayName = info.displayName || "";
-        info.logicalReqNodeAddress = info.logicalReqNodeAddress || 0;
         info.index = info.index || -1;
         info.logicalNodeAddress = info.logicalNodeAddress || 0;
         info.logicalAddress = info.logicalAddress || 0;
@@ -447,27 +438,55 @@ function char(ascii) {
     return String.fromCharCode(ascii);
 }
 exports.char = char;
+function two(n) {
+    return (n < 10) ? ("0" + n) : n.toString();
+}
+exports.two = two;
 function hex(n) {
     n = Math.floor(n);
     return "0x" + n.toString(16);
 }
 exports.hex = hex;
-function two(n) {
-    return (n < 10) ? ("0" + n) : n.toString();
+function watt(w) {
+    if (w < 1000)
+        return w + "W";
+    if (w < 1000000)
+        return Math.floor(w / 1000) + "." + (Math.round(w / 100) % 10) + "KW";
+    if (w < 1000000000)
+        return Math.floor(w / 1000000) + "." + (Math.round(w / 100000) % 10) + "MW";
+    return Math.floor(w / 1000000000) + "." + (Math.round(w / 100000000) % 10) + "GW";
 }
-exports.two = two;
+exports.watt = watt;
+function date(aDate) {
+    if (!aDate)
+        return "-";
+    return two(aDate.getDate()) + "-" + two(aDate.getMonth() + 1) + "-" + aDate.getFullYear();
+}
+exports.date = date;
+function time(aDate) {
+    if (!aDate)
+        return "-";
+    return two(aDate.getHours()) + ":" + two(aDate.getMinutes()) + ":" + two(aDate.getSeconds());
+}
+exports.time = time;
+function datetime(aDate) {
+    if (!aDate)
+        return "-";
+    return date(aDate) + " " + time(aDate);
+}
+exports.datetime = datetime;
 function now() {
-    const aDate = new Date();
-    return aDate.getFullYear() + "-" +
-        two(aDate.getMonth() + 1) + "-" +
-        two(aDate.getDate()) + " " +
-        two(aDate.getHours()) + ":" +
-        two(aDate.getMinutes()) + ":" +
-        two(aDate.getSeconds());
+    return datetime(new Date());
 }
 exports.now = now;
-function single(val) {
-    return (val instanceof Array) ? val[0] : val;
+function makeInt(val) {
+    if (typeof val === "string") {
+        if ((val[0] === '0') && (val[1] === 'x'))
+            val = parseInt(val.substr(2), 16);
+        else
+            val = parseInt(val, 10);
+    }
+    return isNaN(val) ? 0 : val;
 }
-exports.single = single;
+exports.makeInt = makeInt;
 //# sourceMappingURL=types.js.map

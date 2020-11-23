@@ -644,7 +644,7 @@ exports.Protocol = {
             unit.hsun = next.message[13] * 256 + next.message[14]; // 10x temperature
             unit.moon = next.message[15] * 256 + next.message[16]; // 10x temperature
             unit.hmoon = next.message[17] * 256 + next.message[18]; // 10x temperature
-            this.debugger("received temperature = " + unit.value / 10.0);
+            this.debugger("received status - temperature = " + unit.value / 10.0);
             // Dimmers, switches and moods have 
             //  - status (0=off,1=on,2=pir-on)
             //  = value (true/false for switches and moods, 1-99 for dimmers)
@@ -653,26 +653,26 @@ exports.Protocol = {
             // switch -> boolean
             unit.status = next.message[6];
             unit.value = (next.message[6] > 0);
-            this.debugger("received switch = " + unit.value);
+            this.debugger("received status - switch = " + unit.value);
         }
         else if (next.cmd === Rec.Dimmer) {
             // dimmer -> 0 .. 99
             unit.status = next.message[6];
             unit.value = next.message[7];
-            this.debugger("received dimmer -> value=" + unit.value + " / status=" + unit.status);
+            this.debugger("received status - dimmer -> value=" + unit.value + " / status=" + unit.status);
         }
         else if (next.cmd === Rec.Mood) {
             // control -> boolean
             unit.status = next.message[6];
             unit.value = (next.message[6] != 0);
-            this.debugger("received mood = " + unit.value);
+            this.debugger("received status - mood = " + unit.value);
         }
         else if (next.cmd === Rec.Motor) {
             // motor -> boolean/status
             // 0 = stopped, 1 stopped/down, 2 = stopped/up, 3 = busy/down, 4 = busy/up
             unit.status = next.message[6];
             unit.value = next.message[6];
-            this.debugger("received motor = " + unit.value);
+            this.debugger("received status - motor = " + unit.value);
         }
         else if (next.cmd === Rec.Macro) {
             // = EV_UNITMACROCOMMANDO
@@ -690,7 +690,7 @@ exports.Protocol = {
             if (next.message[5] === 1) {
                 unit.value = next.message[6] * 256 + next.message[7];
             }
-            this.debugger("received macro -> value=" + unit.value + " / status=" + unit.status);
+            this.debugger("received status - macro -> value=" + unit.value + " / status=" + unit.status);
         }
         // clear the timer to turn the mood off again.
         //if (unit.resetTimer) {
@@ -721,7 +721,6 @@ exports.Protocol = {
         let offset = name.length;
         return {
             name,
-            logicalReqNodeAddress: res[2],
             index: res[3],
             logicalNodeAddress: res[4],
             logicalAddress: res[5],

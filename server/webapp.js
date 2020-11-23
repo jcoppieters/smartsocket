@@ -12,31 +12,34 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.WebApp = exports.Context = exports.char = exports.ascii = void 0;
+exports.WebApp = exports.Context = exports.single = void 0;
 const ejs = require("ejs");
 const http = require("http");
 const fs = require("fs");
 const url = require("url");
 const qs = require("querystring");
 const base_1 = require("./base");
-const types_1 = require("../duotecno/types");
+const types = require("../duotecno/types");
 ;
 //////////////////////
 // Helper functions //
 //////////////////////
-function ascii(char) {
-    return char.charCodeAt(0);
+// move most of them to types.ts
+function single(val) {
+    return (val instanceof Array) ? val[0] : val;
 }
-exports.ascii = ascii;
-function char(ascii) {
-    return String.fromCharCode(ascii);
-}
-exports.char = char;
+exports.single = single;
 ///////////////////
 // Context Class //
 ///////////////////
 class Context {
     constructor(body, req, res) {
+        this.time = types.time;
+        this.hex = types.hex;
+        this.watt = types.watt;
+        this.date = types.date;
+        this.datetime = types.datetime;
+        this.makeInt = types.makeInt;
         const bodyParams = qs.parse(body);
         const urlParts = url.parse(req.url, true);
         this.params = Object.assign(Object.assign({}, bodyParams), urlParts.query);
@@ -46,48 +49,13 @@ class Context {
             path = path.substring(1);
         const parts = path.split("/");
         // get action and id from the params or if not specified from the url when available
-        this.action = types_1.single(this.params.action) || ((parts.length > 1) ? parts[1] : "") || types_1.single(this.params.daction);
-        this.id = types_1.single(this.params.id) || ((parts.length > 2) ? parts[2] : "");
+        this.action = single(this.params.action) || ((parts.length > 1) ? parts[1] : "") || single(this.params.daction);
+        this.id = single(this.params.id) || ((parts.length > 2) ? parts[2] : "");
         // some easy to use stuff
         this.method = req.method;
         this.request = parts[0];
         this.req = req;
         this.res = res;
-    }
-    hex(n) {
-        n = Math.floor(n);
-        return "0x" + n.toString(16);
-    }
-    watt(w) {
-        if (w < 1000)
-            return w + "W";
-        if (w < 1000000)
-            return Math.floor(w / 1000) + "." + (Math.round(w / 100) % 10) + "KW";
-        if (w < 1000000000)
-            return Math.floor(w / 1000000) + "." + (Math.round(w / 100000) % 10) + "MW";
-        return Math.floor(w / 1000000000) + "." + (Math.round(w / 100000000) % 10) + "GW";
-    }
-    date(aDate) {
-        if (!aDate)
-            return "-";
-        return types_1.two(aDate.getDate()) + "-" + types_1.two(aDate.getMonth() + 1) + "-" + aDate.getFullYear();
-    }
-    time(aDate) {
-        if (!aDate)
-            return "-";
-        return types_1.two(aDate.getHours()) + ":" + types_1.two(aDate.getMinutes()) + ":" + types_1.two(aDate.getSeconds());
-    }
-    datetime(aDate) {
-        if (!aDate)
-            return "-";
-        return types_1.two(aDate.getDate()) + "-" + types_1.two(aDate.getMonth() + 1) + "-" + aDate.getFullYear() + " " +
-            types_1.two(aDate.getHours()) + ":" + types_1.two(aDate.getMinutes()) + ":" + types_1.two(aDate.getSeconds());
-    }
-    makeInt(i) {
-        if (i && (i[0] === '0') && (i[1] === 'x'))
-            return parseInt(i.substr(2), 16);
-        else
-            return parseInt(i);
     }
     addr(a) {
         const parts = a.split(";");
@@ -157,20 +125,20 @@ class Context {
         }
         let val = this.params[spec.name];
         if (spec.type === "integer") {
-            let num = this.makeInt(types_1.single(val));
+            let num = this.makeInt(single(val));
             return (isNaN(num) ? spec.default : num);
         }
         else if ((typeof val === "undefined") || (val === null)) {
             return spec.default;
         }
         else if (spec.type === "string") {
-            return types_1.single(val);
+            return single(val);
         }
         else if (spec.type === "integers") {
             if (val instanceof Array)
                 return val.map(s => parseInt(s));
             else {
-                let num = this.makeInt(types_1.single(val));
+                let num = this.makeInt(single(val));
                 return (isNaN(num) ? spec.default : [num]);
             }
         }

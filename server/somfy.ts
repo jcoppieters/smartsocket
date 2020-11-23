@@ -1,4 +1,5 @@
 import * as sgpio from 'rpi-gpio';
+import { LogFunction, now } from '../duotecno/types';
 const gpio = sgpio.promise;
 
 const s3v3         = 1;   // pin 1
@@ -18,7 +19,16 @@ const kWaitPush    = 150;
 const kWaitStable  = 200;
 
 let init: boolean;
+let busy: boolean;
 
+let log = myLogger;
+
+export function setlogger(logF: LogFunction) {
+  log = logF;
+}
+function myLogger(msg) {
+  console.log("[" + now() + "] [Somfy] gpio - " + msg);
+}
 async function mS(nr: number) {
   return new Promise(resolve => setTimeout(resolve, nr));
 }
@@ -63,12 +73,12 @@ async function selected(screen: number): Promise<boolean> {
   if (screens[0]) {
    screens[1] = screens[2] = screens[3] = screens[4] = false;
   }
-  console.log("selected screen: " + screens[0] +" "+ screens[1] +" "+ screens[2] +" "+ screens[3] +" "+ screens[4]);
+  log("selected screen: " + screens[0] +" "+ screens[1] +" "+ screens[2] +" "+ screens[3] +" "+ screens[4]);
   return screens[screen];
 }
 
 async function select(screen: number): Promise<boolean> {
-  console.log("try to select screen " + screen);
+  log("try to select screen " + screen);
   let i = 0;
   do {
    await toggle(sSelect);
@@ -77,12 +87,24 @@ async function select(screen: number): Promise<boolean> {
   } while (i < 5);
 
   // give up after 5 tries
-  console.log("Error: couldn't select screen " + screen);
+  log("Error: couldn't select screen " + screen);
   return false;
 }
 
+async function waitBusy() {
+  // wait the average selection time
+  const kWaitingTime = (kWaitStable+kWaitPush) * 2.5;
+
+  let nr = 0;
+  while (busy) {
+    nr++;
+    log("waiting for busy flag - " + Math.round(nr*kWaitingTime) + "mSec")
+    await mS(kWaitingTime);
+  }
+}
+
 export async function down(screen: number): Promise<boolean> {
-  console.log("down " + screen + ((init) ? "" : " - test mode"));
+  log("down " + screen + ((init) ? "" : " - test mode"));
   if (!init) return true;
 
   if (await select(screen)) {
@@ -93,7 +115,7 @@ export async function down(screen: number): Promise<boolean> {
 }
 
 export async function up(screen: number): Promise<boolean> {
-  console.log("up " + screen + ((init) ? "" : " - test mode"));
+  log("up " + screen + ((init) ? "" : " - test mode"));
   if (!init) return true;
 
   if (await select(screen)) {
@@ -104,7 +126,7 @@ export async function up(screen: number): Promise<boolean> {
 } 
 
 export async function stop(screen: number): Promise<boolean> {
-  console.log("stop " + screen + ((init) ? "" : " - test mode"));
+  log("stop " + screen + ((init) ? "" : " - test mode"));
   if (!init) return true;
 
   if (sStop) {
@@ -125,12 +147,14 @@ export async function stop(screen: number): Promise<boolean> {
 //   await up(2);
 // }
   
-
+busy = true;
 setup().then(() => {
-  console.log("gpio package initialized");
+  log("gpio package initialized");
   init = true;
+  busy = false;
 }).catch((e) => {
-  console.log("error setting up gpio package - running test mode");
-  console.log(e);
+  log("error setting up gpio package - running test mode");
+  log(e);
   init = false;
+  busy = false;
 });
