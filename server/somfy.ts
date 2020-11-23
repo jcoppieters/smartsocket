@@ -21,13 +21,17 @@ const kWaitStable  = 200;
 let init: boolean;
 let busy: boolean;
 
-let log = myLogger;
+let curlog = myLogger;
+
+function log (msg) {
+  this.curlog("[somfy] " + msg);
+}
 
 export function setlogger(logF: LogFunction) {
-  log = logF;
+  curlog = logF;
 }
 function myLogger(msg) {
-  console.log("[" + now() + "] [Somfy] gpio - " + msg);
+  console.log("[" + now() + "] [somfy] " + msg);
 }
 async function mS(nr: number) {
   return new Promise(resolve => setTimeout(resolve, nr));
@@ -73,7 +77,7 @@ async function selected(screen: number): Promise<boolean> {
   if (screens[0]) {
    screens[1] = screens[2] = screens[3] = screens[4] = false;
   }
-  log("selected screen: " + screens[0] +" "+ screens[1] +" "+ screens[2] +" "+ screens[3] +" "+ screens[4]);
+  log("selected screen: " + screens[0] +" "+ screens[1] +" "+ screens[2] +" "+ screens[3] +" "+ screens[4]+ " <- " + screen + "=" + screens[screen]);
   return screens[screen];
 }
 

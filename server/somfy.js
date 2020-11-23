@@ -27,13 +27,16 @@ const kWaitPush = 150;
 const kWaitStable = 200;
 let init;
 let busy;
-let log = myLogger;
+let curlog = myLogger;
+function log(msg) {
+    this.curlog("[somfy] " + msg);
+}
 function setlogger(logF) {
-    log = logF;
+    curlog = logF;
 }
 exports.setlogger = setlogger;
 function myLogger(msg) {
-    console.log("[" + types_1.now() + "] [Somfy] gpio - " + msg);
+    console.log("[" + types_1.now() + "] [somfy] " + msg);
 }
 function mS(nr) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -80,7 +83,7 @@ function selected(screen) {
         if (screens[0]) {
             screens[1] = screens[2] = screens[3] = screens[4] = false;
         }
-        log("selected screen: " + screens[0] + " " + screens[1] + " " + screens[2] + " " + screens[3] + " " + screens[4]);
+        log("selected screen: " + screens[0] + " " + screens[1] + " " + screens[2] + " " + screens[3] + " " + screens[4] + " <- " + screen + "=" + screens[screen]);
         return screens[screen];
     });
 }
