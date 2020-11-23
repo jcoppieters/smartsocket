@@ -109,6 +109,7 @@ function waitBusy() {
             log("waiting for busy flag - " + Math.round(nr * kWaitingTime) + "mSec");
             yield mS(kWaitingTime);
         }
+        busy = true;
     });
 }
 function down(screen) {
@@ -116,10 +117,13 @@ function down(screen) {
         log("down " + screen + ((init) ? "" : " - test mode"));
         if (!init)
             return true;
+        yield waitBusy();
         if (yield select(screen)) {
             yield toggle(sDown);
+            busy = false;
             return true;
         }
+        busy = false;
         return false;
     });
 }
@@ -129,10 +133,13 @@ function up(screen) {
         log("up " + screen + ((init) ? "" : " - test mode"));
         if (!init)
             return true;
+        yield waitBusy();
         if (yield select(screen)) {
             yield toggle(sUp);
+            busy = false;
             return true;
         }
+        busy = false;
         return false;
     });
 }
@@ -142,14 +149,18 @@ function stop(screen) {
         log("stop " + screen + ((init) ? "" : " - test mode"));
         if (!init)
             return true;
+        yield waitBusy();
         if (sStop) {
             if (yield select(screen)) {
                 yield toggle(sStop);
+                busy = false;
                 return true;
             }
+            busy = false;
             return false;
         }
         else {
+            busy = false;
             return true;
         }
     });

@@ -101,16 +101,22 @@ async function waitBusy() {
     log("waiting for busy flag - " + Math.round(nr*kWaitingTime) + "mSec")
     await mS(kWaitingTime);
   }
+  busy = true;
 }
 
 export async function down(screen: number): Promise<boolean> {
   log("down " + screen + ((init) ? "" : " - test mode"));
   if (!init) return true;
 
+  await waitBusy();
+
   if (await select(screen)) {
     await toggle(sDown);
+    busy = false;
     return true;
   }
+
+  busy = false;
   return false;
 }
 
@@ -118,10 +124,15 @@ export async function up(screen: number): Promise<boolean> {
   log("up " + screen + ((init) ? "" : " - test mode"));
   if (!init) return true;
 
+  await waitBusy();
+
   if (await select(screen)) {
     await toggle(sUp);
+    busy = false;
     return true;
   }
+
+  busy = false;
   return false;
 } 
 
@@ -129,14 +140,19 @@ export async function stop(screen: number): Promise<boolean> {
   log("stop " + screen + ((init) ? "" : " - test mode"));
   if (!init) return true;
 
+  await waitBusy();
+
   if (sStop) {
     if (await select(screen)) {
       await toggle(sStop);
+      busy = false;
       return true;
     }
+    busy = false;
     return false;
     
   } else {
+    busy = false;
     return true;
   }
 }
