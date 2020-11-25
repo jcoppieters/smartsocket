@@ -134,6 +134,7 @@ switch =>
 - added wait/busy in somfy gpio access
 - moved a number of helper functions to types.ts
 - removed: logicalReqNodeAddress (never used)
+- removed test configs from repo
 
 ### Todo
 - setup openstack server
