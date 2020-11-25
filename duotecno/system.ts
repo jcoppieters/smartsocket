@@ -21,8 +21,8 @@ export class System extends Base {
   public stores: Array<Unit> = [];
   public scenes: Array<SceneConfig> = [];
 
-  constructor(debug: boolean = false, logger?: LogFunction) {
-    super("system", debug, logger);
+  constructor(debug: boolean = false, logger?: LogFunction, dev = false) {
+    super("system" + (dev) ? "-dev" : "", debug, logger);
     Protocol.setLogger(logger, debug ? logger : null);
 
     this.trigger = null;

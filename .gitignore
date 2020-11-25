@@ -2,4 +2,7 @@ node_modules
 **/*.js.map
 backup/**/*
 data/**/*
-config.system.json
+
+config.smappee-dev.json
+config.smartapp-dev.json
+config.system-dev.json

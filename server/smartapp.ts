@@ -52,10 +52,10 @@ export class SmartApp extends WebApp {
   switches: Array<Switch>;
 
 
-  constructor(system: System, smappee: Smappee, platform: Platform, log?: LogFunction) {
-    super("smartapp", log);
+  constructor(system: System, smappee: Smappee, platform: Platform, log?: LogFunction, dev = false) {
+    super("smartapp" + (dev) ? "-dev" : "", log);
     somfy.setlogger(log);
-    
+
     this.readConfig();
     this.system = system;
 

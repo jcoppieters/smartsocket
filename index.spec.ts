@@ -26,17 +26,17 @@ function tester() {
   console.log("Testing names -> getName = " + u.getName() + ", getDisplayname = " + u.getDisplayName() + ", type " + u.type + ", extType = " + u.extendedType + ", getTypeName = " + u.typeName());
 }
 function alertS(a, b) {
-  console.log(a,b);
+  console.log(a, b);
 }
 
 let system;
 try {
-  system = new System(true, console.log);
+  system = new System(true, console.log, true);
   system.openMasters(true);      
 
   try {
-    const smappee = new Smappee(system, true, console.log, alertS);
-    const smartapp = new SmartApp(system, smappee, null, console.log);
+    const smappee = new Smappee(system, true, console.log, alertS, true);
+    const smartapp = new SmartApp(system, smappee, null, console.log, true);
     smartapp.serve();
   } catch(err) {
     console.log(err);

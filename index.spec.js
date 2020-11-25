@@ -27,11 +27,11 @@ function alertS(a, b) {
 }
 let system;
 try {
-    system = new system_1.System(true, console.log);
+    system = new system_1.System(true, console.log, true);
     system.openMasters(true);
     try {
-        const smappee = new smappee_1.Smappee(system, true, console.log, alertS);
-        const smartapp = new smartapp_1.SmartApp(system, smappee, null, console.log);
+        const smappee = new smappee_1.Smappee(system, true, console.log, alertS, true);
+        const smartapp = new smartapp_1.SmartApp(system, smappee, null, console.log, true);
         smartapp.serve();
     }
     catch (err) {

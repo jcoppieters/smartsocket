@@ -1,7 +1,7 @@
 {
   "rules": [
   ],
-  "address": "192.168.0.183",
+  "address": "192.168.0.xxx",
   "uid": "57e3e0d8-bb05-4b04-8662-1a9871998f3f",
-  "debug": true
+  "debug": false
 }

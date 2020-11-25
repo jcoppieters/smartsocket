@@ -15,8 +15,8 @@ const protocol_1 = require("./protocol");
 const base_1 = require("../server/base");
 const events_1 = require("events");
 class System extends base_1.Base {
-    constructor(debug = false, logger) {
-        super("system", debug, logger);
+    constructor(debug = false, logger, dev = false) {
+        super("system" + (dev) ? "-dev" : "", debug, logger);
         this.isBrowser = true;
         this.isSplitted = false;
         this.moods = [];

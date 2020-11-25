@@ -50,8 +50,8 @@ const kAccessoryPins = {
     "577-03-010": "CC:22:3D:E3:A1:0A"
 };
 class SmartApp extends webapp_1.WebApp {
-    constructor(system, smappee, platform, log) {
-        super("smartapp", log);
+    constructor(system, smappee, platform, log, dev = false) {
+        super("smartapp" + (dev) ? "-dev" : "", log);
         somfy.setlogger(log);
         this.readConfig();
         this.system = system;

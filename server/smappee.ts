@@ -52,12 +52,12 @@ export class Smappee extends Base {
   channels: { [publishIndex: number]: {
     name: string, type: string, flow: string,
     power: number, exportEnergy: number, importEnergy: number, phaseId: number,
-    current: number,apparentPower: number, cosPhi: number, formula: string} };
+    current: number, apparentPower: number, cosPhi: number, formula: string} };
   alertSwitch: (type: SwitchType, plugNr: number) => void;
 
 
-  constructor(system: System, debug: boolean, log: LogFunction, alertSwitch?: (type: SwitchType, plugNr: number) => void) {
-    super("smappee", debug, log);
+  constructor(system: System, debug: boolean, log: LogFunction, alertSwitch?: (type: SwitchType, plugNr: number) => void, dev = false) {
+    super("smappee" + (dev) ? "-dev" : "", debug, log);
     this.readConfig();
     
     this.system = system;
