@@ -228,7 +228,7 @@ export class Master extends Base {
   /* ************* */
   /* Communication */
   /* ************* */
-  async open() {
+  async open(cnt = 1) {
     this.socket = await getSocket( this.config.address, this.config.port,
       (msg) => { 
         this.handleData(msg);
@@ -236,7 +236,9 @@ export class Master extends Base {
       (end) => {
         this.isOpen = false;
         this.isLoggedIn = false;
-        this.log("end -> socket got disconnected");
+        this.log("end -> socket got disconnected -> try to reopen (" + cnt + ")");
+        // try to reopen
+        setTimeout(() => this.open(cnt+1), 2);
       },
       (log) => {
         this.log(log);

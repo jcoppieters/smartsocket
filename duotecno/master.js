@@ -205,14 +205,16 @@ class Master extends base_1.Base {
     /* ************* */
     /* Communication */
     /* ************* */
-    open() {
+    open(cnt = 1) {
         return __awaiter(this, void 0, void 0, function* () {
             this.socket = yield smartsocket_1.getSocket(this.config.address, this.config.port, (msg) => {
                 this.handleData(msg);
             }, (end) => {
                 this.isOpen = false;
                 this.isLoggedIn = false;
-                this.log("end -> socket got disconnected");
+                this.log("end -> socket got disconnected -> try to reopen (" + cnt + ")");
+                // try to reopen
+                setTimeout(() => this.open(cnt + 1), 2);
             }, (log) => {
                 this.log(log);
             }, (err) => {
