@@ -57,7 +57,7 @@ export class Smappee extends Base {
 
 
   constructor(system: System, debug: boolean, log: LogFunction, alertSwitch?: (type: SwitchType, plugNr: number) => void, dev = false) {
-    super("smappee" + (dev) ? "-dev" : "", debug, log);
+    super("smappee" + (dev ? "-dev" : ""), debug, log);
     this.readConfig();
     
     this.system = system;

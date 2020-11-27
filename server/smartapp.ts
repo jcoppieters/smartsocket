@@ -53,7 +53,7 @@ export class SmartApp extends WebApp {
 
 
   constructor(system: System, smappee: Smappee, platform: Platform, log?: LogFunction, dev = false) {
-    super("smartapp" + (dev) ? "-dev" : "", log);
+    super("smartapp" + (dev ? "-dev" : ""), log);
     somfy.setlogger(log);
 
     this.readConfig();

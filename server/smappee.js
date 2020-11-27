@@ -44,7 +44,7 @@ const base_1 = require("./base");
 */
 class Smappee extends base_1.Base {
     constructor(system, debug, log, alertSwitch, dev = false) {
-        super("smappee" + (dev) ? "-dev" : "", debug, log);
+        super("smappee" + (dev ? "-dev" : ""), debug, log);
         this.readConfig();
         this.system = system;
         this.alertSwitch = alertSwitch;
