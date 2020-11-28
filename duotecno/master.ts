@@ -243,7 +243,10 @@ export class Master extends Base {
         } else {
           this.log("end -> socket got disconnected -> trying to reopen (" + cnt + ") ###############");
           // try to reopen
-          setTimeout(() => this.open(cnt+1), 2);
+          //setTimeout(() => 
+          //  this.open(cnt+1).then(() => 
+          //  this.login()).then(() => 
+          //  this.log("logged in on: " + this.getAddress())), 2);
         }
         this.closing = false;
       },
