@@ -16,6 +16,7 @@ export class Master extends Base {
 
   public isOpen: boolean;
   public isLoggedIn: boolean;
+  private closing: boolean;
   private resolveLogin = null;
   private buffer: string;
 
@@ -164,6 +165,7 @@ export class Master extends Base {
     this.socket = null;
     this.isOpen = false;
     this.isLoggedIn = false;
+    this.closing = false;
   
     // incoming data
     this.buffer = "";
@@ -236,9 +238,14 @@ export class Master extends Base {
       (end) => {
         this.isOpen = false;
         this.isLoggedIn = false;
-        this.log("end -> socket got disconnected -> try to reopen (" + cnt + ")");
-        // try to reopen
-        setTimeout(() => this.open(cnt+1), 2);
+        if (this.closing) {
+          this.log("end -> socket got closed as requested");
+        } else {
+          this.log("end -> socket got disconnected -> trying to reopen (" + cnt + ") ###############");
+          // try to reopen
+          setTimeout(() => this.open(cnt+1), 2);
+        }
+        this.closing = false;
       },
       (log) => {
         this.log(log);
@@ -248,6 +255,7 @@ export class Master extends Base {
       }
     );
     this.isOpen = true;
+    this.closing = false;
     this.log("master opened -> " + this.config.address);
   }
 
@@ -255,6 +263,7 @@ export class Master extends Base {
     if (this.isOpen) {
       const message = Protocol.buildDisconnect();
       try {
+        this.closing = true;
         await this.send(message);  
         // server will close the socket, no need to call socket.close()
 

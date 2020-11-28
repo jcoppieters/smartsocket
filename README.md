@@ -136,6 +136,10 @@ switch =>
 - removed: logicalReqNodeAddress (never used)
 - removed test configs from repo
 
+## v5.6.8/9
+- trying to fix connection loss
+
+
 ### Todo
 - setup openstack server
 
