@@ -13,6 +13,7 @@ export class Master extends Base {
   public nrNodes: number;
   public schedule: number;
   public date: Date;
+  public lastHeartbeat: Date;
 
   public isOpen: boolean;
   public isLoggedIn: boolean;
@@ -231,6 +232,8 @@ export class Master extends Base {
   /* Communication */
   /* ************* */
   async open(cnt = 1) {
+    let beater;
+
     this.socket = await getSocket( this.config.address, this.config.port,
       (msg) => { 
         this.handleData(msg);
@@ -238,8 +241,13 @@ export class Master extends Base {
       (end) => {
         this.isOpen = false;
         this.isLoggedIn = false;
+
+        // stop sending heartbeats
+        clearInterval(beater);
+
         if (this.closing) {
           this.log("end -> socket got closed as requested");
+          this.closing = false;
         } else {
           this.log("end -> socket got disconnected -> trying to reopen (" + cnt + ") ###############");
           // try to reopen
@@ -248,7 +256,6 @@ export class Master extends Base {
           //  this.login()).then(() => 
           //  this.log("logged in on: " + this.getAddress())), 2);
         }
-        this.closing = false;
       },
       (log) => {
         this.log(log);
@@ -260,6 +267,11 @@ export class Master extends Base {
     this.isOpen = true;
     this.closing = false;
     this.log("master opened -> " + this.config.address);
+
+    // setup a heartbeat
+    beater = setInterval(() => {
+      this.send(Protocol.buildHeartbeat());
+    }, 30 * 1000);
   }
 
   async close() {
@@ -267,6 +279,7 @@ export class Master extends Base {
       const message = Protocol.buildDisconnect();
       try {
         this.closing = true;
+        this.log("master closing -> " + this.config.address);
         await this.send(message);  
         // server will close the socket, no need to call socket.close()
 
@@ -337,6 +350,9 @@ export class Master extends Base {
       } else if (next.cmd === Rec.Info) {
         this.receiveInfo(next);
 
+      } else if (next.cmd === Rec.HeartbeatStatus) {
+        this.receiveHeartbeat(next.message);
+
       } else if (next.cmd === Rec.ConnectStatus) {
         this.receiveLogin(next.message);
       
@@ -369,6 +385,10 @@ export class Master extends Base {
   ///////////////////
   // Info messages //
   ///////////////////
+
+  receiveHeartbeat(next: Message) {
+    this.lastHeartbeat = new Date();
+  }
 
   receiveInfo(next: CommRecord) {
     if (next.message[1] === Rec.DBInfo) {

@@ -139,6 +139,9 @@ switch =>
 ## v5.6.8/9
 - trying to fix connection loss
 
+## v5.6.10
+- add heartbeat to master to prevent connection loss
+
 
 ### Todo
 - setup openstack server

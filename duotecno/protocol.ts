@@ -74,6 +74,7 @@ export enum Rec {
   AudioStatus = 23,
   AudioExtendedStatus = 70,
   TimeDateStatus = 71,
+  HeartbeatStatus = 72,
   ScheduleStatus = 73,
 
   // return info from recDBInfo
@@ -648,6 +649,10 @@ export const Protocol = {
 
   buildDisconnect: function(): Message {
     return [Cmd.Login, reqDisconnect];
+  },
+
+  buildHeartbeat: function(): Message {
+    return [Cmd.Heartbeat, 1];
   },
 
 

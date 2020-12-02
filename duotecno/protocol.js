@@ -66,6 +66,7 @@ var Rec;
     Rec[Rec["AudioStatus"] = 23] = "AudioStatus";
     Rec[Rec["AudioExtendedStatus"] = 70] = "AudioExtendedStatus";
     Rec[Rec["TimeDateStatus"] = 71] = "TimeDateStatus";
+    Rec[Rec["HeartbeatStatus"] = 72] = "HeartbeatStatus";
     Rec[Rec["ScheduleStatus"] = 73] = "ScheduleStatus";
     // return info from recDBInfo
     Rec[Rec["Info"] = 64] = "Info";
@@ -552,6 +553,9 @@ exports.Protocol = {
     },
     buildDisconnect: function () {
         return [Cmd.Login, reqDisconnect];
+    },
+    buildHeartbeat: function () {
+        return [Cmd.Heartbeat, 1];
     },
     /////////////////////////////////////
     // Collect info of all found nodes //

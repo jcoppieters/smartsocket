@@ -208,13 +208,17 @@ class Master extends base_1.Base {
     /* ************* */
     open(cnt = 1) {
         return __awaiter(this, void 0, void 0, function* () {
+            let beater;
             this.socket = yield smartsocket_1.getSocket(this.config.address, this.config.port, (msg) => {
                 this.handleData(msg);
             }, (end) => {
                 this.isOpen = false;
                 this.isLoggedIn = false;
+                // stop sending heartbeats
+                clearInterval(beater);
                 if (this.closing) {
                     this.log("end -> socket got closed as requested");
+                    this.closing = false;
                 }
                 else {
                     this.log("end -> socket got disconnected -> trying to reopen (" + cnt + ") ###############");
@@ -224,7 +228,6 @@ class Master extends base_1.Base {
                     //  this.login()).then(() => 
                     //  this.log("logged in on: " + this.getAddress())), 2);
                 }
-                this.closing = false;
             }, (log) => {
                 this.log(log);
             }, (err) => {
@@ -233,6 +236,10 @@ class Master extends base_1.Base {
             this.isOpen = true;
             this.closing = false;
             this.log("master opened -> " + this.config.address);
+            // setup a heartbeat
+            beater = setInterval(() => {
+                this.send(protocol_1.Protocol.buildHeartbeat());
+            }, 30 * 1000);
         });
     }
     close() {
@@ -241,6 +248,7 @@ class Master extends base_1.Base {
                 const message = protocol_1.Protocol.buildDisconnect();
                 try {
                     this.closing = true;
+                    this.log("master closing -> " + this.config.address);
                     yield this.send(message);
                     // server will close the socket, no need to call socket.close()
                 }
@@ -308,6 +316,9 @@ class Master extends base_1.Base {
             else if (next.cmd === protocol_1.Rec.Info) {
                 this.receiveInfo(next);
             }
+            else if (next.cmd === protocol_1.Rec.HeartbeatStatus) {
+                this.receiveHeartbeat(next.message);
+            }
             else if (next.cmd === protocol_1.Rec.ConnectStatus) {
                 this.receiveLogin(next.message);
             }
@@ -336,6 +347,9 @@ class Master extends base_1.Base {
     ///////////////////
     // Info messages //
     ///////////////////
+    receiveHeartbeat(next) {
+        this.lastHeartbeat = new Date();
+    }
     receiveInfo(next) {
         if (next.message[1] === protocol_1.Rec.DBInfo) {
             this.receiveDBInfo(next.message);
