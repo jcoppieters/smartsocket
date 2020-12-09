@@ -800,19 +800,23 @@ export const Protocol = {
       // examples: On 50%: [69,0,NodeAddress,UnitAddress,6,1,0,50]
       //           Off:    [69,0,NodeAddress,UnitAddress,6,0,0,0] -> don't touch dimmer value
 
-      if (next.message[4] == 6) {
-        // ON/OFF
-        unit.status = next.message[5];
-
-      } else if ((next.message[4] == 7) && (next.message[5] == 1)) {
-        // PIR ON
+      // STATUS
+      if (((next.message[4] == 7) || (next.message[4] == 5)) && (next.message[5] == 1)) {
+        // PIR ON -- override status value with "2" (our PIR ON)
         unit.status = 2;
+
+      } else if ((next.message[4] < 8) || (next.message[4] == 10)) {
+        // ON/OFF messages, including sensor types (off/heating/cooling)
+        unit.status = next.message[5];
       }
 
-      // only change dim value when state = 1 (ON, PIR ON, DIM STOP)
-      if (next.message[5] === 1) {
+      // VALUE
+      // only change dim value when state = 1 (ON, PIR ON, DIM STOP) for Dimmers and IRTX + for any setpoint event
+      if ((((next.message[4] === 1) || (next.message[4] === 6) || (next.message[4] === 7)) && (next.message[5] === 1)) || 
+          (next.message[4] === 11)) {
         unit.value = next.message[6]*256 + next.message[7];
       }
+      
       this.debugger("received status - macro -> value=" + unit.value + " / status=" + unit.status);
     }
 

@@ -334,7 +334,8 @@ export class Master extends Base {
       return false;
 
     } else {
-      if ((next.cmd != Rec.TimeDateStatus) && (next.cmd != Rec.Sensor))
+      if ((next.cmd != Rec.TimeDateStatus) &&
+          (next.cmd != Rec.Sensor))
         this.log(recName(next.cmd) + " -> " + ((!next.message) ? 
           "--" : ((next.message instanceof Array) ? next.message.join(",") : next.message)));
 
@@ -360,7 +361,7 @@ export class Master extends Base {
         this.receiveSchedule(next.message);
 
       } else {
-        this.log("what to do with: " + next.message);
+        this.log("not handled: " + next.message);
 
       }
       return true;
