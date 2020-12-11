@@ -302,7 +302,8 @@ class Master extends base_1.Base {
             return false;
         }
         else {
-            if ((next.cmd != protocol_1.Rec.TimeDateStatus) && (next.cmd != protocol_1.Rec.Sensor))
+            if ((next.cmd != protocol_1.Rec.TimeDateStatus) &&
+                (next.cmd != protocol_1.Rec.Sensor))
                 this.log(protocol_1.recName(next.cmd) + " -> " + ((!next.message) ?
                     "--" : ((next.message instanceof Array) ? next.message.join(",") : next.message)));
             this.Q.do();
@@ -326,7 +327,7 @@ class Master extends base_1.Base {
                 this.receiveSchedule(next.message);
             }
             else {
-                this.log("what to do with: " + next.message);
+                this.log("not handled: " + next.message);
             }
             return true;
         }

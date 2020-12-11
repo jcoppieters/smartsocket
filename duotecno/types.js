@@ -421,6 +421,10 @@ exports.Sanitizers = {
         return info;
     }
 };
+// add dev entries for dev configs
+exports.Sanitizers["system-dev"] = exports.Sanitizers["system"];
+exports.Sanitizers["smartapp-dev"] = exports.Sanitizers["smartapp"];
+exports.Sanitizers["smappee-dev"] = exports.Sanitizers["smappee"];
 //////////////////////
 // Helper functions //
 //////////////////////

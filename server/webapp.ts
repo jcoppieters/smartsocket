@@ -318,7 +318,7 @@ export class WebApp extends Base {
 
     } else {
       return {status: 200, type: "text/html", 
-              data: "hello there ! " + context.method + ":" + context.request + "/" + context.action};
+              data: "hello there ! " + context.method + ":" + context.request + "/" + (context.action||"")};
     }
   }
 

@@ -32,7 +32,7 @@ class SocApp extends webapp_1.WebApp {
     doRequest(context) {
         return __awaiter(this, void 0, void 0, function* () {
             if (context.request === "") {
-                return this.serveFile("/index.html");
+                return this.serveFile(context, "/index.html");
             }
             else if (context.request === "log") {
                 return this.renderLog();
@@ -43,15 +43,15 @@ class SocApp extends webapp_1.WebApp {
                 return this.renderRestart();
             }
             else if (context.req.url === "/apple-touch-icon-precomposed.png") {
-                return this.serveFile("/assets/imgs/apple-touch-icon-precomposed.png");
+                return this.serveFile(context, "/assets/imgs/apple-touch-icon-precomposed.png");
             }
             else {
                 try {
-                    return this.serveFile(context.path);
+                    return this.serveFile(context, context.path);
                 }
                 catch (err) {
                     this.err("Error serving URL: " + context.req.url);
-                    return this.serveFile("/index.html");
+                    return this.serveFile(context, "/index.html");
                     // return this.notFound(context.req.url);
                 }
             }
@@ -64,10 +64,11 @@ class SocApp extends webapp_1.WebApp {
             wsServer.on('connection', this.handleClient.bind(this));
         });
     }
-    serveFile(fn) {
+    serveFile(context, fn) {
+        var _a, _b;
         const data = fs.readFileSync("www" + fn);
         const type = mime.lookup(fn) || "application/text";
-        this.log("Serving file: " + fn + " - " + type);
+        this.log("Serve - " + (((_b = (_a = context.req) === null || _a === void 0 ? void 0 : _a.socket) === null || _b === void 0 ? void 0 : _b.remoteAddress) || "no-remote") + ": " + fn + " - " + type);
         return { status: 200, data, type };
     }
     renderLog() {

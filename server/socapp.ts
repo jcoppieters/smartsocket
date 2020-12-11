@@ -29,7 +29,7 @@ export class SocApp extends WebApp {
 
   async doRequest(context: Context): Promise<HttpResponse> {
     if (context.request === "") {
-      return this.serveFile("/index.html");
+      return this.serveFile(context, "/index.html");
 
     } else if (context.request === "log") {
       return this.renderLog();
@@ -40,15 +40,15 @@ export class SocApp extends WebApp {
       return this.renderRestart();
 
     } else if (context.req.url === "/apple-touch-icon-precomposed.png") {
-      return this.serveFile("/assets/imgs/apple-touch-icon-precomposed.png");
+      return this.serveFile(context, "/assets/imgs/apple-touch-icon-precomposed.png");
       
     } else {
       try {
-        return this.serveFile(context.path);
+        return this.serveFile(context, context.path);
 
       } catch(err) {
         this.err("Error serving URL: " + context.req.url);
-        return this.serveFile("/index.html");
+        return this.serveFile(context, "/index.html");
         // return this.notFound(context.req.url);
       }
     }
@@ -62,10 +62,10 @@ export class SocApp extends WebApp {
     });
   }
 
-  serveFile(fn: string): HttpResponse {
+  serveFile(context: Context, fn: string): HttpResponse {
     const data = fs.readFileSync("www"+fn);
     const type = mime.lookup(fn) || "application/text";
-    this.log("Serving file: " + fn + " - " + type);
+    this.log("Serve - " + (context.req?.socket?.remoteAddress || "no-remote") + ": " + fn + " - " + type);
     return { status: 200, data, type };
   }
 

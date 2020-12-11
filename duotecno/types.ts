@@ -571,6 +571,12 @@ export const Sanitizers = {
 
 };
 
+// add dev entries for dev configs
+Sanitizers["system-dev"] = Sanitizers["system"];
+Sanitizers["smartapp-dev"] = Sanitizers["smartapp"];
+Sanitizers["smappee-dev"] = Sanitizers["smappee"];
+
+
 //////////////////////
 // Helper functions //
 //////////////////////
