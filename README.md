@@ -142,8 +142,12 @@ switch =>
 ## v5.6.10
 - add heartbeat to master to prevent connection loss
 
-## v.5.6.11
+## v5.6.11
 - fix PIR and other stuff like values for virtual units / macro's
+
+## v5.6.12
+- added logging for files
+- R2: added new version of the app v2.3.4 B2
 
 ### Todo
 - setup openstack server
