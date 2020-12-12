@@ -244,7 +244,7 @@ export class Master extends Base {
 
         if (this.closing) {
           // stop sending heartbeats
-          clearInterval(beater);
+          if (beater) { clearInterval(beater); beater = null; }
 
           this.log("end -> socket got closed as requested");
           this.closing = false;
@@ -273,7 +273,7 @@ export class Master extends Base {
         this.close();
       }
       this.send(Protocol.buildHeartbeat());
-    }, 30 * 1000);
+    }, kInterval);
   }
 
   async close() {

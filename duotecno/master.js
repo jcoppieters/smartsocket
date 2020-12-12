@@ -216,7 +216,10 @@ class Master extends base_1.Base {
                 this.isLoggedIn = false;
                 if (this.closing) {
                     // stop sending heartbeats
-                    clearInterval(beater);
+                    if (beater) {
+                        clearInterval(beater);
+                        beater = null;
+                    }
                     this.log("end -> socket got closed as requested");
                     this.closing = false;
                     this.lastHeartbeat = 0;
@@ -240,7 +243,7 @@ class Master extends base_1.Base {
                     this.close();
                 }
                 this.send(protocol_1.Protocol.buildHeartbeat());
-            }, 30 * 1000);
+            }, kInterval);
         });
     }
     close() {
