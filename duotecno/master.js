@@ -214,19 +214,15 @@ class Master extends base_1.Base {
             }, (end) => {
                 this.isOpen = false;
                 this.isLoggedIn = false;
-                // stop sending heartbeats
-                clearInterval(beater);
                 if (this.closing) {
+                    // stop sending heartbeats
+                    clearInterval(beater);
                     this.log("end -> socket got closed as requested");
                     this.closing = false;
+                    this.lastHeartbeat = 0;
                 }
                 else {
-                    this.log("end -> socket got disconnected -> trying to reopen (" + cnt + ") ###############");
-                    // try to reopen
-                    //setTimeout(() => 
-                    //  this.open(cnt+1).then(() => 
-                    //  this.login()).then(() => 
-                    //  this.log("logged in on: " + this.getAddress())), 2);
+                    this.log("end -> socket got unexpectedly disconnected -> hopefully the heartbeat will reopen ###############");
                 }
             }, (log) => {
                 this.log(log);
@@ -237,7 +233,12 @@ class Master extends base_1.Base {
             this.closing = false;
             this.log("master opened -> " + this.config.address);
             // setup a heartbeat
+            const kInterval = 30 * 1000;
             beater = setInterval(() => {
+                if (this.lastHeartbeat && ((new Date().getTime() - this.lastHeartbeat) > 2.5 * kInterval)) {
+                    this.log("Didn't receive a heartbeat in 2.5 times our interval -> try to close manually");
+                    this.close();
+                }
                 this.send(protocol_1.Protocol.buildHeartbeat());
             }, 30 * 1000);
         });
@@ -349,7 +350,7 @@ class Master extends base_1.Base {
     // Info messages //
     ///////////////////
     receiveHeartbeat(next) {
-        this.lastHeartbeat = new Date();
+        this.lastHeartbeat = new Date().getTime();
     }
     receiveInfo(next) {
         if (next.message[1] === protocol_1.Rec.DBInfo) {

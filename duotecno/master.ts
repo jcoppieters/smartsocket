@@ -13,7 +13,7 @@ export class Master extends Base {
   public nrNodes: number;
   public schedule: number;
   public date: Date;
-  public lastHeartbeat: Date;
+  public lastHeartbeat: number;
 
   public isOpen: boolean;
   public isLoggedIn: boolean;
@@ -242,19 +242,16 @@ export class Master extends Base {
         this.isOpen = false;
         this.isLoggedIn = false;
 
-        // stop sending heartbeats
-        clearInterval(beater);
-
         if (this.closing) {
+          // stop sending heartbeats
+          clearInterval(beater);
+
           this.log("end -> socket got closed as requested");
           this.closing = false;
+          this.lastHeartbeat = 0;
+
         } else {
-          this.log("end -> socket got disconnected -> trying to reopen (" + cnt + ") ###############");
-          // try to reopen
-          //setTimeout(() => 
-          //  this.open(cnt+1).then(() => 
-          //  this.login()).then(() => 
-          //  this.log("logged in on: " + this.getAddress())), 2);
+          this.log("end -> socket got unexpectedly disconnected -> hopefully the heartbeat will reopen ###############");
         }
       },
       (log) => {
@@ -269,7 +266,12 @@ export class Master extends Base {
     this.log("master opened -> " + this.config.address);
 
     // setup a heartbeat
+    const kInterval = 30 * 1000;
     beater = setInterval(() => {
+      if (this.lastHeartbeat && ((new Date().getTime() - this.lastHeartbeat) > 2.5 * kInterval)) {
+        this.log("Didn't receive a heartbeat in 2.5 times our interval -> try to close manually")
+        this.close();
+      }
       this.send(Protocol.buildHeartbeat());
     }, 30 * 1000);
   }
@@ -388,7 +390,7 @@ export class Master extends Base {
   ///////////////////
 
   receiveHeartbeat(next: Message) {
-    this.lastHeartbeat = new Date();
+    this.lastHeartbeat = new Date().getTime();
   }
 
   receiveInfo(next: CommRecord) {

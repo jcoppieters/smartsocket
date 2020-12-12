@@ -148,6 +148,7 @@ switch =>
 ## v5.6.12
 - added logging for files
 - R2: added new version of the app v2.3.4 B2
+- R3: keep heartbeat if socket closes unexpectedly
 
 ### Todo
 - setup openstack server
