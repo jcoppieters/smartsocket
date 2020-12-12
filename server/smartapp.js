@@ -90,6 +90,7 @@ class SmartApp extends webapp_1.WebApp {
         this.switches = this.config.switches.map(s => types_1.Sanitizers.switchConfig(s));
     }
     checkReady(context) {
+        this.log("ready: " + this.platform.ready);
         if (this.platform && !this.platform.ready) {
             context["notReady"] = true;
             context["notReadyMessage"] = "=== waiting >> found " + this.system.allActiveUnits().length + " units out of " + this.system.config.cunits.length + " selected after " +

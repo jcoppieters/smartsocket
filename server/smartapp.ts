@@ -102,6 +102,7 @@ export class SmartApp extends WebApp {
   }
 
   checkReady(context: Context) {
+    this.log("ready: " + this.platform.ready);
     if (this.platform && ! this.platform.ready) {
       context["notReady"] = true;
       context["notReadyMessage"] = "=== waiting >> found " + this.system.allActiveUnits().length + " units out of " + this.system.config.cunits.length + " selected after " +
