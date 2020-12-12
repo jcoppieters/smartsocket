@@ -9,4 +9,7 @@
       <li <%= (request === "switches") ? 'class="active"' : '' %></li><a href="/switches">Switches</a></li>
     </ul>
   </div>
+  <% if (notReady) { %>
+    <%= notReadyMessage %>
+  <% } %>
 </nav>

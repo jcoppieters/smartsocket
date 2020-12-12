@@ -89,6 +89,17 @@ class SmartApp extends webapp_1.WebApp {
         // copy switches from config
         this.switches = this.config.switches.map(s => types_1.Sanitizers.switchConfig(s));
     }
+    checkReady(context) {
+        if (this.platform && !this.platform.ready) {
+            context["notReady"] = true;
+            context["notReadyMessage"] = "=== waiting >> found " + this.system.allActiveUnits().length + " units out of " + this.system.config.cunits.length + " selected after " +
+                this.platform.startWaiting + " sec ===";
+        }
+        else {
+            context["notReady"] = false;
+            context["notReadyMessage"] = "";
+        }
+    }
     //////////////////////////////
     // Router                   //
     //////////////////////////////
@@ -97,6 +108,7 @@ class SmartApp extends webapp_1.WebApp {
             doRequest: { get: () => super.doRequest }
         });
         return __awaiter(this, void 0, void 0, function* () {
+            this.checkReady(context);
             if (context.request === "")
                 context.request = "masters";
             context["hasSmappee"] = !!this.smappee;

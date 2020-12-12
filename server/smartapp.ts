@@ -101,11 +101,24 @@ export class SmartApp extends WebApp {
     this.switches = this.config.switches.map(s => Sanitizers.switchConfig(s));
   }
 
+  checkReady(context: Context) {
+    if (this.platform && ! this.platform.ready) {
+      context["notReady"] = true;
+      context["notReadyMessage"] = "=== waiting >> found " + this.system.allActiveUnits().length + " units out of " + this.system.config.cunits.length + " selected after " +
+                                this.platform.startWaiting + " sec ===";
+    } else {
+      context["notReady"] = false;
+      context["notReadyMessage"] = "";
+    }
+  }
+
   //////////////////////////////
   // Router                   //
   //////////////////////////////
 
   async doRequest(context: Context): Promise<HttpResponse> {
+    this.checkReady(context);
+
     if (context.request === "") context.request= "masters";
     context["hasSmappee"] = !!this.smappee;
 
