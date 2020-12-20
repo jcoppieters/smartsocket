@@ -76,12 +76,12 @@
 
 <script>
   function setStatus(state, master, port, node, unit) {
-    if (typeof state === "boolean") state = (state) ? "Y" : "N";
+    if (typeof state === "boolean") state = (state) ? 1 : 0;
     ajax("http://<%= req.headers.host %>/units/set?master="+master+"&port="+port+"&node="+node+"&unit="+unit+"&value="+state, function(data){ 
     });
   }
   function press(state, master, port, node, unit) {
-    if (typeof state === "boolean") state = (state) ? "Y" : "N";
+    if (typeof state === "boolean") state = (state) ? 1 : 0;
     ajax("http://<%= req.headers.host %>/units/press?master="+master+"&port="+port+"&node="+node+"&unit="+unit+"&value="+state, function(data){ 
     });
   }

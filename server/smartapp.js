@@ -90,7 +90,7 @@ class SmartApp extends webapp_1.WebApp {
         this.switches = this.config.switches.map(s => types_1.Sanitizers.switchConfig(s));
     }
     checkReady(context) {
-        this.log("ready: " + this.platform.ready);
+        this.log("ready: " + (this.platform && this.platform.ready));
         if (this.platform && !this.platform.ready) {
             context["notReady"] = true;
             context["notReadyMessage"] = "=== waiting >> found " + this.system.allActiveUnits().length + " units out of " + this.system.config.cunits.length + " selected after " +
@@ -113,7 +113,14 @@ class SmartApp extends webapp_1.WebApp {
             if (context.request === "")
                 context.request = "masters";
             context["hasSmappee"] = !!this.smappee;
-            if (context.request === "files") {
+            if (context.nums[0]) {
+                // try number url node/unit/status
+            }
+            const res = yield this.tryNumURL(context);
+            if (res) {
+                return res;
+            }
+            else if (context.request === "files") {
                 return this.renderAssets(context);
             }
             else if (context.request === "images") {
@@ -140,6 +147,17 @@ class SmartApp extends webapp_1.WebApp {
             else {
                 return _super.doRequest.call(this, context);
             }
+        });
+    }
+    tryNumURL(context) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const node = context.nums[0];
+            const master = this.system.masters[0];
+            if ((!node) || (!master))
+                return null;
+            const unit = context.nums[1];
+            const state = context.nums[2];
+            return this.json(yield this.setState(master, node, unit, state));
         });
     }
     scrapeUnit(context, boundary) {
@@ -680,36 +698,36 @@ class SmartApp extends webapp_1.WebApp {
                 // mood click
                 yield unit.setState(true);
                 unit.value = false; // simulate push button
-                return { value: true };
+                return { node: nodeLogicalAddress, unit: unitLogicalAddress, value: true };
             }
             else if ((val === 0) || (val === 1)) {
                 // mood/input long clicks
                 yield unit.setState(val);
-                return { value: val };
+                return { node: nodeLogicalAddress, unit: unitLogicalAddress, value: val };
             }
             else if ((val === 3) || (val === 4) || (val === 5)) {
                 // switching motor
                 yield unit.setState(val);
-                return { value: yield unit.reqState() };
+                return { node: nodeLogicalAddress, unit: unitLogicalAddress, value: yield unit.reqState() };
             }
             return { message: "Strange press " + val };
         });
     }
-    setState(master, nodeLogicalAddress, unitLogicalAddress, val) {
+    setState(master, nodeLogicalAddress, unitLogicalAddress, value) {
         return __awaiter(this, void 0, void 0, function* () {
-            this.log("setState requested with node = " + nodeLogicalAddress + ", unit = " + unitLogicalAddress + " -> " + val);
-            if ((val === "Y") || (val === "N"))
-                val = (val === "Y");
+            this.log("setState requested with node = " + nodeLogicalAddress + ", unit = " + unitLogicalAddress + " -> " + value);
+            if ((value === "Y") || (value === "N"))
+                value = (value === "Y");
             else {
-                val = parseInt(val);
-                if (isNaN(val))
+                value = parseInt(value);
+                if (isNaN(value))
                     return { message: "Illegal value" };
             }
             let unit = this.system.findUnit(master, nodeLogicalAddress, unitLogicalAddress);
             if (!unit)
                 return { message: "Unit not found " + master.getName() + "/" + nodeLogicalAddress + "/" + unitLogicalAddress };
-            val = yield unit.setState(val);
-            return { value: val };
+            yield unit.setState(value);
+            return { node: nodeLogicalAddress, unit: unitLogicalAddress, value };
         });
     }
     //////////////////////////////

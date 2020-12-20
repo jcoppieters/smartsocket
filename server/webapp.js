@@ -56,6 +56,17 @@ class Context {
         this.request = parts[0];
         this.req = req;
         this.res = res;
+        this.nums = [0, 0, 0];
+        // check short urls with numbers a parts
+        const p1 = parseInt(this.request);
+        if (!isNaN(p1))
+            this.nums[0] = p1;
+        const p2 = parseInt(this.action);
+        if (!isNaN(p2))
+            this.nums[1] = p2;
+        const p3 = parseInt(this.id);
+        if (!isNaN(p3))
+            this.nums[2] = p3;
     }
     addr(a) {
         const parts = a.split(";");

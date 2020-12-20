@@ -102,7 +102,7 @@ export class SmartApp extends WebApp {
   }
 
   checkReady(context: Context) {
-    this.log("ready: " + this.platform.ready);
+    this.log("ready: " + (this.platform && this.platform.ready));
     if (this.platform && ! this.platform.ready) {
       context["notReady"] = true;
       context["notReadyMessage"] = "=== waiting >> found " + this.system.allActiveUnits().length + " units out of " + this.system.config.cunits.length + " selected after " +
@@ -123,7 +123,16 @@ export class SmartApp extends WebApp {
     if (context.request === "") context.request= "masters";
     context["hasSmappee"] = !!this.smappee;
 
-    if (context.request === "files") {
+    if (context.nums[0]) {
+      // try number url node/unit/status
+
+    }
+
+    const res = await this.tryNumURL(context);
+    if (res) {
+      return res;
+
+    } else if (context.request === "files") {
       return this.renderAssets(context);
 
     } else if (context.request === "images") {
@@ -152,6 +161,16 @@ export class SmartApp extends WebApp {
     }
   }
 
+  async tryNumURL(context: Context): Promise<HttpResponse> {
+    const node = context.nums[0];
+    const master = this.system.masters[0];
+    if ((!node) || (!master)) return null;
+
+    const unit = context.nums[1];
+    const state = context.nums[2];
+
+    return this.json(await this.setState(master, node, unit, state));
+  }
 
   scrapeUnit(context: Context, boundary: string): Action {
     context.getMaster("action");
@@ -718,35 +737,35 @@ export class SmartApp extends WebApp {
       // mood click
       await unit.setState(true);
       unit.value = false; // simulate push button
-      return { value: true };
+      return { node: nodeLogicalAddress, unit: unitLogicalAddress, value: true };
 
     } else if ((val === 0) || (val === 1)) {
       // mood/input long clicks
       await unit.setState(val);
-      return { value: val }
+      return { node: nodeLogicalAddress, unit: unitLogicalAddress, value: val }
 
     } else if ((val === 3) || (val === 4) || (val === 5)) {
       // switching motor
       await unit.setState(val);
-      return { value: await unit.reqState() };
+      return { node: nodeLogicalAddress, unit: unitLogicalAddress, value: await unit.reqState() };
     }
     return { message: "Strange press " + val };
   }
 
-  async setState(master: Master, nodeLogicalAddress: number, unitLogicalAddress: number, val: any) {
-    this.log("setState requested with node = " + nodeLogicalAddress + ", unit = " + unitLogicalAddress + " -> " + val);
+  async setState(master: Master, nodeLogicalAddress: number, unitLogicalAddress: number, value: any) {
+    this.log("setState requested with node = " + nodeLogicalAddress + ", unit = " + unitLogicalAddress + " -> " + value);
 
-    if ((val === "Y") || (val === "N"))
-      val = (val === "Y")
+    if ((value === "Y") || (value === "N"))
+      value = (value === "Y")
     else {
-      val = parseInt(val);
-      if (isNaN(val)) return { message: "Illegal value" };
+      value = parseInt(value);
+      if (isNaN(value)) return { message: "Illegal value" };
     }
     let unit = this.system.findUnit(master, nodeLogicalAddress, unitLogicalAddress);
     if (! unit) return { message: "Unit not found " + master.getName() + "/" + nodeLogicalAddress + "/" + unitLogicalAddress };
 
-    val = await unit.setState(val);
-    return { value: val };
+    await unit.setState(value);
+    return { node: nodeLogicalAddress, unit: unitLogicalAddress, value };
   }
 
   

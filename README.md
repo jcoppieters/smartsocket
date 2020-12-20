@@ -150,6 +150,7 @@ switch =>
 - R2: added new version of the app v2.3.4 B2
 - R3: keep heartbeat if socket closes unexpectedly
 - R4: added not ready message
+- R5: support for short url's  /node/unit/value
 
 ### Todo
 - setup openstack server
