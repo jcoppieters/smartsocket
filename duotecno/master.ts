@@ -25,6 +25,7 @@ export class Master extends Base {
   
   config: MasterConfig;
   private socket: SmartSocket;
+  private beater;
 
   // command was sent, no response received yet
 
@@ -232,7 +233,10 @@ export class Master extends Base {
   /* Communication */
   /* ************* */
   async open(cnt = 1) {
-    let beater;
+    // open socket, but for some reason there is still a heartbeat around???
+    if (this.beater) { 
+      this.stopHeartbeat("We still had a heartbeat, but were asked for a new sockets ???");
+    }
 
     this.socket = await getSocket( this.config.address, this.config.port,
       (msg) => { 
@@ -244,7 +248,7 @@ export class Master extends Base {
 
         if (this.closing) {
           // stop sending heartbeats
-          if (beater) { clearInterval(beater); beater = null; }
+          if (this.beater) { clearInterval(this.beater); this.beater = null; }
 
           this.log("end -> socket got closed as requested");
           this.closing = false;
@@ -265,14 +269,25 @@ export class Master extends Base {
     this.closing = false;
     this.log("master opened -> " + this.config.address);
 
+   this.startHeartbeat();
+  }
+
+  stopHeartbeat(msg) {
+    clearInterval(this.beater); 
+    this.beater = null; 
+    if (msg)
+      this.log(msg);
+  }
+  startHeartbeat() {
     // setup a heartbeat
     const kInterval = 30 * 1000;
-    beater = setInterval(() => {
+    this.beater = setInterval(() => {
       if (this.lastHeartbeat && ((new Date().getTime() - this.lastHeartbeat) > 2.5 * kInterval)) {
-        this.log("Didn't receive a heartbeat in 2.5 times our interval -> try to close manually")
+        this.stopHeartbeat("Didn't receive a heartbeat in 2.5 times our interval -> try to close manually")
         this.close();
+      } else {
+        this.send(Protocol.buildHeartbeat());
       }
-      this.send(Protocol.buildHeartbeat());
     }, kInterval);
   }
 

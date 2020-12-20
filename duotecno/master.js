@@ -208,7 +208,10 @@ class Master extends base_1.Base {
     /* ************* */
     open(cnt = 1) {
         return __awaiter(this, void 0, void 0, function* () {
-            let beater;
+            // open socket, but for some reason there is still a heartbeat around???
+            if (this.beater) {
+                this.stopHeartbeat("We still had a heartbeat, but were asked for a new sockets ???");
+            }
             this.socket = yield smartsocket_1.getSocket(this.config.address, this.config.port, (msg) => {
                 this.handleData(msg);
             }, (end) => {
@@ -216,9 +219,9 @@ class Master extends base_1.Base {
                 this.isLoggedIn = false;
                 if (this.closing) {
                     // stop sending heartbeats
-                    if (beater) {
-                        clearInterval(beater);
-                        beater = null;
+                    if (this.beater) {
+                        clearInterval(this.beater);
+                        this.beater = null;
                     }
                     this.log("end -> socket got closed as requested");
                     this.closing = false;
@@ -235,16 +238,27 @@ class Master extends base_1.Base {
             this.isOpen = true;
             this.closing = false;
             this.log("master opened -> " + this.config.address);
-            // setup a heartbeat
-            const kInterval = 30 * 1000;
-            beater = setInterval(() => {
-                if (this.lastHeartbeat && ((new Date().getTime() - this.lastHeartbeat) > 2.5 * kInterval)) {
-                    this.log("Didn't receive a heartbeat in 2.5 times our interval -> try to close manually");
-                    this.close();
-                }
-                this.send(protocol_1.Protocol.buildHeartbeat());
-            }, kInterval);
+            this.startHeartbeat();
         });
+    }
+    stopHeartbeat(msg) {
+        clearInterval(this.beater);
+        this.beater = null;
+        if (msg)
+            this.log(msg);
+    }
+    startHeartbeat() {
+        // setup a heartbeat
+        const kInterval = 30 * 1000;
+        this.beater = setInterval(() => {
+            if (this.lastHeartbeat && ((new Date().getTime() - this.lastHeartbeat) > 2.5 * kInterval)) {
+                this.stopHeartbeat("Didn't receive a heartbeat in 2.5 times our interval -> try to close manually");
+                this.close();
+            }
+            else {
+                this.send(protocol_1.Protocol.buildHeartbeat());
+            }
+        }, kInterval);
     }
     close() {
         return __awaiter(this, void 0, void 0, function* () {
