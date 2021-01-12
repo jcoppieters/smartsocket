@@ -32,7 +32,7 @@
     "ejs": "^3.1.2",
     "mime-types": "^2.1.25",
     "mqtt": "^4.1.0",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "rpi-gpio": "^2.1.7",
     "typescript": "^4.0.5",
     "ws": "^7.2.1"
