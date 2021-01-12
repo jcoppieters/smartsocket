@@ -228,7 +228,7 @@ class Unit {
     calcExtendedType() {
         // General idea extention on DuoTecno's types
         //
-        // $,! -> kind of lock -> needs authentication
+        // $   -> kind of lock -> needs authentication
         // *   -> toggle
         //
         // Extension on Duotecno's types
