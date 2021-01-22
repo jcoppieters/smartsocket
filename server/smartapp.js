@@ -266,7 +266,7 @@ class SmartApp extends webapp_1.WebApp {
         let rule = Object.assign({}, types_1.kEmptyRule);
         // get the form values
         rule.type = context.getParam({ name: "type", type: "string", default: rule.type });
-        rule.channel = context.getParam({ name: "channel", type: "integer", default: rule.channel });
+        rule.channel = context.getParam({ name: "channel", type: "string", default: rule.channel });
         rule.low = context.getParam({ name: "low", type: "integer", default: rule.low });
         rule.high = context.getParam({ name: "high", type: "integer", default: rule.high });
         rule.actions[0] = this.scrapeUnit(context, "low");

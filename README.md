@@ -152,6 +152,12 @@ switch =>
 - R4: added not ready message
 - R5: support for short url's  /node/unit/value
 
+## v5.7.1
+- smappee channel rules now accept 3+2+7 format for a channel
+
+## v5.7.2
+- smappee now has "sun" rules: low == (production < consumption>)
+
 ### Todo
 - setup openstack server
 

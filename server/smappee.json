@@ -1,0 +1,1067 @@
+[
+{
+  "utcTimeStamp": 1610744701087,
+  "deviceUuid": "8ebeaca6-4105-47b6-b471-eb6970f0cd6f",
+  "serialNumber": "5010000631",
+  "serviceLocationUuid": "57e3e0d8-bb05-4b04-8662-1a9871998f3f",
+  "serviceLocationId": 39277,
+  "firmwareVersion": "V4.7.1",
+  "aggregationPeriodSeconds": 300,
+  "timeZone": "Europe/Brussels"
+},
+
+{
+  "utcTimeStamp": 1610744701956,
+  "gwSensors": [],
+  "switchSensors": []
+},
+
+{
+  "value": "OFF",
+  "since": 1611296368404
+},
+
+{
+  "utcTimeStamp": 1610744704280,
+  "dataProcessingSpecification": {
+    "serviceLocationId": 39277,
+    "phaseType": "THREE_DELTA",
+    "dataSources": [
+      {
+        "busAddress": {
+          "serialNumber": "5500000190",
+          "inputIndex": 0
+        },
+        "type": "SCT2_50A",
+        "reversed": false,
+        "version": 4,
+        "name": "CTHub-5500000190",
+        "nilm": false,
+        "measurementType": {
+          "commodity": "ELECTRICITY",
+          "measurementKind": "ACTIVE_POWER",
+          "unit": "WATT",
+          "index": 0,
+          "phase": "PHASEB",
+          "channel": 0,
+          "mRID": "1.37.64.38"
+        }
+      },
+      {
+        "busAddress": {
+          "serialNumber": "5500000190",
+          "inputIndex": 1
+        },
+        "type": "SCT2_50A",
+        "reversed": false,
+        "version": 4,
+        "name": "CTHub-5500000190",
+        "nilm": false,
+        "measurementType": {
+          "commodity": "ELECTRICITY",
+          "measurementKind": "ACTIVE_POWER",
+          "unit": "WATT",
+          "index": 0,
+          "phase": "PHASEA",
+          "channel": 0,
+          "mRID": "1.37.128.38"
+        }
+      },
+      {
+        "busAddress": {
+          "serialNumber": "5500000190",
+          "inputIndex": 2
+        },
+        "type": "SCT2_50A",
+        "reversed": false,
+        "version": 4,
+        "name": "CTHub-5500000190",
+        "nilm": true,
+        "measurementType": {
+          "commodity": "ELECTRICITY",
+          "measurementKind": "ACTIVE_POWER",
+          "unit": "WATT",
+          "index": 0,
+          "phase": "PHASEA",
+          "channel": 0,
+          "mRID": "1.37.128.38"
+        }
+      },
+      {
+        "busAddress": {
+          "serialNumber": "5500000190",
+          "inputIndex": 3
+        },
+        "type": "SCT2_50A",
+        "reversed": false,
+        "version": 4,
+        "name": "CTHub-5500000190",
+        "nilm": false,
+        "measurementType": {
+          "commodity": "ELECTRICITY",
+          "measurementKind": "ACTIVE_POWER",
+          "unit": "WATT",
+          "index": 0,
+          "phase": "PHASEB",
+          "channel": 0,
+          "mRID": "1.37.64.38"
+        }
+      },
+      {
+        "busAddress": {
+          "serialNumber": "5500000194",
+          "inputIndex": 1
+        },
+        "type": "SCT2_50A",
+        "reversed": false,
+        "version": 4,
+        "name": "CTHub-5500000194",
+        "nilm": false,
+        "measurementType": {
+          "commodity": "ELECTRICITY",
+          "measurementKind": "ACTIVE_POWER",
+          "unit": "WATT",
+          "index": 0,
+          "phase": "PHASEA",
+          "channel": 0,
+          "mRID": "1.37.128.38"
+        }
+      },
+      {
+        "busAddress": {
+          "serialNumber": "5500000194",
+          "inputIndex": 2
+        },
+        "type": "SCT2_50A",
+        "reversed": false,
+        "version": 4,
+        "name": "CTHub-5500000194",
+        "nilm": false,
+        "measurementType": {
+          "commodity": "ELECTRICITY",
+          "measurementKind": "ACTIVE_POWER",
+          "unit": "WATT",
+          "index": 0,
+          "phase": "PHASEB",
+          "channel": 0,
+          "mRID": "1.37.64.38"
+        }
+      },
+      {
+        "busAddress": {
+          "serialNumber": "5500000194",
+          "inputIndex": 0
+        },
+        "type": "SCT2_50A",
+        "reversed": true,
+        "version": 4,
+        "name": "CTHub-5500000194",
+        "nilm": false,
+        "measurementType": {
+          "commodity": "ELECTRICITY",
+          "measurementKind": "ACTIVE_POWER",
+          "unit": "WATT",
+          "index": 0,
+          "phase": "PHASEB",
+          "channel": 0,
+          "mRID": "1.37.64.38"
+        }
+      },
+      {
+        "busAddress": {
+          "serialNumber": "5500000198",
+          "inputIndex": 2
+        },
+        "type": "SCT2_50A",
+        "reversed": true,
+        "version": 4,
+        "name": "CTHub-5500000198",
+        "nilm": false,
+        "measurementType": {
+          "commodity": "ELECTRICITY",
+          "measurementKind": "ACTIVE_POWER",
+          "unit": "WATT",
+          "index": 0,
+          "phase": "PHASEB",
+          "channel": 0,
+          "mRID": "1.37.64.38"
+        }
+      },
+      {
+        "busAddress": {
+          "serialNumber": "5500000194",
+          "inputIndex": 3
+        },
+        "type": "SCT2_50A",
+        "reversed": false,
+        "version": 4,
+        "name": "CTHub-5500000194",
+        "nilm": false,
+        "measurementType": {
+          "commodity": "ELECTRICITY",
+          "measurementKind": "ACTIVE_POWER",
+          "unit": "WATT",
+          "index": 0,
+          "phase": "PHASEA",
+          "channel": 0,
+          "mRID": "1.37.128.38"
+        }
+      },
+      {
+        "busAddress": {
+          "serialNumber": "5500000198",
+          "inputIndex": 0
+        },
+        "type": "SCT2_50A",
+        "reversed": false,
+        "version": 4,
+        "name": "CTHub-5500000198",
+        "nilm": false,
+        "measurementType": {
+          "commodity": "ELECTRICITY",
+          "measurementKind": "ACTIVE_POWER",
+          "unit": "WATT",
+          "index": 0,
+          "phase": "PHASEB",
+          "channel": 0,
+          "mRID": "1.37.64.38"
+        }
+      },
+      {
+        "busAddress": {
+          "serialNumber": "5500000198",
+          "inputIndex": 1
+        },
+        "type": "SCT2_50A",
+        "reversed": true,
+        "version": 4,
+        "name": "CTHub-5500000198",
+        "nilm": false,
+        "measurementType": {
+          "commodity": "ELECTRICITY",
+          "measurementKind": "ACTIVE_POWER",
+          "unit": "WATT",
+          "index": 0,
+          "phase": "PHASEA",
+          "channel": 0,
+          "mRID": "1.37.128.38"
+        }
+      },
+      {
+        "busAddress": {
+          "serialNumber": "5500000198",
+          "inputIndex": 3
+        },
+        "type": "SCT2_50A",
+        "reversed": false,
+        "version": 4,
+        "name": "CTHub-5500000198",
+        "nilm": false,
+        "measurementType": {
+          "commodity": "ELECTRICITY",
+          "measurementKind": "ACTIVE_POWER",
+          "unit": "WATT",
+          "index": 0,
+          "phase": "PHASEC",
+          "channel": 0,
+          "mRID": "1.37.32.38"
+        }
+      }
+    ],
+    "measurements": [
+      {
+        "version": 2,
+        "type": "CT",
+        "name": "Zonnepanelen",
+        "formula": "$5500000190/0$",
+        "publishIndex": 0,
+        "flow": "PRODUCTION",
+        "connectionType": "GRID",
+        "publishedMeasurementTypes": [
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "ACTIVE_POWER",
+            "unit": "WATT",
+            "index": 0,
+            "phase": "PHASEB",
+            "channel": 0,
+            "mRID": "1.37.64.38"
+          },
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "REACTIVE_POWER",
+            "unit": "VOLTAMPEREREACTIVE",
+            "index": 0,
+            "phase": "PHASEB",
+            "channel": 0,
+            "mRID": "1.1003.64.63"
+          },
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "VOLTAGE",
+            "unit": "VOLT",
+            "index": 0,
+            "phase": "PHASEB",
+            "channel": 0,
+            "mRID": "1.158.64.29"
+          },
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "CURRENT",
+            "unit": "AMPERE",
+            "index": 0,
+            "phase": "PHASEB",
+            "channel": 0,
+            "mRID": "1.4.64.5"
+          }
+        ]
+      },
+      {
+        "version": 2,
+        "type": "CT",
+        "name": "Zonnepanelen",
+        "formula": "$5500000190/1$",
+        "publishIndex": 1,
+        "flow": "PRODUCTION",
+        "connectionType": "GRID",
+        "publishedMeasurementTypes": [
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "ACTIVE_POWER",
+            "unit": "WATT",
+            "index": 0,
+            "phase": "PHASEA",
+            "channel": 0,
+            "mRID": "1.37.128.38"
+          },
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "REACTIVE_POWER",
+            "unit": "VOLTAMPEREREACTIVE",
+            "index": 0,
+            "phase": "PHASEA",
+            "channel": 0,
+            "mRID": "1.1003.128.63"
+          },
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "VOLTAGE",
+            "unit": "VOLT",
+            "index": 0,
+            "phase": "PHASEA",
+            "channel": 0,
+            "mRID": "1.158.128.29"
+          },
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "CURRENT",
+            "unit": "AMPERE",
+            "index": 0,
+            "phase": "PHASEA",
+            "channel": 0,
+            "mRID": "1.4.128.5"
+          }
+        ]
+      },
+      {
+        "version": 2,
+        "type": "CT",
+        "name": "GridA",
+        "formula": "$5500000190/2$",
+        "publishIndex": 2,
+        "flow": "CONSUMPTION",
+        "connectionType": "GRID",
+        "publishedMeasurementTypes": [
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "ACTIVE_POWER",
+            "unit": "WATT",
+            "index": 0,
+            "phase": "PHASEA",
+            "channel": 0,
+            "mRID": "1.37.128.38"
+          },
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "REACTIVE_POWER",
+            "unit": "VOLTAMPEREREACTIVE",
+            "index": 0,
+            "phase": "PHASEA",
+            "channel": 0,
+            "mRID": "1.1003.128.63"
+          },
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "VOLTAGE",
+            "unit": "VOLT",
+            "index": 0,
+            "phase": "PHASEA",
+            "channel": 0,
+            "mRID": "1.158.128.29"
+          },
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "CURRENT",
+            "unit": "AMPERE",
+            "index": 0,
+            "phase": "PHASEA",
+            "channel": 0,
+            "mRID": "1.4.128.5"
+          }
+        ]
+      },
+      {
+        "version": 2,
+        "type": "CT",
+        "name": "GridB",
+        "formula": "$5500000190/3$",
+        "publishIndex": 3,
+        "flow": "CONSUMPTION",
+        "connectionType": "GRID",
+        "publishedMeasurementTypes": [
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "ACTIVE_POWER",
+            "unit": "WATT",
+            "index": 0,
+            "phase": "PHASEB",
+            "channel": 0,
+            "mRID": "1.37.64.38"
+          },
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "REACTIVE_POWER",
+            "unit": "VOLTAMPEREREACTIVE",
+            "index": 0,
+            "phase": "PHASEB",
+            "channel": 0,
+            "mRID": "1.1003.64.63"
+          },
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "VOLTAGE",
+            "unit": "VOLT",
+            "index": 0,
+            "phase": "PHASEB",
+            "channel": 0,
+            "mRID": "1.158.64.29"
+          },
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "CURRENT",
+            "unit": "AMPERE",
+            "index": 0,
+            "phase": "PHASEB",
+            "channel": 0,
+            "mRID": "1.4.64.5"
+          }
+        ]
+      },
+      {
+        "version": 2,
+        "type": "CT",
+        "name": "Tesla",
+        "formula": "$5500000194/1$",
+        "publishIndex": 4,
+        "flow": "CONSUMPTION",
+        "connectionType": "SUBMETER",
+        "publishedMeasurementTypes": [
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "ACTIVE_POWER",
+            "unit": "WATT",
+            "index": 0,
+            "phase": "PHASEA",
+            "channel": 0,
+            "mRID": "1.37.128.38"
+          },
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "REACTIVE_POWER",
+            "unit": "VOLTAMPEREREACTIVE",
+            "index": 0,
+            "phase": "PHASEA",
+            "channel": 0,
+            "mRID": "1.1003.128.63"
+          },
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "VOLTAGE",
+            "unit": "VOLT",
+            "index": 0,
+            "phase": "PHASEA",
+            "channel": 0,
+            "mRID": "1.158.128.29"
+          },
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "CURRENT",
+            "unit": "AMPERE",
+            "index": 0,
+            "phase": "PHASEA",
+            "channel": 0,
+            "mRID": "1.4.128.5"
+          }
+        ]
+      },
+      {
+        "version": 2,
+        "type": "CT",
+        "name": "Tesla",
+        "formula": "$5500000194/2$",
+        "publishIndex": 5,
+        "flow": "CONSUMPTION",
+        "connectionType": "SUBMETER",
+        "publishedMeasurementTypes": [
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "ACTIVE_POWER",
+            "unit": "WATT",
+            "index": 0,
+            "phase": "PHASEB",
+            "channel": 0,
+            "mRID": "1.37.64.38"
+          },
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "REACTIVE_POWER",
+            "unit": "VOLTAMPEREREACTIVE",
+            "index": 0,
+            "phase": "PHASEB",
+            "channel": 0,
+            "mRID": "1.1003.64.63"
+          },
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "VOLTAGE",
+            "unit": "VOLT",
+            "index": 0,
+            "phase": "PHASEB",
+            "channel": 0,
+            "mRID": "1.158.64.29"
+          },
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "CURRENT",
+            "unit": "AMPERE",
+            "index": 0,
+            "phase": "PHASEB",
+            "channel": 0,
+            "mRID": "1.4.64.5"
+          }
+        ]
+      },
+      {
+        "version": 2,
+        "type": "CT",
+        "name": "Carport",
+        "formula": "$5500000194/0$",
+        "publishIndex": 6,
+        "flow": "CONSUMPTION",
+        "connectionType": "SUBMETER",
+        "publishedMeasurementTypes": [
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "ACTIVE_POWER",
+            "unit": "WATT",
+            "index": 0,
+            "phase": "PHASEB",
+            "channel": 0,
+            "mRID": "1.37.64.38"
+          },
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "REACTIVE_POWER",
+            "unit": "VOLTAMPEREREACTIVE",
+            "index": 0,
+            "phase": "PHASEB",
+            "channel": 0,
+            "mRID": "1.1003.64.63"
+          },
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "VOLTAGE",
+            "unit": "VOLT",
+            "index": 0,
+            "phase": "PHASEB",
+            "channel": 0,
+            "mRID": "1.158.64.29"
+          },
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "CURRENT",
+            "unit": "AMPERE",
+            "index": 0,
+            "phase": "PHASEB",
+            "channel": 0,
+            "mRID": "1.4.64.5"
+          }
+        ]
+      },
+      {
+        "version": 2,
+        "type": "CT",
+        "name": "Verlichting beneden",
+        "formula": "$5500000198/2$",
+        "publishIndex": 7,
+        "flow": "CONSUMPTION",
+        "connectionType": "SUBMETER",
+        "publishedMeasurementTypes": [
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "ACTIVE_POWER",
+            "unit": "WATT",
+            "index": 0,
+            "phase": "PHASEB",
+            "channel": 0,
+            "mRID": "1.37.64.38"
+          },
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "REACTIVE_POWER",
+            "unit": "VOLTAMPEREREACTIVE",
+            "index": 0,
+            "phase": "PHASEB",
+            "channel": 0,
+            "mRID": "1.1003.64.63"
+          },
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "VOLTAGE",
+            "unit": "VOLT",
+            "index": 0,
+            "phase": "PHASEB",
+            "channel": 0,
+            "mRID": "1.158.64.29"
+          },
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "CURRENT",
+            "unit": "AMPERE",
+            "index": 0,
+            "phase": "PHASEB",
+            "channel": 0,
+            "mRID": "1.4.64.5"
+          }
+        ]
+      },
+      {
+        "version": 2,
+        "type": "CT",
+        "name": "Zwembad",
+        "formula": "$5500000194/3$",
+        "publishIndex": 8,
+        "flow": "CONSUMPTION",
+        "connectionType": "SUBMETER",
+        "publishedMeasurementTypes": [
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "ACTIVE_POWER",
+            "unit": "WATT",
+            "index": 0,
+            "phase": "PHASEA",
+            "channel": 0,
+            "mRID": "1.37.128.38"
+          },
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "REACTIVE_POWER",
+            "unit": "VOLTAMPEREREACTIVE",
+            "index": 0,
+            "phase": "PHASEA",
+            "channel": 0,
+            "mRID": "1.1003.128.63"
+          },
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "VOLTAGE",
+            "unit": "VOLT",
+            "index": 0,
+            "phase": "PHASEA",
+            "channel": 0,
+            "mRID": "1.158.128.29"
+          },
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "CURRENT",
+            "unit": "AMPERE",
+            "index": 0,
+            "phase": "PHASEA",
+            "channel": 0,
+            "mRID": "1.4.128.5"
+          }
+        ]
+      },
+      {
+        "version": 2,
+        "type": "CT",
+        "name": "Wasmachine",
+        "formula": "$5500000198/0$",
+        "publishIndex": 9,
+        "flow": "CONSUMPTION",
+        "connectionType": "SUBMETER",
+        "publishedMeasurementTypes": [
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "ACTIVE_POWER",
+            "unit": "WATT",
+            "index": 0,
+            "phase": "PHASEB",
+            "channel": 0,
+            "mRID": "1.37.64.38"
+          },
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "REACTIVE_POWER",
+            "unit": "VOLTAMPEREREACTIVE",
+            "index": 0,
+            "phase": "PHASEB",
+            "channel": 0,
+            "mRID": "1.1003.64.63"
+          },
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "VOLTAGE",
+            "unit": "VOLT",
+            "index": 0,
+            "phase": "PHASEB",
+            "channel": 0,
+            "mRID": "1.158.64.29"
+          },
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "CURRENT",
+            "unit": "AMPERE",
+            "index": 0,
+            "phase": "PHASEB",
+            "channel": 0,
+            "mRID": "1.4.64.5"
+          }
+        ]
+      },
+      {
+        "version": 2,
+        "type": "CT",
+        "name": "Droogkast",
+        "formula": "$5500000198/1$",
+        "publishIndex": 10,
+        "flow": "CONSUMPTION",
+        "connectionType": "SUBMETER",
+        "publishedMeasurementTypes": [
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "ACTIVE_POWER",
+            "unit": "WATT",
+            "index": 0,
+            "phase": "PHASEA",
+            "channel": 0,
+            "mRID": "1.37.128.38"
+          },
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "REACTIVE_POWER",
+            "unit": "VOLTAMPEREREACTIVE",
+            "index": 0,
+            "phase": "PHASEA",
+            "channel": 0,
+            "mRID": "1.1003.128.63"
+          },
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "VOLTAGE",
+            "unit": "VOLT",
+            "index": 0,
+            "phase": "PHASEA",
+            "channel": 0,
+            "mRID": "1.158.128.29"
+          },
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "CURRENT",
+            "unit": "AMPERE",
+            "index": 0,
+            "phase": "PHASEA",
+            "channel": 0,
+            "mRID": "1.4.128.5"
+          }
+        ]
+      },
+      {
+        "version": 2,
+        "type": "CT",
+        "name": "System D + Verwarming",
+        "formula": "$5500000198/3$",
+        "publishIndex": 11,
+        "flow": "CONSUMPTION",
+        "connectionType": "SUBMETER",
+        "publishedMeasurementTypes": [
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "ACTIVE_POWER",
+            "unit": "WATT",
+            "index": 0,
+            "phase": "PHASEC",
+            "channel": 0,
+            "mRID": "1.37.32.38"
+          },
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "REACTIVE_POWER",
+            "unit": "VOLTAMPEREREACTIVE",
+            "index": 0,
+            "phase": "PHASEC",
+            "channel": 0,
+            "mRID": "1.1003.32.63"
+          },
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "VOLTAGE",
+            "unit": "VOLT",
+            "index": 0,
+            "phase": "PHASEC",
+            "channel": 0,
+            "mRID": "1.158.32.29"
+          },
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "CURRENT",
+            "unit": "AMPERE",
+            "index": 0,
+            "phase": "PHASEC",
+            "channel": 0,
+            "mRID": "1.4.32.5"
+          }
+        ]
+      },
+      {
+        "version": 2,
+        "type": "SERVICE_LOCATION",
+        "formula": "",
+        "publishIndex": -1,
+        "flow": "UNKNOWN",
+        "connectionType": "UNKNOWN",
+        "publishedMeasurementTypes": [
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "ALWAYS_ON",
+            "unit": "WATT",
+            "index": 0,
+            "phase": "NOTAPPLICABLE",
+            "channel": 0,
+            "mRID": "1.1008.0.38"
+          },
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "LOADTOTAL_ACTIVE_POWER",
+            "unit": "WATT",
+            "index": 0,
+            "phase": "NOTAPPLICABLE",
+            "channel": 0,
+            "mRID": "1.1009.0.38"
+          },
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "PRODUCTIONTOTAL_ACTIVE_POWER",
+            "unit": "WATT",
+            "index": 0,
+            "phase": "NOTAPPLICABLE",
+            "channel": 0,
+            "mRID": "1.1010.0.38"
+          },
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "IMPORTTOTAL_ACTIVE_POWER",
+            "unit": "WATT",
+            "index": 0,
+            "phase": "NOTAPPLICABLE",
+            "channel": 0,
+            "mRID": "1.1011.0.38"
+          },
+          {
+            "commodity": "ELECTRICITY",
+            "measurementKind": "EXPORTTOTAL_ACTIVE_POWER",
+            "unit": "WATT",
+            "index": 0,
+            "phase": "NOTAPPLICABLE",
+            "channel": 0,
+            "mRID": "1.1012.0.38"
+          }
+        ]
+      }
+    ]
+  }
+},
+
+{
+  "utcTimeStamp": 1610744704040,
+  "switchActuators": [],
+  "smartplugActuators": [
+    {
+      "nodeId": 1,
+      "name": "Tester"
+    }
+  ],
+  "maximumAmpere": 0
+},
+
+{
+  "value": false
+},
+
+{
+  "totalPower": -174,
+  "totalReactivePower": 46,
+  "totalExportEnergy": 18478803600,
+  "totalImportEnergy": 138580527600,
+  "monitorStatus": 0,
+  "utcTimeStamp": 1611327109000,
+  "measuredFrequency": 50020624,
+  "channelPowers": [
+    {
+      "publishIndex": 0,
+      "formula": "$5500000190/0$",
+      "power": 237,
+      "exportEnergy": 49312800,
+      "importEnergy": 15684735600,
+      "phaseId": 1,
+      "current": 10,
+      "apparentPower": 241,
+      "cosPhi": 98
+    },
+    {
+      "publishIndex": 1,
+      "formula": "$5500000190/1$",
+      "power": -356,
+      "exportEnergy": 758426400,
+      "importEnergy": 15022443600,
+      "phaseId": 0,
+      "current": 18,
+      "apparentPower": 418,
+      "cosPhi": -85
+    },
+    {
+      "publishIndex": 2,
+      "formula": "$5500000190/2$",
+      "power": 28,
+      "exportEnergy": 10780765200,
+      "importEnergy": 20259932400,
+      "phaseId": 0,
+      "current": 7,
+      "apparentPower": 160,
+      "cosPhi": 17
+    },
+    {
+      "publishIndex": 3,
+      "formula": "$5500000190/3$",
+      "power": -83,
+      "exportEnergy": 5261864400,
+      "importEnergy": 40255650000,
+      "phaseId": 1,
+      "current": 13,
+      "apparentPower": 300,
+      "cosPhi": -27
+    },
+    {
+      "publishIndex": 4,
+      "formula": "$5500000194/1$",
+      "power": 0,
+      "exportEnergy": 1069200,
+      "importEnergy": 8195655600,
+      "phaseId": 0,
+      "current": 0,
+      "apparentPower": 0,
+      "cosPhi": 62
+    },
+    {
+      "publishIndex": 5,
+      "formula": "$5500000194/2$",
+      "power": 7,
+      "exportEnergy": 158400,
+      "importEnergy": 14310316800,
+      "phaseId": 1,
+      "current": 1,
+      "apparentPower": 20,
+      "cosPhi": 31
+    },
+    {
+      "publishIndex": 6,
+      "formula": "$5500000194/0$",
+      "power": -37,
+      "exportEnergy": 712890000,
+      "importEnergy": 4347169200,
+      "phaseId": 1,
+      "current": 2,
+      "apparentPower": 46,
+      "cosPhi": -79
+    },
+    {
+      "publishIndex": 7,
+      "formula": "$5500000198/2$",
+      "power": 2,
+      "exportEnergy": 176824800,
+      "importEnergy": 1666389600,
+      "phaseId": 1,
+      "current": 0,
+      "apparentPower": 6,
+      "cosPhi": 26
+    },
+    {
+      "publishIndex": 8,
+      "formula": "$5500000194/3$",
+      "power": -5,
+      "exportEnergy": 55580400,
+      "importEnergy": 13118234400,
+      "phaseId": 0,
+      "current": 0,
+      "apparentPower": 8,
+      "cosPhi": -62
+    },
+    {
+      "publishIndex": 9,
+      "formula": "$5500000198/0$",
+      "power": 11,
+      "exportEnergy": 516884400,
+      "importEnergy": 994172400,
+      "phaseId": 1,
+      "current": 1,
+      "apparentPower": 12,
+      "cosPhi": 88
+    },
+    {
+      "publishIndex": 10,
+      "formula": "$5500000198/1$",
+      "power": 6,
+      "exportEnergy": 105660000,
+      "importEnergy": 608558400,
+      "phaseId": 0,
+      "current": 0,
+      "apparentPower": 7,
+      "cosPhi": 86
+    },
+    {
+      "publishIndex": 11,
+      "formula": "$5500000198/3$",
+      "power": 79,
+      "exportEnergy": 59367600,
+      "importEnergy": 4117269600,
+      "phaseId": 2,
+      "current": 7,
+      "apparentPower": 165,
+      "cosPhi": 47
+    }
+  ],
+  "voltages": [
+    {
+      "voltage": 230,
+      "phaseId": 0
+    },
+    {
+      "voltage": 231,
+      "phaseId": 1
+    },
+    {
+      "voltage": 0,
+      "phaseId": 2
+    }
+  ]
+}]

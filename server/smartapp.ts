@@ -282,7 +282,7 @@ export class SmartApp extends WebApp {
 
     // get the form values
     rule.type = context.getParam({name: "type", type: "string", default: rule.type });
-    rule.channel = context.getParam({name: "channel", type: "integer", default: rule.channel });
+    rule.channel = context.getParam({name: "channel", type: "string", default: rule.channel });
 
     rule.low = context.getParam({name: "low", type: "integer", default: rule.low });
     rule.high = context.getParam({name: "high", type: "integer", default: rule.high });

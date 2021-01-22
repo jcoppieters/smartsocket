@@ -56,7 +56,11 @@
                      (rule.current == 0) ? 'low' : '--'
                     ))) %></a></td>
                 <td><a href="/smappee/rule/<%= inx %>"><%= ((rule.power) ? rule.power : '-') %></a></td>
-                <td><a href="/smappee/rule/<%= inx %>"><%= rule.low %>/<%= rule.high %></a></td>
+                <% if (rule.type == "power") { %>
+                  <td><a href="/smappee/rule/<%= inx %>"><%= rule.low %>/<%= rule.high %></a></td>
+                <% } else { %>
+                  <td>-</td>
+                <% } %>
               </tr>
             <% } %>
           </tbody>

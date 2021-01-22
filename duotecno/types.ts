@@ -194,7 +194,7 @@ export const kEmptyAction: Action = { ...kEmptyUnit, value: false };
 
 export interface Rule {
   type: string;
-  channel: number;
+  channel: string;
   low: number;
   high: number;
   current?: number;
@@ -202,7 +202,7 @@ export interface Rule {
   actions: Array<Action>;
 };
 export const kEmptyRule: Rule = { 
-  type: "power", channel: 0, low: 30, high: 900, 
+  type: "power", channel: "0", low: 30, high: 900, 
   actions: [{...kEmptyUnit, value: false}, {...kEmptyUnit, value: 50}, {...kEmptyUnit, value: true}] 
 };
 
@@ -396,7 +396,7 @@ export const Sanitizers = {
   },
 
   ruleConfig(rule): Rule {
-    rule.channel = makeInt(rule.channel);
+    rule.channel = (rule.channel ?? 0).toString(10);
     rule.low = makeInt(rule.low);
     rule.high = makeInt(rule.high);
 

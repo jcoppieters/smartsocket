@@ -25,14 +25,22 @@
         </h1>
 
         <div class="row rules">
+          <% if (rule.type == "power") { %>
             <p><%= rule.actions[0].name || "?" %>: (<%= hex(rule.actions[0].logicalNodeAddress) %>;<%= hex(rule.actions[0].logicalAddress) %>) = <%= rule.actions[0].value %> <b>&lt; <%= rule.low %>W</b></p>
             <p><b> &le;</b> <%= rule.actions[1].name || "?" %> (<%= hex(rule.actions[1].logicalNodeAddress) %>;<%= hex(rule.actions[1].logicalAddress) %>) = <%= rule.actions[1].value %> <b>&le; <%= rule.high %>W</b></p>
             <p><b> &lt;</b> <%= rule.actions[2].name || "?" %> (<%= hex(rule.actions[2].logicalNodeAddress) %>;<%= hex(rule.actions[2].logicalAddress) %>) = <%= rule.actions[2].value %></p>
-            </div>
+          <% } else { %>
+            <p>production &lt; consumption <b>=&gt;</b> <%= rule.actions[0].name || "?" %>: (<%= hex(rule.actions[0].logicalNodeAddress) %>;<%= hex(rule.actions[0].logicalAddress) %>) = <%= rule.actions[0].value %></p><br>
+            <p>production &ge; consumption <b>=&gt;</b> <%= rule.actions[2].name || "?" %>: (<%= hex(rule.actions[2].logicalNodeAddress) %>;<%= hex(rule.actions[2].logicalAddress) %>) = <%= rule.actions[2].value %></p>
+          <% } %>
+        </div>
           
         <div class="row">
           <div class="input-field col s12">
-            <input placeholder="power" id="type" name="type" type="text" value="<%= rule.type %>">
+            <select name="type" id="type">
+              <option value="power " <%= (rule.type == "power") ? "selected" : "" %>">power</option>
+              <option value="sun " <%= (rule.type == "sun") ? "selected" : "" %>">sun</option>
+            </select>
             <label for="type">Type</label>
           </div>
         </div>
@@ -113,7 +121,10 @@
           <strong>Values:</strong><br>
           - Units can be entered by their name or by "nodeNr;unitNr" (example: 0x1a;0xc2), all on the same master<br>
           - for moods: -1 = short puls, true/false or 1/0 = long toggle event<br>
-          - for dimmers: true/false = on/off, 0-99 = dimmer value
+          - for dimmers: true/false = on/off, 0-99 = dimmer value<br>
+          <strong>Sun rules:</strong><br>
+          - There is no "Mid Unit Action" and there are no "Thresholds"<br>
+          - The low rule is executed when production is less than consumption (otherwise the "high" rule)
         </div>
       </form>
       <%- include('/views/footer'); -%>

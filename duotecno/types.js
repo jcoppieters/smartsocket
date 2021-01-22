@@ -135,7 +135,7 @@ var SwitchType;
 exports.kEmptyAction = Object.assign(Object.assign({}, exports.kEmptyUnit), { value: false });
 ;
 exports.kEmptyRule = {
-    type: "power", channel: 0, low: 30, high: 900,
+    type: "power", channel: "0", low: 30, high: 900,
     actions: [Object.assign(Object.assign({}, exports.kEmptyUnit), { value: false }), Object.assign(Object.assign({}, exports.kEmptyUnit), { value: 50 }), Object.assign(Object.assign({}, exports.kEmptyUnit), { value: true })]
 };
 ;
@@ -254,7 +254,8 @@ exports.Sanitizers = {
             type: aSwitch.type, plug: aSwitch.plug, data: aSwitch.data, method: aSwitch.method });
     },
     ruleConfig(rule) {
-        rule.channel = makeInt(rule.channel);
+        var _a;
+        rule.channel = ((_a = rule.channel) !== null && _a !== void 0 ? _a : 0).toString(10);
         rule.low = makeInt(rule.low);
         rule.high = makeInt(rule.high);
         if (typeof rule.actions === "undefined")

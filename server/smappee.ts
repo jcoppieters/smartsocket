@@ -7,34 +7,17 @@ import { Base } from "./base";
 
 // Smappee MQTT implementation
 // Johan Coppieters, Jan 2019.
+//  v2: rules can now add multiple channels, Jan 2021
 //
-// Testing:
+// Testing Rspaberry:
 //  mqtt sub -t '#' -h '192.168.99.75' -v  => uid
 //  mqtt sub -t 'servicelocation/57e3e0d8-bb05-4b04-8662-1a9871998f3f/#' -h '192.168.99.54' -v
+//
+// Testing Mac:
 // /Users/johan/.nvm/versions/node/v10.16.0/bin/mqtt sub -t 'servicelocation/57e3e0d8-bb05-4b04-8662-1a9871998f3f/#' -h '192.168.99.54' -v
+//
+// see smappee.json for output
 
-/* realtime power:
-{ totalPower: 0,
-  totalReactivePower: 0,
-  totalExportEnergy: 0,
-  totalImportEnergy: 0,
-  monitorStatus: 0,
-  utcTimeStamp: 1548612512000,
-  channelPowers:
-   [ { publishIndex: 0,
-       formula: '$5500000194/3$',
-       power: 5,
-       exportEnergy: 0,
-       importEnergy: 989260,
-       phaseId: 0,
-       current: 0 } ],
-  voltages:
-   [ { voltage: 229, phaseId: 0 },
-     { voltage: 0, phaseId: 1 },
-     { voltage: 0, phaseId: 2 } ] }
-
-
-*/
 
 
 export class Smappee extends Base {
@@ -83,6 +66,7 @@ export class Smappee extends Base {
   
   subscribe(address: string, uid: string) {
     let client = mqtt.connect('mqtt:' + address);
+    this.log("connecting to " + 'mqtt:' + address);
  
     client.on('connect', () => {
       client.subscribe('servicelocation/' + uid + '/#', (err) => {
@@ -262,57 +246,104 @@ export class Smappee extends Base {
     }
   }
 
-  applyRules(message) {
-    // check power
-    if (typeof message.channelPowers === "object") {
-      message.channelPowers.forEach(power => {
-        this.checkPower(power);
-      });
-    }
-
-    // check other types
-  }
-
-  checkPower(power) {
-    this.rules.forEach( rule => {
-      if (rule.type === "power") {
-        this.checkPowerRule(power, rule);
-      }
-    });
-  }
-  checkPowerRule(power, rule: Rule) {    
-    if (power.publishIndex == rule.channel) {
-      let newCurrent;
-
-      if (power.power < rule.low) {
-        newCurrent = Boundaries.kLow;
-      } else if (power.power > rule.high) {
-        newCurrent = Boundaries.kHigh;
-      } else {
-        newCurrent = Boundaries.kMid;
-      }
-
-      rule.power = power.power;
-
-      if (newCurrent != rule.current) {
-        this.log("rule for channel: " + rule.channel + ", power = " + power.power + 
-                 ", low: " + rule.low + ", high: " + rule.high + 
-                 ", current: " + rule.current + " -> new: " + newCurrent);
-
-        // should be done after successful applyCommand...
-        rule.current = newCurrent;
-        if (newCurrent < rule.actions.length) {
-          this.applyCommand(rule.actions[newCurrent])
-            .then((val) => {this.log("## sent command -> " + rule.type + 
-                                     ", power = " + power.power + ", channel = " + rule.channel + 
-                                     " -> current = " + newCurrent + 
-                                     " (unit: " + rule.actions[newCurrent].name + ", value: " + rule.actions[newCurrent].value + ")");
-                            rule.current = newCurrent;})
-            .catch((e) => this.err(e));
+  getProdCons(message) {
+    let production = 0;
+    let consumption = 0;
+    message.channelPowers.forEach(p => {
+      const channel = this.channels[p.publishIndex];
+      if (channel) {
+        if (channel.flow == "PRODUCTION") {
+          production += channel.power;
+        } else {
+          consumption += channel.power;
         }
       }
+    });
+    return { production, consumption };
+  }
+
+  applyRules(message) {
+    const powerOf = (channel) => message.channelPowers.find(c => c.publishIndex == channel)?.power ?? 0
+    const { production, consumption } = this.getProdCons(message);
+
+    // for all rules
+    this.rules.forEach( rule => {
+      // if about power
+      if (rule.type === "power") {
+        // add all channels this rule refers to
+        const power = rule.channel.split("+").reduce((acc, cur) => acc + powerOf(parseInt(cur)), 0);
+        this.log("checking rule with channel = " + rule.channel + " = " + power + "W");
+        this.checkPowerRule(power, rule);
+
+      } else if (rule.type === "sun") {
+        this.log("checking sun: prod=" + production + ", cons=" + consumption)
+        this.checkSunRule(rule, production, consumption);
+      }
+      
+    });
+  }
+
+  checkSunRule(rule: Rule, production: number, consumption: number) {    
+    let newCurrent;
+
+    if (production < consumption) {
+      newCurrent = Boundaries.kLow;
+    } else if (consumption >= production) {
+      newCurrent = Boundaries.kHigh;
+    }
+    // no real need to store it, but perhaps it gets displayed
+    rule.power = production;
+
+    if (newCurrent != rule.current) {
+      this.log("triggered rule for channel: " + rule.channel + 
+               ", production = " +  production + ", consumption = " + consumption +
+               ", current: " + rule.current + " -> new: " + newCurrent);
+
+      // should be done after successful applyCommand...
+      rule.current = newCurrent;
+      if (newCurrent < rule.actions.length) {
+        this.applyCommand(rule.actions[newCurrent])
+          .then((val) => {this.log("## sent command -> " + rule.type + 
+                                    ", production = " +  production + ", consumption = " + consumption + ", channel = " + rule.channel + 
+                                    " -> current = " + newCurrent + 
+                                    " (unit: " + rule.actions[newCurrent].name + ", value: " + rule.actions[newCurrent].value + ")");
+                          rule.current = newCurrent;})
+          .catch((e) => this.err(e));
+      }
     }
   }
+  checkPowerRule(power: number, rule: Rule) {    
+    let newCurrent;
+
+    if (power < rule.low) {
+      newCurrent = Boundaries.kLow;
+    } else if (power > rule.high) {
+      newCurrent = Boundaries.kHigh;
+    } else {
+      newCurrent = Boundaries.kMid;
+    }
+
+    rule.power = power;
+
+    if (newCurrent != rule.current) {
+      this.log("triggered rule for channel: " + rule.channel + ", power = " + power + 
+                ", low: " + rule.low + ", high: " + rule.high + 
+                ", current: " + rule.current + " -> new: " + newCurrent);
+
+      // should be done after successful applyCommand...
+      rule.current = newCurrent;
+      if (newCurrent < rule.actions.length) {
+        this.applyCommand(rule.actions[newCurrent])
+          .then((val) => {this.log("## sent command -> " + rule.type + 
+                                    ", power = " + power + ", channel = " + rule.channel + 
+                                    " -> current = " + newCurrent + 
+                                    " (unit: " + rule.actions[newCurrent].name + ", value: " + rule.actions[newCurrent].value + ")");
+                          rule.current = newCurrent;})
+          .catch((e) => this.err(e));
+      }
+    }
+  }
+
   async applyCommand(action: Action) {
     const unit = this.system.findUnit(this.system.findMaster(action.masterAddress, action.masterPort), action.logicalNodeAddress, action.logicalAddress);
     if (unit)
@@ -323,7 +354,7 @@ export class Smappee extends Base {
 
   updateRules() {
     // sort on channel.
-    this.rules.sort((a,b) => a.channel-b.channel);
+    this.rules.sort((a,b) => parseInt(a.channel)-parseInt(b.channel));
     // sanitize and copy all rules into the config
     this.rules.forEach((r, i) => this.config.rules[i] = Sanitizers.ruleConfig(r));
     this.writeConfig();
