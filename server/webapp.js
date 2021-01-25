@@ -74,15 +74,15 @@ class Context {
             logicalAddress: parseInt((parts.length > 1) ? parts[1] : "0", 16) };
     }
     parseAddress(suggestion) {
-        const parts = suggestion.split(":");
-        if (parts.length > 1) {
-            this["masterAddress"] = parts[0];
-            this["masterPort"] = parseInt(parts[1]);
-            return true;
+        if (suggestion) {
+            const parts = suggestion.split(":");
+            if (parts.length > 1) {
+                this["masterAddress"] = parts[0];
+                this["masterPort"] = parseInt(parts[1]);
+                return true;
+            }
         }
-        else {
-            return false;
-        }
+        return false;
     }
     getMaster(tryName, newAction) {
         const suggestion = this[tryName] || this.params[tryName];
@@ -286,8 +286,10 @@ class WebApp extends base_1.Base {
             data: "<html><head><title>File " + filename + " not found</title></head><body>These are not the droids your are looking for</body></html>"
         };
     }
-    error(context, msg = "") {
-        return {
+    error(context, msg = "", json = false) {
+        return json ? {
+            status: 202, type: "json/application", data: '{"error": "' + msg + '"}'
+        } : {
             status: 202, type: "text/html",
             data: "<html><head><title>Error in " + context.request + "/" + context.action + "</title></head>" +
                 "<body><h1>Error</h1>During " + context.method + " of " + context.request + "/" + context.action + " :</br>" + msg + "</body></html>"

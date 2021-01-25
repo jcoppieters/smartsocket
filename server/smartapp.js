@@ -66,6 +66,7 @@ class SmartApp extends webapp_1.WebApp {
         this.platform = platform;
         // when all masters are loaded -> attach units to the switches
         this.system.emitter.on('ready', this.initSwitchUnits.bind(this));
+        this.addFile("unitList", "./server/views/unit-list.ejs", "application/json");
         this.addFile("masterList", "./server/views/master-list.ejs", "text/html");
         this.addFile("masterDetail", "./server/views/master-detail.ejs", "text/html");
         this.addFile("nodeDetail", "./server/views/node-details.ejs", "text/html");
@@ -157,7 +158,10 @@ class SmartApp extends webapp_1.WebApp {
                 return null;
             const unit = context.nums[1];
             const state = context.nums[2];
-            return this.json(yield this.setState(master, node, unit, state));
+            if (typeof state === "undefined")
+                return this.json(yield this.getState(master, node, unit));
+            else
+                return this.json(yield this.setState(master, node, unit, state));
         });
     }
     scrapeUnit(context, boundary) {
@@ -565,6 +569,12 @@ class SmartApp extends webapp_1.WebApp {
                 if (context.action === "new") {
                     return this.ejs("masterDetail", context, { config: types_1.Sanitizers.masterConfig(null) });
                 }
+                else if (context.action === "list") {
+                    return this.ejs("unitList", context, { masters: this.system.masters });
+                }
+                else if (context.action === "services") {
+                    return this.serviceList(context);
+                }
                 else if (context.action === "edit") {
                     context.getMaster("id");
                     const master = this.system.findMaster(context["masterAddress"], context["masterPort"]);
@@ -593,6 +603,15 @@ class SmartApp extends webapp_1.WebApp {
                 message = e.toString();
             }
             return this.ejs("masterList", context, { masters: this.system.masters, message });
+        });
+    }
+    serviceList(context) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let units = this.system.allActiveUnits();
+            for (let u of units) {
+                yield u.node.master.requestUnitStatus(u);
+            }
+            return this.ejs("unitList", context, { services: this.system.allActiveUnits() });
         });
     }
     updateNodes(master, nodes, params) {
@@ -631,11 +650,22 @@ class SmartApp extends webapp_1.WebApp {
                 return this.doRequest(context);
             }
             else if (context.action === "set") {
+                if (!master)
+                    return this.error(context, "master not found", true);
                 const { logicalNodeAddress, logicalAddress } = context.getUnit();
                 const response = yield this.setState(master, logicalNodeAddress, logicalAddress, context.getParam(kValue));
                 return this.json(response);
             }
+            else if (context.action === "get") {
+                if (!master)
+                    return this.error(context, "master not found", true);
+                const { logicalNodeAddress, logicalAddress } = context.getUnit();
+                const response = yield this.getState(master, logicalNodeAddress, logicalAddress);
+                return this.json(response);
+            }
             else if (context.action === "press") {
+                if (!master)
+                    return this.error(context, "master not found", true);
                 const { logicalNodeAddress, logicalAddress } = context.getUnit();
                 const response = yield this.doPress(master, logicalNodeAddress, logicalAddress, context.getParam(kIntValue));
                 return this.json(response);
@@ -728,6 +758,16 @@ class SmartApp extends webapp_1.WebApp {
                 return { message: "Unit not found " + master.getName() + "/" + nodeLogicalAddress + "/" + unitLogicalAddress };
             yield unit.setState(value);
             return { node: nodeLogicalAddress, unit: unitLogicalAddress, value };
+        });
+    }
+    getState(master, nodeLogicalAddress, unitLogicalAddress) {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.log("getState requested with node = " + nodeLogicalAddress + ", unit = " + unitLogicalAddress);
+            let unit = this.system.findUnit(master, nodeLogicalAddress, unitLogicalAddress);
+            if (!unit)
+                return { message: "Unit not found " + master.getName() + "/" + nodeLogicalAddress + "/" + unitLogicalAddress };
+            yield master.requestUnitStatus(unit);
+            return { node: nodeLogicalAddress, unit: unitLogicalAddress, value: unit.value, status: unit.status, active: unit.active };
         });
     }
     //////////////////////////////

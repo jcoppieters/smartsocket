@@ -1,0 +1,47 @@
+<% if (typeof masters != "undefined") { %>
+{ masters: [
+  <% let m = 0; for (master of masters) { m++; %>{
+    "address": "<%= master.getAddress() %>",
+    "port": <%= master.getPort() %>,
+    "nodes": [
+    <% let n = 0; for (let node of master.nodes) { n++; %>{
+      "node": <%= node.logicalAddress %>,
+      "name": "<%= node.getName() %>",
+      "units": [
+      <% let u = 0; for (let unit of node.units) { u++; %>{
+        "unit": <%= unit.logicalAddress %>,
+        "name": "<%= unit.getName() %>",
+        "display": "<%= unit.getDisplayName() %>",
+        "kind": "<%= unit.typeName() %>",
+        "type": <%= unit.extendedType %>,
+        "active": <%= unit.active %>     
+      <%= (u == node.units.length) ? "}" : "}," %>
+      <% } %>
+      ]
+    <%= (n == master.nodes.length) ? "}" : "}," %>
+    <% } %>
+    ]
+  <%= (m == masters.length) ? "}" : "}," %>
+  <% } %>
+  ]
+}
+
+<% } else { %>
+
+{ "services": [
+  <% let u = 0; for (let unit of services) { u++; %>{
+    "address": "<%= unit.node.master.getAddress() %>",
+    "port": <%= unit.node.master.getPort() %>,
+    "node": <%= unit.node.logicalAddress %>,
+    "unit": <%= unit.logicalAddress %>,
+    "name": "<%= unit.getName() %>",
+    "display": "<%= unit.getDisplayName() %>",
+    "kind": "<%= unit.typeName() %>",
+    "type": <%= unit.extendedType %>,
+    "status": <%= unit.status %>,
+    "value": <%= unit.value %>     
+  <%= (u == services.length) ? "}" : "}," %>
+  <% } %>
+  ]  
+}
+<% } %>

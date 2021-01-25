@@ -112,14 +112,15 @@ export class Context {
   }
 
   parseAddress(suggestion): boolean  {
-    const parts = suggestion.split(":");
-    if (parts.length > 1) {
-      this["masterAddress"] = parts[0];
-      this["masterPort"] = parseInt(parts[1]);
-      return true;
-    } else {
-      return false;
+    if (suggestion) {
+      const parts = suggestion.split(":");
+      if (parts.length > 1) {
+        this["masterAddress"] = parts[0];
+        this["masterPort"] = parseInt(parts[1]);
+        return true;
+      }
     }
+    return false;
   }
 
   getMaster(tryName: string, newAction?: string) {
@@ -339,8 +340,10 @@ export class WebApp extends Base {
     };
   }
 
-  error(context: Context, msg = ""): HttpResponse {
-    return {
+  error(context: Context, msg = "", json = false): HttpResponse {
+    return json ? {
+      status: 202, type: "json/application", data: '{"error": "'+msg+'"}'
+    } : {
       status: 202, type: "text/html", 
       data: "<html><head><title>Error in " + context.request + "/" + context.action + "</title></head>" + 
             "<body><h1>Error</h1>During " + context.method + " of " + context.request + "/" + context.action + " :</br>" + msg + "</body></html>"

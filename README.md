@@ -158,6 +158,9 @@ switch =>
 ## v5.7.2
 - smappee now has "sun" rules: low == (production < consumption>)
 
+## v5.8.0
+- Added API calls /masters/list & services  /units/set & get
+
 ### Todo
 - setup openstack server
 

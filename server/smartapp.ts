@@ -74,6 +74,7 @@ export class SmartApp extends WebApp {
     // when all masters are loaded -> attach units to the switches
     this.system.emitter.on('ready', this.initSwitchUnits.bind(this));
 
+    this.addFile("unitList", "./server/views/unit-list.ejs", "application/json");
     this.addFile("masterList", "./server/views/master-list.ejs", "text/html");
     this.addFile("masterDetail", "./server/views/master-detail.ejs", "text/html");
     this.addFile("nodeDetail", "./server/views/node-details.ejs", "text/html");
@@ -169,7 +170,10 @@ export class SmartApp extends WebApp {
     const unit = context.nums[1];
     const state = context.nums[2];
 
-    return this.json(await this.setState(master, node, unit, state));
+    if (typeof state === "undefined")
+      return this.json(await this.getState(master, node, unit))
+    else
+      return this.json(await this.setState(master, node, unit, state));
   }
 
   scrapeUnit(context: Context, boundary: string): Action {
@@ -604,6 +608,12 @@ export class SmartApp extends WebApp {
       if (context.action === "new") {
         return this.ejs("masterDetail", context, { config: Sanitizers.masterConfig(null) });
 
+      } else if (context.action === "list") {
+        return this.ejs("unitList", context, { masters: this.system.masters });
+
+      } else if (context.action === "services") {
+        return this.serviceList(context);        
+
       } else if (context.action === "edit") {
         context.getMaster("id");
         const master = this.system.findMaster(context["masterAddress"], context["masterPort"]);
@@ -631,6 +641,14 @@ export class SmartApp extends WebApp {
       message = e.toString();
     }
     return this.ejs("masterList", context, { masters: this.system.masters, message });
+  }
+
+  async serviceList(context: Context) {
+    let units = this.system.allActiveUnits();
+    for (let u of units) {
+      await u.node.master.requestUnitStatus(u);
+    }
+    return this.ejs("unitList", context, { services: this.system.allActiveUnits() });
   }
 
   async updateNodes(master: Master, nodes, params) {
@@ -670,11 +688,19 @@ export class SmartApp extends WebApp {
       return this.doRequest(context);  
 
     } else if (context.action === "set") {
+      if (!master) return this.error(context, "master not found", true);
       const { logicalNodeAddress, logicalAddress } = context.getUnit();
       const response = await this.setState(master, logicalNodeAddress, logicalAddress, context.getParam(kValue));
       return this.json(response);
       
+    } else if (context.action === "get") {
+      if (!master) return this.error(context, "master not found", true);
+      const { logicalNodeAddress, logicalAddress } = context.getUnit();
+      const response = await this.getState(master, logicalNodeAddress, logicalAddress);
+      return this.json(response);
+      
     } else if (context.action === "press") {
+      if (!master) return this.error(context, "master not found", true);
       const { logicalNodeAddress, logicalAddress } = context.getUnit();
       const response = await this.doPress(master, logicalNodeAddress, logicalAddress, context.getParam(kIntValue));
       return this.json(response);
@@ -766,6 +792,16 @@ export class SmartApp extends WebApp {
 
     await unit.setState(value);
     return { node: nodeLogicalAddress, unit: unitLogicalAddress, value };
+  }
+
+  async getState(master: Master, nodeLogicalAddress: number, unitLogicalAddress: number) {
+    this.log("getState requested with node = " + nodeLogicalAddress + ", unit = " + unitLogicalAddress);
+
+    let unit = this.system.findUnit(master, nodeLogicalAddress, unitLogicalAddress);
+    if (! unit) return { message: "Unit not found " + master.getName() + "/" + nodeLogicalAddress + "/" + unitLogicalAddress };
+
+    await master.requestUnitStatus(unit);
+    return { node: nodeLogicalAddress, unit: unitLogicalAddress, value: unit.value, status: unit.status, active: unit.active };
   }
 
   
