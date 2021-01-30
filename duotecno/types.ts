@@ -90,6 +90,7 @@ export const kEmptyUnit: UnitDef = { masterAddress: "0.0.0.0", masterPort: 5001,
 
 export interface UnitConfig extends UnitDef {
   active: YN;                 // export / don't export to homebridge
+  used: YN;                   // load into the active units
   group: number;              // id of group
 };
 
@@ -494,6 +495,7 @@ export const Sanitizers = {
     this.unitDef(config);
 
     config.active = config.active || 'N';
+    config.used = config.used || config.active;
 
     if (typeof config.group === 'string') { config.group = parseInt(config.group); }
     config.group = config.group || 0;

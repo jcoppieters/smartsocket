@@ -163,7 +163,13 @@ switch =>
 
 ## v5.9.0
 - added extended type selection in master->node->unit->detail page (not yet tested !!) 
+
+## v5.9.1
 - added stubs for openHAB switch/dimmer/updown
+
+## v5.9.2
+- added active / used unit flag, allowing more units in the gateway, only those "actice" are sent to Homebridge
+
 
 ### Todo
 - setup openstack server

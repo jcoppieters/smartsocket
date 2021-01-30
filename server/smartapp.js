@@ -581,7 +581,7 @@ class SmartApp extends webapp_1.WebApp {
     //////////////////////////////
     doServices(context) {
         return __awaiter(this, void 0, void 0, function* () {
-            let units = this.system.allActiveUnits();
+            let units = this.system.allUsedUnits();
             for (let u of units) {
                 yield u.node.master.requestUnitStatus(u);
             }
@@ -728,6 +728,7 @@ class SmartApp extends webapp_1.WebApp {
         if (node) {
             node.units.forEach(unit => {
                 unit.active = (params["active_" + unit.logicalAddress] === "Y");
+                unit.used = unit.active || (params["used_" + unit.logicalAddress] === "Y");
                 unit.displayName = params["name_" + unit.logicalAddress];
                 unit.extendedType = parseInt(params["extended_" + unit.logicalAddress]);
             });

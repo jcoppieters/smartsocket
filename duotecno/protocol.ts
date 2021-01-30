@@ -165,6 +165,7 @@ export class Node {
 export class Unit {
   node: Node;
   active: boolean;
+  used: boolean;
   name: string;
   group: number = 0;
   index: number;

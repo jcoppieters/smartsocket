@@ -1,7 +1,7 @@
 <table>
   <thead>
     <tr>
-      <%- (edit) ? "<th>Active</th>" : "" %>
+      <%- (edit) ? "<th>Homekit</th><th>Used</th>" : "" %>
       <th>Name</th>
       <%- (edit) ? "<th>Display</th>" : "" %>
       <th>State</th>
@@ -13,17 +13,30 @@
   <% for (let unit of units) { %>
     <tr>
       <% if (edit) { %>
-        <td><label>
+        <td class="center">
+          <label>
             <input name="active_<%= unit.logicalAddress %>" type="checkbox" 
-                   class="<%= (unit.active === 'X') ? 'indeterminate' : 'filled-in' %>" 
-                   id="active_<%= unit.logicalAddress %>"   value="Y"
+                   class="filled-in" onclick="active(this, <%= unit.logicalAddress %>)"
+                   id="active_<%= unit.logicalAddress %>"  value="Y"
                    <%= (unit.active) ? 'checked' : '' %> />
+            <span></span>
+          </label>
+        </td><td><label>
+            <input name="used_<%= unit.logicalAddress %>" type="checkbox" 
+                   class="filled-in" 
+                   id="used_<%= unit.logicalAddress %>"  value="Y"
+                   <%= (unit.used) ? 'checked' : '' %> />
             <span></span>
         </label></td>
       <% } %>
       <td>
-        <span><%= (edit) ? unit.getName() : unit.getDisplayName() %></span>
-        <br><span class="grey-text"><small><%= unit.typeName() %> (<%= unit.type %>)
+        <% if (edit) { %>
+          <span><%= unit.getName() %></span>
+        <% } else { %>
+          <span class="<%= unit.active ? '':'used' %>"><%= unit.getDisplayName() %></span>
+        <% } %>
+
+        <br><span class="grey-text"><small><%= unit.typeName() %>
           (<%= hex(unit.node.logicalAddress) %>;<%= hex(unit.logicalAddress) %>) on 
            <% if (!edit) { %><a href="http://<%= req.headers.host %>/units/<%= unit.node.master.getAddress() %>:<%= unit.node.master.getPort() %>/<%= unit.node.logicalAddress %>"><%= unit.node.getName() %></a><% } else { %><%= unit.node.getName() %><% } %>
         </small></span>
@@ -101,6 +114,11 @@
 </table>
 
 <script>
+  function active(checkbox, adr) {
+    if (checkbox.checked) {
+      document.getElementById("used_"+adr).checked = true;
+    }
+  }
   function setStatus(state, master, port, node, unit) {
     if (typeof state === "boolean") state = (state) ? 1 : 0;
     ajax("http://<%= req.headers.host %>/units/set?master="+master+"&port="+port+"&node="+node+"&unit="+unit+"&value="+state, function(data){ 

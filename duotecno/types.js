@@ -349,6 +349,7 @@ exports.Sanitizers = {
         }
         this.unitDef(config);
         config.active = config.active || 'N';
+        config.used = config.used || config.active;
         if (typeof config.group === 'string') {
             config.group = parseInt(config.group);
         }

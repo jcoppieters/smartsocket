@@ -191,6 +191,7 @@ export class System extends Base {
       ;
       if (unitConfig) {
         item.active = (unitConfig.active === "Y");
+        item.used = (unitConfig.used === "Y");
         item.displayName = unitConfig.displayName || unitConfig.name;
         item.group = unitConfig.group;
       } else {
@@ -308,6 +309,13 @@ export class System extends Base {
       .filter(u => u.active);
   }
 
+  allUsedUnits(): Array<Unit> {
+    return this.masters
+      .reduce((acc, m) => acc.concat(m.nodes), [])
+      .reduce((acc, n) => acc.concat(n.units), [])
+      .filter(u => u.used);
+  }
+
   allMasters(doToMaster: (m: Master) => void) {
     this.masters.forEach(m => doToMaster(m));
   }
@@ -317,8 +325,8 @@ export class System extends Base {
   // Getting the current state of units and nodes //
   //////////////////////////////////////////////////
   updateSystem(dontTrigger: boolean = false) {
-    this.config.cunits = this.allActiveUnits()
-      .map((u: Unit) => { return { active: <YN>"Y", group: u.group, name: u.name, displayName: u.displayName, 
+    this.config.cunits = this.allUsedUnits()
+      .map((u: Unit) => { return { active: u.active ? "Y" : "N", used: <YN>"Y", group: u.group, name: u.name, displayName: u.displayName, 
                                    type: u.type, extendedType: u.extendedType,
                                    masterAddress: u.node.master.getAddress(), masterPort: u.node.master.getPort(), 
                                    logicalNodeAddress: u.node.logicalAddress, logicalAddress: u.logicalAddress}; });
