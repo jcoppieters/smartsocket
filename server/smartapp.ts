@@ -458,6 +458,15 @@ export class SmartApp extends WebApp {
       } else if (swtch.type === SwitchType.kHTTPUpDown) {
         this.httpUpDown(swtch);
 
+      } else if (swtch.type === SwitchType.kOhSwitch) {
+        this.ohSwitch(swtch);
+
+      } else if (swtch.type === SwitchType.kOhDimmer) {
+        this.ohDimmer(swtch);
+
+      } else if (swtch.type === SwitchType.kOhUpDown) {
+        this.ohUpDown(swtch);
+
       } else if (swtch.type === SwitchType.kSomfy) {
         this.somfy(swtch);
 
@@ -583,6 +592,28 @@ export class SmartApp extends WebApp {
     } catch(e) {
       this.log("** http error ** " + e.message + " **");
     }
+  }
+
+
+  //////////////
+  // open HAB //
+  //////////////
+  ohSwitch(swtch: Switch) {
+    const req = this.makeVariableURL(swtch.plug, !!swtch.unit.status, +swtch.unit.value);
+    this.log("OH-Switch(" + !!swtch.unit.status + ") -> " + req);
+    // this.wrequest(req);
+  }
+  ohDimmer(swtch: Switch) {
+    const req = this.makeVariableURL(swtch.plug, !!swtch.unit.status, +swtch.unit.value);
+    const data = this.makeVariableURL(swtch.data, !!swtch.unit.status, +swtch.unit.value);
+    this.log("OH-Dimmer(" + !!swtch.unit.status + "," + swtch.unit.value + ") -> " + req + " + " + data);
+    // this.wrequest(req);
+  }
+  ohUpDown(swtch: Switch) {
+    const req = this.makeVariableURL(swtch.plug, !!swtch.unit.status, +swtch.unit.value);
+    // 1=stopped, 2-closed, 3=opened, 4=closing, 5=opening
+    this.log("OH-UpDown(" + <number>swtch.unit.value + ") -> " + req);
+    // this.wrequest(req);
   }
 
 
@@ -735,7 +766,8 @@ export class SmartApp extends WebApp {
     if (node) {
       node.units.forEach(unit => {
         unit.active = (params["active_"+unit.logicalAddress] === "Y");
-        unit.displayName = (params["name_"+unit.logicalAddress]);
+        unit.displayName = params["name_"+unit.logicalAddress];
+        unit.extendedType = parseInt(params["extended_"+unit.logicalAddress]);
       });
       this.system.updateSystem(true); 
     }

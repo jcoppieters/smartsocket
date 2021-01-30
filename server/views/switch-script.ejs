@@ -2,7 +2,7 @@
 <script>
   function setStatus(inx, state, value) {
     console.log("setstatus " + inx + "/" + state + "/" + value);
-    if (typeof state === "boolean") state = (state) ? 1 : 0;
+    if ((typeof state === "boolean") || (typeof state === "number")) state = (state) ? "Y" : "N";
     ajax("http://<%= req.headers.host %>/switches/set/" + inx + "?state="+state+"&value="+value, function(data){
       console.log(data); 
     });

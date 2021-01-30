@@ -136,7 +136,7 @@ class Unit {
         this.resetTimer = null;
         this.node = node;
         types_1.Sanitizers.unitInfo(params, this);
-        this.extendedType = this.calcExtendedType();
+        this.extendedType = this.extendedType || this.calcExtendedType();
         this.name = this.name || this.getSerialNr();
         // make a name for homekit, without the | but add § is 'specials' to add "sfeer", etc...
         // if the display name is empty make a N[nodeAdr]-U[unitAdr] name.

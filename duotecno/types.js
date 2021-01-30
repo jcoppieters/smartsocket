@@ -129,6 +129,9 @@ var SwitchType;
     SwitchType["kHTTPSwitch"] = "http";
     SwitchType["kHTTPDimmer"] = "httpdim";
     SwitchType["kHTTPUpDown"] = "httpupdown";
+    SwitchType["kOhSwitch"] = "oswitch";
+    SwitchType["kOhDimmer"] = "odimmer";
+    SwitchType["kOhUpDown"] = "oupdown";
     SwitchType["kSomfy"] = "somfy";
 })(SwitchType = exports.SwitchType || (exports.SwitchType = {}));
 ;
@@ -415,6 +418,7 @@ exports.Sanitizers = {
         info.logicalNodeAddress = info.logicalNodeAddress || 0;
         info.logicalAddress = info.logicalAddress || 0;
         info.type = info.type || UnitType.kNoType;
+        info.extendedType = info.extendedType || info.type;
         info.flags = info.flags || 0;
         if (into) {
             Object.keys(info).forEach(prop => into[prop] = info[prop]);

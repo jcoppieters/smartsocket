@@ -23,7 +23,7 @@
       <% } %>
       <td>
         <span><%= (edit) ? unit.getName() : unit.getDisplayName() %></span>
-        <br><span class="grey-text"><small><%= unit.typeName() %>
+        <br><span class="grey-text"><small><%= unit.typeName() %> (<%= unit.type %>)
           (<%= hex(unit.node.logicalAddress) %>;<%= hex(unit.logicalAddress) %>) on 
            <% if (!edit) { %><a href="http://<%= req.headers.host %>/units/<%= unit.node.master.getAddress() %>:<%= unit.node.master.getPort() %>/<%= unit.node.logicalAddress %>"><%= unit.node.getName() %></a><% } else { %><%= unit.node.getName() %><% } %>
         </small></span>
@@ -34,7 +34,33 @@
             <input name="name_<%= unit.logicalAddress %>" type="input" size="28"
                    id="name_<%= unit.logicalAddress %>" value="<%= unit.getDisplayName() %>"/>
             <span></span>
-        </label></td>
+        </label>
+        <% if (unit.type == 2) { %>
+          <select name="extended_<%= unit.logicalAddress %>" id="extended_<%= unit.logicalAddress %>">
+            <option value="2" <%= (unit.extendedType == '2') ? 'selected' : '' %>>Switch</option>
+            <option value="203" <%= (unit.extendedType == '203') ? 'selected' : '' %>>Lock</option>
+            <option value="101" <%= (unit.extendedType == '101') ? 'selected' : '' %>>Lightbulb</option>
+          </select>
+          <label for="type">Type</label>
+        <% } %>
+        <% if (unit.type == 8) { %>
+          <select name="extended_<%= unit.logicalAddress %>" id="extended_<%= unit.logicalAddress %>">
+            <option value="8" <%= (unit.extendedType == '8') ? 'selected' : '' %>>Switch motor</option>
+            <option value="201" <%= (unit.extendedType == '201') ? 'selected' : '' %>>Garagedoor</option>
+            <option value="202" <%= (unit.extendedType == '202') ? 'selected' : '' %>>Door</option>
+          </select>
+          <label for="type">Type</label>
+        <% } %>
+        <% if (unit.type == 7) { %>
+          <select name="extended_<%= unit.logicalAddress %>" id="extended_<%= unit.logicalAddress %>">
+            <option value="7" <%= (unit.extendedType == '7') ? 'selected' : '' %>>Mood</option>
+            <option value="204" <%= (unit.extendedType == '204') ? 'selected' : '' %>>Unlocker</option>
+            <option value="102" <%= (unit.extendedType == '102') ? 'selected' : '' %>>Condition</option>
+          </select>
+          <label for="type">Type</label>
+        <% } %>
+
+        </td>
       <% } %>
       <td>
         <% if ((unit.type == 1) || (unit.type == 2) || (unit.type == 101)) { %>

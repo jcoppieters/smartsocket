@@ -426,6 +426,15 @@ class SmartApp extends webapp_1.WebApp {
             else if (swtch.type === types_1.SwitchType.kHTTPUpDown) {
                 this.httpUpDown(swtch);
             }
+            else if (swtch.type === types_1.SwitchType.kOhSwitch) {
+                this.ohSwitch(swtch);
+            }
+            else if (swtch.type === types_1.SwitchType.kOhDimmer) {
+                this.ohDimmer(swtch);
+            }
+            else if (swtch.type === types_1.SwitchType.kOhUpDown) {
+                this.ohUpDown(swtch);
+            }
             else if (swtch.type === types_1.SwitchType.kSomfy) {
                 this.somfy(swtch);
             }
@@ -546,6 +555,26 @@ class SmartApp extends webapp_1.WebApp {
         catch (e) {
             this.log("** http error ** " + e.message + " **");
         }
+    }
+    //////////////
+    // open HAB //
+    //////////////
+    ohSwitch(swtch) {
+        const req = this.makeVariableURL(swtch.plug, !!swtch.unit.status, +swtch.unit.value);
+        this.log("OH-Switch(" + !!swtch.unit.status + ") -> " + req);
+        // this.wrequest(req);
+    }
+    ohDimmer(swtch) {
+        const req = this.makeVariableURL(swtch.plug, !!swtch.unit.status, +swtch.unit.value);
+        const data = this.makeVariableURL(swtch.data, !!swtch.unit.status, +swtch.unit.value);
+        this.log("OH-Dimmer(" + !!swtch.unit.status + "," + swtch.unit.value + ") -> " + req + " + " + data);
+        // this.wrequest(req);
+    }
+    ohUpDown(swtch) {
+        const req = this.makeVariableURL(swtch.plug, !!swtch.unit.status, +swtch.unit.value);
+        // 1=stopped, 2-closed, 3=opened, 4=closing, 5=opening
+        this.log("OH-UpDown(" + swtch.unit.value + ") -> " + req);
+        // this.wrequest(req);
     }
     //////////////////////////////
     // Services                 //
@@ -699,7 +728,8 @@ class SmartApp extends webapp_1.WebApp {
         if (node) {
             node.units.forEach(unit => {
                 unit.active = (params["active_" + unit.logicalAddress] === "Y");
-                unit.displayName = (params["name_" + unit.logicalAddress]);
+                unit.displayName = params["name_" + unit.logicalAddress];
+                unit.extendedType = parseInt(params["extended_" + unit.logicalAddress]);
             });
             this.system.updateSystem(true);
         }

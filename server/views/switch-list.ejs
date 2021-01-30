@@ -30,7 +30,7 @@
           <tbody>
             <% for (let inx in switches) { let swtch = switches[inx]; %>
               <tr>
-                <td><a href="/switches/edit/<%= inx %>"><%= swtch.name %></a></td>
+                <td><a href="/switches/edit/<%= inx %>"><%= swtch.name %></a><br><small><%= swtch.type %></small></td>
                 <td><a href="/switches/edit/<%= inx %>"><%= swtch.plug %></a></td>
                 <td><a href="/switches/edit/<%= inx %>"><%= hex(swtch.logicalNodeAddress) %>/<%= hex(swtch.logicalAddress) %></a></td>
                 <td>

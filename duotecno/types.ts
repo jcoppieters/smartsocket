@@ -78,10 +78,11 @@ export interface UnitDef {
   name: string;
   masterAddress: string;
   masterPort: number;
-  logicalAddress: number,
-  logicalNodeAddress: number,
-  unit?: Unit,
+  logicalAddress: number;
+  logicalNodeAddress: number;
   displayName?: string;
+  extendedType?: UnitExtendedType;
+  //unit?: Unit;
 };
 export const kEmptyUnit: UnitDef = { masterAddress: "0.0.0.0", masterPort: 5001, 
                                      name: "unit", logicalAddress: 0, logicalNodeAddress: 0 };
@@ -141,6 +142,7 @@ export interface UnitInfo {
   logicalAddress?: number;
   physicalAddress?: number;
   type?: UnitType;
+  extendedType?: UnitExtendedType;
   flags?: number;
 };
 
@@ -183,6 +185,9 @@ export enum SwitchType {
   kHTTPSwitch = "http", 
   kHTTPDimmer = "httpdim",
   kHTTPUpDown = "httpupdown",
+  kOhSwitch = "oswitch",
+  kOhDimmer = "odimmer",
+  kOhUpDown = "oupdown",
   kSomfy = "somfy"
 };
 
@@ -213,6 +218,7 @@ export interface Switch extends UnitDef {
   plug: number | string,
   data: string,
   method: string,
+  unit?: Unit;
   status?: number | boolean,
   value?: number | boolean | string
 };
@@ -561,6 +567,7 @@ export const Sanitizers = {
     info.logicalNodeAddress = info.logicalNodeAddress || 0;
     info.logicalAddress = info.logicalAddress || 0;
     info.type = info.type || UnitType.kNoType;
+    info.extendedType = info.extendedType || <UnitExtendedType><unknown>info.type;
     info.flags = info.flags || 0;
 
     if (into) {

@@ -161,6 +161,10 @@ switch =>
 ## v5.8.0
 - Added API calls /masters/list & services  /units/set & get
 
+## v5.9.0
+- added extended type selection in master->node->unit->detail page (not yet tested !!) 
+- added stubs for openHAB switch/dimmer/updown
+
 ### Todo
 - setup openstack server
 

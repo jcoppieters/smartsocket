@@ -318,7 +318,8 @@ export class System extends Base {
   //////////////////////////////////////////////////
   updateSystem(dontTrigger: boolean = false) {
     this.config.cunits = this.allActiveUnits()
-      .map((u: Unit) => { return { active: <YN>"Y", group: u.group, name: u.name, displayName: u.displayName, type: u.type,
+      .map((u: Unit) => { return { active: <YN>"Y", group: u.group, name: u.name, displayName: u.displayName, 
+                                   type: u.type, extendedType: u.extendedType,
                                    masterAddress: u.node.master.getAddress(), masterPort: u.node.master.getPort(), 
                                    logicalNodeAddress: u.node.logicalAddress, logicalAddress: u.logicalAddress}; });
     this.writeConfig();
