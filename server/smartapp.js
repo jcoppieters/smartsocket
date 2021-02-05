@@ -509,16 +509,23 @@ class SmartApp extends webapp_1.WebApp {
         this.log("Dimmer(" + !!swtch.unit.status + "," + swtch.unit.value + ") -> " + req + " + " + data);
         this.wrequest(req, swtch.method, data);
     }
-    wrequest(url, method = "GET", formdata) {
+    wrequest(url, method = "GET", formdata, oh = false) {
         try {
             // const data = querystring.stringify(formdata);
             const options = { method };
             if (formdata) {
                 //formdata = JSON.stringify(formdata);
-                options["headers"] = {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Content-Length': Buffer.byteLength(formdata)
-                };
+                if (oh) {
+                  options["headers"] = {
+                    'Content-Type': 'text/plain',
+                    'Accept': 'application/json'
+                  };
+                } else {
+                  options["headers"] = {
+                      'Content-Type': 'application/x-www-form-urlencoded',
+                      'Content-Length': Buffer.byteLength(formdata)
+                  };
+                }
             }
             ;
             const req = http.request(url, options, res => {
@@ -562,19 +569,44 @@ class SmartApp extends webapp_1.WebApp {
     ohSwitch(swtch) {
         const req = this.makeVariableURL(swtch.plug, !!swtch.unit.status, +swtch.unit.value);
         this.log("OH-Switch(" + !!swtch.unit.status + ") -> " + req);
-        // this.wrequest(req);
+        let data = "";
+        if ( !!swtch.unit.status ) {
+            data = "ON";
+        } else {
+            data = "OFF";
+        }
+        this.wrequest(req, swtch.method, data, true);
     }
     ohDimmer(swtch) {
         const req = this.makeVariableURL(swtch.plug, !!swtch.unit.status, +swtch.unit.value);
-        const data = this.makeVariableURL(swtch.data, !!swtch.unit.status, +swtch.unit.value);
-        this.log("OH-Dimmer(" + !!swtch.unit.status + "," + swtch.unit.value + ") -> " + req + " + " + data);
-        // this.wrequest(req);
+        this.log("OH-Dimmer(" + !!swtch.unit.status + "," + swtch.unit.value + ") -> " + req );
+        let data = "";
+        if ( swtch.unit.status == 0) {
+            data = "OFF";
+        } else if ( swtch.unit.status == 1 ) {
+            if ( swtch.unit.value == 1 ) {
+                data = "ON";
+            } else {
+                data = swtch.unit.value.toString();
+            }
+        }
+        this.wrequest(req, swtch.method, data, true);
     }
     ohUpDown(swtch) {
         const req = this.makeVariableURL(swtch.plug, !!swtch.unit.status, +swtch.unit.value);
         // 1=stopped, 2-closed, 3=opened, 4=closing, 5=opening
         this.log("OH-UpDown(" + swtch.unit.value + ") -> " + req);
-        // this.wrequest(req);
+        let data = "";
+        if ( (swtch.unit.status == 1) || (swtch.unit.status == 2) ) {
+            data = "STOP";
+            this.wrequest(req, swtch.method, data, true);
+        } else if ( swtch.unit.status == 3) {
+            data = "DOWN";
+            this.wrequest(req, swtch.method, data, true);
+        } else if ( swtch.unit.status == 4) {
+            data = "UP";
+            this.wrequest(req, swtch.method, data, true);
+        }
     }
     //////////////////////////////
     // Services                 //
