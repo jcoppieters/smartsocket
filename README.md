@@ -170,6 +170,9 @@ switch =>
 ## v5.9.2
 - added active / used unit flag, allowing more units in the gateway, only those "actice" are sent to Homebridge
 
+## v5.10.0
+- openHAB support for up/downs, dimmers en switches. copied from smartapp.js file of Pieter Becu <pieter@bqnet.be>
+
 
 ### Todo
 - setup openstack server

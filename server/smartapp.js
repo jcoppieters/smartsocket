@@ -49,6 +49,12 @@ const kAccessoryPins = {
     "577-03-009": "CC:22:3D:E3:A1:09",
     "577-03-010": "CC:22:3D:E3:A1:0A"
 };
+var ContentType;
+(function (ContentType) {
+    ContentType[ContentType["form"] = 0] = "form";
+    ContentType[ContentType["plain"] = 1] = "plain";
+})(ContentType || (ContentType = {}));
+;
 class SmartApp extends webapp_1.WebApp {
     constructor(system, smappee, platform, log, dev = false) {
         super("smartapp" + (dev ? "-dev" : ""), log);
@@ -509,16 +515,23 @@ class SmartApp extends webapp_1.WebApp {
         this.log("Dimmer(" + !!swtch.unit.status + "," + swtch.unit.value + ") -> " + req + " + " + data);
         this.wrequest(req, swtch.method, data);
     }
-    wrequest(url, method = "GET", formdata) {
+    wrequest(url, method = "GET", formdata, contentType = ContentType.form) {
         try {
             // const data = querystring.stringify(formdata);
             const options = { method };
             if (formdata) {
-                //formdata = JSON.stringify(formdata);
-                options["headers"] = {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Content-Length': Buffer.byteLength(formdata)
-                };
+                if (contentType === ContentType.form) {
+                    options["headers"] = {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'Content-Length': Buffer.byteLength(formdata)
+                    };
+                }
+                else if (contentType === ContentType.plain) {
+                    options["headers"] = {
+                        'Content-Type': 'text/plain',
+                        'Accept': 'application/json'
+                    };
+                }
             }
             ;
             const req = http.request(url, options, res => {
@@ -562,19 +575,28 @@ class SmartApp extends webapp_1.WebApp {
     ohSwitch(swtch) {
         const req = this.makeVariableURL(swtch.plug, !!swtch.unit.status, +swtch.unit.value);
         this.log("OH-Switch(" + !!swtch.unit.status + ") -> " + req);
-        // this.wrequest(req);
+        this.wrequest(req, swtch.method, swtch.unit.status ? "ON" : "OFF", ContentType.plain);
     }
     ohDimmer(swtch) {
         const req = this.makeVariableURL(swtch.plug, !!swtch.unit.status, +swtch.unit.value);
-        const data = this.makeVariableURL(swtch.data, !!swtch.unit.status, +swtch.unit.value);
-        this.log("OH-Dimmer(" + !!swtch.unit.status + "," + swtch.unit.value + ") -> " + req + " + " + data);
-        // this.wrequest(req);
+        const val = (swtch.unit.value == 1) ? "ON" : swtch.unit.value.toString();
+        this.log("OH-Dimmer(" + !!swtch.unit.status + ", " + val + ") -> " + req);
+        this.wrequest(req, swtch.method, swtch.unit.status ? val : "OFF", ContentType.plain);
     }
     ohUpDown(swtch) {
         const req = this.makeVariableURL(swtch.plug, !!swtch.unit.status, +swtch.unit.value);
+        let data;
         // 1=stopped, 2-closed, 3=opened, 4=closing, 5=opening
-        this.log("OH-UpDown(" + swtch.unit.value + ") -> " + req);
-        // this.wrequest(req);
+        if ((swtch.unit.status == 1) || (swtch.unit.status == 2))
+            data = "STOP";
+        else if (swtch.unit.status == 3)
+            data = "DOWN";
+        else if (swtch.unit.status == 4)
+            data = "UP";
+        if (data) {
+            this.log("OH-UpDown(" + swtch.unit.value + ", " + data + ") -> " + req);
+            this.wrequest(req, swtch.method, data, ContentType.plain);
+        }
     }
     //////////////////////////////
     // Services                 //
