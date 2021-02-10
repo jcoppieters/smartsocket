@@ -1,6 +1,8 @@
 #!/bin/bash
 # save current config files
 cd ~/smartsocket
+git config user.name "duotecno"
+git config user.email "mario@duotecno.be"
 mkdir -p backup/temp
 mv config.*.json backup/temp/
 git pull

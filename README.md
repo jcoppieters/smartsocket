@@ -173,6 +173,9 @@ switch =>
 ## v5.10.0
 - openHAB support for up/downs, dimmers en switches. copied from smartapp.js file of Pieter Becu <pieter@bqnet.be>
 
+## v5.10.1
+- added git user.name/email to update.sh
+
 
 ### Todo
 - setup openstack server
