@@ -303,7 +303,9 @@ exports.Sanitizers = {
             config.socketserver = 'gateway.duotecno.com';
         config.socketport = config.socketport || 9999;
         config.cmasters = config.cmasters || [];
+        config.cmasters.forEach(m => this.masterConfig(m));
         config.cunits = config.cunits || [];
+        config.cunits.forEach(u => this.unitConfig(u));
         return config;
     },
     ////////////

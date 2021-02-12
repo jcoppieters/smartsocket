@@ -176,6 +176,9 @@ switch =>
 ## v5.10.1
 - added git user.name/email to update.sh
 
+## v5.10.2
+- better upgrade to new config layout (used - active units)
+
 
 ### Todo
 - setup openstack server
