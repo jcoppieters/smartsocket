@@ -179,6 +179,9 @@ switch =>
 ## v5.10.2
 - better upgrade to new config layout (used - active units)
 
+## v5.10.3
+- waiting for active config units (not total units)
+
 
 ### Todo
 - setup openstack server

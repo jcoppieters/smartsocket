@@ -137,7 +137,9 @@ export class Platform extends Base {
     const kMaxWaiting = 5 * 60;
 
     if (this.ready) {
-      this.log("=== running after timeout of " + this.startWaiting + " secs --> " +  this.system.allActiveUnits().length + " == " + this.system.config.cunits.length + " units -> " +  (this.system.allActiveUnits().length == this.system.config.cunits.length) + ", will start in 10 seconds ===");
+      this.log("=== running after timeout of " + this.startWaiting + " secs --> " +  
+        this.system.allActiveUnits().length + " == " + this.system.activeUnitsConfig().length + 
+        " units -> " +  (this.system.allActiveUnits().length == this.system.config.cunits.length) + ", will start in 10 seconds ===");
       setTimeout( () => { this.doAccessories(callback) }, 10 * 1000);
 
     } else if (this.startWaiting > kMaxWaiting) {
@@ -147,7 +149,8 @@ export class Platform extends Base {
     
     } else {
       // wait another 5 seconds.
-      this.log("=== waiting >> found " + this.system.allActiveUnits().length + " units out of " + this.system.config.cunits.length + " selected after " + this.startWaiting + " sec ===");
+      this.log("=== waiting >> found " + this.system.allActiveUnits().length + " units out of " + this.system.activeUnitsConfig().length + 
+        " selected after " + this.startWaiting + " sec ===");
       this.startWaiting += 5;
       setTimeout( () => { this.accessories(callback) }, 5000);
     }

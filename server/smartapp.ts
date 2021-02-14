@@ -110,8 +110,9 @@ export class SmartApp extends WebApp {
     this.log("ready: " + (this.platform && this.platform.ready));
     if (this.platform && ! this.platform.ready) {
       context["notReady"] = true;
-      context["notReadyMessage"] = "=== waiting >> found " + this.system.allActiveUnits().length + " units out of " + this.system.config.cunits.length + " selected after " +
-                                this.platform.startWaiting + " sec ===";
+      context["notReadyMessage"] = "=== waiting >> found " + 
+        this.system.allActiveUnits().length + " units out of " + this.system.activeUnitsConfig().length + " selected after " +
+        this.platform.startWaiting + " sec ===";
     } else {
       context["notReady"] = false;
       context["notReadyMessage"] = "";

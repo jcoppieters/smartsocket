@@ -282,11 +282,17 @@ class System extends base_1.Base {
         });
         return unit;
     }
+    activeUnitsConfig() {
+        return this.config.cunits.filter(u => u.active == "Y");
+    }
     allActiveUnits() {
         return this.masters
             .reduce((acc, m) => acc.concat(m.nodes), [])
             .reduce((acc, n) => acc.concat(n.units), [])
             .filter(u => u.active);
+    }
+    usedUnitsConfig() {
+        return this.config.cunits.filter(u => u.used == "Y");
     }
     allUsedUnits() {
         return this.masters

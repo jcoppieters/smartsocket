@@ -302,13 +302,19 @@ export class System extends Base {
     return unit;
   }
 
+  activeUnitsConfig(): Array<UnitConfig> {
+    return this.config.cunits.filter(u => u.active == "Y");
+  }
   allActiveUnits(): Array<Unit> {
-    return this.masters
+      return this.masters
       .reduce((acc, m) => acc.concat(m.nodes), [])
       .reduce((acc, n) => acc.concat(n.units), [])
       .filter(u => u.active);
   }
 
+  usedUnitsConfig(): Array<UnitConfig> {
+    return this.config.cunits.filter(u => u.used == "Y");
+  }
   allUsedUnits(): Array<Unit> {
     return this.masters
       .reduce((acc, m) => acc.concat(m.nodes), [])
