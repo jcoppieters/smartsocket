@@ -182,6 +182,9 @@ switch =>
 ## v5.10.3
 - waiting for active config units (not total units)
 
+## v5.10.4
+- Extended saved type was not used on restart
+
 
 ### Todo
 - setup openstack server

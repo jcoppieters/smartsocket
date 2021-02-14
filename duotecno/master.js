@@ -422,6 +422,10 @@ class Master extends base_1.Base {
         const unitInfo = protocol_1.Protocol.makeUnitInfo(message);
         let unit = this.findUnit(unitInfo.logicalNodeAddress, unitInfo.logicalAddress);
         if (!unit) {
+            // find if in config
+            const cunit = this.system.config.cunits.find(u => ((u.logicalNodeAddress == unitInfo.logicalNodeAddress) && (u.logicalAddress == unitInfo.logicalAddress)));
+            if (cunit)
+                unitInfo.extendedType = cunit.extendedType;
             const node = this.findNode(unitInfo.logicalNodeAddress);
             if (node) {
                 unit = new protocol_1.Unit(node, unitInfo, this.system.config.mood);

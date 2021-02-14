@@ -1,5 +1,5 @@
 import { Node, Protocol, Unit, recName, Rec } from "./protocol";
-import { MasterConfig, WriteError, CommRecord, Message, Sanitizers, LogFunction } from "./types";
+import { MasterConfig, WriteError, CommRecord, Message, Sanitizers, LogFunction, UnitExtendedType } from "./types";
 import { System } from "./system";
 import { Base } from "../server/base";
 
@@ -466,8 +466,14 @@ export class Master extends Base {
 
   receiveUnitInfo(message: Message) {
     const unitInfo = Protocol.makeUnitInfo(message);
+
     let unit = this.findUnit(unitInfo.logicalNodeAddress, unitInfo.logicalAddress);
+
     if (!unit) {
+      // find if in config
+      const cunit = this.system.config.cunits.find(u => ((u.logicalNodeAddress == unitInfo.logicalNodeAddress) && (u.logicalAddress == unitInfo.logicalAddress)));
+      if (cunit) unitInfo.extendedType = cunit.extendedType;
+
       const node = this.findNode(unitInfo.logicalNodeAddress);
       if (node) {
         unit = new Unit(node, unitInfo, this.system.config.mood);
