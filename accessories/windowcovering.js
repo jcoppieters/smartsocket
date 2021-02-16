@@ -15,52 +15,43 @@ const types_1 = require("../duotecno/types");
 /*
 
 [ clicked "Open" ]
-0|homebridge  | [16/02/2021, 15:10:34] [DuotecnoPlatform] [master] 192.168.0.8: Motor -> 38,0,4,2,8,0,0
-0|homebridge  | [16/02/2021, 15:10:34] [DuotecnoPlatform] received status - motor = 0
-0|homebridge  | [16/02/2021, 15:10:34] [DuotecnoPlatform] [homebridge] Received updateState -> Homekit WindowCovering for Up/Down - Tim rechts -> 0 / 0 -> passing: 50
-0|homebridge  | [16/02/2021, 15:10:34] [DuotecnoPlatform] [master] 192.168.0.8: Motor -> 38,0,4,2,8,0,4
-0|homebridge  | [16/02/2021, 15:10:34] [DuotecnoPlatform] received status - motor = 4
-0|homebridge  | [16/02/2021, 15:10:34] [DuotecnoPlatform] [homebridge] Received updateState -> Homekit WindowCovering for Up/Down - Tim rechts -> 4 / 4 -> passing: 50
-0|homebridge  | [16/02/2021, 15:10:34] [DuotecnoPlatform] [homebridge] Setting targetposition to 100
-0|homebridge  | [16/02/2021, 15:10:34] [DuotecnoPlatform] [somfy] up 2
-0|homebridge  | [16/02/2021, 15:10:34] [DuotecnoPlatform] [somfy] try to select screen 2
-0|homebridge  | [16/02/2021, 15:10:35] [DuotecnoPlatform] [somfy] selected screen: false false true false false <- 2=true
-0|homebridge  | [16/02/2021, 15:11:01] [DuotecnoPlatform] sending: Heartbeat - [215,1]
-0|homebridge  | [16/02/2021, 15:11:01] [DuotecnoPlatform] [master] 192.168.0.8: HeartbeatStatus -> 72,1
-
-0|homebridge  | [16/02/2021, 15:11:31] [DuotecnoPlatform] sending: Heartbeat - [215,1]
-0|homebridge  | [16/02/2021, 15:11:31] [DuotecnoPlatform] [master] 192.168.0.8: HeartbeatStatus -> 72,1
-0|homebridge  | [16/02/2021, 15:11:34] [DuotecnoPlatform] [master] 192.168.0.8: Motor -> 38,0,4,2,8,0,2
-0|homebridge  | [16/02/2021, 15:11:34] [DuotecnoPlatform] received status - motor = 2
-0|homebridge  | [16/02/2021, 15:11:34] [DuotecnoPlatform] [homebridge] Received updateState -> Homekit WindowCovering for Up/Down - Tim rechts -> 2 / 2 -> passing: 100
-0|homebridge  | [16/02/2021, 15:11:34] [DuotecnoPlatform] [somfy] stop 2
-0|homebridge  | [16/02/2021, 15:11:34] [DuotecnoPlatform] [somfy] try to select screen 2
-0|homebridge  | [16/02/2021, 15:11:35] [DuotecnoPlatform] [somfy] selected screen: false false true false false <- 2=true
+0|homebridge  | [16/02/2021, 15:21:07] [DuotecnoPlatform] [master] 192.168.0.8: Motor -> 38,0,4,2,8,0,0
+0|homebridge  | [16/02/2021, 15:21:07] [DuotecnoPlatform] received status - motor = 0
+0|homebridge  | [16/02/2021, 15:21:07] [DuotecnoPlatform] [homebridge] Received updateState -> Homekit WindowCovering for Up/Down - Tim rechts -> 0 / 0 -> passing: 50
+0|homebridge  | [16/02/2021, 15:21:07] [DuotecnoPlatform] [master] 192.168.0.8: Motor -> 38,0,4,2,8,0,4
+0|homebridge  | [16/02/2021, 15:21:07] [DuotecnoPlatform] received status - motor = 4
+0|homebridge  | [16/02/2021, 15:21:07] [DuotecnoPlatform] [homebridge] Received updateState -> Homekit WindowCovering for Up/Down - Tim rechts -> 4 / 4 -> passing: 75
+0|homebridge  | [16/02/2021, 15:21:07] [DuotecnoPlatform] [homebridge] Setting targetposition to 100
+0|homebridge  | [16/02/2021, 15:21:07] [DuotecnoPlatform] [somfy] up 2
+0|homebridge  | [16/02/2021, 15:21:07] [DuotecnoPlatform] [somfy] try to select screen 2
+0|homebridge  | [16/02/2021, 15:21:07] [DuotecnoPlatform] [somfy] selected screen: false false true false false <- 2=true
+...
+0|homebridge  | [16/02/2021, 15:22:07] [DuotecnoPlatform] [master] 192.168.0.8: Motor -> 38,0,4,2,8,0,2
+0|homebridge  | [16/02/2021, 15:22:07] [DuotecnoPlatform] received status - motor = 2
+0|homebridge  | [16/02/2021, 15:22:07] [DuotecnoPlatform] [homebridge] Received updateState -> Homekit WindowCovering for Up/Down - Tim rechts -> 2 / 2 -> passing: 100
+0|homebridge  | [16/02/2021, 15:22:07] [DuotecnoPlatform] [somfy] stop 2
+0|homebridge  | [16/02/2021, 15:22:07] [DuotecnoPlatform] [somfy] try to select screen 2
+0|homebridge  | [16/02/2021, 15:22:07] [DuotecnoPlatform] [somfy] selected screen: false false true false false <- 2=true
 
 
 [ clicked "close"]
-0|homebridge  | [16/02/2021, 15:09:06] [DuotecnoPlatform] [master] 192.168.0.8: Motor -> 38,0,4,2,8,0,0
-0|homebridge  | [16/02/2021, 15:09:06] [DuotecnoPlatform] received status - motor = 0
-0|homebridge  | [16/02/2021, 15:09:06] [DuotecnoPlatform] [homebridge] Received updateState -> Homekit WindowCovering for Up/Down - Tim rechts -> 0 / 0 -> passing: 50
-0|homebridge  | [16/02/2021, 15:09:07] [DuotecnoPlatform] [master] 192.168.0.8: Motor -> 38,0,4,2,8,0,3
-0|homebridge  | [16/02/2021, 15:09:07] [DuotecnoPlatform] received status - motor = 3
-0|homebridge  | [16/02/2021, 15:09:07] [DuotecnoPlatform] [homebridge] Received updateState -> Homekit WindowCovering for Up/Down - Tim rechts -> 3 / 3 -> passing: 50
-0|homebridge  | [16/02/2021, 15:09:07] [DuotecnoPlatform] [somfy] down 2
-0|homebridge  | [16/02/2021, 15:09:07] [DuotecnoPlatform] [somfy] try to select screen 2
-0|homebridge  | [16/02/2021, 15:09:07] [DuotecnoPlatform] [somfy] selected screen: false false true false false <- 2=true
-0|homebridge  | [16/02/2021, 15:09:31] [DuotecnoPlatform] sending: Heartbeat - [215,1]
-0|homebridge  | [16/02/2021, 15:09:31] [DuotecnoPlatform] [master] 192.168.0.8: HeartbeatStatus -> 72,1
-
-
-0|homebridge  | [16/02/2021, 15:10:01] [DuotecnoPlatform] sending: Heartbeat - [215,1]
-0|homebridge  | [16/02/2021, 15:10:01] [DuotecnoPlatform] [master] 192.168.0.8: HeartbeatStatus -> 72,1
-0|homebridge  | [16/02/2021, 15:10:07] [DuotecnoPlatform] [master] 192.168.0.8: Motor -> 38,0,4,2,8,0,1
-0|homebridge  | [16/02/2021, 15:10:07] [DuotecnoPlatform] received status - motor = 1
-0|homebridge  | [16/02/2021, 15:10:07] [DuotecnoPlatform] [homebridge] Received updateState -> Homekit WindowCovering for Up/Down - Tim rechts -> 1 / 1 -> passing: 0
-0|homebridge  | [16/02/2021, 15:10:07] [DuotecnoPlatform] [somfy] stop 2
-0|homebridge  | [16/02/2021, 15:10:07] [DuotecnoPlatform] [somfy] try to select screen 2
-0|homebridge  | [16/02/2021, 15:10:07] [DuotecnoPlatform] [somfy] selected screen: false false true false false <- 2=true
-
+0|homebridge  | [16/02/2021, 15:19:29] [DuotecnoPlatform] [master] 192.168.0.8: Motor -> 38,0,4,2,8,0,0
+0|homebridge  | [16/02/2021, 15:19:29] [DuotecnoPlatform] received status - motor = 0
+0|homebridge  | [16/02/2021, 15:19:29] [DuotecnoPlatform] [homebridge] Received updateState -> Homekit WindowCovering for Up/Down - Tim rechts -> 0 / 0 -> passing: 50
+0|homebridge  | [16/02/2021, 15:19:30] [DuotecnoPlatform] [master] 192.168.0.8: Motor -> 38,0,4,2,8,0,3
+0|homebridge  | [16/02/2021, 15:19:30] [DuotecnoPlatform] received status - motor = 3
+0|homebridge  | [16/02/2021, 15:19:30] [DuotecnoPlatform] [homebridge] Received updateState -> Homekit WindowCovering for Up/Down - Tim rechts -> 3 / 3 -> passing: 25
+0|homebridge  | [16/02/2021, 15:19:30] [DuotecnoPlatform] [homebridge] Setting targetposition to 0
+0|homebridge  | [16/02/2021, 15:19:30] [DuotecnoPlatform] [somfy] down 2
+0|homebridge  | [16/02/2021, 15:19:30] [DuotecnoPlatform] [somfy] try to select screen 2
+0|homebridge  | [16/02/2021, 15:19:30] [DuotecnoPlatform] [somfy] selected screen: false false true false false <- 2=true
+...
+0|homebridge  | [16/02/2021, 15:20:30] [DuotecnoPlatform] [master] 192.168.0.8: Motor -> 38,0,4,2,8,0,1
+0|homebridge  | [16/02/2021, 15:20:30] [DuotecnoPlatform] received status - motor = 1
+0|homebridge  | [16/02/2021, 15:20:30] [DuotecnoPlatform] [homebridge] Received updateState -> Homekit WindowCovering for Up/Down - Tim rechts -> 1 / 1 -> passing: 0
+0|homebridge  | [16/02/2021, 15:20:30] [DuotecnoPlatform] [somfy] stop 2
+0|homebridge  | [16/02/2021, 15:20:30] [DuotecnoPlatform] [somfy] try to select screen 2
+0|homebridge  | [16/02/2021, 15:20:30] [DuotecnoPlatform] [somfy] selected screen: false false true false false <- 2=true
 
 */
 class WindowCovering extends accessory_1.Accessory {
