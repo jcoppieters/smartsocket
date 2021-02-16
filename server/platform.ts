@@ -118,9 +118,11 @@ export class Platform extends Base {
   }
 
   systemReady() {
-    const activeUnits = this.system.allActiveUnits().length
-    this.log("=== SYSTEM READY received update -> addMasters: " + activeUnits + " of " + this.system.config.cunits.length + " ===");
-    this.ready = (activeUnits == this.system.config.cunits.length);
+    const inConfig = this.system.activeUnitsConfig().length;
+    const inSystem = this.system.allActiveUnits().length;
+
+    this.log("=== SYSTEM READY received update -> addMasters: " + inSystem + " of " + inConfig + " ===");
+    this.ready = (inSystem == inConfig);
 
     // trigger status request of all active units in 2 seconds.
     setTimeout( async() => {
@@ -135,11 +137,12 @@ export class Platform extends Base {
   accessories(callback) {
     // waiting until the database is complete or give up after 5 minutes
     const kMaxWaiting = 5 * 60;
+    const inConfig = this.system.activeUnitsConfig().length;
+    const inSystem = this.system.allActiveUnits().length;
 
     if (this.ready) {
       this.log("=== running after timeout of " + this.startWaiting + " secs --> " +  
-        this.system.allActiveUnits().length + " == " + this.system.activeUnitsConfig().length + 
-        " units -> " +  (this.system.allActiveUnits().length == this.system.config.cunits.length) + ", will start in 10 seconds ===");
+        inSystem + " == " + inConfig + " units -> " +  (inConfig == inSystem) + ", will start in 10 seconds ===");
       setTimeout( () => { this.doAccessories(callback) }, 10 * 1000);
 
     } else if (this.startWaiting > kMaxWaiting) {
@@ -149,8 +152,7 @@ export class Platform extends Base {
     
     } else {
       // wait another 5 seconds.
-      this.log("=== waiting >> found " + this.system.allActiveUnits().length + " units out of " + this.system.activeUnitsConfig().length + 
-        " selected after " + this.startWaiting + " sec ===");
+      this.log("=== waiting >> found " + inSystem + " units out of " + inConfig + " selected after " + this.startWaiting + " sec ===");
       this.startWaiting += 5;
       setTimeout( () => { this.accessories(callback) }, 5000);
     }

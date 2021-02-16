@@ -121,6 +121,7 @@
   }
   function setStatus(state, master, port, node, unit) {
     if (typeof state === "boolean") state = (state) ? 1 : 0;
+    console.log("http://<%= req.headers.host %>/units/set?master="+master+"&port="+port+"&node="+node+"&unit="+unit+"&value="+state);
     ajax("http://<%= req.headers.host %>/units/set?master="+master+"&port="+port+"&node="+node+"&unit="+unit+"&value="+state, function(data){ 
     });
   }

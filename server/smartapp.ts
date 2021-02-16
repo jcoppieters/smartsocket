@@ -516,6 +516,7 @@ export class SmartApp extends WebApp {
         .replace("#1", state ? '1' : '0')
         .replace("#", state ? "on" : "off")
         .replace("$B", "" + Math.round(value / 100 * 256))
+        .replace("$T", "" + Math.round(value / 100 * 512))
         .replace("$W", "" + Math.round(value / 100 * 256 * 256))
         .replace("$1", "" + (value / 100))
         .replace("$", "" + value);

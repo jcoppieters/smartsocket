@@ -7,43 +7,52 @@ import { Unit } from "../duotecno/protocol";
 // WindowCovering
 // - or a Screen, no security for opening.
 // - homekit.TargetPosition: closed = 0 - 100 = open
-// - duotecno.value: kOpen = 2, kClosed = 1, kClosing = 3, kOpening = 4
+// - duotecno.value: kStopped = 0, kOpen = 2, kClosed = 1, kClosing = 3, kOpening = 4
 //
 // Example: https://github.com/dxdc/homebridge-blinds/blob/master/index.js
 //
 /*
-0|homebridge  | homebridge - set Characteristic.TargetPosition was called with value = 0
-0|homebridge  | homebridge - setUpDown, value =0 -> cmd=5
-0|homebridge  | sending: SetMotor - [182,5,3,28]
-0|homebridge  | received motor = 0
-0|homebridge  | homebridge - received updateState up/down, status = 0, value = 0
-0|homebridge  | homebridge - passing to homekit accessory
-0|homebridge  | homebridge - Received updateState from Master -> WindowCovering for SB 1 - up/down -> 0 / 0 -> passing: 50
-0|homebridge  | received motor = 3
-0|homebridge  | homebridge - received updateState up/down, status = 3, value = 3
-0|homebridge  | homebridge - passing to homekit accessory
-0|homebridge  | homebridge - Received updateState from Master -> WindowCovering for SB 1 - up/down -> 3 / 3 -> passing: 50
-0|homebridge  | received motor = 1
-0|homebridge  | homebridge - received updateState up/down, status = 1, value = 1
-0|homebridge  | homebridge - passing to homekit accessory
-0|homebridge  | homebridge - Received updateState from Master -> WindowCovering for SB 1 - up/down -> 1 / 1 -> passing: 0
 
+[ clicked "Open" ]
+0|homebridge  | [16/02/2021, 14:43:46] [DuotecnoPlatform] [master] 192.168.0.8: Motor -> 38,0,4,2,8,0,0
+0|homebridge  | [16/02/2021, 14:43:46] [DuotecnoPlatform] received status - motor = 0
+0|homebridge  | [16/02/2021, 14:43:46] [DuotecnoPlatform] [homebridge] Received updateState -> Homekit WindowCovering for Up/Down - Tim rechts -> 0 / 0 -> passing: 50
+0|homebridge  | [16/02/2021, 14:43:47] [DuotecnoPlatform] [master] 192.168.0.8: Motor -> 38,0,4,2,8,0,4
+0|homebridge  | [16/02/2021, 14:43:47] [DuotecnoPlatform] received status - motor = 4
+0|homebridge  | [16/02/2021, 14:43:47] [DuotecnoPlatform] [homebridge] Received updateState -> Homekit WindowCovering for Up/Down - Tim rechts -> 4 / 4 -> passing: 50
+0|homebridge  | [16/02/2021, 14:43:47] [DuotecnoPlatform] [somfy] up 2
+0|homebridge  | [16/02/2021, 14:43:47] [DuotecnoPlatform] [somfy] try to select screen 2
+0|homebridge  | [16/02/2021, 14:43:47] [DuotecnoPlatform] [somfy] selected screen: false false true false false <- 2=true
+....
+0|homebridge  | [16/02/2021, 14:44:47] [DuotecnoPlatform] [master] 192.168.0.8: Motor -> 38,0,4,2,8,0,2
+0|homebridge  | [16/02/2021, 14:44:47] [DuotecnoPlatform] received status - motor = 2
+0|homebridge  | [16/02/2021, 14:44:47] [DuotecnoPlatform] [homebridge] Received updateState -> Homekit WindowCovering for Up/Down - Tim rechts -> 2 / 2 -> passing: 100
 
-0|homebridge  | homebridge - set Characteristic.TargetPosition was called with value = 100
-0|homebridge  | homebridge - setUpDown, value =100 -> cmd=4
-0|homebridge  | sending: SetMotor - [182,4,3,28]
-0|homebridge  | received motor = 0
-0|homebridge  | homebridge - received updateState up/down, status = 0, value = 0
-0|homebridge  | homebridge - passing to homekit accessory
-0|homebridge  | homebridge - Received updateState from Master -> WindowCovering for SB 1 - up/down -> 0 / 0 -> passing: 50
-0|homebridge  | received motor = 4
-0|homebridge  | homebridge - received updateState up/down, status = 4, value = 4
-0|homebridge  | homebridge - passing to homekit accessory
-0|homebridge  | homebridge - Received updateState from Master -> WindowCovering for SB 1 - up/down -> 4 / 4 -> passing: 50
-0|homebridge  | received motor = 2
-0|homebridge  | homebridge - received updateState up/down, status = 2, value = 2
-0|homebridge  | homebridge - passing to homekit accessory
-0|homebridge  | homebridge - Received updateState from Master -> WindowCovering for SB 1 - up/down -> 2 / 2 -> passing: 100
+0|homebridge  | [16/02/2021, 14:44:47] [DuotecnoPlatform] [somfy] stop 2
+0|homebridge  | [16/02/2021, 14:44:47] [DuotecnoPlatform] [somfy] try to select screen 2
+0|homebridge  | [16/02/2021, 14:44:47] [DuotecnoPlatform] [somfy] selected screen: false false true false false <- 2=true
+
+[ clicked "close"]
+0|homebridge  | [16/02/2021, 14:45:16] [DuotecnoPlatform] [master] 192.168.0.8: Motor -> 38,0,4,2,8,0,0 [0=stopped]
+0|homebridge  | [16/02/2021, 14:45:16] [DuotecnoPlatform] received status - motor = 0
+0|homebridge  | [16/02/2021, 14:45:16] [DuotecnoPlatform] [homebridge] Received updateState -> Homekit WindowCovering for Up/Down - Tim rechts -> 0 / 0 -> passing: 50
+0|homebridge  | [16/02/2021, 14:45:16] [DuotecnoPlatform] sending: Heartbeat - [215,1]
+0|homebridge  | [16/02/2021, 14:45:16] [DuotecnoPlatform] [master] 192.168.0.8: Motor -> 38,0,4,2,8,0,3 [3=closing]
+0|homebridge  | [16/02/2021, 14:45:16] [DuotecnoPlatform] received status - motor = 3
+0|homebridge  | [16/02/2021, 14:45:16] [DuotecnoPlatform] [homebridge] Received updateState -> Homekit WindowCovering for Up/Down - Tim rechts -> 3 / 3 -> passing: 50
+0|homebridge  | [16/02/2021, 14:45:16] [DuotecnoPlatform] [somfy] down 2
+0|homebridge  | [16/02/2021, 14:45:16] [DuotecnoPlatform] [master] 192.168.0.8: HeartbeatStatus -> 72,1
+0|homebridge  | [16/02/2021, 14:45:16] [DuotecnoPlatform] [somfy] try to select screen 2
+0|homebridge  | [16/02/2021, 14:45:17] [DuotecnoPlatform] [somfy] selected screen: false false true false false <- 2=true
+...
+0|homebridge  | [16/02/2021, 14:46:16] [DuotecnoPlatform] received status - motor = 1
+0|homebridge  | [16/02/2021, 14:46:16] [DuotecnoPlatform] [homebridge] Received updateState -> Homekit WindowCovering for Up/Down - Tim rechts -> 1 / 1 -> passing: 0
+
+0|homebridge  | [16/02/2021, 14:46:16] [DuotecnoPlatform] [somfy] stop 2
+0|homebridge  | [16/02/2021, 14:46:16] [DuotecnoPlatform] [master] 192.168.0.8: HeartbeatStatus -> 72,1
+0|homebridge  | [16/02/2021, 14:46:16] [DuotecnoPlatform] [somfy] try to select screen 2
+0|homebridge  | [16/02/2021, 14:46:17] [DuotecnoPlatform] [somfy] selected screen: false false true false false <- 2=true
+
 
 */
 
@@ -155,5 +164,14 @@ export class WindowCovering extends Accessory {
     this.log("Received updateState -> Homekit WindowCovering for " + this.unit.node.getName() + " - " + this.unit.getName() + " -> " + this.unit.status + " / " + this.unit.value + " -> passing: " + value);
 
     this.me.getCharacteristic(this.homebridge.Characteristic.CurrentPosition).updateValue(value);
+
+    if (this.unit.status == UnitMotorCmd.kClose) {
+      this.me.getCharacteristic(this.homebridge.Characteristic.TargetPosition).updateValue(0);
+      this.log("Setting targetposition to 0");
+    } else if (this.unit.status == UnitMotorCmd.kOpen) {
+      this.me.getCharacteristic(this.homebridge.Characteristic.TargetPosition).updateValue(100);
+      this.log("Setting targetposition to 100");
+    }
+
   }
 }
