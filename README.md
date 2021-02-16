@@ -185,7 +185,7 @@ switch =>
 ## v5.10.4
 - Extended saved type was not used on restart
 
-## v.5.10.5 - R1
+## v.5.10.5 - R1/2
 - Added $T (0-511) for bindings (Hue)
 - trying to fix up/down - windowcovering
 - trying to fix ready state (nr units in systems versus in config)
