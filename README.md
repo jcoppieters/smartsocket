@@ -189,6 +189,9 @@ switch =>
 - Added $T (0-511) for bindings (Hue)
 - trying to fix up/down - windowcovering
 - trying to fix ready state (nr units in systems versus in config)
+## v.5.10.5 - R4
+- changed mood-press(true) to (-1)
+
 
 ### Todo
 - setup openstack server

@@ -818,7 +818,7 @@ export class SmartApp extends WebApp {
 
     if (val === -1) {
       // mood click
-      await unit.setState(true);
+      await unit.setState(-1);
       unit.value = false; // simulate push button
       return { node: nodeLogicalAddress, unit: unitLogicalAddress, value: true };
 

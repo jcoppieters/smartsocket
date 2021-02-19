@@ -781,7 +781,7 @@ class SmartApp extends webapp_1.WebApp {
                 return { message: "Unit not found " + master.getName() + "/" + nodeLogicalAddress + "/" + unitLogicalAddress };
             if (val === -1) {
                 // mood click
-                yield unit.setState(true);
+                yield unit.setState(-1);
                 unit.value = false; // simulate push button
                 return { node: nodeLogicalAddress, unit: unitLogicalAddress, value: true };
             }
