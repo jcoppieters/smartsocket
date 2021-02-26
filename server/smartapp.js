@@ -589,7 +589,7 @@ class SmartApp extends webapp_1.WebApp {
         const req = this.makeVariableURL(swtch.plug, !!swtch.unit.status, +swtch.unit.value);
         let data;
         // 1=stopped, 2-closed, 3=opened, 4=closing, 5=opening
-        if ((swtch.unit.status == 1) || (swtch.unit.status == 2))
+        if ((swtch.unit.status == 0) || (swtch.unit.status == 1) || (swtch.unit.status == 2))
             data = "STOP";
         else if (swtch.unit.status == 3)
             data = "DOWN";
