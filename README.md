@@ -191,6 +191,10 @@ switch =>
 - trying to fix ready state (nr units in systems versus in config)
 ## v.5.10.5 - R4
 - changed mood-press(true) to (-1)
+## v.5.10.5 - R5 - 26/02/2021
+- send "stop" to openHAB for status = 0
+## v.5.10.5 - R6 - 27/02/2021
+- app upgrade to 2.3.7
 
 
 ### Todo
