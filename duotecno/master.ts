@@ -248,7 +248,7 @@ export class Master extends Base {
 
         if (this.closing) {
           // stop sending heartbeats
-          if (this.beater) this.stopHeartbeat("stopping hearbeat because we are closing the socket")
+          if (this.beater) this.stopHeartbeat("stopping heartbeat because we are closing the socket")
 
           this.log("end -> socket got closed as requested");
           this.closing = false;
