@@ -233,11 +233,14 @@ export class Master extends Base {
   /* Communication */
   /* ************* */
   async open(cnt = 1) {
-    // open socket, but for some reason there is still a heartbeat around???
+    // open a socket to the master
+    
+    // check to see if for some reason there is still a heartbeat around???
     if (this.beater) { 
-      this.stopHeartbeat("We still had a heartbeat, but were asked for a new sockets ???");
+      this.stopHeartbeat("We still had a heartbeat timer, but were asked for a new socket... ###############");
     }
 
+    // params 3-6: data message, closed, log and error functions
     this.socket = await getSocket( this.config.address, this.config.port,
       (msg) => { 
         this.handleData(msg);
@@ -255,7 +258,8 @@ export class Master extends Base {
           this.lastHeartbeat = 0;
 
         } else {
-          this.log("end -> socket got unexpectedly disconnected -> hopefully the heartbeat will reopen ###############");
+          // our program didn't request the close, on next send it should automatically be reopened in Master.send()
+          this.log("end -> socket got unexpectedly disconnected -> will be reopened on next send ###############");
         }
       },
       (log) => {
