@@ -19,7 +19,7 @@ class Support {
         return str.replace(/]/g, '§');
     }
     getFN(name) {
-        return "./data/" + name.toLowerCase() + ".json";
+        return "./data/" + (name.toLowerCase().replace(/\ /g, "")) + ".json";
     }
     doBackup(name, data) {
         try {

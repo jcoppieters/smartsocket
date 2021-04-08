@@ -195,6 +195,9 @@ switch =>
 - send "stop" to openHAB for status = 0
 ## v.5.10.5 - R6 - 27/02/2021
 - app upgrade to 2.3.7
+## v.5.10.6 - 08/04/2021
+- delete spaces from backup names
+- updated files on the server
 
 
 ### Todo
