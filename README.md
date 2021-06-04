@@ -185,24 +185,26 @@ switch =>
 ## v5.10.4
 - Extended saved type was not used on restart
 
-## v.5.10.5 - R1/2/3
+## v5.10.5 - R1/2/3
 - Added $T (0-511) for bindings (Hue)
 - trying to fix up/down - windowcovering
 - trying to fix ready state (nr units in systems versus in config)
-## v.5.10.5 - R4
+## v5.10.5 - R4
 - changed mood-press(true) to (-1)
-## v.5.10.5 - R5 - 26/02/2021
+## v5.10.5 - R5 - 26/02/2021
 - send "stop" to openHAB for status = 0
-## v.5.10.5 - R6 - 27/02/2021
+## v5.10.5 - R6 - 27/02/2021
 - app upgrade to 2.3.7
-## v.5.10.6 - 08/04/2021
+## v5.10.6 - 08/04/2021
 - delete spaces from backup names
 - updated files on the server: for f in *\ *.json ; do mv "$f" ${f//\ /}; done
-## v.5.11.0 - 04/06/2021
+## v5.11.0 - 04/06/2021
 - fixed bug in sun/power selection of rule
 - changed power rule functionality (now: compare channels with "sun-consumption")
-## v.5.11.0 - R2 - 04/06/2021
+## v5.11.0 - R2 - 04/06/2021
 - change name of master does not generate new master anymore
+## v5.11.1 - 04/06/2021
+- turn of debug -> production
 
 ### Todo
 - setup openstack server
