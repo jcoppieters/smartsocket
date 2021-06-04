@@ -6,6 +6,7 @@ const types_1 = require("./duotecno/types");
 const master_1 = require("./duotecno/master");
 const system_1 = require("./duotecno/system");
 const smartapp_1 = require("./server/smartapp");
+const smappee_1 = require("./server/smappee");
 console.log("running in directory: " + process.cwd());
 function adder(plugin, platform, list) {
     console.log("************* plugin: " + plugin + ", platform: " + platform, list);
@@ -29,7 +30,7 @@ try {
     system = new system_1.System(true, console.log, true);
     system.openMasters(true);
     try {
-        const smappee = null; // = new Smappee(system, true, console.log, alertS, true);
+        const smappee = new smappee_1.Smappee(system, true, console.log, alertS, true);
         const smartapp = new smartapp_1.SmartApp(system, smappee, null, console.log, true);
         //const smartapp = new SocApp(system, "smartapp", console.log, 9999);
         smartapp.serve();

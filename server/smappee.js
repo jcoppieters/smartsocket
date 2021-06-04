@@ -227,23 +227,27 @@ class Smappee extends base_1.Base {
     }
     applyRules(message) {
         const powerOf = (channel) => { var _a, _b; return (_b = (_a = message.channelPowers.find(c => c.publishIndex == channel)) === null || _a === void 0 ? void 0 : _a.power) !== null && _b !== void 0 ? _b : 0; };
-        const { production, consumption } = this.getProdCons(message);
+        let { production, consumption } = this.getProdCons(message);
+        // consumption is wrong -> temp fix
+        consumption = this.realtime.totalPower;
         // for all rules
         this.rules.forEach(rule => {
+            let power = 0;
             // if about power
             if (rule.type === "power") {
                 // add all channels this rule refers to
-                const power = rule.channel.split("+").reduce((acc, cur) => acc + powerOf(parseInt(cur)), 0);
-                this.log("checking rule with channel = " + rule.channel + " = " + power + "W");
-                this.checkPowerRule(power, rule);
+                power = rule.channel.split("+").reduce((acc, cur) => acc + powerOf(parseInt(cur)), 0);
             }
             else if (rule.type === "sun") {
-                this.log("checking sun: prod=" + production + ", cons=" + consumption);
-                this.checkSunRule(rule, production, consumption);
+                // calc fake power usage
+                power = production - consumption;
             }
+            this.log("checking rule with channel = " + rule.channel + " = " + power + "W");
+            this.checkPowerRule(power, rule);
         });
     }
     checkSunRule(rule, production, consumption) {
+        // NOT USED FOR THE MOMENT  
         let newCurrent;
         if (production < consumption) {
             newCurrent = types_1.Boundaries.kLow;
@@ -316,7 +320,9 @@ class Smappee extends base_1.Base {
         // sort on channel.
         this.rules.sort((a, b) => parseInt(a.channel) - parseInt(b.channel));
         // sanitize and copy all rules into the config
-        this.rules.forEach((r, i) => this.config.rules[i] = types_1.Sanitizers.ruleConfig(r));
+        this.config.rules = [];
+        this.rules.forEach((r, i) => this.config.rules.push(types_1.Sanitizers.ruleConfig(r)));
+        this.log("config = " + JSON.stringify(this.config.rules));
         this.writeConfig();
     }
     updateRule(inx, rule) {

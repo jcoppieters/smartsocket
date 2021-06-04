@@ -38,8 +38,8 @@
         <div class="row">
           <div class="input-field col s12">
             <select name="type" id="type">
-              <option value="power " <%= (rule.type == "power") ? "selected" : "" %>">power</option>
-              <option value="sun " <%= (rule.type == "sun") ? "selected" : "" %>">sun</option>
+              <option value="power" <%= (rule.type == "power") ? "selected" : "" %>>power</option>
+              <option value="sun" <%= (rule.type == "sun") ? "selected" : "" %>>sun</option>
             </select>
             <label for="type">Type</label>
           </div>
@@ -122,9 +122,9 @@
           - Units can be entered by their name or by "nodeNr;unitNr" (example: 0x1a;0xc2), all on the same master<br>
           - for moods: -1 = short puls, true/false or 1/0 = long toggle event<br>
           - for dimmers: true/false = on/off, 0-99 = dimmer value<br>
+          - for values: use channel (ex. "4") or the sum of channels (ex. "2+4+9")
           <strong>Sun rules:</strong><br>
-          - There is no "Mid Unit Action" and there are no "Thresholds"<br>
-          - The low rule is executed when production is less than consumption (otherwise the "high" rule)
+          - The values are compared with production-consumption
         </div>
       </form>
       <%- include('/views/footer'); -%>

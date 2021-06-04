@@ -1,3 +1,4 @@
+import { timeStamp } from "console";
 import * as mqtt from "mqtt";
 import { MqttClient } from "mqtt";
 
@@ -264,26 +265,31 @@ export class Smappee extends Base {
 
   applyRules(message) {
     const powerOf = (channel) => message.channelPowers.find(c => c.publishIndex == channel)?.power ?? 0
-    const { production, consumption } = this.getProdCons(message);
+    let { production, consumption } = this.getProdCons(message);
+
+    // consumption is wrong -> temp fix
+    consumption = this.realtime.totalPower;
 
     // for all rules
     this.rules.forEach( rule => {
+      let power = 0;
+
       // if about power
       if (rule.type === "power") {
         // add all channels this rule refers to
-        const power = rule.channel.split("+").reduce((acc, cur) => acc + powerOf(parseInt(cur)), 0);
-        this.log("checking rule with channel = " + rule.channel + " = " + power + "W");
-        this.checkPowerRule(power, rule);
+        power = rule.channel.split("+").reduce((acc, cur) => acc + powerOf(parseInt(cur)), 0);
 
       } else if (rule.type === "sun") {
-        this.log("checking sun: prod=" + production + ", cons=" + consumption)
-        this.checkSunRule(rule, production, consumption);
+        // calc fake power usage
+        power = production-consumption;
       }
-      
+      this.log("checking rule with channel = " + rule.channel + " = " + power + "W");
+      this.checkPowerRule(power, rule);
     });
   }
 
-  checkSunRule(rule: Rule, production: number, consumption: number) {    
+  checkSunRule(rule: Rule, production: number, consumption: number) {  
+    // NOT USED FOR THE MOMENT  
     let newCurrent;
 
     if (production < consumption) {
@@ -356,7 +362,9 @@ export class Smappee extends Base {
     // sort on channel.
     this.rules.sort((a,b) => parseInt(a.channel)-parseInt(b.channel));
     // sanitize and copy all rules into the config
-    this.rules.forEach((r, i) => this.config.rules[i] = Sanitizers.ruleConfig(r));
+    this.config.rules = [];
+    this.rules.forEach((r, i) => this.config.rules.push(Sanitizers.ruleConfig(r)));
+    this.log("config = " + JSON.stringify(this.config.rules));
     this.writeConfig();
   }
 

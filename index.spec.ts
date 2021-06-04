@@ -36,7 +36,7 @@ try {
   system.openMasters(true);      
 
   try {
-    const smappee = null; // = new Smappee(system, true, console.log, alertS, true);
+    const smappee = new Smappee(system, true, console.log, alertS, true);
     const smartapp = new SmartApp(system, smappee, null, console.log, true);
     //const smartapp = new SocApp(system, "smartapp", console.log, 9999);
     smartapp.serve();

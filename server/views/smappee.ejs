@@ -48,7 +48,12 @@
             <% for (let inx in rules) { let rule = rules[inx]; %>
               <tr>
                 <td><a href="/smappee/rule/<%= inx %>"><%= rule.type %></a></td>
-                <td><a href="/smappee/rule/<%= inx %>"><%= rule.channel %></a></td>
+                <td><% if (rule.type == "power") { %>
+                      <a href="/smappee/rule/<%= inx %>"><%= rule.channel %></a>
+                    <% } else { %>
+                      -
+                    <% } %>
+                </td>
                 <td><a href="/smappee/rule/<%= inx %>">
                 <%= (
                      (rule.current == 2) ? 'high' : (
@@ -56,11 +61,7 @@
                      (rule.current == 0) ? 'low' : '--'
                     ))) %></a></td>
                 <td><a href="/smappee/rule/<%= inx %>"><%= ((rule.power) ? rule.power : '-') %></a></td>
-                <% if (rule.type == "power") { %>
-                  <td><a href="/smappee/rule/<%= inx %>"><%= rule.low %>/<%= rule.high %></a></td>
-                <% } else { %>
-                  <td>-</td>
-                <% } %>
+                <td><a href="/smappee/rule/<%= inx %>"><%= rule.low %>/<%= rule.high %></a></td>
               </tr>
             <% } %>
           </tbody>

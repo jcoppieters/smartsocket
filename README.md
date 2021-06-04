@@ -197,8 +197,10 @@ switch =>
 - app upgrade to 2.3.7
 ## v.5.10.6 - 08/04/2021
 - delete spaces from backup names
-- updated files on the server
-
+- updated files on the server: for f in *\ *.json ; do mv "$f" ${f//\ /}; done
+## v.5.11.0 - 04/06/2021
+- fixed bug in sun/power selection of rule
+- changed power rule functionality (now: compare channels with "sun-consumption")
 
 ### Todo
 - setup openstack server
