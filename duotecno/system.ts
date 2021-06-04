@@ -113,11 +113,11 @@ export class System extends Base {
   // Setting up //
   ////////////////
 
-  async addMaster(cmaster: MasterConfig): Promise<Master> {
+  async addMaster(oldAddress: string, oldPort: number, cmaster: MasterConfig): Promise<Master> {
     if (!cmaster.address) return;
 
     // see if this master already exists
-    let inx = this.findCMasterInx(cmaster.address, cmaster.port);
+    let inx = this.findCMasterInx(oldAddress, oldPort);
 
     // store in config if not yet known
     if (inx < 0) {
@@ -126,7 +126,7 @@ export class System extends Base {
 
     } else {
       // close to re-open (master is deleted from the master array)
-      const master = this.findMaster(cmaster.address, cmaster.port);
+      const master = this.findMaster(oldAddress, oldPort);
       await this.closeMaster(master);
 
       // update the config

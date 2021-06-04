@@ -201,6 +201,8 @@ switch =>
 ## v.5.11.0 - 04/06/2021
 - fixed bug in sun/power selection of rule
 - changed power rule functionality (now: compare channels with "sun-consumption")
+## v.5.11.0 - R2 - 04/06/2021
+- change name of master does not generate new master anymore
 
 ### Todo
 - setup openstack server

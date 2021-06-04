@@ -110,12 +110,12 @@ class System extends base_1.Base {
     ////////////////
     // Setting up //
     ////////////////
-    addMaster(cmaster) {
+    addMaster(oldAddress, oldPort, cmaster) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!cmaster.address)
                 return;
             // see if this master already exists
-            let inx = this.findCMasterInx(cmaster.address, cmaster.port);
+            let inx = this.findCMasterInx(oldAddress, oldPort);
             // store in config if not yet known
             if (inx < 0) {
                 this.config.cmasters.push(cmaster);
@@ -123,7 +123,7 @@ class System extends base_1.Base {
             }
             else {
                 // close to re-open (master is deleted from the master array)
-                const master = this.findMaster(cmaster.address, cmaster.port);
+                const master = this.findMaster(oldAddress, oldPort);
                 yield this.closeMaster(master);
                 // update the config
                 this.config.cmasters[inx] = cmaster;

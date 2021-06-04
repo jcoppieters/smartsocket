@@ -27,7 +27,9 @@ const http = require("http");
 const somfy = require("./somfy");
 const kMaster = { name: "master", type: "string", default: "0.0.0.0:5001" };
 const kAddress = { name: "address", type: "string", default: "0.0.0.0" };
+const kAddressOld = { name: "addressX", type: "string", default: "0.0.0.0" };
 const kPort = { name: "port", type: "integer", default: 80 };
+const kPortOld = { name: "portX", type: "integer", default: 80 };
 const kActive = { name: "active", type: "string", default: "N" };
 const kUID = { name: "uid", type: "string", default: "" };
 const kName = { name: "name", type: "string", default: "no name" };
@@ -645,7 +647,7 @@ class SmartApp extends webapp_1.WebApp {
                     // drop through and list all masters
                 }
                 else if (context.action === "save") {
-                    const master = yield this.system.addMaster({ address: context.getParam(kAddress), port: context.getParam(kPort),
+                    const master = yield this.system.addMaster(context.getParam(kAddressOld), context.getParam(kPortOld), { address: context.getParam(kAddress), port: context.getParam(kPort),
                         password: context.getParam(kPassword), name: context.getParam(kName),
                         active: context.getParam(kActive) != "N", nodenames: {} });
                     this.updateNodes(master, context.params.nodes || "", context.params);

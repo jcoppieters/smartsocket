@@ -34,12 +34,14 @@
         <div class="row">
           <div class="input-field col s12">
             <input placeholder="xx.xx.xx.xx" id="address" name="address" type="text" value="<%= config.address %>">
+            <input id="addressX" name="addressX" type="hidden" value="<%= config.address %>">
             <label for="address">Address</label>
           </div>
         </div>
         <div class="row">
           <div class="input-field col s12">
             <input placeholder="5002" id="port" name="port" type="text" value="<%= config.port %>">
+            <input id="portX" name="portX" type="hidden" value="<%= config.port %>">
             <label for="port">Port Number</label>
           </div>
         </div>
