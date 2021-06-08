@@ -85,7 +85,7 @@ export interface UnitDef {
   //unit?: Unit;
 };
 export const kEmptyUnit: UnitDef = { masterAddress: "0.0.0.0", masterPort: 5001, 
-                                     name: "unit", logicalAddress: 0, logicalNodeAddress: 0 };
+                                     name: "unit", logicalAddress: 0, logicalNodeAddress: 0 } as const;
 
 
 export interface UnitConfig extends UnitDef {
@@ -100,7 +100,7 @@ export interface UnitSetting extends UnitConfig {
 export interface UnitScene extends UnitDef {
   value: number | boolean;
 };
-export const kEmptyUnitScene: UnitScene = { ...kEmptyUnit, value: true};
+export const kEmptyUnitScene: UnitScene = { ...kEmptyUnit, value: true} as const;
 
 
 export interface SceneConfig {
@@ -109,7 +109,7 @@ export interface SceneConfig {
   order: number;
   units: Array<UnitScene>;
 };
-export const kEmptyScene: SceneConfig = {name: 'Scene', trigger: kEmptyUnitScene, order: 0, units: []};
+export const kEmptyScene: SceneConfig = {name: 'Scene', trigger: {... kEmptyUnitScene}, order: 0, units: []};
 
 
 export interface GroupConfig {
@@ -118,7 +118,7 @@ export interface GroupConfig {
   visible: boolean;
   order: number;
 };
-export const kEmptyGroup: GroupConfig = {name: "Home", id: 0, order: 0, visible: true};
+export const kEmptyGroup: GroupConfig = {name: "Home", id: 0, order: 0, visible: true} as const;
 
 
 
@@ -196,7 +196,7 @@ export enum SwitchType {
 export interface Action extends UnitDef {
   value: number | boolean;
 }
-export const kEmptyAction: Action = { ...kEmptyUnit, value: false };
+export const kEmptyAction: Action = { ...kEmptyUnit, value: false } as const;
 
 export interface Rule {
   type: string;
@@ -223,7 +223,8 @@ export interface Switch extends UnitDef {
   status?: number | boolean,
   value?: number | boolean | string
 };
-export const kEmptySwitch: Switch = { ...kEmptyUnit, plug: 0, type: SwitchType.kNoType, unitName: "", name: "", data: "", method: "GET"};
+export const kEmptySwitch: Switch = 
+  { ...kEmptyUnit, plug: 0, type: SwitchType.kNoType, unitName: "", name: "", data: "", method: "GET"} as const;
 
 
 export interface SmartAppConfig extends BaseConfig {
@@ -403,12 +404,13 @@ export const Sanitizers = {
   },
 
   ruleConfig(rule): Rule {
+    rule = {... rule};
     rule.channel = (rule.channel ?? 0).toString(10);
     rule.low = makeInt(rule.low);
     rule.high = makeInt(rule.high);
 
     if (typeof rule.actions === "undefined") rule.actions = [];
-    while (rule.actions.length < 2) rule.actions.push(kEmptyAction);
+    while (rule.actions.length < 2) rule.actions.push({... kEmptyAction});
     rule.actions.forEach( action => {
       action.value = actionValue(action.value);
       action.logicalAddress = makeInt(action.logicalAddress);
@@ -419,7 +421,8 @@ export const Sanitizers = {
   },
 
   masterConfig: function(config?: MasterConfig): MasterConfig {
-    if (!config) config = <MasterConfig>{};
+    config = (config) ? {...config} : <MasterConfig>{};
+
     config.name = config.name || "IP Master";
     config.address = config.address || "";
     config.port = config.port || 0;
@@ -465,7 +468,7 @@ export const Sanitizers = {
   },
 
   groups: function(config?: Array<GroupConfig>): Array<GroupConfig> {
-    if (!config) return [kEmptyGroup];
+    if (!config) return [{... kEmptyGroup}];
 
     config.forEach(g => Sanitizers["group"](g));
     return config;

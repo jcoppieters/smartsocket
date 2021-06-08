@@ -321,7 +321,7 @@ class Smappee extends base_1.Base {
         this.rules.sort((a, b) => parseInt(a.channel) - parseInt(b.channel));
         // sanitize and copy all rules into the config
         this.config.rules = [];
-        this.rules.forEach((r, i) => this.config.rules.push(types_1.Sanitizers.ruleConfig(r)));
+        this.rules.forEach(r => this.config.rules.push(types_1.Sanitizers.ruleConfig(r)));
         this.log("config = " + JSON.stringify(this.config.rules));
         this.writeConfig();
     }

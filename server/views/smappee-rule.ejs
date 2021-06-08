@@ -25,14 +25,20 @@
         </h1>
 
         <div class="row rules">
+          <style> tr { border: none } </style>
+          <table>
           <% if (rule.type == "power") { %>
-            <p><%= rule.actions[0].name || "?" %>: (<%= hex(rule.actions[0].logicalNodeAddress) %>;<%= hex(rule.actions[0].logicalAddress) %>) = <%= rule.actions[0].value %> <b>&lt; <%= rule.low %>W</b></p>
-            <p><b> &le;</b> <%= rule.actions[1].name || "?" %> (<%= hex(rule.actions[1].logicalNodeAddress) %>;<%= hex(rule.actions[1].logicalAddress) %>) = <%= rule.actions[1].value %> <b>&le; <%= rule.high %>W</b></p>
-            <p><b> &lt;</b> <%= rule.actions[2].name || "?" %> (<%= hex(rule.actions[2].logicalNodeAddress) %>;<%= hex(rule.actions[2].logicalAddress) %>) = <%= rule.actions[2].value %></p>
+            <tr><td colspan=3><b>Channel <%= rule.channel %></b></td></tr>
           <% } else { %>
-            <p>production &lt; consumption <b>=&gt;</b> <%= rule.actions[0].name || "?" %>: (<%= hex(rule.actions[0].logicalNodeAddress) %>;<%= hex(rule.actions[0].logicalAddress) %>) = <%= rule.actions[0].value %></p><br>
-            <p>production &ge; consumption <b>=&gt;</b> <%= rule.actions[2].name || "?" %>: (<%= hex(rule.actions[2].logicalNodeAddress) %>;<%= hex(rule.actions[2].logicalAddress) %>) = <%= rule.actions[2].value %></p>
+            <tr><td colspan=3><b>Production - Consumption:</b></td></tr>
           <% } %>
+            <tr><th>&lt; <%= rule.low %>W</th>
+                <th>&ge; <%= rule.low %>W and &le; <%= rule.high %>W</th>
+                <th>&gt; <%= rule.high %>W</th></tr>
+            <tr><td><%= rule.actions[0].name || "?" %>: (<%= hex(rule.actions[0].logicalNodeAddress) %>;<%= hex(rule.actions[0].logicalAddress) %>) = <%= rule.actions[0].value %></td>
+                <td><%= rule.actions[1].name || "?" %> (<%= hex(rule.actions[1].logicalNodeAddress) %>;<%= hex(rule.actions[1].logicalAddress) %>) = <%= rule.actions[1].value %></td>
+                <td><%= rule.actions[2].name || "?" %> (<%= hex(rule.actions[2].logicalNodeAddress) %>;<%= hex(rule.actions[2].logicalAddress) %>) = <%= rule.actions[2].value %></td></tr>
+          </table>
         </div>
           
         <div class="row">

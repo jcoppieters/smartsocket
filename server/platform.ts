@@ -32,7 +32,7 @@ export class Platform extends Base {
     // set debug to true for new config files
     super("homebridge", (config && ("debug" in config)) ? config.debug : true, log);
 
-    this.config = Object.assign({}, config);
+    this.config = {... config};
     this.config.debug = (config && ("debug" in config)) ? config.debug : true;
 
     log("running in directory: " + process.cwd());

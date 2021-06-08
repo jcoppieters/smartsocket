@@ -91,7 +91,7 @@ exports.kEmptyUnit = { masterAddress: "0.0.0.0", masterPort: 5001,
 ;
 exports.kEmptyUnitScene = Object.assign(Object.assign({}, exports.kEmptyUnit), { value: true });
 ;
-exports.kEmptyScene = { name: 'Scene', trigger: exports.kEmptyUnitScene, order: 0, units: [] };
+exports.kEmptyScene = { name: 'Scene', trigger: Object.assign({}, exports.kEmptyUnitScene), order: 0, units: [] };
 ;
 exports.kEmptyGroup = { name: "Home", id: 0, order: 0, visible: true };
 ;
@@ -258,13 +258,14 @@ exports.Sanitizers = {
     },
     ruleConfig(rule) {
         var _a;
+        rule = Object.assign({}, rule);
         rule.channel = ((_a = rule.channel) !== null && _a !== void 0 ? _a : 0).toString(10);
         rule.low = makeInt(rule.low);
         rule.high = makeInt(rule.high);
         if (typeof rule.actions === "undefined")
             rule.actions = [];
         while (rule.actions.length < 2)
-            rule.actions.push(exports.kEmptyAction);
+            rule.actions.push(Object.assign({}, exports.kEmptyAction));
         rule.actions.forEach(action => {
             action.value = actionValue(action.value);
             action.logicalAddress = makeInt(action.logicalAddress);
@@ -275,8 +276,7 @@ exports.Sanitizers = {
         return rule;
     },
     masterConfig: function (config) {
-        if (!config)
-            config = {};
+        config = (config) ? Object.assign({}, config) : {};
         config.name = config.name || "IP Master";
         config.address = config.address || "";
         config.port = config.port || 0;
@@ -321,7 +321,7 @@ exports.Sanitizers = {
     },
     groups: function (config) {
         if (!config)
-            return [exports.kEmptyGroup];
+            return [Object.assign({}, exports.kEmptyGroup)];
         config.forEach(g => exports.Sanitizers["group"](g));
         return config;
     },

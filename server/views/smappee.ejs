@@ -62,6 +62,7 @@
                     ))) %></a></td>
                 <td><a href="/smappee/rule/<%= inx %>"><%= ((rule.power) ? rule.power : '-') %></a></td>
                 <td><a href="/smappee/rule/<%= inx %>"><%= rule.low %>/<%= rule.high %></a></td>
+                <td><%= hex(rule.actions[0].logicalNodeAddress) %>;<%= hex(rule.actions[0].logicalAddress) %></td>
               </tr>
             <% } %>
           </tbody>

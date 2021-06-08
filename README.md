@@ -205,6 +205,8 @@ switch =>
 - change name of master does not generate new master anymore
 ## v5.11.1 - 04/06/2021
 - turn of debug -> production
+## v5.11.2 - 04/06/2021
+- Fixed Long standing rule editing bug: kEmptyRule included an array
 
 ### Todo
 - setup openstack server

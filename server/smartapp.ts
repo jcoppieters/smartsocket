@@ -252,8 +252,9 @@ export class SmartApp extends WebApp {
     // if not found or action done -> drop through and list again the smappee attributes + all rules
     try {
       if (context.action === "add") {
-        this.smappee.rules.push(kEmptyRule);
-        return this.ejs("smappeeRule", context, { rule: kEmptyRule, id: this.smappee.rules.length-1, masters: this.system.masters });
+        const rule = {... kEmptyRule};
+        this.smappee.rules.push(rule);
+        return this.ejs("smappeeRule", context, { rule, id: this.smappee.rules.length-1, masters: this.system.masters });
 
       } else if (context.action === "rule") {
         if (id >= 0) 
@@ -289,7 +290,7 @@ export class SmartApp extends WebApp {
 
   scrapeRule(context: Context): Rule {
     // deep copy an empty rule
-    let rule = Object.assign({}, kEmptyRule);
+    let rule = {... kEmptyRule};  // = shallow copy, re-assign actions later
 
     // get the form values
     rule.type = context.getParam({name: "type", type: "string", default: rule.type });
@@ -298,9 +299,9 @@ export class SmartApp extends WebApp {
     rule.low = context.getParam({name: "low", type: "integer", default: rule.low });
     rule.high = context.getParam({name: "high", type: "integer", default: rule.high });
 
-    rule.actions[0] = this.scrapeUnit(context, "low");
-    rule.actions[1] = this.scrapeUnit(context, "mid");
-    rule.actions[2] = this.scrapeUnit(context, "high");
+    rule.actions = [this.scrapeUnit(context, "low"),
+                    this.scrapeUnit(context, "mid"),
+                    this.scrapeUnit(context, "high")];
 
     return rule;
   }
